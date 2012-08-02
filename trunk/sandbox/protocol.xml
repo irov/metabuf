@@ -1,0 +1,21 @@
+<Protocol>
+    <Node Name="DataBlock">
+        <Includes Node="Resource"/>
+    </Node>
+
+    <Node Name="Resource" Generator="Type">
+        <Attribute Name="Name" Type="Menge::ConstString" Evict = "string" Required="1"/>
+        <Attribute Name="Type" Type="Menge::ConstString" Evict = "string" Required="1"/>
+    </Node>
+  
+    <Node Name="ResourceImageDefault" Inheritance = "Resource">
+        <Member Node="File" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+        <Member Node="File" Name="Codec" Type="Menge::ConstString" Evict = "string"/>
+        <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
+    </Node>
+
+    <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
+        <Member Node="File" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+        <Member Node="Folder" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+    </Node>
+</Protocol>
