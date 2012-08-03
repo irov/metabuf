@@ -15,15 +15,31 @@ namespace Metabuf
 		Xml2Metacode( XmlProtocol * _protocol );
 
 	public:
-		bool generate( std::string & _out );
+		bool generate( std::string & _header, std::string & _source );
 
-	protected:
-		bool writeConstructor_( const XmlNode * _node );
-		bool writeNode_( const XmlNode * _node );
+    protected:
+        bool generateHeader( std::string & _header );        
+
+	protected:		
+		bool writeHeaderNode_( const XmlNode * _node );
 				
-		bool writeNodeReader_( const XmlNode * _node );
-		bool writeNodeSetup_( const XmlNode * _node );
-		bool writeNodeMember_( const XmlNode * _node );
+    protected:
+        bool writeHeaderConstructor_( const XmlNode * _node );
+		bool writeHeaderAttributeReader_( const XmlNode * _node );
+		bool writeHeaderAttributeSetup_( const XmlNode * _node );
+		bool writeHeaderAttribute_( const XmlNode * _node );
+		bool writeHeaderIncludes_( const XmlNode * _node );
+		bool writeHeaderIncludesReader_( const XmlNode * _node );
+
+    protected:
+        bool generateSource( std::string & _header );
+
+    protected:
+        bool writeSourceNode_( const XmlNode * _node );
+
+    protected:
+        bool writeSourceAttributeReader_( const XmlNode * _node );
+        bool writeSourceIncludesReader_( const XmlNode * _node );
 
 	protected:
 		std::stringstream & write();

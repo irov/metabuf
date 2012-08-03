@@ -54,6 +54,7 @@ namespace Metabuf
 		}
 
 	protected:
-		virtual void _parse( char * _buff, size_t _size, size_t & _read, size_t id ) = 0;
+		virtual void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t id ) = 0;
+		virtual void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t id ) = 0;
 	};
 }

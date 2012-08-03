@@ -2,6 +2,8 @@
 #	include "Xml2Metabuf.hpp"
 #	include "Xml2Metacode.hpp"
 
+//#   include "Metacode.hpp"
+
 #	include <stdio.h>
 
 void main()
@@ -26,17 +28,19 @@ void main()
 	
 	Metabuf::Xml2Metacode xml_metacode(&xml_protocol);
 
-	std::string out;
-	xml_metacode.generate(out);
+	std::string header;
+    std::string source;
+	xml_metacode.generate( header, source );
 
-	FILE * file_metacode = fopen("Metacode.hpp", "wb");
+	FILE * file_metacode_hpp = fopen("Metacode.hpp", "wb");
 
-	fwrite( out.c_str(), out.size(), 1, file_metacode );
-	fclose( file_metacode );
+	fwrite( header.c_str(), header.size(), 1, file_metacode_hpp );
+	fclose( file_metacode_hpp );
 
-	char * write_buff = new char[size];
+    FILE * file_metacode_cpp = fopen("Metacode.cpp", "wb");
 
-	Metabuf::Xml2Metabuf xml_metabuf(write_buff, &xml_protocol);
+    fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
+    fclose( file_metacode_cpp );
 
 	FILE * file_test = fopen("101_Fork.xml", "rb");
 
@@ -53,6 +57,16 @@ void main()
 	fclose( file_test );
 
 	size_t write_size;
+    
+    char * write_buff = new char[size_test];
+
+    Metabuf::Xml2Metabuf xml_metabuf(write_buff, &xml_protocol);
 
 	xml_metabuf.convert( buf_test, size_test, write_size );
+
+
+    //Metacode::Meta_DataBlock * datablock = new Metacode::Meta_DataBlock();
+
+    //size_t read_size;
+    //datablock->parse( write_buff, write_size, read_size);
 }

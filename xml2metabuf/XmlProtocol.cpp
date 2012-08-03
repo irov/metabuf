@@ -1,13 +1,15 @@
 #	include "XmlProtocol.hpp"
 
+#   include <algorithm>
+
 namespace Metabuf
 {
 	//////////////////////////////////////////////////////////////////////////
 	const XmlAttribute * XmlNode::getAttribute( const std::string & _name ) const
 	{
-		TMapAttributes::const_iterator it_found = attributes.find( _name );
+		TMapAttributes::const_iterator it_found = this->attributes.find( _name );
 
-		if( it_found == attributes.end() )
+		if( it_found == this->attributes.end() )
 		{
 			return 0;
 		}
@@ -17,15 +19,36 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	const XmlMember * XmlNode::getMember( const std::string & _name ) const
 	{
-		TMapMembers::const_iterator it_found = members.find( _name );
+		TMapMembers::const_iterator it_found = this->members.find( _name );
 
-		if( it_found == members.end() )
+		if( it_found == this->members.end() )
 		{
 			return 0;
 		}
 
 		return &it_found->second;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlNode::isInclude( const std::string & _name ) const
+    {
+        TVectorIncludes::const_iterator it_found = std::find( this->includes.begin(), this->includes.end(), _name );
+
+        if( it_found == this->includes.end() )
+        {
+            return false;
+        }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlNode::getName() const
+    {
+        std::string write_name;
+        write_name += "Meta_";
+        write_name += this->name;
+
+        return write_name;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::XmlProtocol()
 		: m_enumerator(0)
@@ -135,6 +158,12 @@ namespace Metabuf
 				attributeXml.type = Type.value();
 				attributeXml.evict = Evict.value();
 				attributeXml.required = false;
+			}
+			else if( strcmp( element.name(), "Includes" ) == 0 )
+			{
+				pugi::xml_attribute Node = element.attribute("Node");
+
+				nodeXml.includes.push_back( Node.value() );
 			}
 		}
 

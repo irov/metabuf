@@ -4,6 +4,7 @@
 
 #	include <string>
 #	include <map>
+#	include <vector>
 
 namespace Metabuf
 {
@@ -26,6 +27,8 @@ namespace Metabuf
 	
 	typedef std::map<std::string, XmlMember> TMapMembers;
 	
+	typedef std::vector<std::string> TVectorIncludes;
+
 	struct XmlNode
 	{
 		size_t id;
@@ -36,8 +39,13 @@ namespace Metabuf
 		TMapAttributes attributes;
 		TMapMembers members;
 
+		TVectorIncludes includes;
+
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
+        bool isInclude( const std::string & _name ) const;
+        
+        std::string getName() const;
 	};
 
 	typedef std::map<std::string, XmlNode> TMapNodes;
