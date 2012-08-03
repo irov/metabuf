@@ -2,38 +2,38 @@
 
 #   include <Metabuf.hpp>
 
-namespace Menge
+#   include <vector>
+
+namespace Metacode
 {
-    class DataBlock
+    class Meta_DataBlock
         : public Metabuf::Metadata
     { 
     public:
-        DataBlock()
+        Meta_DataBlock()
             : Metabuf::Metadata()
         {
         }
     public:
     protected:
-        void _parse( char * _buff, size_t _size, size_t & _read, size_t _id ) override
-        {
-            switch( _id )
-            {
-            }
-        }
-        
+        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
     protected:
-    } 
+    protected:
+        typedef std::vector<class Meta_Resource *> TVectorMeta_Resource;
+        TVectorMeta_Resource includes_Meta_Resource;
+    };
     
-    class Resource
+    class Meta_Resource
         : public Metabuf::Metadata
     { 
     public:
-        Resource()
+        Meta_Resource()
             : Metabuf::Metadata()
         {
         }
     public:
-        void setup_Name( Menge::ConstString & _value )
+        void setup_Name( std::string & _value )
         {
             _value = this->Name;
         }
@@ -44,7 +44,7 @@ namespace Menge
             (_self->*_method)( this->Name );
         }
         
-        void setup_Type( Menge::ConstString & _value )
+        void setup_Type( std::string & _value )
         {
             _value = this->Type;
         }
@@ -56,38 +56,26 @@ namespace Menge
         }
         
     protected:
-        void _parse( char * _buff, size_t _size, size_t & _read, size_t _id ) override
-        {
-            switch( _id )
-            {
-            case 3:
-                {
-                    this->read( _buff, _size, _read, this->Name );
-                }
-            case 4:
-                {
-                    this->read( _buff, _size, _read, this->Type );
-                }
-            }
-        }
-        
+        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
     protected:
-        Menge::ConstString Name
-        Menge::ConstString Type
-    } 
+    protected:
+        std::string Name;
+        std::string Type;
+    };
     
-    class ResourceEmitterContainer
-        : public Resource
+    class Meta_ResourceEmitterContainer
+        : public Meta_Resource
     { 
     public:
-        ResourceEmitterContainer()
-            : Resource()
+        Meta_ResourceEmitterContainer()
+            : Meta_Resource()
             , File_Path_successful(false)
             , Folder_Path_successful(false)
         {
         }
     public:
-        void setup_File_Path( Menge::WString & _value )
+        void setup_File_Path( std::string & _value )
         {
             if( File_Path_successful == false )
             {
@@ -108,7 +96,7 @@ namespace Menge
             (_self->*_method)( this->File_Path );
         }
         
-        void setup_Folder_Path( Menge::WString & _value )
+        void setup_Folder_Path( std::string & _value )
         {
             if( Folder_Path_successful == false )
             {
@@ -130,43 +118,29 @@ namespace Menge
         }
         
     protected:
-        void _parse( char * _buff, size_t _size, size_t & _read, size_t _id ) override
-        {
-            switch( _id )
-            {
-            case 10:
-                {
-                    this->read( _buff, _size, _read, this->File_Path );
-                    this->File_Path_successful = true;
-                }
-            case 11:
-                {
-                    this->read( _buff, _size, _read, this->Folder_Path );
-                    this->Folder_Path_successful = true;
-                }
-            }
-        }
-        
+        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+    protected:
     protected:
         bool File_Path_successful;
-        Menge::WString File_Path;
+        std::string File_Path;
         bool Folder_Path_successful;
-        Menge::WString Folder_Path;
-    } 
+        std::string Folder_Path;
+    };
     
-    class ResourceImageDefault
-        : public Resource
+    class Meta_ResourceImageDefault
+        : public Meta_Resource
     { 
     public:
-        ResourceImageDefault()
-            : Resource()
+        Meta_ResourceImageDefault()
+            : Meta_Resource()
             , File_Codec_successful(false)
             , File_MaxSize_successful(false)
             , File_Path_successful(false)
         {
         }
     public:
-        void setup_File_Codec( Menge::ConstString & _value )
+        void setup_File_Codec( std::string & _value )
         {
             if( File_Codec_successful == false )
             {
@@ -208,7 +182,7 @@ namespace Menge
             (_self->*_method)( this->File_MaxSize );
         }
         
-        void setup_File_Path( Menge::WString & _value )
+        void setup_File_Path( std::string & _value )
         {
             if( File_Path_successful == false )
             {
@@ -230,35 +204,16 @@ namespace Menge
         }
         
     protected:
-        void _parse( char * _buff, size_t _size, size_t & _read, size_t _id ) override
-        {
-            switch( _id )
-            {
-            case 7:
-                {
-                    this->read( _buff, _size, _read, this->File_Codec );
-                    this->File_Codec_successful = true;
-                }
-            case 8:
-                {
-                    this->read( _buff, _size, _read, this->File_MaxSize );
-                    this->File_MaxSize_successful = true;
-                }
-            case 6:
-                {
-                    this->read( _buff, _size, _read, this->File_Path );
-                    this->File_Path_successful = true;
-                }
-            }
-        }
-        
+        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+    protected:
     protected:
         bool File_Codec_successful;
-        Menge::ConstString File_Codec;
+        std::string File_Codec;
         bool File_MaxSize_successful;
         mt::vec2f File_MaxSize;
         bool File_Path_successful;
-        Menge::WString File_Path;
-    } 
+        std::string File_Path;
+    };
     
 }

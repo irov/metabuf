@@ -87,9 +87,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Metacode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Metacode.hpp" />
+    <ClInclude Include="Metatype.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="protocol.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
