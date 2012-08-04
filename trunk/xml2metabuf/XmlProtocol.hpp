@@ -28,8 +28,8 @@ namespace Metabuf
 	};
 	
 	typedef std::map<std::string, XmlMember> TMapMembers;
-	
-	typedef std::vector<std::string> TVectorIncludes;
+
+    typedef std::map<std::string, struct XmlNode *> TMapNodes;
 
 	struct XmlNode
 	{
@@ -45,17 +45,18 @@ namespace Metabuf
 		TMapAttributes attributes;
 		TMapMembers members;
 
-		TVectorIncludes includes;
+		TMapNodes includes;
+        TMapNodes generators;
 
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
-        bool isInclude( const std::string & _name ) const;
+        
+        XmlNode * getInclude( const std::string & _name );
+        XmlNode * getGenerator( const std::string & _name );
                 
         std::string getName() const;
 	};
-
-	typedef std::map<std::string, XmlNode> TMapNodes;
-
+    
 	class XmlProtocol
 	{
 	public:
@@ -69,7 +70,7 @@ namespace Metabuf
 		bool readProtocol( const void * _buff, size_t _size );
 
 	protected:
-		bool readNode_( const pugi::xml_node & _node );
+		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
 		size_t m_enumerator;

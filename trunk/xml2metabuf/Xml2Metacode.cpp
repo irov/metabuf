@@ -57,9 +57,9 @@ namespace Metabuf
         it != it_end;
         ++it )
         {
-            const XmlNode & node = it->second;
+            const XmlNode * node = it->second;
 
-            if( this->writeHeaderNode_( &node ) == false )
+            if( this->writeHeaderNode_( node ) == false )
             {
                 return false;
             }
@@ -362,15 +362,13 @@ namespace Metabuf
 	{
 		m_indent += 4;
 
-		for( TVectorIncludes::const_iterator
+		for( TMapNodes::const_iterator
 			it = _node->includes.begin(),
 			it_end = _node->includes.end();
 		it != it_end;
 		++it )
 		{
-			const std::string & nodeName = *it;
-
-            const XmlNode * node = m_protocol->getNode( nodeName );
+            const XmlNode * node = it->second;
 
 			this->write() << "typedef std::vector<class " << node->getName() << " *> TVector" << node->getName() << ";" << std::endl;
 			this->write() << "TVector" << node->getName() << " includes_" << node->getName() << ";" << std::endl;
@@ -410,9 +408,9 @@ namespace Metabuf
         it != it_end;
         ++it )
         {
-            const XmlNode & node = it->second;
+            const XmlNode * node = it->second;
 
-            if( this->writeSourceNode_( &node ) == false )
+            if( this->writeSourceNode_( node ) == false )
             {
                 return false;
             }
@@ -456,7 +454,7 @@ namespace Metabuf
         it != it_end;
         ++it )
         {
-            const XmlNode * node = &it->second;
+            const XmlNode * node = it->second;
 
             this->write() << "    case " << node->id << ":" << std::endl;
             this->write() << "        {" << std::endl;
@@ -563,15 +561,13 @@ namespace Metabuf
         this->write() << "    switch( _includes )" << std::endl;
         this->write() << "    {" << std::endl;
 
-        for( TVectorIncludes::const_iterator
+        for( TMapNodes::const_iterator
             it = _node->includes.begin(),
             it_end = _node->includes.end();
         it != it_end;
         ++it )
         {
-            const std::string & nodeName = *it;
-
-            const XmlNode * node = m_protocol->getNode( nodeName );
+            const XmlNode * node = it->second;
 
             this->write() << "    case " << node->id << ":" << std::endl;
             this->write() << "        {" << std::endl;

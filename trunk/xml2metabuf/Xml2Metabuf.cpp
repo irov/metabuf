@@ -272,11 +272,6 @@ namespace Metabuf
 
             const char * child_name = child.name();
 
-            if( _node->isInclude( child_name ) == false )
-            {
-                continue;
-            }
-
             const XmlNode * node_includes = m_protocol->getNode( child_name );
 
             this->writeSize( node_includes->id );
@@ -315,12 +310,7 @@ namespace Metabuf
             const pugi::xml_node & child = *it;
 
             const char * child_name = child.name();
-
-            if( _node->isInclude( child_name ) == false )
-            {
-                continue;
-            }
-
+            
             ++count;
         }
 

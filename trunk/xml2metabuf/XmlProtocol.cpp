@@ -65,16 +65,32 @@ namespace Metabuf
 		return member;
 	}
     //////////////////////////////////////////////////////////////////////////
-    bool XmlNode::isInclude( const std::string & _name ) const
+    XmlNode * XmlNode::getInclude( const std::string & _name )
     {
-        TVectorIncludes::const_iterator it_found = std::find( this->includes.begin(), this->includes.end(), _name );
+        TMapNodes::iterator it_found = this->includes.find( _name );
 
         if( it_found == this->includes.end() )
         {
-            return false;
+            return 0;
         }
 
-        return true;
+        XmlNode * attr = it_found->second;
+
+        return attr;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    XmlNode * XmlNode::getGenerator( const std::string & _name )
+    {
+        TMapNodes::iterator it_found = this->generators.find( _name );
+
+        if( it_found == this->generators.end() )
+        {
+            return 0;
+        }
+
+        XmlNode * attr = it_found->second;
+
+        return attr;
     }
     //////////////////////////////////////////////////////////////////////////
     std::string XmlNode::getName() const
@@ -125,43 +141,56 @@ namespace Metabuf
 			//element->attribute()
 			if( strcmp( element.name(), "Node" ) == 0 )
 			{
-				this->readNode_( element );
+				this->readNode_( 0, element );
 			}
 		}
 
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool XmlProtocol::readNode_( const pugi::xml_node & _node )
+	bool XmlProtocol::readNode_( XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
-		pugi::xml_attribute Name = _node.attribute("Name");
-		pugi::xml_attribute Generator = _node.attribute("Generator");
-		pugi::xml_attribute Inheritance = _node.attribute("Inheritance");
+		pugi::xml_attribute Name = _xml_node.attribute("Name");
+		pugi::xml_attribute Generator = _xml_node.attribute("Generator");
+		pugi::xml_attribute Inheritance = _xml_node.attribute("Inheritance");
 		
-		XmlNode & nodeXml = m_nodes[Name.value()];
+		XmlNode * nodeXml = new XmlNode();
+        
+        if( _node == 0 )
+        {
+            m_nodes.insert( std::make_pair(Name.value(), nodeXml) );
+        }
+        else if( Inheritance.empty() == true )
+        {
+            _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
+        }
+        else
+        {
+            _node->generators.insert( std::make_pair(Name.value(), nodeXml) );
+        }
 
-		nodeXml.id = ++m_enumerator;
-        nodeXml.enumerator = 0;
-        nodeXml.node_inheritance = NULL;
-		nodeXml.name = Name.value();
+		nodeXml->id = ++m_enumerator;
+        nodeXml->enumerator = 0;
+        nodeXml->node_inheritance = NULL;
+		nodeXml->name = Name.value();
 
 		if( Generator.empty() == false )
 		{
-			nodeXml.generator = Generator.value();
+			nodeXml->generator = Generator.value();
 		}
 
 		if( Inheritance.empty() == false )
 		{
-			nodeXml.inheritance = Inheritance.value();
+			nodeXml->inheritance = Inheritance.value();
 
-            nodeXml.node_inheritance = this->getNode( nodeXml.inheritance );
+            nodeXml->node_inheritance = _node->getInclude( nodeXml->inheritance );
 
-            nodeXml.enumerator = nodeXml.node_inheritance->enumerator;
+            nodeXml->enumerator = nodeXml->node_inheritance->enumerator;
 		}
 
 		for( pugi::xml_node::iterator
-			it = _node.begin(),
-			it_end = _node.end();
+			it = _xml_node.begin(),
+			it_end = _xml_node.end();
 		it != it_end;
 		++it )
 		{
@@ -174,9 +203,9 @@ namespace Metabuf
 				pugi::xml_attribute Evict = element.attribute("Evict");
 				pugi::xml_attribute Required = element.attribute("Required");
 
-				XmlAttribute & attributeXml = nodeXml.attributes[ Name.value() ];
+				XmlAttribute & attributeXml = nodeXml->attributes[ Name.value() ];
                 
-				attributeXml.id = ++nodeXml.enumerator;
+				attributeXml.id = ++nodeXml->enumerator;
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
 				attributeXml.evict = Evict.value();
@@ -189,24 +218,22 @@ namespace Metabuf
 				pugi::xml_attribute Type = element.attribute("Type");
 				pugi::xml_attribute Evict = element.attribute("Evict");
 
-				XmlMember & memberXml = nodeXml.members[ Node.value() ];
+				XmlMember & memberXml = nodeXml->members[ Node.value() ];
 
 				memberXml.name = Node.value();
 
 				XmlAttribute & attributeXml = memberXml.attributes[ Name.value() ];
 
-				attributeXml.id = ++nodeXml.enumerator;
+				attributeXml.id = ++nodeXml->enumerator;
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
 				attributeXml.evict = Evict.value();
 				attributeXml.required = false;
 			}
-			else if( strcmp( element.name(), "Includes" ) == 0 )
-			{
-				pugi::xml_attribute Node = element.attribute("Node");
-
-				nodeXml.includes.push_back( Node.value() );
-			}
+            else if( strcmp( element.name(), "Node" ) == 0 )
+            {
+                this->readNode_( nodeXml, element );
+            }
 		}
 
 		return true;
@@ -221,7 +248,7 @@ namespace Metabuf
 			return 0;
 		}
 
-		return &it_found->second;
+		return it_found->second;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	const TMapNodes & XmlProtocol::getNodes() const
