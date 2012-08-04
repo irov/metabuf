@@ -187,8 +187,15 @@ namespace Metabuf
             }
         }
 
+        if( _node == 0 )
+        {
+		    nodeXml->id = ++m_enumerator;
+        }
+        else
+        {
+            nodeXml->id = ++_node->enumerator;
+        }
 
-		nodeXml->id = ++m_enumerator;
         nodeXml->enumerator = 0;
         nodeXml->node_inheritance = NULL;
         nodeXml->node_scope = _node;
