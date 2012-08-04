@@ -1,21 +1,34 @@
 <Protocol>
     <Node Name="DataBlock">
-        <Includes Node="Resource"/>
-    </Node>
+        <Node Name="Resource" Generator="Type">
+            <Attribute Name="Name" Type="std::string" Evict = "string" Required="1"/>
+            <Attribute Name="Type" Type="std::string" Evict = "string" Required="1"/>
+        </Node>
+        
+        <Node Name="ResourceImageDefault" Inheritance = "Resource">
+            <Member Node="File" Name="Path" Type="std::string" Evict = "string" Required="1"/>
+            <Member Node="File" Name="Codec" Type="std::string" Evict = "string"/>
+            <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
+        </Node>
 
-    <Node Name="Resource" Generator="Type">
-        <Attribute Name="Name" Type="std::string" Evict = "string" Required="1"/>
-        <Attribute Name="Type" Type="std::string" Evict = "string" Required="1"/>
+        <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
+            <Member Node="File" Name="Path" Type="std::string" Evict = "string" Required="1"/>
+            <Member Node="Folder" Name="Path" Type="std::string" Evict = "string" Required="1"/>
+        </Node>        
     </Node>
   
-    <Node Name="ResourceImageDefault" Inheritance = "Resource">
-        <Member Node="File" Name="Path" Type="std::string" Evict = "string" Required="1"/>
-        <Member Node="File" Name="Codec" Type="std::string" Evict = "string"/>
-        <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
-    </Node>
-
-    <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
-        <Member Node="File" Name="Path" Type="std::string" Evict = "string" Required="1"/>
-        <Member Node="Folder" Name="Path" Type="std::string" Evict = "string" Required="1"/>
-    </Node>
+    
+    <Node Name="Pak">
+        <Node Name="Scripts">
+            <Attribute Name="Path" Type="std::wstring" Evict = "wstring" Required="1"/>
+        </Node>
+        
+        <Node Name="Resources">
+            <Attribute Name="Path" Type="std::wstring" Evict = "wstring" Required="1"/>
+            
+            <Node Name="Resource">
+                <Attribute Name="Name" Type="std::string" Evict = "string" Required="1"/>
+            </Node>
+        </Node>
+    </Node>        
 </Protocol>
