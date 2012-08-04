@@ -272,14 +272,17 @@ namespace Metabuf
 
             const char * child_name = child.name();
 
-            const XmlNode * node_includes = m_protocol->getNode( child_name );
+            const XmlNode * node_includes = _node->getInclude( child_name );
+
+            if( node_includes == 0 )
+            {
+                continue;
+            }
 
             this->writeSize( node_includes->id );
 
             if( node_includes->generator.empty() == true )
             {
-                this->writeSize( node_includes->id );
-
                 this->writeNode_( node_includes, child );
             }
             else
@@ -288,7 +291,7 @@ namespace Metabuf
                 
                 const char * value_generator = attr_generator.value();
 
-                const XmlNode * node_generator = m_protocol->getNode( value_generator );
+                const XmlNode * node_generator = _node->getGenerator( value_generator );
 
                 this->writeNode_( node_generator, child );
             }            
@@ -310,6 +313,11 @@ namespace Metabuf
             const pugi::xml_node & child = *it;
 
             const char * child_name = child.name();
+
+            if( _node->getInclude( child_name ) == 0 )
+            {
+                continue;
+            }
             
             ++count;
         }

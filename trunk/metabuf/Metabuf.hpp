@@ -8,9 +8,15 @@ namespace Metabuf
 	{
 	public:
 		void parse( char * _buff, size_t _size, size_t & _read );
+
+
+    public:
+        virtual Metadata * generateMetadata( size_t _id ) = 0;
+
+    public:
         void parseNode( char * _buff, size_t _size, size_t & _read );
 
-	public:
+    protected:
 		template<class T>
 		inline void read( const char * _buff, size_t _size, size_t & _read, T & _t )
 		{
@@ -24,6 +30,6 @@ namespace Metabuf
 
 	protected:
 		virtual void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t id ) = 0;
-		virtual void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) = 0;
+		virtual void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) = 0;        
 	};
 }

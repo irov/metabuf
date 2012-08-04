@@ -39,6 +39,7 @@ namespace Metabuf
 		std::string inheritance;
 
         const XmlNode * node_inheritance;
+        const XmlNode * node_scope;
 
         mutable size_t enumerator;
 
@@ -51,10 +52,13 @@ namespace Metabuf
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         
-        XmlNode * getInclude( const std::string & _name );
-        XmlNode * getGenerator( const std::string & _name );
+        const XmlNode * getInclude( const std::string & _name ) const;
+        const XmlNode * getGenerator( const std::string & _name ) const;
+
+        const TMapNodes & getGenerators() const;
                 
         std::string getName() const;
+        std::string getScope() const;
 	};
     
 	class XmlProtocol

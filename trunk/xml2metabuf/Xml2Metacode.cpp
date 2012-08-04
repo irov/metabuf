@@ -78,7 +78,7 @@ namespace Metabuf
                 
 		if( _node->inheritance.empty() == false )
 		{
-            const XmlNode * node_inheritance = m_protocol->getNode( _node->inheritance );
+            const XmlNode * node_inheritance = _node->node_inheritance;
 
 			this->write() << "    : public " << node_inheritance->getName() << std::endl;
 		}
@@ -118,6 +118,11 @@ namespace Metabuf
 
         m_indent -= 4;
 
+        if( this->writeHeaderIncludesDefinition_( _node ) == false )
+        {
+            return false;
+        }
+
         this->write() << "protected:" << std::endl;
 		if( this->writeHeaderAttribute_( _node ) == false )
 		{
@@ -143,7 +148,7 @@ namespace Metabuf
 
 		if( _node->inheritance.empty() == false )
 		{
-            const XmlNode * node_inheritance = m_protocol->getNode( _node->inheritance );
+            const XmlNode * node_inheritance = _node->node_inheritance;
 
 			this->write() << "        : " << node_inheritance->getName() << "()" << std::endl;
 		}
@@ -305,6 +310,31 @@ namespace Metabuf
 
 		return true;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeHeaderIncludesDefinition_( const XmlNode * _node )
+    {
+        this->write() << "public:" << std::endl;
+        
+        m_indent += 4;
+
+        this->write() << "Metadata * generateMetadata( size_t _id ) override;" << std::endl;
+        this->write() << std::endl;
+
+        for( TMapNodes::const_iterator
+            it = _node->includes.begin(),
+            it_end = _node->includes.end();
+        it != it_end;
+        ++it )
+        {
+            XmlNode * node_include = it->second;
+
+            this->writeHeaderNode_( node_include );
+        }
+        
+        m_indent -= 4;
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderAttribute_( const XmlNode * _node )
 	{
@@ -368,10 +398,21 @@ namespace Metabuf
 		it != it_end;
 		++it )
 		{
-            const XmlNode * node = it->second;
+            const XmlNode * node_include = it->second;
 
-			this->write() << "typedef std::vector<class " << node->getName() << " *> TVector" << node->getName() << ";" << std::endl;
-			this->write() << "TVector" << node->getName() << " includes_" << node->getName() << ";" << std::endl;
+            if( node_include->inheritance.empty() == true )
+            {
+                if( node_include->generator.empty() == true )
+                {
+                    this->write() << "typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
+                    this->write() << "TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+                }
+                else
+                {
+                    this->write() << "typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
+                    this->write() << "TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+                }
+            }
 		}
 		
 		m_indent -= 4;
@@ -394,11 +435,6 @@ namespace Metabuf
         this->write() << "{" << std::endl;
 
         m_indent += 4;
-
-        if( this->writeSourceNodeGenerator_() == false )
-        {
-            return false;
-        }
 
         const TMapNodes & nodes = m_protocol->getNodes();
 
@@ -425,6 +461,11 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceNode_( const XmlNode * _node )
     {
+        if( this->writeSourceNodeGenerator_( _node ) == false )
+        {
+            return false;
+        }
+
         if( this->writeSourceAttributeReader_( _node ) == false )
         {
             return false;
@@ -435,36 +476,44 @@ namespace Metabuf
             return false;
         }
 
+        if( this->writeSourceIncludesDefinition_( _node ) == false )
+        {
+            return false;
+        }
+
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::writeSourceNodeGenerator_()
+    bool Xml2Metacode::writeSourceNodeGenerator_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "static Metabuf::Metadata * s_generatorMetadata( size_t _id )" << std::endl;
+        this->write() << "Metabuf::Metadata * " << _node->getScope() << "::generateMetadata( size_t _id )" << std::endl;
         this->write() << "{" << std::endl;
-        this->write() << "    switch( _id )" << std::endl;
-        this->write() << "    {" << std::endl;
 
-        const TMapNodes & nodes = m_protocol->getNodes();
 
-        for( TMapNodes::const_iterator
-            it = nodes.begin(),
-            it_end = nodes.end();
-        it != it_end;
-        ++it )
+        if( _node->generators.empty() == false )
         {
-            const XmlNode * node = it->second;
+            this->write() << "    switch( _id )" << std::endl;
+            this->write() << "    {" << std::endl;
 
-            this->write() << "    case " << node->id << ":" << std::endl;
-            this->write() << "        {" << std::endl;
-            this->write() << "            return new " << node->getName() << "();" << std::endl;
-            this->write() << "            break;" << std::endl;
-            this->write() << "        }" << std::endl;
+            for( TMapNodes::const_iterator
+                it = _node->generators.begin(),
+                it_end = _node->generators.end();
+            it != it_end;
+            ++it )
+            {
+                const XmlNode * node = it->second;
+
+                this->write() << "    case " << node->id << ":" << std::endl;
+                this->write() << "        {" << std::endl;
+                this->write() << "            return new " << node->getName() << "();" << std::endl;
+                this->write() << "            break;" << std::endl;
+                this->write() << "        }" << std::endl;
+            }
+
+            this->write() << "    }" << std::endl;
+            this->write() << std::endl;
         }
-                
-        this->write() << "    }" << std::endl;
-        this->write() << std::endl;
         this->write() << "    return 0;" << std::endl;
         this->write() << "}" << std::endl;
 
@@ -474,51 +523,25 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceAttributeReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getName() << "::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
+        this->write() << "void " << _node->getScope() << "::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
-            const XmlNode * node_inheritance = m_protocol->getNode( _node->inheritance );
+            const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write() << "    " << node_inheritance->getName()<< "::_parseArguments( _buff, _size, _read, _id );" << std::endl;
+            this->write() << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id );" << std::endl;
             this->write() << std::endl;
         }
 
-        this->write() << "    switch( _id )" << std::endl;
-        this->write() << "    {" << std::endl;
-
-        for( TMapAttributes::const_iterator
-            it = _node->attributes.begin(),
-            it_end = _node->attributes.end();
-        it != it_end;
-        ++it )
+        if( _node->attributes.empty() == false || _node->members.empty() == false )
         {
-            const XmlAttribute * attr = &it->second;
-
-            this->write() << "    case " << attr->id << ":" << std::endl;
-            this->write() << "        {" << std::endl;
-            this->write() << "            this->read( _buff, _size, _read, this->" << attr->name << " );" << std::endl;
-
-            if( attr->required == false )
-            {
-                this->write() << "           this->" << attr->name << "_successful = true;" << std::endl;
-            }
-            this->write() << "            break;" << std::endl;
-            this->write() << "        }" << std::endl;
-        }
-
-        for( TMapMembers::const_iterator
-            it = _node->members.begin(),
-            it_end = _node->members.end();
-        it != it_end;
-        ++it )
-        {
-            const XmlMember * member = &it->second;
+            this->write() << "    switch( _id )" << std::endl;
+            this->write() << "    {" << std::endl;
 
             for( TMapAttributes::const_iterator
-                it = member->attributes.begin(),
-                it_end = member->attributes.end();
+                it = _node->attributes.begin(),
+                it_end = _node->attributes.end();
             it != it_end;
             ++it )
             {
@@ -526,18 +549,47 @@ namespace Metabuf
 
                 this->write() << "    case " << attr->id << ":" << std::endl;
                 this->write() << "        {" << std::endl;
-                this->write() << "            this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " );" << std::endl;
+                this->write() << "            this->read( _buff, _size, _read, this->" << attr->name << " );" << std::endl;
 
                 if( attr->required == false )
                 {
-                    this->write() << "            this->" << member->name << "_" << attr->name << "_successful = true;" << std::endl;
+                    this->write() << "           this->" << attr->name << "_successful = true;" << std::endl;
                 }
                 this->write() << "            break;" << std::endl;
                 this->write() << "        }" << std::endl;
             }
-        }
 
-        this->write() << "    }" << std::endl;
+            for( TMapMembers::const_iterator
+                it = _node->members.begin(),
+                it_end = _node->members.end();
+            it != it_end;
+            ++it )
+            {
+                const XmlMember * member = &it->second;
+
+                for( TMapAttributes::const_iterator
+                    it = member->attributes.begin(),
+                    it_end = member->attributes.end();
+                it != it_end;
+                ++it )
+                {
+                    const XmlAttribute * attr = &it->second;
+
+                    this->write() << "    case " << attr->id << ":" << std::endl;
+                    this->write() << "        {" << std::endl;
+                    this->write() << "            this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " );" << std::endl;
+
+                    if( attr->required == false )
+                    {
+                        this->write() << "            this->" << member->name << "_" << attr->name << "_successful = true;" << std::endl;
+                    }
+                    this->write() << "            break;" << std::endl;
+                    this->write() << "        }" << std::endl;
+                }
+            }
+
+            this->write() << "    }" << std::endl;
+        }
         this->write() << "}" << std::endl;
         this->write() << std::endl;
 
@@ -547,44 +599,85 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getName() << "::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
+        this->write() << "void " << _node->getScope() << "::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
-            const XmlNode * node_inheritance = m_protocol->getNode( _node->inheritance );
+            const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write() << "    " << node_inheritance->getName() << "::_parseIncludes( _buff, _size, _read, _includes, _generators );" << std::endl;
-            this->write() << std::endl;
+            this->write() << "    " << node_inheritance->getScope() << "::_parseIncludes( _buff, _size, _read, _includes, _generators );" << std::endl;            
+
+            if( _node->includes.empty() == false )
+            {
+                this->write() << std::endl;
+            }
         }
 
-        this->write() << "    switch( _includes )" << std::endl;
-        this->write() << "    {" << std::endl;
+        if( _node->includes.empty() == false )
+        {            
+            this->write() << "    switch( _includes )" << std::endl;
+            this->write() << "    {" << std::endl;
 
+            for( TMapNodes::const_iterator
+                it = _node->includes.begin(),
+                it_end = _node->includes.end();
+            it != it_end;
+            ++it )
+            {
+                const XmlNode * node = it->second;
+
+                if( node->inheritance.empty() == true )
+                {
+                    if( node->generator.empty() == true )
+                    {
+                        this->write() << "    case " << node->id << ":" << std::endl;
+                        this->write() << "        {" << std::endl;
+                        this->write() << "            " << node->getScope() << " metadata;" << std::endl;
+                        this->write() << "            metadata.parseNode( _buff, _size, _read );" << std::endl;
+                        this->write() << std::endl;
+                        this->write() << "            includes_" << node->getName() << ".push_back(metadata);" << std::endl;
+                        this->write() << "            break;" << std::endl;
+                        this->write() << "        }" << std::endl;
+
+                    }
+                    else
+                    {
+                        this->write() << "    case " << node->id << ":" << std::endl;
+                        this->write() << "        {" << std::endl;
+
+                        this->write() << "            Metabuf::Metadata * metadata = this->generateMetadata( _generators );" << std::endl;
+                        this->write() << std::endl;
+                        this->write() << "            " << node->getScope() << " * metadata2 = static_cast<" << node->getScope() << " *>(metadata);" << std::endl;
+                        this->write() << "            metadata2->parseNode( _buff, _size, _read );" << std::endl;
+                        this->write() << std::endl;
+                        this->write() << "            includes_" << node->getName() << ".push_back(metadata2);" << std::endl;            
+                        this->write() << "            break;" << std::endl;
+                        this->write() << "        }" << std::endl;
+                    }
+                }
+            }
+
+            this->write() << "    }" << std::endl;
+        }
+
+        this->write() << "}" << std::endl;
+        this->write() << std::endl;
+
+        return true;
+    }
+    bool Xml2Metacode::writeSourceIncludesDefinition_( const XmlNode * _node )
+    {
         for( TMapNodes::const_iterator
             it = _node->includes.begin(),
             it_end = _node->includes.end();
         it != it_end;
         ++it )
         {
-            const XmlNode * node = it->second;
+            XmlNode * node_include = it->second;
 
-            this->write() << "    case " << node->id << ":" << std::endl;
-            this->write() << "        {" << std::endl;
-
-            this->write() << "            Metabuf::Metadata * metadata = s_generatorMetadata( _generators );" << std::endl;
-            this->write() << std::endl;
-            this->write() << "            " << node->getName() << " * metadata2 = static_cast<" << node->getName() << " *>(metadata);" << std::endl;
-            this->write() << "            metadata2->parseNode( _buff, _size, _read );" << std::endl;
-            this->write() << std::endl;
-            this->write() << "            includes_" << node->getName() << ".push_back(metadata2);" << std::endl;            
-            this->write() << "            break;" << std::endl;
-            this->write() << "        }" << std::endl;
+            this->writeSourceNode_( node_include );
         }
-
-        this->write() << "    }" << std::endl;
-        this->write() << "}" << std::endl;
-        this->write() << std::endl;
 
         return true;
     }

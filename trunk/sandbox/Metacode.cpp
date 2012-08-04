@@ -3,18 +3,18 @@
 namespace Metacode
 {
     //////////////////////////////////////////////////////////////////////////
-    static Metabuf::Metadata * s_generatorMetadata( size_t _id )
+    Metabuf::Metadata * Meta_DataBlock::generateMetadata( size_t _id )
     {
         switch( _id )
         {
-        case 1:
+        case 4:
             {
-                return new Meta_DataBlock();
+                return new Meta_ResourceEmitterContainer();
                 break;
             }
-        case 5:
+        case 3:
             {
-                return new Meta_Pak();
+                return new Meta_ResourceImageDefault();
                 break;
             }
         }
@@ -24,9 +24,6 @@ namespace Metacode
     //////////////////////////////////////////////////////////////////////////
     void Meta_DataBlock::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
     {
-        switch( _id )
-        {
-        }
     }
     
     //////////////////////////////////////////////////////////////////////////
@@ -36,9 +33,9 @@ namespace Metacode
         {
         case 2:
             {
-                Metabuf::Metadata * metadata = s_generatorMetadata( _generators );
+                Metabuf::Metadata * metadata = this->generateMetadata( _generators );
     
-                Meta_Resource * metadata2 = static_cast<Meta_Resource *>(metadata);
+                Meta_DataBlock::Meta_Resource * metadata2 = static_cast<Meta_DataBlock::Meta_Resource *>(metadata);
                 metadata2->parseNode( _buff, _size, _read );
     
                 includes_Meta_Resource.push_back(metadata2);
@@ -48,11 +45,113 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    Metabuf::Metadata * Meta_DataBlock::Meta_Resource::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_Resource::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         switch( _id )
         {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Name );
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->Type );
+                break;
+            }
         }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_Resource::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_DataBlock::Meta_ResourceEmitterContainer::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _id );
+    
+        switch( _id )
+        {
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->File_Path );
+                this->File_Path_successful = true;
+                break;
+            }
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->Folder_Path );
+                this->Folder_Path_successful = true;
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _includes, _generators );
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_DataBlock::Meta_ResourceImageDefault::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _id );
+    
+        switch( _id )
+        {
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->File_Codec );
+                this->File_Codec_successful = true;
+                break;
+            }
+        case 5:
+            {
+                this->read( _buff, _size, _read, this->File_MaxSize );
+                this->File_MaxSize_successful = true;
+                break;
+            }
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->File_Path );
+                this->File_Path_successful = true;
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_DataBlock::Meta_ResourceImageDefault::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _includes, _generators );
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
     }
     
     //////////////////////////////////////////////////////////////////////////
@@ -62,25 +161,101 @@ namespace Metacode
         {
         case 7:
             {
-                Metabuf::Metadata * metadata = s_generatorMetadata( _generators );
+                Meta_Pak::Meta_Resources metadata;
+                metadata.parseNode( _buff, _size, _read );
     
-                Meta_Resources * metadata2 = static_cast<Meta_Resources *>(metadata);
-                metadata2->parseNode( _buff, _size, _read );
-    
-                includes_Meta_Resources.push_back(metadata2);
+                includes_Meta_Resources.push_back(metadata);
                 break;
             }
         case 6:
             {
-                Metabuf::Metadata * metadata = s_generatorMetadata( _generators );
+                Meta_Pak::Meta_Scripts metadata;
+                metadata.parseNode( _buff, _size, _read );
     
-                Meta_Scripts * metadata2 = static_cast<Meta_Scripts *>(metadata);
-                metadata2->parseNode( _buff, _size, _read );
-    
-                includes_Meta_Scripts.push_back(metadata2);
+                includes_Meta_Scripts.push_back(metadata);
                 break;
             }
         }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::Meta_Resources::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Resources::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Path );
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Resources::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 8:
+            {
+                Meta_Pak::Meta_Resources::Meta_Resource metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Resource.push_back(metadata);
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::Meta_Resources::Meta_Resource::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Resources::Meta_Resource::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Name );
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Resources::Meta_Resource::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::Meta_Scripts::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Scripts::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Path );
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Scripts::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
     }
     
 }

@@ -65,32 +65,32 @@ namespace Metabuf
 		return member;
 	}
     //////////////////////////////////////////////////////////////////////////
-    XmlNode * XmlNode::getInclude( const std::string & _name )
+    const XmlNode * XmlNode::getInclude( const std::string & _name ) const
     {
-        TMapNodes::iterator it_found = this->includes.find( _name );
+        TMapNodes::const_iterator it_found = this->includes.find( _name );
 
         if( it_found == this->includes.end() )
         {
             return 0;
         }
 
-        XmlNode * attr = it_found->second;
+        XmlNode * node = it_found->second;
 
-        return attr;
+        return node;
     }
     //////////////////////////////////////////////////////////////////////////
-    XmlNode * XmlNode::getGenerator( const std::string & _name )
+    const XmlNode * XmlNode::getGenerator( const std::string & _name ) const
     {
-        TMapNodes::iterator it_found = this->generators.find( _name );
+        TMapNodes::const_iterator it_found = this->generators.find( _name );
 
         if( it_found == this->generators.end() )
         {
             return 0;
         }
 
-        XmlNode * attr = it_found->second;
+        XmlNode * node = it_found->second;
 
-        return attr;
+        return node;
     }
     //////////////////////////////////////////////////////////////////////////
     std::string XmlNode::getName() const
@@ -100,6 +100,23 @@ namespace Metabuf
         write_name += this->name;
 
         return write_name;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlNode::getScope() const
+    {
+        std::string write_scope;
+
+        if( this->node_scope == 0 )
+        {
+            write_scope += this->getName();
+            return write_scope;
+        }
+        
+        write_scope += this->node_scope->getScope();
+        write_scope += "::";
+        write_scope += this->getName();
+
+        return write_scope;
     }
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::XmlProtocol()
@@ -160,18 +177,21 @@ namespace Metabuf
         {
             m_nodes.insert( std::make_pair(Name.value(), nodeXml) );
         }
-        else if( Inheritance.empty() == true )
-        {
-            _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
-        }
         else
         {
-            _node->generators.insert( std::make_pair(Name.value(), nodeXml) );
+            _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
+
+            if( Inheritance.empty() == false )
+            {
+                _node->generators.insert( std::make_pair(Name.value(), nodeXml) );
+            }
         }
+
 
 		nodeXml->id = ++m_enumerator;
         nodeXml->enumerator = 0;
         nodeXml->node_inheritance = NULL;
+        nodeXml->node_scope = _node;
 		nodeXml->name = Name.value();
 
 		if( Generator.empty() == false )
