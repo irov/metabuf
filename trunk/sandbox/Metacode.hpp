@@ -2,6 +2,8 @@
 
 #   include <Metabuf.hpp>
 
+#   include "Metatype.hpp"
+
 #   include <vector>
 
 namespace Metacode
@@ -17,7 +19,7 @@ namespace Metacode
     public:
     protected:
         void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     protected:
     protected:
         typedef std::vector<class Meta_Resource *> TVectorMeta_Resource;
@@ -57,7 +59,7 @@ namespace Metacode
         
     protected:
         void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     protected:
     protected:
         std::string Name;
@@ -119,7 +121,7 @@ namespace Metacode
         
     protected:
         void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     protected:
     protected:
         bool File_Path_successful;
@@ -205,7 +207,7 @@ namespace Metacode
         
     protected:
         void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     protected:
     protected:
         bool File_Codec_successful;

@@ -19,7 +19,11 @@ namespace Metabuf
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value )
         {
             size_t size = strlen( _value );
-            _metabuf->write( size );
+            if( _metabuf->writeSize( size ) == false )
+            {
+                return false;
+            }
+
             _metabuf->writeCount( _value, size );
 
             return true;
@@ -29,7 +33,11 @@ namespace Metabuf
         {
             size_t size = strlen( _value );
 
-            _metabuf->write( size );
+            if( _metabuf->writeSize( size ) == false )
+            {
+                return false;
+            }
+
             _metabuf->writeCount( _value, size );
 
             return true;
@@ -76,7 +84,11 @@ namespace Metabuf
 
 		pugi::xml_node root = doc.document_element();
 
-		if( this->writeNode_( root ) == false )
+        const char * root_name = root.name();
+
+        const XmlNode * node_root = m_protocol->getNode( root_name );
+
+		if( this->writeNode_( node_root, root ) == false )
 		{
 			return false;
 		}
@@ -86,26 +98,16 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::writeNode_( const pugi::xml_node & _xml_node )
+	bool Xml2Metabuf::writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
-		const char * nodeName = _xml_node.name();
+		size_t id = _node->id;
+		if( this->writeSize( id ) == false )
+        {
+            return false;
+        }
 
-		const XmlNode * node = m_protocol->getNode( nodeName );
-
-		if( node == 0 )
-		{
-			std::stringstream ss;
-			ss << "XmlToBin write not found node '" << nodeName << "'";
-			m_error = ss.str();
-
-			return false;
-		}
-
-		size_t id = node->id;
-		this->write( id );
-
-        this->writeNodeAttribute_( node, _xml_node );
-        this->writeNodeIncludes_( node, _xml_node );
+        this->writeNodeAttribute_( _node, _xml_node );
+        this->writeNodeIncludes_( _node, _xml_node );
 
         return true;
     }
@@ -115,7 +117,10 @@ namespace Metabuf
         size_t attributeCount;
         this->getNodeAttributeSize_( _node, _xml_node, attributeCount );
 
-        this->write( attributeCount );
+        if( this->writeSize( attributeCount ) == false )
+        {
+            return false;
+        }
 
 		for( pugi::xml_node::attribute_iterator
 			it = _xml_node.attributes_begin(),
@@ -130,7 +135,10 @@ namespace Metabuf
 			const XmlAttribute * attr = _node->getAttribute( attrName );
 
 			size_t id = attr->id;
-            this->write( id );
+            if( this->writeSize( id ) == false )
+            {
+                return false;
+            }
 
             TMapSerialization::const_iterator it_serialize = m_serialization.find( attr->evict );
 
@@ -140,8 +148,61 @@ namespace Metabuf
             }
 
             const char * attr_value = xml_attr.value();
-            (*it_serialize->second)( this, attr_value );
+            if( (*it_serialize->second)( this, attr_value ) == false )
+            {
+                return false;
+            }
 		}
+
+        for( pugi::xml_node::iterator
+            it = _xml_node.begin(),
+            it_end = _xml_node.end();
+        it != it_end;
+        ++it )
+        {
+            const pugi::xml_node & child = *it;
+
+            const char * child_name = child.name();
+
+            const XmlMember * member = _node->getMember( child_name );
+
+            if( member == 0 )
+            {
+                continue;
+            }
+
+            for( pugi::xml_node::attribute_iterator
+                it = child.attributes_begin(),
+                it_end = child.attributes_end();
+            it != it_end;
+            ++it )
+            {
+                const pugi::xml_attribute & xml_attr = *it;
+
+                const char * attrName = xml_attr.name();
+
+                const XmlAttribute * attr = member->getAttribute( attrName );
+
+                size_t id = attr->id;
+                if( this->writeSize( id ) == false )
+                {
+                    return false;
+                }
+
+                TMapSerialization::const_iterator it_serialize = m_serialization.find( attr->evict );
+
+                if( it_serialize == m_serialization.end() )
+                {
+                    return false;
+                }
+
+                const char * attr_value = xml_attr.value();
+                if( (*it_serialize->second)( this, attr_value ) == false )
+                {
+                    return false;
+                }
+            }
+        }
 
 		return true;
 	}
@@ -193,10 +254,13 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        size_t attributeCount;
-        this->getNodeIncludesSize_( _node, _xml_node, attributeCount );
+        size_t incluidesCount;
+        this->getNodeIncludesSize_( _node, _xml_node, incluidesCount );
 
-        this->write( attributeCount );
+        if( this->writeSize( incluidesCount ) == false )
+        {
+            return false;
+        }
 
         for( pugi::xml_node::iterator
             it = _xml_node.begin(),
@@ -213,7 +277,26 @@ namespace Metabuf
                 continue;
             }
 
-            this->writeNode_( child );
+            const XmlNode * node_includes = m_protocol->getNode( child_name );
+
+            this->writeSize( node_includes->id );
+
+            if( node_includes->generator.empty() == true )
+            {
+                this->writeSize( node_includes->id );
+
+                this->writeNode_( node_includes, child );
+            }
+            else
+            {
+                pugi::xml_attribute attr_generator = child.attribute( node_includes->generator.c_str() );
+                
+                const char * value_generator = attr_generator.value();
+
+                const XmlNode * node_generator = m_protocol->getNode( value_generator );
+
+                this->writeNode_( node_generator, child );
+            }            
         }
 
         return true;
@@ -242,6 +325,20 @@ namespace Metabuf
         }
 
         _count = count;
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::writeSize( size_t _value )
+    {
+        if( _value > 255 )
+        {
+            return false;
+        }
+
+        unsigned char size = (unsigned char)_value;
+
+        this->writeBuffer( (const char * )&size, 1 );
 
         return true;
     }

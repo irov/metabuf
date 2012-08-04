@@ -21,7 +21,7 @@ namespace Metabuf
 		bool convert( const void * _buff, size_t _size, size_t & _write );
 
 	protected:
-		bool writeNode_( const pugi::xml_node & _xml_node );
+		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
 
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, size_t & _count );
@@ -36,10 +36,12 @@ namespace Metabuf
             this->writeBuffer( (const char * )&_value, sizeof(T) );
         }   
 
+        bool writeSize( size_t _value );
+
         template<class T>
         void writeCount( const T * _value, size_t _count )
         {
-            this->writeBuffer( (const char * )&_value, sizeof(T) * _count );
+            this->writeBuffer( (const char * )_value, sizeof(T) * _count );
         }   
         
     protected:

@@ -2,8 +2,6 @@
 #	include "Xml2Metabuf.hpp"
 #	include "Xml2Metacode.hpp"
 
-//#   include "Metacode.hpp"
-
 #	include <stdio.h>
 
 void main()
@@ -62,11 +60,11 @@ void main()
 
     Metabuf::Xml2Metabuf xml_metabuf(write_buff, &xml_protocol);
 
+    xml_metabuf.initialize();
 	xml_metabuf.convert( buf_test, size_test, write_size );
 
+    FILE * file_test_bin = fopen("101_Fork.bin", "wb");
 
-    //Metacode::Meta_DataBlock * datablock = new Metacode::Meta_DataBlock();
-
-    //size_t read_size;
-    //datablock->parse( write_buff, write_size, read_size);
+    fwrite( write_buff, write_size, 1, file_test_bin );
+    fclose( file_test_bin );
 }
