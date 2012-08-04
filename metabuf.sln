@@ -16,6 +16,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pugixml", "pugixml\scripts\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "metabuf", "metabuf\metabuf.vcxproj", "{7C7912D0-2D91-4A12-811E-5F70AEA7B167}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox_reader", "sandbox_reader\sandbox_reader.vcxproj", "{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C794618-5C63-4024-AA30-AA4360EE543F} = {7C794618-5C63-4024-AA30-AA4360EE543F}
+		{89A1E353-E2DC-495C-B403-742BE206ACED} = {89A1E353-E2DC-495C-B403-742BE206ACED}
+		{7C7912D0-2D91-4A12-811E-5F70AEA7B167} = {7C7912D0-2D91-4A12-811E-5F70AEA7B167}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
@@ -53,6 +60,12 @@ Global
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Release|Win32.ActiveCfg = Release|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Release|Win32.Build.0 = Release|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Release|x64.ActiveCfg = Release|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Debug|Win32.Build.0 = Debug|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Debug|x64.ActiveCfg = Debug|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|Win32.ActiveCfg = Release|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|Win32.Build.0 = Release|Win32
+		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

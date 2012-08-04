@@ -23,6 +23,8 @@ namespace Metabuf
 	{
 		std::string name;
 		TMapAttributes attributes;
+
+        const XmlAttribute * getAttribute( const std::string & _name ) const;
 	};
 	
 	typedef std::map<std::string, XmlMember> TMapMembers;
@@ -36,6 +38,10 @@ namespace Metabuf
 		std::string generator;
 		std::string inheritance;
 
+        const XmlNode * node_inheritance;
+
+        mutable size_t enumerator;
+
 		TMapAttributes attributes;
 		TMapMembers members;
 
@@ -44,7 +50,7 @@ namespace Metabuf
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         bool isInclude( const std::string & _name ) const;
-        
+                
         std::string getName() const;
 	};
 
