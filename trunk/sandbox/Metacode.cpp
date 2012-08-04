@@ -7,12 +7,12 @@ namespace Metacode
     {
         switch( _id )
         {
-        case 4:
+        case 3:
             {
                 return new Meta_ResourceEmitterContainer();
                 break;
             }
-        case 3:
+        case 2:
             {
                 return new Meta_ResourceImageDefault();
                 break;
@@ -31,7 +31,7 @@ namespace Metacode
     {
         switch( _includes )
         {
-        case 2:
+        case 1:
             {
                 Metabuf::Metadata * metadata = this->generateMetadata( _generators );
     
@@ -159,7 +159,7 @@ namespace Metacode
     {
         switch( _includes )
         {
-        case 7:
+        case 2:
             {
                 Meta_Pak::Meta_Resources metadata;
                 metadata.parseNode( _buff, _size, _read );
@@ -167,7 +167,7 @@ namespace Metacode
                 includes_Meta_Resources.push_back(metadata);
                 break;
             }
-        case 6:
+        case 1:
             {
                 Meta_Pak::Meta_Scripts metadata;
                 metadata.parseNode( _buff, _size, _read );
@@ -201,7 +201,7 @@ namespace Metacode
     {
         switch( _includes )
         {
-        case 8:
+        case 2:
             {
                 Meta_Pak::Meta_Resources::Meta_Resource metadata;
                 metadata.parseNode( _buff, _size, _read );
