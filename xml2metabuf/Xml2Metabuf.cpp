@@ -32,7 +32,6 @@ namespace Metabuf
 
         static bool s_write_wstring( Xml2Metabuf * _metabuf, const char * _value )
         {
-
             int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
 
             if( _metabuf->writeSize( size ) == false )
@@ -87,12 +86,6 @@ namespace Metabuf
 				, result.description()
 				);
 
-			return false;
-		}
-
-		size_t id = 42;
-		if( this->writeSize( id ) == false )
-		{
 			return false;
 		}
 
