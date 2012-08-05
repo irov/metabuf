@@ -32,7 +32,7 @@ void main()
     std::string source;
 	xml_metacode.generate( header, source );
 
-	FILE * file_metacode_hpp = fopen("Metacode.hpp", "wb");
+	FILE * file_metacode_hpp = fopen("Metacode.h", "wb");
 
 	fwrite( header.c_str(), header.size(), 1, file_metacode_hpp );
 	fclose( file_metacode_hpp );
@@ -42,7 +42,7 @@ void main()
     fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
     fclose( file_metacode_cpp );
 
-    convert("101_Fork.xml", "101_Fork.bin", &xml_protocol );
+    //convert("101_Fork.xml", "101_Fork.bin", &xml_protocol );
     convert("Pak.xml", "Pak.bin", &xml_protocol );
 }
 //////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,14 @@ void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _prot
     Metabuf::Xml2Metabuf xml_metabuf(write_buff, _protocol);
 
     xml_metabuf.initialize();
-	xml_metabuf.convert( buf_test, size_test, write_size );
+	if( xml_metabuf.convert( buf_test, size_test, write_size ) == false )
+    {
+        printf("Error: %s\n"
+            , xml_metabuf.getError().c_str()
+            );
+
+        return;
+    }
 
     FILE * file_test_bin = fopen(_bin, "wb");
 

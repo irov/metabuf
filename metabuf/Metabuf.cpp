@@ -27,7 +27,7 @@ namespace Metabuf
 		}
 
 		size_t includeCount;
-		this->readSize( _buff, _size, _read, includeCount );
+		this->read( _buff, _size, _read, includeCount );
 		
 		for( size_t i = 0; i != includeCount; ++i )
 		{

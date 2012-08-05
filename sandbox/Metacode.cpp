@@ -175,6 +175,14 @@ namespace Metacode
                 includes_Meta_Scripts.push_back(metadata);
                 break;
             }
+        case 3:
+            {
+                Meta_Pak::Meta_Texts metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Texts.push_back(metadata);
+                break;
+            }
         }
     }
     
@@ -255,6 +263,68 @@ namespace Metacode
     
     //////////////////////////////////////////////////////////////////////////
     void Meta_Pak::Meta_Scripts::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::Meta_Texts::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Texts::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Path );
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Texts::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 2:
+            {
+                Meta_Pak::Meta_Texts::Meta_Text metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Text.push_back(metadata);
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Pak::Meta_Texts::Meta_Text::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Texts::Meta_Text::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->File );
+                break;
+            }
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Name );
+                break;
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    void Meta_Pak::Meta_Texts::Meta_Text::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
     }
     
