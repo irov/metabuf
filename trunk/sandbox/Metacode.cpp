@@ -1,4 +1,4 @@
-#   include "Metacode.hpp"
+#   include "Metacode.h"
 
 namespace Metacode
 {
@@ -22,12 +22,12 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_DataBlock::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_DataBlock::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         switch( _includes )
         {
@@ -50,7 +50,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_Resource::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_DataBlock::Meta_Resource::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         switch( _id )
         {
@@ -68,7 +68,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_Resource::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_DataBlock::Meta_Resource::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
     }
     
@@ -78,7 +78,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _id );
     
@@ -100,7 +100,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_DataBlock::Meta_ResourceEmitterContainer::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _includes, _generators );
     }
@@ -111,7 +111,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _id );
     
@@ -139,7 +139,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_DataBlock::Meta_ResourceImageDefault::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_DataBlock::Meta_ResourceImageDefault::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _includes, _generators );
     }
@@ -150,12 +150,12 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_Pak::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_Pak::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         switch( _includes )
         {
@@ -184,7 +184,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Resources::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_Pak::Meta_Resources::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         switch( _id )
         {
@@ -197,7 +197,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Resources::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_Pak::Meta_Resources::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         switch( _includes )
         {
@@ -218,7 +218,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Resources::Meta_Resource::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_Pak::Meta_Resources::Meta_Resource::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         switch( _id )
         {
@@ -231,7 +231,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Resources::Meta_Resource::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_Pak::Meta_Resources::Meta_Resource::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
     }
     
@@ -241,7 +241,7 @@ namespace Metacode
         return 0;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Scripts::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )
+    void Meta_Pak::Meta_Scripts::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
     {
         switch( _id )
         {
@@ -254,7 +254,7 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
-    void Meta_Pak::Meta_Scripts::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    void Meta_Pak::Meta_Scripts::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
     }
     
