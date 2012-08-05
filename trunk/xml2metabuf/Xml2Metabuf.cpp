@@ -90,6 +90,12 @@ namespace Metabuf
 			return false;
 		}
 
+		size_t id = 42;
+		if( this->writeSize( id ) == false )
+		{
+			return false;
+		}
+
 		pugi::xml_node root = doc.document_element();
 
         const char * root_name = root.name();
