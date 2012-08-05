@@ -32,26 +32,36 @@ namespace Metacode
             {
             }
         public:
-            void attribute_Name( std::string & _value )
+            void attribute_Name( Menge::String & _value ) const
             {
                 _value = this->Name;
             }
             
             template<class C, class M>
-            void method_Name( C * _self, M _method )
+            void method_Name( C * _self, M _method ) const
             {
                 (_self->*_method)( this->Name );
             }
+            template<class C, class M, class A0>
+            void method_Name( C * _self, M _method, const A0 & _a0 ) const
+            {
+                (_self->*_method)( this->Name, _a0 );
+            }
             
-            void attribute_Type( std::string & _value )
+            void attribute_Type( Menge::String & _value ) const
             {
                 _value = this->Type;
             }
             
             template<class C, class M>
-            void method_Type( C * _self, M _method )
+            void method_Type( C * _self, M _method ) const
             {
                 (_self->*_method)( this->Type );
+            }
+            template<class C, class M, class A0>
+            void method_Type( C * _self, M _method, const A0 & _a0 ) const
+            {
+                (_self->*_method)( this->Type, _a0 );
             }
             
         protected:
@@ -62,8 +72,8 @@ namespace Metacode
             
         protected:
         protected:
-            std::string Name;
-            std::string Type;
+            Menge::String Name;
+            Menge::String Type;
         };
         
         class Meta_ResourceEmitterContainer
@@ -77,7 +87,7 @@ namespace Metacode
             {
             }
         public:
-            void setup_File_Path( std::string & _value )
+            void setup_File_Path( Menge::String & _value )
             {
                 if( File_Path_successful == false )
                 {
@@ -98,7 +108,7 @@ namespace Metacode
                 (_self->*_method)( this->File_Path );
             }
             
-            void setup_Folder_Path( std::string & _value )
+            void setup_Folder_Path( Menge::String & _value )
             {
                 if( Folder_Path_successful == false )
                 {
@@ -128,9 +138,9 @@ namespace Metacode
         protected:
         protected:
             bool File_Path_successful;
-            std::string File_Path;
+            Menge::String File_Path;
             bool Folder_Path_successful;
-            std::string Folder_Path;
+            Menge::String Folder_Path;
         };
         
         class Meta_ResourceImageDefault
@@ -145,7 +155,7 @@ namespace Metacode
             {
             }
         public:
-            void setup_File_Codec( std::string & _value )
+            void setup_File_Codec( Menge::String & _value )
             {
                 if( File_Codec_successful == false )
                 {
@@ -187,7 +197,7 @@ namespace Metacode
                 (_self->*_method)( this->File_MaxSize );
             }
             
-            void setup_File_Path( std::string & _value )
+            void setup_File_Path( Menge::String & _value )
             {
                 if( File_Path_successful == false )
                 {
@@ -217,11 +227,11 @@ namespace Metacode
         protected:
         protected:
             bool File_Codec_successful;
-            std::string File_Codec;
+            Menge::String File_Codec;
             bool File_MaxSize_successful;
             mt::vec2f File_MaxSize;
             bool File_Path_successful;
-            std::string File_Path;
+            Menge::String File_Path;
         };
         
     protected:
@@ -229,7 +239,7 @@ namespace Metacode
     public:
         typedef std::vector<Meta_Resource *> TVectorMeta_Resource;
     
-        const TVectorMeta_Resource & get_Resource() const
+        const TVectorMeta_Resource & get_IncludesResource() const
         {
             return this->includes_Meta_Resource;
         }
@@ -262,15 +272,20 @@ namespace Metacode
             {
             }
         public:
-            void attribute_Path( std::wstring & _value )
+            void attribute_Path( Menge::WString & _value ) const
             {
                 _value = this->Path;
             }
             
             template<class C, class M>
-            void method_Path( C * _self, M _method )
+            void method_Path( C * _self, M _method ) const
             {
                 (_self->*_method)( this->Path );
+            }
+            template<class C, class M, class A0>
+            void method_Path( C * _self, M _method, const A0 & _a0 ) const
+            {
+                (_self->*_method)( this->Path, _a0 );
             }
             
         protected:
@@ -288,15 +303,20 @@ namespace Metacode
                 {
                 }
             public:
-                void attribute_Name( std::wstring & _value )
+                void attribute_Name( Menge::ConstString & _value ) const
                 {
                     _value = this->Name;
                 }
                 
                 template<class C, class M>
-                void method_Name( C * _self, M _method )
+                void method_Name( C * _self, M _method ) const
                 {
                     (_self->*_method)( this->Name );
+                }
+                template<class C, class M, class A0>
+                void method_Name( C * _self, M _method, const A0 & _a0 ) const
+                {
+                    (_self->*_method)( this->Name, _a0 );
                 }
                 
             protected:
@@ -307,16 +327,16 @@ namespace Metacode
                 
             protected:
             protected:
-                std::wstring Name;
+                Menge::ConstString Name;
             };
             
         protected:
         protected:
-            std::wstring Path;
+            Menge::WString Path;
         public:
             typedef std::vector<Meta_Resource> TVectorMeta_Resource;
         
-            const TVectorMeta_Resource & get_Resource() const
+            const TVectorMeta_Resource & get_IncludesResource() const
             {
                 return this->includes_Meta_Resource;
             }
@@ -334,15 +354,20 @@ namespace Metacode
             {
             }
         public:
-            void attribute_Path( std::wstring & _value )
+            void attribute_Path( Menge::WString & _value ) const
             {
                 _value = this->Path;
             }
             
             template<class C, class M>
-            void method_Path( C * _self, M _method )
+            void method_Path( C * _self, M _method ) const
             {
                 (_self->*_method)( this->Path );
+            }
+            template<class C, class M, class A0>
+            void method_Path( C * _self, M _method, const A0 & _a0 ) const
+            {
+                (_self->*_method)( this->Path, _a0 );
             }
             
         protected:
@@ -353,7 +378,106 @@ namespace Metacode
             
         protected:
         protected:
-            std::wstring Path;
+            Menge::WString Path;
+        };
+        
+        class Meta_Texts
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_Texts()
+                : Metabuf::Metadata()
+            {
+            }
+        public:
+            void attribute_Path( Menge::WString & _value ) const
+            {
+                _value = this->Path;
+            }
+            
+            template<class C, class M>
+            void method_Path( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Path );
+            }
+            template<class C, class M, class A0>
+            void method_Path( C * _self, M _method, const A0 & _a0 ) const
+            {
+                (_self->*_method)( this->Path, _a0 );
+            }
+            
+        protected:
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        public:
+            Metadata * generateMetadata( size_t _id ) override;
+            
+            class Meta_Text
+                : public Metabuf::Metadata
+            { 
+            public:
+                Meta_Text()
+                    : Metabuf::Metadata()
+                {
+                }
+            public:
+                void attribute_File( Menge::WString & _value ) const
+                {
+                    _value = this->File;
+                }
+                
+                template<class C, class M>
+                void method_File( C * _self, M _method ) const
+                {
+                    (_self->*_method)( this->File );
+                }
+                template<class C, class M, class A0>
+                void method_File( C * _self, M _method, const A0 & _a0 ) const
+                {
+                    (_self->*_method)( this->File, _a0 );
+                }
+                
+                void attribute_Name( Menge::ConstString & _value ) const
+                {
+                    _value = this->Name;
+                }
+                
+                template<class C, class M>
+                void method_Name( C * _self, M _method ) const
+                {
+                    (_self->*_method)( this->Name );
+                }
+                template<class C, class M, class A0>
+                void method_Name( C * _self, M _method, const A0 & _a0 ) const
+                {
+                    (_self->*_method)( this->Name, _a0 );
+                }
+                
+            protected:
+                void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            public:
+                Metadata * generateMetadata( size_t _id ) override;
+                
+            protected:
+            protected:
+                Menge::WString File;
+                Menge::ConstString Name;
+            };
+            
+        protected:
+        protected:
+            Menge::WString Path;
+        public:
+            typedef std::vector<Meta_Text> TVectorMeta_Text;
+        
+            const TVectorMeta_Text & get_IncludesText() const
+            {
+                return this->includes_Meta_Text;
+            }
+        
+        protected:
+            TVectorMeta_Text includes_Meta_Text;
         };
         
     protected:
@@ -361,7 +485,7 @@ namespace Metacode
     public:
         typedef std::vector<Meta_Resources> TVectorMeta_Resources;
     
-        const TVectorMeta_Resources & get_Resources() const
+        const TVectorMeta_Resources & get_IncludesResources() const
         {
             return this->includes_Meta_Resources;
         }
@@ -371,13 +495,23 @@ namespace Metacode
     public:
         typedef std::vector<Meta_Scripts> TVectorMeta_Scripts;
     
-        const TVectorMeta_Scripts & get_Scripts() const
+        const TVectorMeta_Scripts & get_IncludesScripts() const
         {
             return this->includes_Meta_Scripts;
         }
     
     protected:
         TVectorMeta_Scripts includes_Meta_Scripts;
+    public:
+        typedef std::vector<Meta_Texts> TVectorMeta_Texts;
+    
+        const TVectorMeta_Texts & get_IncludesTexts() const
+        {
+            return this->includes_Meta_Texts;
+        }
+    
+    protected:
+        TVectorMeta_Texts includes_Meta_Texts;
     };
     
 }

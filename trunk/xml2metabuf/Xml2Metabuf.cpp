@@ -117,8 +117,15 @@ namespace Metabuf
             return false;
         }
 
-        this->writeNodeAttribute_( _node, _xml_node );
-        this->writeNodeIncludes_( _node, _xml_node );
+        if( this->writeNodeAttribute_( _node, _xml_node ) == false )
+        {
+            return false;
+        }
+
+        if( this->writeNodeIncludes_( _node, _xml_node ) == false )
+        {
+            return false;
+        }
 
         return true;
     }
@@ -286,10 +293,7 @@ namespace Metabuf
         size_t incluidesCount;
         this->getNodeIncludesSize_( _node, _xml_node, incluidesCount );
 
-        if( this->writeSize( incluidesCount ) == false )
-        {
-            return false;
-        }
+        this->write( incluidesCount );
 
         for( pugi::xml_node::iterator
             it = _xml_node.begin(),
