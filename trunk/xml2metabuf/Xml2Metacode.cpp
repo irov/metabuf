@@ -252,6 +252,23 @@ namespace Metabuf
 
 			this->write() << "    (_self->*_method)( this->" << attr->name << " );" << std::endl;
 			this->write() << "}" << std::endl;
+
+            this->write() << "template<class C, class M, class A0>" << std::endl;
+            this->write() << "void" << " " << "method_" << attr->name << "( C * _self, M _method, const A0 & _a0 ) const" << std::endl;
+            this->write() << "{" << std::endl;
+
+            if( attr->required == false )
+            {
+                this->write() << "    if( " << attr->name << "_successful == false )" << std::endl;
+                this->write() << "    {" << std::endl;
+                this->write() << "        return;" << std::endl;
+                this->write() << "    }" << std::endl;
+                this->write() << std::endl;
+            }
+
+            this->write() << "    (_self->*_method)( this->" << attr->name << ", _a0 );" << std::endl;
+            this->write() << "}" << std::endl;
+
 			this->write() << std::endl;
 		}
 
