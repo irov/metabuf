@@ -27,7 +27,7 @@
             <Attribute Name="Path" Type="std::wstring" Evict = "wstring" Required="1"/>
             
             <Node Name="Resource">
-                <Attribute Name="Name" Type="std::string" Evict = "string" Required="1"/>
+                <Attribute Name="Name" Type="std::wstring" Evict = "wstring" Required="1"/>
             </Node>
         </Node>
     </Node>        
