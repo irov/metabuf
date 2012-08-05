@@ -1,6 +1,7 @@
 #	include "Xml2Metabuf.hpp"
 #	include "XmlProtocol.hpp"
 
+#   include <Windows.h>
 #	include <sstream>
 
 namespace Metabuf
@@ -31,14 +32,21 @@ namespace Metabuf
 
         static bool s_write_wstring( Xml2Metabuf * _metabuf, const char * _value )
         {
-            size_t size = strlen( _value );
+
+            int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
 
             if( _metabuf->writeSize( size ) == false )
             {
                 return false;
             }
 
-            _metabuf->writeCount( _value, size );
+            //static WString s_buffer;
+            std::wstring wstr;
+            wstr.resize(size);
+            //wchar_t * buffer = new wchar_t[size];
+            ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, &wstr[0], size );
+
+            _metabuf->writeCount( wstr.c_str(), size );
 
             return true;
         }
