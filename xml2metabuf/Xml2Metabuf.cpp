@@ -17,6 +17,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     namespace Serialize
     {
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value )
         {
             size_t size = strlen( _value );
@@ -29,27 +30,58 @@ namespace Metabuf
 
             return true;
         }
-
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_wstring( Xml2Metabuf * _metabuf, const char * _value )
         {
             int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
 
-            if( _metabuf->writeSize( size ) == false )
+            if( size == 0 )
             {
                 return false;
             }
 
-            //static WString s_buffer;
-            std::wstring wstr;
-            wstr.resize(size);
-            //wchar_t * buffer = new wchar_t[size];
-            ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, &wstr[0], size );
+            if( _metabuf->writeSize( size - 1 ) == false )
+            {
+                return false;
+            }
 
-            _metabuf->writeCount( wstr.c_str(), size );
+            wchar_t * buffer = new wchar_t[size];
+            ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, buffer, size );
+            
+            _metabuf->writeCount( buffer, size - 1 );
+
+            delete [] buffer;
 
             return true;
         }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            int int_value;
+            if( sscanf_s( _value, "%d", &int_value ) != 1 )
+            {
+                return false;
+            }
 
+            bool value = (int_value != 0);
+            _metabuf->write( value );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            float value;
+            if( sscanf_s( _value, "%f", &value ) != 1 )
+            {
+                return false;
+            }
+
+            _metabuf->write( value );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value )
         {
             float value[2];
@@ -65,13 +97,32 @@ namespace Metabuf
 
             return true;
         }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            float value[4];
+            if( sscanf_s( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+            {
+                if( sscanf_s( _value, "%f %f %f %f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+                {
+                    return false;
+                }
+            }
+
+            _metabuf->writeCount( value, 4 );
+
+            return true;
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::initialize()
     {
         m_serialization["string"] = &Serialize::s_write_string;
         m_serialization["wstring"] = &Serialize::s_write_wstring;
-        m_serialization["float2"] = &Serialize::s_write_float2;        
+        m_serialization["bool"] = &Serialize::s_write_bool;
+        m_serialization["float"] = &Serialize::s_write_float;
+        m_serialization["float2"] = &Serialize::s_write_float2;
+        m_serialization["float4"] = &Serialize::s_write_float4;
     }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::convert( const void * _buff, size_t _size, size_t & _write )
@@ -334,9 +385,16 @@ namespace Metabuf
 
                 const XmlNode * node_generator = _node->getGenerator( value_generator );
 
+                if( node_generator == 0 )
+                {
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_includes->name << " not found generator " << value_generator << std::endl;
+
+                    return false;
+                }
+
                 if( this->writeNode_( node_generator, child ) == false )
 				{
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << " generator " << node_includes->generator << std::endl;
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << std::endl;
 
 					return false;
 				}
