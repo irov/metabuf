@@ -104,6 +104,10 @@ namespace Metabuf
 
 		return true;
 	}
+	std::string Xml2Metabuf::getError()
+	{
+		return m_error.str();
+	}
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
@@ -141,24 +145,19 @@ namespace Metabuf
 
 			const XmlAttribute * attr = _node->getAttribute( attrName );
 
-			size_t id = attr->id;
-            if( this->writeSize( id ) == false )
-            {
-                return false;
-            }
+			if( attr == 0 )
+			{
+				m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not found argument " << attrName << std::endl;
 
-            TMapSerialization::const_iterator it_serialize = m_serialization.find( attr->evict );
+				return false;
+			}
 
-            if( it_serialize == m_serialization.end() )
-            {
-                return false;
-            }
+			if( this->writeNodeArguments_( attr, xml_attr ) == false )
+			{
+				m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write argument " << attrName << std::endl;
 
-            const char * attr_value = xml_attr.value();
-            if( (*it_serialize->second)( this, attr_value ) == false )
-            {
-                return false;
-            }
+				return false;
+			}
 		}
 
         for( pugi::xml_node::iterator
@@ -190,28 +189,51 @@ namespace Metabuf
 
                 const XmlAttribute * attr = member->getAttribute( attrName );
 
-                size_t id = attr->id;
-                if( this->writeSize( id ) == false )
-                {
-                    return false;
-                }
+				if( attr == 0 )
+				{
+					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found argument " << attrName << std::endl;
 
-                TMapSerialization::const_iterator it_serialize = m_serialization.find( attr->evict );
+					return false;
+				}
 
-                if( it_serialize == m_serialization.end() )
-                {
-                    return false;
-                }
+				if( this->writeNodeArguments_( attr, xml_attr ) == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attrName << std::endl;
 
-                const char * attr_value = xml_attr.value();
-                if( (*it_serialize->second)( this, attr_value ) == false )
-                {
-                    return false;
-                }
+					return false;
+				}
             }
         }
 
 		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeArguments_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
+	{
+		size_t id = _attr->id;
+		if( this->writeSize( id ) == false )
+		{
+			return false;
+		}
+
+		TMapSerialization::const_iterator it_serialize = m_serialization.find( _attr->evict );
+
+		if( it_serialize == m_serialization.end() )
+		{
+			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << _attr->evict << " for attribute " << _attr->name << std::endl;
+
+			return false;
+		}
+
+		const char * attr_value = _xml_attr.value();
+		if( (*it_serialize->second)( this, attr_value ) == false )
+		{
+			m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << _attr->evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+
+			return false;
+		}
+
+        return true;
 	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, size_t & _count )
@@ -286,11 +308,19 @@ namespace Metabuf
                 continue;
             }
 
-            this->writeSize( node_includes->id );
+            if( this->writeSize( node_includes->id ) == false )
+			{
+				return false;
+			}
 
             if( node_includes->generator.empty() == true )
             {
-                this->writeNode_( node_includes, child );
+                if( this->writeNode_( node_includes, child ) == false )
+				{
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_includes->name << std::endl;
+
+					return false;
+				}
             }
             else
             {
@@ -300,7 +330,12 @@ namespace Metabuf
 
                 const XmlNode * node_generator = _node->getGenerator( value_generator );
 
-                this->writeNode_( node_generator, child );
+                if( this->writeNode_( node_generator, child ) == false )
+				{
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << " generator " << node_includes->generator << std::endl;
+
+					return false;
+				}
             }            
         }
 
