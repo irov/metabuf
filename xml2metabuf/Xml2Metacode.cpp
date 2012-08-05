@@ -221,7 +221,7 @@ namespace Metabuf
 		{
 			const XmlAttribute * attr = &it->second;
 
-			this->write() << "void" << " " << "setup_" << attr->name << "( " << attr->type << " & _value )" << std::endl;
+			this->write() << "void" << " " << "attribute_" << attr->name << "( " << attr->type << " & _value )" << std::endl;
 			this->write() << "{" << std::endl;
 			
 			if( attr->required == false )
@@ -238,7 +238,7 @@ namespace Metabuf
 			this->write() << std::endl;
 
 			this->write() << "template<class C, class M>" << std::endl;
-			this->write() << "void" << " " << "setup_" << attr->name << "( C * _self, M _method )" << std::endl;
+			this->write() << "void" << " " << "method_" << attr->name << "( C * _self, M _method )" << std::endl;
 			this->write() << "{" << std::endl;
 
 			if( attr->required == false )

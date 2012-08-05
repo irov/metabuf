@@ -1,8 +1,8 @@
 #   pragma once
 
-#   include <Metabuf.hpp>
+#   include <metabuf/Metabuf.hpp>
 
-#   include "Metatype.hpp"
+#   include "Metatype.h"
 
 #   include <vector>
 
@@ -18,8 +18,8 @@ namespace Metacode
         }
     public:
     protected:
-        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -32,31 +32,31 @@ namespace Metacode
             {
             }
         public:
-            void setup_Name( std::string & _value )
+            void attribute_Name( std::string & _value )
             {
                 _value = this->Name;
             }
             
             template<class C, class M>
-            void setup_Name( C * _self, M _method )
+            void method_Name( C * _self, M _method )
             {
                 (_self->*_method)( this->Name );
             }
             
-            void setup_Type( std::string & _value )
+            void attribute_Type( std::string & _value )
             {
                 _value = this->Type;
             }
             
             template<class C, class M>
-            void setup_Type( C * _self, M _method )
+            void method_Type( C * _self, M _method )
             {
                 (_self->*_method)( this->Type );
             }
             
         protected:
-            void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -120,8 +120,8 @@ namespace Metacode
             }
             
         protected:
-            void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -209,8 +209,8 @@ namespace Metacode
             }
             
         protected:
-            void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -248,8 +248,8 @@ namespace Metacode
         }
     public:
     protected:
-        void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -262,20 +262,20 @@ namespace Metacode
             {
             }
         public:
-            void setup_Path( std::wstring & _value )
+            void attribute_Path( std::wstring & _value )
             {
                 _value = this->Path;
             }
             
             template<class C, class M>
-            void setup_Path( C * _self, M _method )
+            void method_Path( C * _self, M _method )
             {
                 (_self->*_method)( this->Path );
             }
             
         protected:
-            void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -288,20 +288,20 @@ namespace Metacode
                 {
                 }
             public:
-                void setup_Name( std::wstring & _value )
+                void attribute_Name( std::wstring & _value )
                 {
                     _value = this->Name;
                 }
                 
                 template<class C, class M>
-                void setup_Name( C * _self, M _method )
+                void method_Name( C * _self, M _method )
                 {
                     (_self->*_method)( this->Name );
                 }
                 
             protected:
-                void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -334,20 +334,20 @@ namespace Metacode
             {
             }
         public:
-            void setup_Path( std::wstring & _value )
+            void attribute_Path( std::wstring & _value )
             {
                 _value = this->Path;
             }
             
             template<class C, class M>
-            void setup_Path( C * _self, M _method )
+            void method_Path( C * _self, M _method )
             {
                 (_self->*_method)( this->Path );
             }
             
         protected:
-            void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
