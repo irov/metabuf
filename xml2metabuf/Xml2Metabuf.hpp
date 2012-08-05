@@ -6,6 +6,7 @@
 
 #   include <map>
 #	include <string>
+#	include <sstream>
 
 namespace Metabuf
 {
@@ -19,6 +20,8 @@ namespace Metabuf
 
 	public:
 		bool convert( const void * _buff, size_t _size, size_t & _write );
+		std::string getError();
+
 
 	protected:
 		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
@@ -28,7 +31,9 @@ namespace Metabuf
 
         bool writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, size_t & _count );
-        
+
+		bool writeNodeArguments_( const XmlAttribute * _node, const pugi::xml_attribute & _xml_attr );
+
     public:
         template<class T>
         void write( const T & _value )
@@ -53,7 +58,7 @@ namespace Metabuf
 
 		XmlProtocol * m_protocol;
 
-		std::string m_error;
+		std::stringstream m_error;
 
         typedef bool (*ValueSerialization)( Xml2Metabuf * _metabuf, const char * _value );
         typedef std::map<std::string, ValueSerialization> TMapSerialization;

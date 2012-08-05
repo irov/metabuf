@@ -427,7 +427,7 @@ namespace Metabuf
                     this->write() << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
                 }
                 this->write() << std::endl;
-                this->write() << "    const TVector" << node_include->getName() << " & " << "get_" << node_include->name << "() const" << std::endl;
+                this->write() << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
                 this->write() << "    {" << std::endl;
                 this->write() << "        return this->includes_" << node_include->getName() << ";" << std::endl;
                 this->write() << "    }" << std::endl;
