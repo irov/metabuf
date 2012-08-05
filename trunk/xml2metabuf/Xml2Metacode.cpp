@@ -128,7 +128,7 @@ namespace Metabuf
 		{
 			return false;
 		}
-
+        
 		if( this->writeHeaderIncludes_( _node ) == false )
 		{
 			return false;
@@ -390,8 +390,6 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludes_( const XmlNode * _node )
 	{
-		m_indent += 4;
-
 		for( TMapNodes::const_iterator
 			it = _node->includes.begin(),
 			it_end = _node->includes.end();
@@ -402,20 +400,26 @@ namespace Metabuf
 
             if( node_include->inheritance.empty() == true )
             {
+                this->write() << "public:" << std::endl;
                 if( node_include->generator.empty() == true )
                 {
-                    this->write() << "typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
-                    this->write() << "TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+                    this->write() << "    typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
                 }
                 else
                 {
-                    this->write() << "typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
-                    this->write() << "TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+                    this->write() << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
                 }
+                this->write() << std::endl;
+                this->write() << "    const TVector" << node_include->getName() << " & " << "get_" << node_include->name << "() const" << std::endl;
+                this->write() << "    {" << std::endl;
+                this->write() << "        return this->includes_" << node_include->getName() << ";" << std::endl;
+                this->write() << "    }" << std::endl;
+
+                this->write() << std::endl;
+                this->write() << "protected:" << std::endl;
+                this->write() << "    TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
             }
 		}
-		
-		m_indent -= 4;
 
 		return true;
 	}
