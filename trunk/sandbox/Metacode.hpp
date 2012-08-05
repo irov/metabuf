@@ -280,7 +280,7 @@ namespace Metacode
                 {
                 }
             public:
-                void setup_Name( std::string & _value )
+                void setup_Name( std::wstring & _value )
                 {
                     _value = this->Name;
                 }
@@ -299,7 +299,7 @@ namespace Metacode
                 
             protected:
             protected:
-                std::string Name;
+                std::wstring Name;
             };
             
         protected:

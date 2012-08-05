@@ -4,6 +4,8 @@
 
 #	include <stdio.h>
 
+void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _protocol );
+
 void main()
 {
 	Metabuf::XmlProtocol xml_protocol;
@@ -40,7 +42,13 @@ void main()
     fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
     fclose( file_metacode_cpp );
 
-	FILE * file_test = fopen("101_Fork.xml", "rb");
+    convert("101_Fork.xml", "101_Fork.bin", &xml_protocol );
+    convert("Pak.xml", "Pak.bin", &xml_protocol );
+}
+//////////////////////////////////////////////////////////////////////////
+void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _protocol )
+{
+	FILE * file_test = fopen(_xml, "rb");
 
 	long size_test;
 
@@ -58,12 +66,12 @@ void main()
     
     char * write_buff = new char[size_test];
 
-    Metabuf::Xml2Metabuf xml_metabuf(write_buff, &xml_protocol);
+    Metabuf::Xml2Metabuf xml_metabuf(write_buff, _protocol);
 
     xml_metabuf.initialize();
 	xml_metabuf.convert( buf_test, size_test, write_size );
 
-    FILE * file_test_bin = fopen("101_Fork.bin", "wb");
+    FILE * file_test_bin = fopen(_bin, "wb");
 
     fwrite( write_buff, write_size, 1, file_test_bin );
     fclose( file_test_bin );
