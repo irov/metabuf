@@ -226,7 +226,15 @@ namespace Metacode
         
     protected:
     protected:
+    public:
         typedef std::vector<Meta_Resource *> TVectorMeta_Resource;
+    
+        const TVectorMeta_Resource & get_Resource() const
+        {
+            return this->includes_Meta_Resource;
+        }
+    
+    protected:
         TVectorMeta_Resource includes_Meta_Resource;
     };
     
@@ -305,7 +313,15 @@ namespace Metacode
         protected:
         protected:
             std::wstring Path;
+        public:
             typedef std::vector<Meta_Resource> TVectorMeta_Resource;
+        
+            const TVectorMeta_Resource & get_Resource() const
+            {
+                return this->includes_Meta_Resource;
+            }
+        
+        protected:
             TVectorMeta_Resource includes_Meta_Resource;
         };
         
@@ -342,9 +358,25 @@ namespace Metacode
         
     protected:
     protected:
+    public:
         typedef std::vector<Meta_Resources> TVectorMeta_Resources;
+    
+        const TVectorMeta_Resources & get_Resources() const
+        {
+            return this->includes_Meta_Resources;
+        }
+    
+    protected:
         TVectorMeta_Resources includes_Meta_Resources;
+    public:
         typedef std::vector<Meta_Scripts> TVectorMeta_Scripts;
+    
+        const TVectorMeta_Scripts & get_Scripts() const
+        {
+            return this->includes_Meta_Scripts;
+        }
+    
+    protected:
         TVectorMeta_Scripts includes_Meta_Scripts;
     };
     

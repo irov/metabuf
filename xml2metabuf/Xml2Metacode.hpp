@@ -29,7 +29,7 @@ namespace Metabuf
 		bool writeHeaderAttributeSetup_( const XmlNode * _node );
         bool writeHeaderIncludesDefinition_( const XmlNode * _node );        
 		bool writeHeaderAttribute_( const XmlNode * _node );
-		bool writeHeaderIncludes_( const XmlNode * _node );
+		bool writeHeaderIncludes_( const XmlNode * _node );        
 		bool writeHeaderIncludesReader_( const XmlNode * _node );
 
     protected:
