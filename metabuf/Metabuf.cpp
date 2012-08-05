@@ -3,7 +3,7 @@
 namespace Metabuf
 {
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::parse( char * _buff, size_t _size, size_t & _read )
+	void Metadata::parse( const char * _buff, size_t _size, size_t & _read )
 	{
         _read = 0;
 
@@ -13,7 +13,7 @@ namespace Metabuf
         this->parseNode( _buff, _size, _read );
     }
     //////////////////////////////////////////////////////////////////////////
-    void Metadata::parseNode( char * _buff, size_t _size, size_t & _read )
+    void Metadata::parseNode( const char * _buff, size_t _size, size_t & _read )
     {
 		size_t attributeCount;
 		this->readSize( _buff, _size, _read, attributeCount );

@@ -38,9 +38,9 @@ namespace Metabuf
     {
         this->write() << "#   pragma once" << std::endl;
         this->write() << std::endl;
-        this->write() << "#   include <Metabuf.hpp>" << std::endl;
+        this->write() << "#   include <metabuf/Metabuf.hpp>" << std::endl;
         this->write() << std::endl;
-        this->write() << "#   include \"Metatype.hpp\"" << std::endl;
+        this->write() << "#   include \"Metatype.h\"" << std::endl;
         this->write() << std::endl;
         this->write() << "#   include <vector>" << std::endl;
         this->write() << std::endl;
@@ -202,7 +202,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderAttributeReader_( const XmlNode * _node )
 	{
-		this->write() << "void _parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id ) override;" << std::endl;
+		this->write() << "void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -422,14 +422,14 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludesReader_( const XmlNode * _node )
 	{
-		this->write() << "void _parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;" << std::endl;
+		this->write() << "void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;" << std::endl;
 
         return true;
 	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::generateSource( std::string & _header )
     {        
-        this->write() << "#   include \"Metacode.hpp\"" << std::endl;
+        this->write() << "#   include \"Metacode.h\"" << std::endl;
         this->write() << std::endl;
         this->write() << "namespace Metacode" << std::endl;
         this->write() << "{" << std::endl;
@@ -523,7 +523,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceAttributeReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getScope() << "::_parseArguments( char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
+        this->write() << "void " << _node->getScope() << "::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
@@ -599,7 +599,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getScope() << "::_parseIncludes( char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
+        this->write() << "void " << _node->getScope() << "::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
