@@ -244,6 +244,7 @@ namespace Metabuf
 				pugi::xml_attribute Name = element.attribute("Name");
 				pugi::xml_attribute Type = element.attribute("Type");
 				pugi::xml_attribute Evict = element.attribute("Evict");
+                pugi::xml_attribute Required = element.attribute("Required");
 
 				XmlMember & memberXml = nodeXml->members[ Node.value() ];
 
@@ -255,7 +256,7 @@ namespace Metabuf
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
 				attributeXml.evict = Evict.value();
-				attributeXml.required = false;
+				attributeXml.required = Required.empty() == false;
 			}
             else if( strcmp( element.name(), "Node" ) == 0 )
             {

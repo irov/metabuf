@@ -7,8 +7,9 @@
 namespace Metabuf
 {
 	//////////////////////////////////////////////////////////////////////////
-	Xml2Metabuf::Xml2Metabuf( char * _out, XmlProtocol * _protocol )
+	Xml2Metabuf::Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol )
 		: m_out(_out)
+        , m_size(_size)
 		, m_write(0)
 		, m_protocol(_protocol)
 	{
@@ -45,8 +46,8 @@ namespace Metabuf
                 return false;
             }
 
-            wchar_t * buffer = new wchar_t[size];
-            ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, buffer, size );
+            wchar_t * buffer = new wchar_t[size + 1];
+            int wc = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, buffer, size );
             
             _metabuf->writeCount( buffer, size - 1 );
 
@@ -222,32 +223,37 @@ namespace Metabuf
             return false;
         }
 
-		for( pugi::xml_node::attribute_iterator
-			it = _xml_node.attributes_begin(),
-			it_end = _xml_node.attributes_end();
-		it != it_end;
-		++it )
-		{
-			const pugi::xml_attribute & xml_attr = *it;
+        for( TMapAttributes::const_iterator
+            it = _node->attributes.begin(),
+            it_end = _node->attributes.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlAttribute * attr = &it->second;
 
-			const char * attrName = xml_attr.name();
+            pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+                        
+            if( xml_attr == false )
+            {
+                if( attr->required == true )
+                {
+                    m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not found required argument " << attr->name << std::endl;
 
-			const XmlAttribute * attr = _node->getAttribute( attrName );
+                    return false;
+                }
+                else
+                {
+                    continue;
+                }
+            }
 
-			if( attr == 0 )
-			{
-				m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not found argument " << attrName << std::endl;
+            if( this->writeNodeArguments_( attr, xml_attr ) == false )
+            {
+                m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write argument " << attr->name << std::endl;
 
-				return false;
-			}
-
-			if( this->writeNodeArguments_( attr, xml_attr ) == false )
-			{
-				m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write argument " << attrName << std::endl;
-
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
         for( pugi::xml_node::iterator
             it = _xml_node.begin(),
@@ -266,28 +272,33 @@ namespace Metabuf
                 continue;
             }
 
-            for( pugi::xml_node::attribute_iterator
-                it = child.attributes_begin(),
-                it_end = child.attributes_end();
+            for( TMapAttributes::const_iterator
+                it = member->attributes.begin(),
+                it_end = member->attributes.end();
             it != it_end;
             ++it )
             {
-                const pugi::xml_attribute & xml_attr = *it;
+                const XmlAttribute * attr = &it->second;
 
-                const char * attrName = xml_attr.name();
+                pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
 
-                const XmlAttribute * attr = member->getAttribute( attrName );
+                if( xml_attr == false )
+                {
+                    if( attr->required == true )
+                    {
+                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
 
-				if( attr == 0 )
-				{
-					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found argument " << attrName << std::endl;
-
-					return false;
-				}
+                        return false;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
 				if( this->writeNodeArguments_( attr, xml_attr ) == false )
 				{
-					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attrName << std::endl;
+					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
 
 					return false;
 				}
@@ -478,6 +489,11 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::writeBuffer( const char * _buff, size_t _size )
     {
+        if( m_write + _size > m_size )
+        {
+            throw std::exception();
+        }
+
         memcpy( m_out + m_write, _buff, _size );
         m_write += _size;
     }
