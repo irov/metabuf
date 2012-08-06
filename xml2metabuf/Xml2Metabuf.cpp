@@ -67,6 +67,19 @@ namespace Metabuf
             _metabuf->write( value );
 
             return true;
+        }        
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            size_t value;
+            if( sscanf_s( _value, "%u", &value ) != 1 )
+            {
+                return false;
+            }
+
+            _metabuf->write( value );
+
+            return true;
         }
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value )
@@ -98,6 +111,22 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
+        static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            float value[3];
+            if( sscanf_s( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
+            {
+                if( sscanf_s( _value, "%f %f %f", &value[0], &value[1], &value[2] ) != 3 )
+                {
+                    return false;
+                }
+            }
+
+            _metabuf->writeCount( value, 3 );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value )
         {
             float value[4];
@@ -120,8 +149,10 @@ namespace Metabuf
         m_serialization["string"] = &Serialize::s_write_string;
         m_serialization["wstring"] = &Serialize::s_write_wstring;
         m_serialization["bool"] = &Serialize::s_write_bool;
+        m_serialization["size_t"] = &Serialize::s_write_size_t;
         m_serialization["float"] = &Serialize::s_write_float;
         m_serialization["float2"] = &Serialize::s_write_float2;
+        m_serialization["float3"] = &Serialize::s_write_float3;
         m_serialization["float4"] = &Serialize::s_write_float4;
     }
 	//////////////////////////////////////////////////////////////////////////
