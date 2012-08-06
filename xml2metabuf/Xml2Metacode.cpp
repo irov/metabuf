@@ -202,7 +202,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderAttributeReader_( const XmlNode * _node )
 	{
-		this->write() << "void _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;" << std::endl;
+		this->write() << "bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -443,7 +443,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludesReader_( const XmlNode * _node )
 	{
-		this->write() << "void _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;" << std::endl;
+		this->write() << "bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;" << std::endl;
 
         return true;
 	}
@@ -544,14 +544,17 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceAttributeReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getScope() << "::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
+        this->write() << "bool " << _node->getScope() << "::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write() << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id );" << std::endl;
+            this->write() << "    if( " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id ) == true )" << std::endl;
+            this->write() << "    {" << std::endl;
+            this->write() << "        return true;" << std::endl;
+            this->write() << "    }" << std::endl;
             this->write() << std::endl;
         }
 
@@ -576,6 +579,7 @@ namespace Metabuf
                 {
                     this->write() << "           this->" << attr->name << "_successful = true;" << std::endl;
                 }
+                this->write() << "            return true;" << std::endl;
                 this->write() << "            break;" << std::endl;
                 this->write() << "        }" << std::endl;
             }
@@ -604,6 +608,7 @@ namespace Metabuf
                     {
                         this->write() << "            this->" << member->name << "_" << attr->name << "_successful = true;" << std::endl;
                     }
+                    this->write() << "            return true;" << std::endl;
                     this->write() << "            break;" << std::endl;
                     this->write() << "        }" << std::endl;
                 }
@@ -611,6 +616,8 @@ namespace Metabuf
 
             this->write() << "    }" << std::endl;
         }
+        
+        this->write() << "    return false;" << std::endl;
         this->write() << "}" << std::endl;
         this->write() << std::endl;
 
@@ -620,14 +627,17 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write() << "void " << _node->getScope() << "::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
+        this->write() << "bool " << _node->getScope() << "::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
         this->write() << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write() << "    " << node_inheritance->getScope() << "::_parseIncludes( _buff, _size, _read, _includes, _generators );" << std::endl;            
+            this->write() << "    if( " << node_inheritance->getScope() << "::_parseIncludes( _buff, _size, _read, _includes, _generators ) == true )" << std::endl;
+            this->write() << "    {" << std::endl;
+            this->write() << "        return true;" << std::endl;
+            this->write() << "    }" << std::endl;
 
             if( _node->includes.empty() == false )
             {
@@ -658,6 +668,7 @@ namespace Metabuf
                         this->write() << "            metadata.parseNode( _buff, _size, _read );" << std::endl;
                         this->write() << std::endl;
                         this->write() << "            includes_" << node->getName() << ".push_back(metadata);" << std::endl;
+                        this->write() << "            return true;" << std::endl;
                         this->write() << "            break;" << std::endl;
                         this->write() << "        }" << std::endl;
 
@@ -673,6 +684,7 @@ namespace Metabuf
                         this->write() << "            metadata2->parseNode( _buff, _size, _read );" << std::endl;
                         this->write() << std::endl;
                         this->write() << "            includes_" << node->getName() << ".push_back(metadata2);" << std::endl;            
+                        this->write() << "            return false;" << std::endl;
                         this->write() << "            break;" << std::endl;
                         this->write() << "        }" << std::endl;
                     }
@@ -682,6 +694,7 @@ namespace Metabuf
             this->write() << "    }" << std::endl;
         }
 
+        this->write() << "    return false;" << std::endl;
         this->write() << "}" << std::endl;
         this->write() << std::endl;
 

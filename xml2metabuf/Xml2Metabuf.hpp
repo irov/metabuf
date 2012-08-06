@@ -13,7 +13,7 @@ namespace Metabuf
 	class Xml2Metabuf
 	{
 	public:
-		Xml2Metabuf( char * _out, XmlProtocol * _protocol );
+		Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol );
 
     public:
         void initialize();
@@ -54,6 +54,8 @@ namespace Metabuf
 
 	protected:
 		char * m_out;
+        size_t m_size;
+
 		size_t m_write;
 
 		XmlProtocol * m_protocol;
