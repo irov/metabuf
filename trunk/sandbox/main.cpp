@@ -64,9 +64,9 @@ void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _prot
 
 	size_t write_size;
     
-    char * write_buff = new char[size_test];
+    char * write_buff = new char[size_test * 2];
 
-    Metabuf::Xml2Metabuf xml_metabuf(write_buff, _protocol);
+    Metabuf::Xml2Metabuf xml_metabuf(write_buff, size_test * 2, _protocol);
 
     xml_metabuf.initialize();
 	if( xml_metabuf.convert( buf_test, size_test, write_size ) == false )

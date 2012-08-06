@@ -14,6 +14,8 @@ namespace Metabuf
         {
             return false;
         }
+
+        return true;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Metadata::parseNode( const char * _buff, size_t _size, size_t & _read )
