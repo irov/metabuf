@@ -684,7 +684,7 @@ namespace Metabuf
                         this->write() << "            metadata2->parseNode( _buff, _size, _read );" << std::endl;
                         this->write() << std::endl;
                         this->write() << "            includes_" << node->getName() << ".push_back(metadata2);" << std::endl;            
-                        this->write() << "            return false;" << std::endl;
+                        this->write() << "            return true;" << std::endl;
                         this->write() << "            break;" << std::endl;
                         this->write() << "        }" << std::endl;
                     }
