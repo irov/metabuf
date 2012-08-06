@@ -3,17 +3,20 @@
 namespace Metabuf
 {
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::parse( const char * _buff, size_t _size, size_t & _read )
+	bool Metadata::parse( const char * _buff, size_t _size, size_t & _read )
 	{
         _read = 0;
 
         size_t nodeId;
         this->readSize( _buff, _size, _read, nodeId );
 
-        this->parseNode( _buff, _size, _read );
+        if( this->parseNode( _buff, _size, _read ) == false )
+        {
+            return false;
+        }
     }
     //////////////////////////////////////////////////////////////////////////
-    void Metadata::parseNode( const char * _buff, size_t _size, size_t & _read )
+    bool Metadata::parseNode( const char * _buff, size_t _size, size_t & _read )
     {
 		size_t attributeCount;
 		this->readSize( _buff, _size, _read, attributeCount );
@@ -23,7 +26,10 @@ namespace Metabuf
 			size_t id;
 			this->readSize( _buff, _size, _read, id );
 
-			this->_parseArguments( _buff, _size, _read, id );
+			if( this->_parseArguments( _buff, _size, _read, id ) == false )
+            {
+                return false;
+            }
 		}
 
 		size_t includeCount;
@@ -37,7 +43,12 @@ namespace Metabuf
             size_t id_generators;
             this->readSize( _buff, _size, _read, id_generators );
 
-			this->_parseIncludes( _buff, _size, _read, id_includes, id_generators );
+			if( this->_parseIncludes( _buff, _size, _read, id_includes, id_generators ) == false )
+            {
+                return false;
+            }
 		}
+
+        return true;
 	}
 }
