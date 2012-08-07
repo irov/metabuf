@@ -22,10 +22,7 @@ namespace Metabuf
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value )
         {
             size_t size = strlen( _value );
-            if( _metabuf->writeSize( size ) == false )
-            {
-                return false;
-            }
+            _metabuf->write( size );
 
             _metabuf->writeCount( _value, size );
 
@@ -41,13 +38,15 @@ namespace Metabuf
                 return false;
             }
 
-            if( _metabuf->writeSize( size - 1 ) == false )
-            {
-                return false;
-            }
+            _metabuf->write( size - 1 );
 
             wchar_t * buffer = new wchar_t[size + 1];
             int wc = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, buffer, size );
+
+            if( wc != size )
+            {
+                return false;
+            }
             
             _metabuf->writeCount( buffer, size - 1 );
 
@@ -68,7 +67,20 @@ namespace Metabuf
             _metabuf->write( value );
 
             return true;
-        }        
+        }      
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            int value;
+            if( sscanf_s( _value, "%d", &value ) != 1 )
+            {
+                return false;
+            }
+
+            _metabuf->write( value );
+
+            return true;
+        }
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value )
         {
@@ -79,6 +91,28 @@ namespace Metabuf
             }
 
             _metabuf->write( value );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_wchar_t( Xml2Metabuf * _metabuf, const char * _value )
+        {
+            int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
+
+            if( size == 0 )
+            {
+                return false;
+            }
+
+            wchar_t wch[2];
+            int wc = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, wch, size );
+
+            if( wc != size )
+            {
+                return false;
+            }
+
+            _metabuf->writeCount( wch, 1 );
 
             return true;
         }
@@ -150,7 +184,9 @@ namespace Metabuf
         m_serialization["string"] = &Serialize::s_write_string;
         m_serialization["wstring"] = &Serialize::s_write_wstring;
         m_serialization["bool"] = &Serialize::s_write_bool;
+        m_serialization["int"] = &Serialize::s_write_int;
         m_serialization["size_t"] = &Serialize::s_write_size_t;
+        m_serialization["wchar_t"] = &Serialize::s_write_wchar_t;        
         m_serialization["float"] = &Serialize::s_write_float;
         m_serialization["float2"] = &Serialize::s_write_float2;
         m_serialization["float3"] = &Serialize::s_write_float3;
@@ -194,6 +230,11 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
+        if( _xml_node.begin() == _xml_node.end() && _xml_node.attributes_begin() == _xml_node.attributes_end() )
+        {
+            return true;
+        }
+
 		size_t id = _node->id;
 		if( this->writeSize( id ) == false )
         {
@@ -225,10 +266,16 @@ namespace Metabuf
 
         if( _node->inheritance.empty() == false )
         {
-            this->writeNodeAttribute2_( _node->node_inheritance, _xml_node );
+            if( this->writeNodeAttribute2_( _node->node_inheritance, _xml_node ) == false )
+            {
+                return false;
+            }
         }
 
-        this->writeNodeAttribute2_( _node, _xml_node );
+        if( this->writeNodeAttribute2_( _node, _xml_node ) == false )
+        {
+            return false;
+        }
 
         for( TMapMembers::const_iterator
             it = _node->members.begin(),
@@ -365,39 +412,119 @@ namespace Metabuf
     {    
         size_t count = 0;
 
-        for( pugi::xml_node::attribute_iterator
-            it = _xml_node.attributes_begin(),
-            it_end = _xml_node.attributes_end();
+        for( TMapAttributes::const_iterator
+            it = _node->attributes.begin(),
+            it_end = _node->attributes.end();
         it != it_end;
         ++it )
         {
+            const XmlAttribute * attr = &it->second;
+
+            pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+            if( xml_attr == false )
+            {
+                if( attr->required == true )
+                {
+                    m_error << "Xml2Metabuf::getNodeAttributeSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+
+                    return false;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
             ++count;
         }
 
-        for( pugi::xml_node::iterator
-            it = _xml_node.begin(),
-            it_end = _xml_node.end();
-        it != it_end;
-        ++it )
+        if( _node->inheritance.empty() == false )
         {
-            const pugi::xml_node & child = *it;
-            
-            const char * child_name = child.name();
-
-            const XmlMember * member = _node->getMember( child_name );
-            
-            if( member == 0 )
-            {
-                continue;
-            }
-             
-            for( pugi::xml_node::attribute_iterator
-                it = child.attributes_begin(),
-                it_end = child.attributes_end();
+            for( TMapAttributes::const_iterator
+                it = _node->node_inheritance->attributes.begin(),
+                it_end = _node->node_inheritance->attributes.end();
             it != it_end;
             ++it )
             {
+                const XmlAttribute * attr = &it->second;
+
+                pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+                if( xml_attr == false )
+                {
+                    if( attr->required == true )
+                    {
+                        m_error << "Xml2Metabuf::getNodeAttributeSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+
+                        return false;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
                 ++count;
+            }
+        }
+
+        for( TMapMembers::const_iterator
+            it = _node->members.begin(),
+            it_end = _node->members.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlMember * member = &it->second;
+
+            for( TMapAttributes::const_iterator
+                it = member->attributes.begin(),
+                it_end = member->attributes.end();
+            it != it_end;
+            ++it )
+            {
+                const XmlAttribute * attr = &it->second;
+
+                bool member_found = false;
+
+                for( pugi::xml_node::iterator
+                    it = _xml_node.begin(),
+                    it_end = _xml_node.end();
+                it != it_end;
+                ++it )
+                {
+                    const pugi::xml_node & child = *it;
+
+                    const char * child_name = child.name();
+
+                    if( member->name != child_name )
+                    {
+                        continue;
+                    }
+
+                    pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+
+                    if( xml_attr == false )
+                    {
+                        continue;
+                    }
+
+                    ++count;
+                    
+                    member_found = true;
+
+                    break;
+                }
+
+                if( attr->required == true )
+                {
+                    if( member_found == false )
+                    {                   
+                        m_error << "Xml2Metabuf::getNodeAttributeSize_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+
+                        return false;
+                    }
+                }
             }
         }
 
@@ -426,6 +553,11 @@ namespace Metabuf
             const XmlNode * node_includes = _node->getInclude( child_name );
 
             if( node_includes == 0 )
+            {
+                continue;
+            }
+
+            if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
             {
                 continue;
             }
@@ -486,6 +618,11 @@ namespace Metabuf
             const char * child_name = child.name();
 
             if( _node->getInclude( child_name ) == 0 )
+            {
+                continue;
+            }
+
+            if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
             {
                 continue;
             }
