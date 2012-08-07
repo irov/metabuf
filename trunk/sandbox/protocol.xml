@@ -1,25 +1,32 @@
 <Protocol>
     <Node Name="DataBlock">
         <Node Name="Resource" Generator="Type">
-            <Attribute Name="Name" Type="Menge::String" Evict = "string" Required="1"/>
-            <Attribute Name="Type" Type="Menge::String" Evict = "string" Required="1"/>
+            <Attribute Name="Name" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Attribute Name="Type" Type="Menge::ConstString" Evict = "string" Required="1"/>
         </Node>
         
         <Node Name="ResourceImageDefault" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Evict = "string" Required="1"/>
-            <Member Node="File" Name="Codec" Type="Menge::String" Evict = "string"/>
+            <Member Node="File" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+            <Member Node="File" Name="Codec" Type="Menge::ConstString" Evict = "string"/>
             <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
+            <Member Node="File" Name="UV" Type="mt::vec4f" Evict = "float4"/>
+            <Member Node="File" Name="Alpha" Type="bool" Evict = "bool"/>
+            <Member Node="File" Name="WrapX" Type="bool" Evict = "bool"/>
+            <Member Node="File" Name="WrapY" Type="bool" Evict = "bool"/>
+            
         </Node>
 
         <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Evict = "string" Required="1"/>
-            <Member Node="Folder" Name="Path" Type="Menge::String" Evict = "string" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+            <Member Node="Folder" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
         </Node>        
         
         <Node Name="ResourceFont" Inheritance = "Resource">
             <Member Node="ResourceGlyph" Name="Name" Type="Menge::ConstString" Evict = "string" Required="1"/>
             <Member Node="Image" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
+            <Member Node="Image" Name="Codec" Type="Menge::ConstString" Evict = "string"/>
             <Member Node="OutlineImage" Name="Path" Type="Menge::WString" Evict = "wstring"/>
+            <Member Node="OutlineImage" Name="Codec" Type="Menge::ConstString" Evict = "string"/>
             <Member Node="Color" Name="Value" Type="Menge::ColourValue" Evict = "float4"/>
         </Node>                
         
@@ -156,5 +163,63 @@
                 <Attribute Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
             </Node>
         </Node>
-    </Node>        
+    </Node>
+
+    <Node Name="Font">
+        <Attribute Name="size" Type="float" Evict = "float" Required="1"/>
+        <Attribute Name="height" Type="float" Evict = "float" Required="1"/>
+        
+        <Node Name="Char">
+            <Attribute Name="width" Type="float" Evict = "float" Required="1"/>
+            <Attribute Name="offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Attribute Name="rect" Type="mt::vec4f" Evict = "float4" Required="1"/>
+            <Attribute Name="code" Type="wchar_t" Evict = "wchar_t" Required="1"/>
+           
+            <Node Name="Kerning">
+                <Attribute Name="advance" Type="float" Evict = "float" Required="1"/>
+                <Attribute Name="id" Type="wchar_t" Evict = "wchar_t" Required="1"/>
+            </Node>
+        </Node>
+    </Node>
+    
+    <Node Name="Texts">
+        <Node Name="Text">
+            <Attribute Name="Key" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Attribute Name="Value" Type="Menge::WString" Evict = "wstring" Required="1"/>
+            <Attribute Name="Font" Type="Menge::ConstString" Evict = "string"/>
+            <Attribute Name="CharOffset" Type="float" Evict = "float"/>
+            <Attribute Name="LineOffset" Type="float" Evict = "float"/>
+        </Node>
+    </Node>
+    
+    <Node Name="KeyFramesPack">
+        <Attribute Name="MaxIndex" Type="size_t" Evict = "size_t" Required="1"/>
+        
+        <Node Name="KeyFrames2D">
+            <Attribute Name="LayerIndex" Type="size_t" Evict = "size_t" Required="1"/>
+            <Attribute Name="Immutable" Type="bool" Evict = "bool"/>
+            <Attribute Name="Count" Type="size_t" Evict = "size_t"/>
+            
+            <Node Name="KeyFrame2D">
+                <Attribute Name="AnchorPoint" Type="mt::vec2f" Evict = "float2"/>
+                <Attribute Name="Position" Type="mt::vec2f" Evict = "float2"/>
+                <Attribute Name="Scale" Type="mt::vec2f" Evict = "float2"/>
+                <Attribute Name="Rotation" Type="float" Evict = "float"/>
+                <Attribute Name="Opacity" Type="float" Evict = "float"/>
+                <Attribute Name="Count" Type="size_t" Evict = "size_t"/>
+            </Node>
+        </Node>
+        
+        <Node Name="KeyFrames3D">
+            <Attribute Name="LayerIndex" Type="size_t" Evict = "size_t" Required="1"/>
+            
+            <Node Name="KeyFrame3D">
+                <Attribute Name="AnchorPoint" Type="mt::vec3f" Evict = "float3"/>
+                <Attribute Name="Position" Type="mt::vec3f" Evict = "float3"/>
+                <Attribute Name="Scale" Type="mt::vec3f" Evict = "float3"/>
+                <Attribute Name="Rotation" Type="mt::vec3f" Evict = "float3"/>
+                <Attribute Name="Opacity" Type="mt::vec3f" Evict = "float3"/>
+            </Node>
+        </Node>
+    </Node>
 </Protocol>

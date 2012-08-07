@@ -230,23 +230,14 @@ namespace Metabuf
 
         this->writeNodeAttribute2_( _node, _xml_node );
 
-        for( pugi::xml_node::iterator
-            it = _xml_node.begin(),
-            it_end = _xml_node.end();
+        for( TMapMembers::const_iterator
+            it = _node->members.begin(),
+            it_end = _node->members.end();
         it != it_end;
         ++it )
         {
-            const pugi::xml_node & child = *it;
-
-            const char * child_name = child.name();
-
-            const XmlMember * member = _node->getMember( child_name );
-
-            if( member == 0 )
-            {
-                continue;
-            }
-
+            const XmlMember * member = &it->second;
+            
             for( TMapAttributes::const_iterator
                 it = member->attributes.begin(),
                 it_end = member->attributes.end();
@@ -255,28 +246,48 @@ namespace Metabuf
             {
                 const XmlAttribute * attr = &it->second;
 
-                pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+                bool member_found = false;
 
-                if( xml_attr == false )
+                for( pugi::xml_node::iterator
+                    it = _xml_node.begin(),
+                    it_end = _xml_node.end();
+                it != it_end;
+                ++it )
                 {
-                    if( attr->required == true )
-                    {
-                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+                    const pugi::xml_node & child = *it;
 
-                        return false;
-                    }
-                    else
+                    const char * child_name = child.name();
+
+                    if( member->name != child_name )
                     {
                         continue;
                     }
+                    
+                    pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+
+                    if( xml_attr == false )
+                    {
+                        continue;
+                    }
+
+                    if( this->writeNodeArguments_( attr, xml_attr ) == false )
+                    {
+                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
+
+                        return false;
+                    }
+
+                    member_found = true;
+                    break;
                 }
 
-				if( this->writeNodeArguments_( attr, xml_attr ) == false )
-				{
-					m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
+                if( )
+                if( member_found == false )
+                {                   
+                    m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
 
-					return false;
-				}
+                    return false;
+                }
             }
         }
 
