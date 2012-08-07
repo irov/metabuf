@@ -281,12 +281,14 @@ namespace Metabuf
                     break;
                 }
 
-                if( )
-                if( member_found == false )
-                {                   
-                    m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
-
-                    return false;
+                if( attr->required == true )
+                {
+                    if( member_found == false )
+                    {                   
+                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+                            
+                        return false;
+                    }
                 }
             }
         }
