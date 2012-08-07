@@ -43,6 +43,7 @@ namespace Metabuf
         this->write() << "#   include \"Metatype.h\"" << std::endl;
         this->write() << std::endl;
         this->write() << "#   include <vector>" << std::endl;
+        this->write() << "#   include <algorithm>" << std::endl;
         this->write() << std::endl;
         this->write() << "namespace Metacode" << std::endl;
         this->write() << "{" << std::endl;
@@ -221,21 +222,47 @@ namespace Metabuf
 		{
 			const XmlAttribute * attr = &it->second;
 
-			this->write() << "void" << " " << "attribute_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
-			this->write() << "{" << std::endl;
-			
-			if( attr->required == false )
-			{
+            if( attr->required == false )
+            {
+		    	this->write() << "bool" << " " << "get_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+    			this->write() << "{" << std::endl;	    	
 				this->write() << "    if( " << attr->name << "_successful == false )" << std::endl;
 				this->write() << "    {" << std::endl;
-				this->write() << "        return;" << std::endl;
+				this->write() << "        return false;" << std::endl;
 				this->write() << "    }" << std::endl;
 				this->write() << std::endl;
+                this->write() << "    _value = this->" << attr->name << ";" << std::endl;
+                this->write() << std::endl;
+                this->write() << "    return true;" << std::endl;
+                this->write() << "}" << std::endl;
+                this->write() << std::endl;
+                this->write() << "bool" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+                this->write() << "{" << std::endl;	    	
+                this->write() << "    if( " << attr->name << "_successful == false )" << std::endl;
+                this->write() << "    {" << std::endl;
+                this->write() << "        return false;" << std::endl;
+                this->write() << "    }" << std::endl;
+                this->write() << std::endl;
+                this->write() << "    std::swap( _value, this->" << attr->name << ");" << std::endl;
+                this->write() << std::endl;
+                this->write() << "    return true;" << std::endl;
+                this->write() << "}" << std::endl;
+                this->write() << std::endl;
 			}
+            else
+            {
+                this->write() << "const " << attr->type << " & get_" << attr->name << "() const" << std::endl;
+                this->write() << "{" << std::endl;	    	
+                this->write() << "    return this->" << attr->name << ";" << std::endl;
+                this->write() << "}" << std::endl;
+                this->write() << std::endl;
+                this->write() << "void" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+                this->write() << "{" << std::endl;
+                this->write() << "    std::swap( _value, this->" << attr->name << ");" << std::endl;
+                this->write() << "}" << std::endl;
+                this->write() << std::endl;
+            }
 
-			this->write() << "    _value = this->" << attr->name << ";" << std::endl;
-			this->write() << "}" << std::endl;
-			this->write() << std::endl;
 
 			this->write() << "template<class C, class M>" << std::endl;
 			this->write() << "void" << " " << "method_" << attr->name << "( C * _self, M _method ) const" << std::endl;
@@ -252,22 +279,6 @@ namespace Metabuf
 
 			this->write() << "    (_self->*_method)( this->" << attr->name << " );" << std::endl;
 			this->write() << "}" << std::endl;
-
-            this->write() << "template<class C, class M, class A0>" << std::endl;
-            this->write() << "void" << " " << "method_" << attr->name << "( C * _self, M _method, const A0 & _a0 ) const" << std::endl;
-            this->write() << "{" << std::endl;
-
-            if( attr->required == false )
-            {
-                this->write() << "    if( " << attr->name << "_successful == false )" << std::endl;
-                this->write() << "    {" << std::endl;
-                this->write() << "        return;" << std::endl;
-                this->write() << "    }" << std::endl;
-                this->write() << std::endl;
-            }
-
-            this->write() << "    (_self->*_method)( this->" << attr->name << ", _a0 );" << std::endl;
-            this->write() << "}" << std::endl;
 
 			this->write() << std::endl;
 		}
@@ -288,24 +299,50 @@ namespace Metabuf
 			{
 				const XmlAttribute * attr = &it->second;
 
-				this->write() << "void" << " " << "setup_" << member->name << "_" << attr->name << "( " << attr->type << " & _value )" << std::endl;
-				this->write() << "{" << std::endl;
-
-				if( attr->required == false )
-				{
+                if( attr->required == false )
+                {
+				    this->write() << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+				    this->write() << "{" << std::endl;
 					this->write() << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
 					this->write() << "    {" << std::endl;
-					this->write() << "        return;" << std::endl;
+					this->write() << "        return false;" << std::endl;
 					this->write() << "    }" << std::endl;
 					this->write() << std::endl;
+                    this->write() << "    _value = this->" << member->name << "_" << attr->name << ";" << std::endl;
+                    this->write() << std::endl;
+                    this->write() << "    return true;" << std::endl;
+                    this->write() << "}" << std::endl;
+                    this->write() << std::endl;
+                    this->write() << "bool" << " " << "swap_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+                    this->write() << "{" << std::endl;
+                    this->write() << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
+                    this->write() << "    {" << std::endl;
+                    this->write() << "        return false;" << std::endl;
+                    this->write() << "    }" << std::endl;
+                    this->write() << std::endl;
+                    this->write() << "    std::swap(_value, this->" << member->name << "_" << attr->name << ");" << std::endl;
+                    this->write() << std::endl;
+                    this->write() << "    return true;" << std::endl;
+                    this->write() << "}" << std::endl;
+                    this->write() << std::endl;
 				}
+                else
+                {
+                    this->write() << "const " << attr->type << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
+                    this->write() << "{" << std::endl;
+                    this->write() << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
+                    this->write() << "}" << std::endl;
+                    this->write() << std::endl;
+                    this->write() << "void" << " " << "swap_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+                    this->write() << "{" << std::endl;
+                    this->write() << "    std::swap(_value, this->" << member->name << "_" << attr->name << ");" << std::endl;
+                    this->write() << "}" << std::endl;
+                    this->write() << std::endl;
+                }
 
-				this->write() << "    _value = this->" << member->name << "_" << attr->name << ";" << std::endl;
-				this->write() << "}" << std::endl;
-				this->write() << std::endl;
 
 				this->write() << "template<class C, class M>" << std::endl;
-				this->write() << "void" << " " << "setup_" << member->name << "_" << attr->name << "( C * _self, M _method )" << std::endl;
+				this->write() << "void" << " " << "method_" << member->name << "_" << attr->name << "( C * _self, M _method )" << std::endl;
 				this->write() << "{" << std::endl;
 
 				if( attr->required == false )
@@ -372,7 +409,7 @@ namespace Metabuf
 				this->write() << "bool" << " " << attr->name << "_successful;" << std::endl;
 			}
 
-			this->write() << attr->type << " " << attr->name << ";" << std::endl;
+			this->write() << "mutable " << attr->type << " " << attr->name << ";" << std::endl;
 		}
 
 		for( TMapMembers::const_iterator
@@ -396,7 +433,7 @@ namespace Metabuf
 					this->write() << "bool" << " " << member->name << "_" << attr->name << "_successful" << ";" << std::endl;
 				}
 
-				this->write() << attr->type << " " << member->name << "_" << attr->name << ";" << std::endl;
+				this->write() << "mutable " << attr->type << " " << member->name << "_" << attr->name << ";" << std::endl;
 			}
 		}
 
