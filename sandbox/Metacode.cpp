@@ -100,7 +100,7 @@ namespace Metacode
                 metadata2->parseNode( _buff, _size, _read );
     
                 includes_Meta_Resource.push_back(metadata2);
-                return false;
+                return true;
                 break;
             }
         }
@@ -336,10 +336,17 @@ namespace Metacode
     
         switch( _id )
         {
-        case 6:
+        case 8:
             {
                 this->read( _buff, _size, _read, this->Color_Value );
                 this->Color_Value_successful = true;
+                return true;
+                break;
+            }
+        case 5:
+            {
+                this->read( _buff, _size, _read, this->Image_Codec );
+                this->Image_Codec_successful = true;
                 return true;
                 break;
             }
@@ -349,7 +356,14 @@ namespace Metacode
                 return true;
                 break;
             }
-        case 5:
+        case 7:
+            {
+                this->read( _buff, _size, _read, this->OutlineImage_Codec );
+                this->OutlineImage_Codec_successful = true;
+                return true;
+                break;
+            }
+        case 6:
             {
                 this->read( _buff, _size, _read, this->OutlineImage_Path );
                 this->OutlineImage_Path_successful = true;
@@ -426,6 +440,13 @@ namespace Metacode
     
         switch( _id )
         {
+        case 7:
+            {
+                this->read( _buff, _size, _read, this->File_Alpha );
+                this->File_Alpha_successful = true;
+                return true;
+                break;
+            }
         case 4:
             {
                 this->read( _buff, _size, _read, this->File_Codec );
@@ -443,6 +464,27 @@ namespace Metacode
         case 3:
             {
                 this->read( _buff, _size, _read, this->File_Path );
+                return true;
+                break;
+            }
+        case 6:
+            {
+                this->read( _buff, _size, _read, this->File_UV );
+                this->File_UV_successful = true;
+                return true;
+                break;
+            }
+        case 8:
+            {
+                this->read( _buff, _size, _read, this->File_WrapX );
+                this->File_WrapX_successful = true;
+                return true;
+                break;
+            }
+        case 9:
+            {
+                this->read( _buff, _size, _read, this->File_WrapY );
+                this->File_WrapY_successful = true;
                 return true;
                 break;
             }
@@ -1208,6 +1250,392 @@ namespace Metacode
     }
     
     //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Font::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->height );
+                return true;
+                break;
+            }
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->size );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 3:
+            {
+                Meta_Font::Meta_Char metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Char.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Font::Meta_Char::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::Meta_Char::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->code );
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->offset );
+                return true;
+                break;
+            }
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->rect );
+                return true;
+                break;
+            }
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->width );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::Meta_Char::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 5:
+            {
+                Meta_Font::Meta_Char::Meta_Kerning metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Kerning.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Font::Meta_Char::Meta_Kerning::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::Meta_Char::Meta_Kerning::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->advance );
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->id );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Font::Meta_Char::Meta_Kerning::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_KeyFramesPack::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->MaxIndex );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 2:
+            {
+                Meta_KeyFramesPack::Meta_KeyFrames2D metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_KeyFrames2D.push_back(metadata);
+                return true;
+                break;
+            }
+        case 3:
+            {
+                Meta_KeyFramesPack::Meta_KeyFrames3D metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_KeyFrames3D.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_KeyFramesPack::Meta_KeyFrames2D::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames2D::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->Count );
+               this->Count_successful = true;
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->Immutable );
+               this->Immutable_successful = true;
+                return true;
+                break;
+            }
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->LayerIndex );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames2D::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 4:
+            {
+                Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_KeyFrame2D.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->AnchorPoint );
+               this->AnchorPoint_successful = true;
+                return true;
+                break;
+            }
+        case 6:
+            {
+                this->read( _buff, _size, _read, this->Count );
+               this->Count_successful = true;
+                return true;
+                break;
+            }
+        case 5:
+            {
+                this->read( _buff, _size, _read, this->Opacity );
+               this->Opacity_successful = true;
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->Position );
+               this->Position_successful = true;
+                return true;
+                break;
+            }
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->Rotation );
+               this->Rotation_successful = true;
+                return true;
+                break;
+            }
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->Scale );
+               this->Scale_successful = true;
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_KeyFramesPack::Meta_KeyFrames3D::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames3D::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->LayerIndex );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames3D::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 2:
+            {
+                Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_KeyFrame3D.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->AnchorPoint );
+               this->AnchorPoint_successful = true;
+                return true;
+                break;
+            }
+        case 5:
+            {
+                this->read( _buff, _size, _read, this->Opacity );
+               this->Opacity_successful = true;
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->Position );
+               this->Position_successful = true;
+                return true;
+                break;
+            }
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->Rotation );
+               this->Rotation_successful = true;
+                return true;
+                break;
+            }
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->Scale );
+               this->Scale_successful = true;
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
     Metabuf::Metadata * Meta_Pak::generateMetadata( size_t _id )
     {
         return 0;
@@ -1386,6 +1814,88 @@ namespace Metacode
     
     //////////////////////////////////////////////////////////////////////////
     bool Meta_Pak::Meta_Texts::Meta_Text::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Texts::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Texts::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Texts::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
+    {
+        switch( _includes )
+        {
+        case 1:
+            {
+                Meta_Texts::Meta_Text metadata;
+                metadata.parseNode( _buff, _size, _read );
+    
+                includes_Meta_Text.push_back(metadata);
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    Metabuf::Metadata * Meta_Texts::Meta_Text::generateMetadata( size_t _id )
+    {
+        return 0;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Texts::Meta_Text::_parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id )
+    {
+        switch( _id )
+        {
+        case 4:
+            {
+                this->read( _buff, _size, _read, this->CharOffset );
+               this->CharOffset_successful = true;
+                return true;
+                break;
+            }
+        case 3:
+            {
+                this->read( _buff, _size, _read, this->Font );
+               this->Font_successful = true;
+                return true;
+                break;
+            }
+        case 1:
+            {
+                this->read( _buff, _size, _read, this->Key );
+                return true;
+                break;
+            }
+        case 5:
+            {
+                this->read( _buff, _size, _read, this->LineOffset );
+               this->LineOffset_successful = true;
+                return true;
+                break;
+            }
+        case 2:
+            {
+                this->read( _buff, _size, _read, this->Value );
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+    
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_Texts::Meta_Text::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )
     {
         return false;
     }
