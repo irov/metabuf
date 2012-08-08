@@ -614,7 +614,7 @@ namespace Metabuf
 
                 if( attr->required == false )
                 {
-                    this->write() << "           this->" << attr->name << "_successful = true;" << std::endl;
+                    this->write() << "            this->" << attr->name << "_successful = true;" << std::endl;
                 }
                 this->write() << "            return true;" << std::endl;
                 this->write() << "            break;" << std::endl;
