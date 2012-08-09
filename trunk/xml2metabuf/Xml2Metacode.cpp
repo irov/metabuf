@@ -664,6 +664,26 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( const XmlNode * _node )
     {
         this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write() << "bool " << _node->getScope() << "::_preparationIncludes( size_t _includes )" << std::endl;
+        this->write() << "{" << std::endl;
+
+        if( _node->inheritance.empty() == false )
+        {
+            const XmlNode * node_inheritance = _node->node_inheritance;
+
+            this->write() << "    if( " << node_inheritance->getScope() << "::_preparationIncludes( _includes ) == true )" << std::endl;
+            this->write() << "    {" << std::endl;
+            this->write() << "        return true;" << std::endl;
+            this->write() << "    }" << std::endl;
+
+            if( _node->includes.empty() == false )
+            {
+                this->write() << std::endl;
+            }
+        }
+
+        this->write() << "}" << std::endl;
+        this->write() << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write() << "bool " << _node->getScope() << "::_parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators )" << std::endl;
         this->write() << "{" << std::endl;
 
