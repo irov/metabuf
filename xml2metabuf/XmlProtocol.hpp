@@ -47,12 +47,14 @@ namespace Metabuf
 		TMapMembers members;
 
 		TMapNodes includes;
+        TMapNodes inheritances;
         TMapNodes generators;
 
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         
         const XmlNode * getInclude( const std::string & _name ) const;
+        const XmlNode * getInheritances( const std::string & _name ) const;
         const XmlNode * getGenerator( const std::string & _name ) const;
 
         const TMapNodes & getGenerators() const;

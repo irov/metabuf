@@ -42,8 +42,8 @@ void main()
     fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
     fclose( file_metacode_cpp );
 
-    //convert("101_Fork.xml", "101_Fork.bin", &xml_protocol );
-    convert("Pak.xml", "Pak.bin", &xml_protocol );
+    convert("101_Fork.xml", "101_Fork.bin", &xml_protocol );
+    //convert("Pak.xml", "Pak.bin", &xml_protocol );
 }
 //////////////////////////////////////////////////////////////////////////
 void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _protocol )

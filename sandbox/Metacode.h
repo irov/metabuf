@@ -20,7 +20,9 @@ namespace Metacode
     public:
     protected:
         bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        bool _preparationIncludes( size_t _includes, size_t _count ) override;
+        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -67,7 +69,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -88,7 +92,9 @@ namespace Metacode
         public:
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -135,7 +141,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -186,7 +194,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -222,7 +232,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -274,7 +286,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -471,7 +485,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -516,13 +532,454 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
         protected:
         protected:
             mutable Menge::WString GlyphPath_Path;
+        };
+        
+        class Meta_ResourceImageCombineRGBAndAlpha
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceImageCombineRGBAndAlpha()
+                : Meta_Resource()
+                , File_Alpha_successful(false)
+                , File_CodecAlpha_successful(false)
+                , File_CodecRGB_successful(false)
+                , File_MaxSize_successful(false)
+                , File_Offset_successful(false)
+                , File_PathAlpha_successful(false)
+                , File_PathRGB_successful(false)
+                , File_Size_successful(false)
+                , File_UV_successful(false)
+                , File_WrapX_successful(false)
+                , File_WrapY_successful(false)
+            {
+            }
+        public:
+            bool get_File_Alpha( bool & _value ) const
+            {
+                if( File_Alpha_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Alpha;
+            
+                return true;
+            }
+            
+            bool swap_File_Alpha( bool & _value ) const
+            {
+                if( File_Alpha_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Alpha);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Alpha( C * _self, M _method )
+            {
+                if( File_Alpha_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Alpha );
+            }
+            
+            bool get_File_CodecAlpha( Menge::ConstString & _value ) const
+            {
+                if( File_CodecAlpha_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_CodecAlpha;
+            
+                return true;
+            }
+            
+            bool swap_File_CodecAlpha( Menge::ConstString & _value ) const
+            {
+                if( File_CodecAlpha_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_CodecAlpha);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_CodecAlpha( C * _self, M _method )
+            {
+                if( File_CodecAlpha_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_CodecAlpha );
+            }
+            
+            bool get_File_CodecRGB( Menge::ConstString & _value ) const
+            {
+                if( File_CodecRGB_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_CodecRGB;
+            
+                return true;
+            }
+            
+            bool swap_File_CodecRGB( Menge::ConstString & _value ) const
+            {
+                if( File_CodecRGB_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_CodecRGB);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_CodecRGB( C * _self, M _method )
+            {
+                if( File_CodecRGB_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_CodecRGB );
+            }
+            
+            bool get_File_MaxSize( mt::vec2f & _value ) const
+            {
+                if( File_MaxSize_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_MaxSize;
+            
+                return true;
+            }
+            
+            bool swap_File_MaxSize( mt::vec2f & _value ) const
+            {
+                if( File_MaxSize_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_MaxSize);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_MaxSize( C * _self, M _method )
+            {
+                if( File_MaxSize_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_MaxSize );
+            }
+            
+            bool get_File_Offset( mt::vec2f & _value ) const
+            {
+                if( File_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Offset;
+            
+                return true;
+            }
+            
+            bool swap_File_Offset( mt::vec2f & _value ) const
+            {
+                if( File_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Offset);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Offset( C * _self, M _method )
+            {
+                if( File_Offset_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Offset );
+            }
+            
+            bool get_File_PathAlpha( Menge::WString & _value ) const
+            {
+                if( File_PathAlpha_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_PathAlpha;
+            
+                return true;
+            }
+            
+            bool swap_File_PathAlpha( Menge::WString & _value ) const
+            {
+                if( File_PathAlpha_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_PathAlpha);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_PathAlpha( C * _self, M _method )
+            {
+                if( File_PathAlpha_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_PathAlpha );
+            }
+            
+            bool get_File_PathRGB( Menge::WString & _value ) const
+            {
+                if( File_PathRGB_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_PathRGB;
+            
+                return true;
+            }
+            
+            bool swap_File_PathRGB( Menge::WString & _value ) const
+            {
+                if( File_PathRGB_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_PathRGB);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_PathRGB( C * _self, M _method )
+            {
+                if( File_PathRGB_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_PathRGB );
+            }
+            
+            bool get_File_Size( mt::vec2f & _value ) const
+            {
+                if( File_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Size;
+            
+                return true;
+            }
+            
+            bool swap_File_Size( mt::vec2f & _value ) const
+            {
+                if( File_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Size);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Size( C * _self, M _method )
+            {
+                if( File_Size_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Size );
+            }
+            
+            bool get_File_UV( mt::vec4f & _value ) const
+            {
+                if( File_UV_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_UV;
+            
+                return true;
+            }
+            
+            bool swap_File_UV( mt::vec4f & _value ) const
+            {
+                if( File_UV_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_UV);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_UV( C * _self, M _method )
+            {
+                if( File_UV_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_UV );
+            }
+            
+            bool get_File_WrapX( bool & _value ) const
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_WrapX;
+            
+                return true;
+            }
+            
+            bool swap_File_WrapX( bool & _value ) const
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_WrapX);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_WrapX( C * _self, M _method )
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_WrapX );
+            }
+            
+            bool get_File_WrapY( bool & _value ) const
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_WrapY;
+            
+                return true;
+            }
+            
+            bool swap_File_WrapY( bool & _value ) const
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_WrapY);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_WrapY( C * _self, M _method )
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_WrapY );
+            }
+            
+        protected:
+            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        public:
+            Metadata * generateMetadata( size_t _id ) override;
+            
+        protected:
+        protected:
+            bool File_Alpha_successful;
+            mutable bool File_Alpha;
+            bool File_CodecAlpha_successful;
+            mutable Menge::ConstString File_CodecAlpha;
+            bool File_CodecRGB_successful;
+            mutable Menge::ConstString File_CodecRGB;
+            bool File_MaxSize_successful;
+            mutable mt::vec2f File_MaxSize;
+            bool File_Offset_successful;
+            mutable mt::vec2f File_Offset;
+            bool File_PathAlpha_successful;
+            mutable Menge::WString File_PathAlpha;
+            bool File_PathRGB_successful;
+            mutable Menge::WString File_PathRGB;
+            bool File_Size_successful;
+            mutable mt::vec2f File_Size;
+            bool File_UV_successful;
+            mutable mt::vec4f File_UV;
+            bool File_WrapX_successful;
+            mutable bool File_WrapX;
+            bool File_WrapY_successful;
+            mutable bool File_WrapY;
         };
         
         class Meta_ResourceImageDefault
@@ -534,6 +991,7 @@ namespace Metacode
                 , File_Alpha_successful(false)
                 , File_Codec_successful(false)
                 , File_MaxSize_successful(false)
+                , File_Size_successful(false)
                 , File_UV_successful(false)
                 , File_WrapX_successful(false)
                 , File_WrapY_successful(false)
@@ -661,6 +1119,41 @@ namespace Metacode
                 (_self->*_method)( this->File_Path );
             }
             
+            bool get_File_Size( mt::vec2f & _value ) const
+            {
+                if( File_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Size;
+            
+                return true;
+            }
+            
+            bool swap_File_Size( mt::vec2f & _value ) const
+            {
+                if( File_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Size);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Size( C * _self, M _method )
+            {
+                if( File_Size_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Size );
+            }
+            
             bool get_File_UV( mt::vec4f & _value ) const
             {
                 if( File_UV_successful == false )
@@ -768,7 +1261,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -781,6 +1276,8 @@ namespace Metacode
             bool File_MaxSize_successful;
             mutable mt::vec2f File_MaxSize;
             mutable Menge::WString File_Path;
+            bool File_Size_successful;
+            mutable mt::vec2f File_Size;
             bool File_UV_successful;
             mutable mt::vec4f File_UV;
             bool File_WrapX_successful;
@@ -832,7 +1329,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -885,7 +1384,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -1086,7 +1587,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -1197,7 +1700,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -1350,7 +1855,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -1505,7 +2012,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -1648,7 +2157,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -1663,7 +2174,9 @@ namespace Metacode
             public:
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -1730,7 +2243,9 @@ namespace Metacode
                     
                 protected:
                     bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                    bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                    bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                    bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                    bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
                 public:
                     Metadata * generateMetadata( size_t _id ) override;
                     
@@ -1944,7 +2459,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -2060,7 +2577,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -2080,22 +2599,6 @@ namespace Metacode
             Meta_ResourceWindow()
                 : Meta_Resource()
                 , WindowBackground_ResourceImageName_successful(false)
-                , WindowBottom_Offset_successful(false)
-                , WindowBottom_ResourceImageName_successful(false)
-                , WindowLeft_Offset_successful(false)
-                , WindowLeft_ResourceImageName_successful(false)
-                , WindowLeftBottom_Offset_successful(false)
-                , WindowLeftBottom_ResourceImageName_successful(false)
-                , WindowLeftTop_Offset_successful(false)
-                , WindowLeftTop_ResourceImageName_successful(false)
-                , WindowRight_Offset_successful(false)
-                , WindowRight_ResourceImageName_successful(false)
-                , WindowRightBottom_Offset_successful(false)
-                , WindowRightBottom_ResourceImageName_successful(false)
-                , WindowRightTop_Offset_successful(false)
-                , WindowRightTop_ResourceImageName_successful(false)
-                , WindowTop_Offset_successful(false)
-                , WindowTop_ResourceImageName_successful(false)
             {
             }
         public:
@@ -2134,569 +2637,267 @@ namespace Metacode
                 (_self->*_method)( this->WindowBackground_ResourceImageName );
             }
             
-            bool get_WindowBottom_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowBottom_Offset() const
             {
-                if( WindowBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowBottom_Offset;
-            
-                return true;
+                return this->WindowBottom_Offset;
             }
             
-            bool swap_WindowBottom_Offset( mt::vec2f & _value ) const
+            void swap_WindowBottom_Offset( mt::vec2f & _value ) const
             {
-                if( WindowBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowBottom_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowBottom_Offset( C * _self, M _method )
             {
-                if( WindowBottom_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowBottom_Offset );
             }
             
-            bool get_WindowBottom_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowBottom_ResourceImageName() const
             {
-                if( WindowBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowBottom_ResourceImageName;
-            
-                return true;
+                return this->WindowBottom_ResourceImageName;
             }
             
-            bool swap_WindowBottom_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowBottom_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowBottom_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowBottom_ResourceImageName( C * _self, M _method )
             {
-                if( WindowBottom_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowBottom_ResourceImageName );
             }
             
-            bool get_WindowLeft_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowLeft_Offset() const
             {
-                if( WindowLeft_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeft_Offset;
-            
-                return true;
+                return this->WindowLeft_Offset;
             }
             
-            bool swap_WindowLeft_Offset( mt::vec2f & _value ) const
+            void swap_WindowLeft_Offset( mt::vec2f & _value ) const
             {
-                if( WindowLeft_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeft_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeft_Offset( C * _self, M _method )
             {
-                if( WindowLeft_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeft_Offset );
             }
             
-            bool get_WindowLeft_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowLeft_ResourceImageName() const
             {
-                if( WindowLeft_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeft_ResourceImageName;
-            
-                return true;
+                return this->WindowLeft_ResourceImageName;
             }
             
-            bool swap_WindowLeft_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowLeft_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowLeft_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeft_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeft_ResourceImageName( C * _self, M _method )
             {
-                if( WindowLeft_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeft_ResourceImageName );
             }
             
-            bool get_WindowLeftBottom_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowLeftBottom_Offset() const
             {
-                if( WindowLeftBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeftBottom_Offset;
-            
-                return true;
+                return this->WindowLeftBottom_Offset;
             }
             
-            bool swap_WindowLeftBottom_Offset( mt::vec2f & _value ) const
+            void swap_WindowLeftBottom_Offset( mt::vec2f & _value ) const
             {
-                if( WindowLeftBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeftBottom_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeftBottom_Offset( C * _self, M _method )
             {
-                if( WindowLeftBottom_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeftBottom_Offset );
             }
             
-            bool get_WindowLeftBottom_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowLeftBottom_ResourceImageName() const
             {
-                if( WindowLeftBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeftBottom_ResourceImageName;
-            
-                return true;
+                return this->WindowLeftBottom_ResourceImageName;
             }
             
-            bool swap_WindowLeftBottom_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowLeftBottom_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowLeftBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeftBottom_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeftBottom_ResourceImageName( C * _self, M _method )
             {
-                if( WindowLeftBottom_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeftBottom_ResourceImageName );
             }
             
-            bool get_WindowLeftTop_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowLeftTop_Offset() const
             {
-                if( WindowLeftTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeftTop_Offset;
-            
-                return true;
+                return this->WindowLeftTop_Offset;
             }
             
-            bool swap_WindowLeftTop_Offset( mt::vec2f & _value ) const
+            void swap_WindowLeftTop_Offset( mt::vec2f & _value ) const
             {
-                if( WindowLeftTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeftTop_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeftTop_Offset( C * _self, M _method )
             {
-                if( WindowLeftTop_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeftTop_Offset );
             }
             
-            bool get_WindowLeftTop_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowLeftTop_ResourceImageName() const
             {
-                if( WindowLeftTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowLeftTop_ResourceImageName;
-            
-                return true;
+                return this->WindowLeftTop_ResourceImageName;
             }
             
-            bool swap_WindowLeftTop_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowLeftTop_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowLeftTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowLeftTop_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowLeftTop_ResourceImageName( C * _self, M _method )
             {
-                if( WindowLeftTop_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowLeftTop_ResourceImageName );
             }
             
-            bool get_WindowRight_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowRight_Offset() const
             {
-                if( WindowRight_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRight_Offset;
-            
-                return true;
+                return this->WindowRight_Offset;
             }
             
-            bool swap_WindowRight_Offset( mt::vec2f & _value ) const
+            void swap_WindowRight_Offset( mt::vec2f & _value ) const
             {
-                if( WindowRight_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRight_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRight_Offset( C * _self, M _method )
             {
-                if( WindowRight_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRight_Offset );
             }
             
-            bool get_WindowRight_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowRight_ResourceImageName() const
             {
-                if( WindowRight_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRight_ResourceImageName;
-            
-                return true;
+                return this->WindowRight_ResourceImageName;
             }
             
-            bool swap_WindowRight_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowRight_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowRight_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRight_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRight_ResourceImageName( C * _self, M _method )
             {
-                if( WindowRight_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRight_ResourceImageName );
             }
             
-            bool get_WindowRightBottom_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowRightBottom_Offset() const
             {
-                if( WindowRightBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRightBottom_Offset;
-            
-                return true;
+                return this->WindowRightBottom_Offset;
             }
             
-            bool swap_WindowRightBottom_Offset( mt::vec2f & _value ) const
+            void swap_WindowRightBottom_Offset( mt::vec2f & _value ) const
             {
-                if( WindowRightBottom_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRightBottom_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRightBottom_Offset( C * _self, M _method )
             {
-                if( WindowRightBottom_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRightBottom_Offset );
             }
             
-            bool get_WindowRightBottom_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowRightBottom_ResourceImageName() const
             {
-                if( WindowRightBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRightBottom_ResourceImageName;
-            
-                return true;
+                return this->WindowRightBottom_ResourceImageName;
             }
             
-            bool swap_WindowRightBottom_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowRightBottom_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowRightBottom_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRightBottom_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRightBottom_ResourceImageName( C * _self, M _method )
             {
-                if( WindowRightBottom_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRightBottom_ResourceImageName );
             }
             
-            bool get_WindowRightTop_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowRightTop_Offset() const
             {
-                if( WindowRightTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRightTop_Offset;
-            
-                return true;
+                return this->WindowRightTop_Offset;
             }
             
-            bool swap_WindowRightTop_Offset( mt::vec2f & _value ) const
+            void swap_WindowRightTop_Offset( mt::vec2f & _value ) const
             {
-                if( WindowRightTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRightTop_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRightTop_Offset( C * _self, M _method )
             {
-                if( WindowRightTop_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRightTop_Offset );
             }
             
-            bool get_WindowRightTop_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowRightTop_ResourceImageName() const
             {
-                if( WindowRightTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowRightTop_ResourceImageName;
-            
-                return true;
+                return this->WindowRightTop_ResourceImageName;
             }
             
-            bool swap_WindowRightTop_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowRightTop_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowRightTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowRightTop_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowRightTop_ResourceImageName( C * _self, M _method )
             {
-                if( WindowRightTop_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowRightTop_ResourceImageName );
             }
             
-            bool get_WindowTop_Offset( mt::vec2f & _value ) const
+            const mt::vec2f & get_WindowTop_Offset() const
             {
-                if( WindowTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowTop_Offset;
-            
-                return true;
+                return this->WindowTop_Offset;
             }
             
-            bool swap_WindowTop_Offset( mt::vec2f & _value ) const
+            void swap_WindowTop_Offset( mt::vec2f & _value ) const
             {
-                if( WindowTop_Offset_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowTop_Offset);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowTop_Offset( C * _self, M _method )
             {
-                if( WindowTop_Offset_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowTop_Offset );
             }
             
-            bool get_WindowTop_ResourceImageName( Menge::ConstString & _value ) const
+            const Menge::ConstString & get_WindowTop_ResourceImageName() const
             {
-                if( WindowTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->WindowTop_ResourceImageName;
-            
-                return true;
+                return this->WindowTop_ResourceImageName;
             }
             
-            bool swap_WindowTop_ResourceImageName( Menge::ConstString & _value ) const
+            void swap_WindowTop_ResourceImageName( Menge::ConstString & _value ) const
             {
-                if( WindowTop_ResourceImageName_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->WindowTop_ResourceImageName);
-            
-                return true;
             }
             
             template<class C, class M>
             void method_WindowTop_ResourceImageName( C * _self, M _method )
             {
-                if( WindowTop_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
                 (_self->*_method)( this->WindowTop_ResourceImageName );
             }
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -2704,37 +2905,21 @@ namespace Metacode
         protected:
             bool WindowBackground_ResourceImageName_successful;
             mutable Menge::ConstString WindowBackground_ResourceImageName;
-            bool WindowBottom_Offset_successful;
             mutable mt::vec2f WindowBottom_Offset;
-            bool WindowBottom_ResourceImageName_successful;
             mutable Menge::ConstString WindowBottom_ResourceImageName;
-            bool WindowLeft_Offset_successful;
             mutable mt::vec2f WindowLeft_Offset;
-            bool WindowLeft_ResourceImageName_successful;
             mutable Menge::ConstString WindowLeft_ResourceImageName;
-            bool WindowLeftBottom_Offset_successful;
             mutable mt::vec2f WindowLeftBottom_Offset;
-            bool WindowLeftBottom_ResourceImageName_successful;
             mutable Menge::ConstString WindowLeftBottom_ResourceImageName;
-            bool WindowLeftTop_Offset_successful;
             mutable mt::vec2f WindowLeftTop_Offset;
-            bool WindowLeftTop_ResourceImageName_successful;
             mutable Menge::ConstString WindowLeftTop_ResourceImageName;
-            bool WindowRight_Offset_successful;
             mutable mt::vec2f WindowRight_Offset;
-            bool WindowRight_ResourceImageName_successful;
             mutable Menge::ConstString WindowRight_ResourceImageName;
-            bool WindowRightBottom_Offset_successful;
             mutable mt::vec2f WindowRightBottom_Offset;
-            bool WindowRightBottom_ResourceImageName_successful;
             mutable Menge::ConstString WindowRightBottom_ResourceImageName;
-            bool WindowRightTop_Offset_successful;
             mutable mt::vec2f WindowRightTop_Offset;
-            bool WindowRightTop_ResourceImageName_successful;
             mutable Menge::ConstString WindowRightTop_ResourceImageName;
-            bool WindowTop_Offset_successful;
             mutable mt::vec2f WindowTop_Offset;
-            bool WindowTop_ResourceImageName_successful;
             mutable Menge::ConstString WindowTop_ResourceImageName;
         };
         
@@ -2777,25 +2962,11 @@ namespace Metacode
             (_self->*_method)( this->height );
         }
         
-        const float & get_size() const
-        {
-            return this->size;
-        }
-        
-        void swap_size( float & _value ) const
-        {
-            std::swap( _value, this->size);
-        }
-        
-        template<class C, class M>
-        void method_size( C * _self, M _method ) const
-        {
-            (_self->*_method)( this->size );
-        }
-        
     protected:
         bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        bool _preparationIncludes( size_t _includes, size_t _count ) override;
+        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -2874,7 +3045,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -2921,7 +3094,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -2952,7 +3127,6 @@ namespace Metacode
     protected:
     protected:
         mutable float height;
-        mutable float size;
     public:
         typedef std::vector<Meta_Char> TVectorMeta_Char;
     
@@ -2992,7 +3166,9 @@ namespace Metacode
         
     protected:
         bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        bool _preparationIncludes( size_t _includes, size_t _count ) override;
+        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -3095,7 +3271,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -3326,7 +3504,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -3392,7 +3572,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -3445,7 +3627,7 @@ namespace Metacode
                     (_self->*_method)( this->AnchorPoint );
                 }
                 
-                bool get_Opacity( mt::vec3f & _value ) const
+                bool get_Opacity( float & _value ) const
                 {
                     if( Opacity_successful == false )
                     {
@@ -3457,7 +3639,7 @@ namespace Metacode
                     return true;
                 }
                 
-                bool swap_Opacity( mt::vec3f & _value ) const
+                bool swap_Opacity( float & _value ) const
                 {
                     if( Opacity_successful == false )
                     {
@@ -3587,7 +3769,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -3596,7 +3780,7 @@ namespace Metacode
                 bool AnchorPoint_successful;
                 mutable mt::vec3f AnchorPoint;
                 bool Opacity_successful;
-                mutable mt::vec3f Opacity;
+                mutable float Opacity;
                 bool Position_successful;
                 mutable mt::vec3f Position;
                 bool Rotation_successful;
@@ -3656,7 +3840,9 @@ namespace Metacode
     public:
     protected:
         bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        bool _preparationIncludes( size_t _includes, size_t _count ) override;
+        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -3671,7 +3857,9 @@ namespace Metacode
         public:
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -3702,7 +3890,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -3752,7 +3942,9 @@ namespace Metacode
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -3772,7 +3964,9 @@ namespace Metacode
         public:
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -3803,7 +3997,9 @@ namespace Metacode
                 
             protected:
                 bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+                bool _preparationIncludes( size_t _includes, size_t _count ) override;
+                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
             public:
                 Metadata * generateMetadata( size_t _id ) override;
                 
@@ -3871,7 +4067,9 @@ namespace Metacode
     public:
     protected:
         bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+        bool _preparationIncludes( size_t _includes, size_t _count ) override;
+        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
     public:
         Metadata * generateMetadata( size_t _id ) override;
         
@@ -3884,6 +4082,7 @@ namespace Metacode
                 , CharOffset_successful(false)
                 , Font_successful(false)
                 , LineOffset_successful(false)
+                , Value_successful(false)
             {
             }
         public:
@@ -4008,25 +4207,46 @@ namespace Metacode
                 (_self->*_method)( this->LineOffset );
             }
             
-            const Menge::WString & get_Value() const
+            bool get_Value( Menge::WString & _value ) const
             {
-                return this->Value;
+                if( Value_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Value;
+            
+                return true;
             }
             
-            void swap_Value( Menge::WString & _value ) const
+            bool swap_Value( Menge::WString & _value ) const
             {
+                if( Value_successful == false )
+                {
+                    return false;
+                }
+            
                 std::swap( _value, this->Value);
+            
+                return true;
             }
             
             template<class C, class M>
             void method_Value( C * _self, M _method ) const
             {
+                if( Value_successful == false )
+                {
+                    return;
+                }
+            
                 (_self->*_method)( this->Value );
             }
             
         protected:
             bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _includes, size_t _generators ) override;
         public:
             Metadata * generateMetadata( size_t _id ) override;
             
@@ -4039,6 +4259,7 @@ namespace Metacode
             mutable Menge::ConstString Key;
             bool LineOffset_successful;
             mutable float LineOffset;
+            bool Value_successful;
             mutable Menge::WString Value;
         };
         
