@@ -235,11 +235,11 @@ namespace Metabuf
             return true;
         }
 
-		size_t id = _node->id;
-		if( this->writeSize( id ) == false )
-        {
-            return false;
-        }
+		//size_t id = _node->id;
+		//if( this->writeSize( id ) == false )
+  //      {
+  //          return false;
+  //      }
 
         if( this->writeNodeAttribute_( _node, _xml_node ) == false )
         {
@@ -247,6 +247,11 @@ namespace Metabuf
         }
 
         if( this->writeNodeIncludes_( _node, _xml_node ) == false )
+        {
+            return false;
+        }
+
+        if( this->writeNodeGenerators_( _node, _xml_node ) == false )
         {
             return false;
         }
@@ -535,75 +540,124 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        size_t incluidesCount;
-        this->getNodeIncludesSize_( _node, _xml_node, incluidesCount );
+        size_t includesTypeCount = _node->includes.size();
+        this->writeSize( includesTypeCount );
 
-        this->write( incluidesCount );
-
-        for( pugi::xml_node::iterator
-            it = _xml_node.begin(),
-            it_end = _xml_node.end();
+        for( TMapNodes::const_iterator
+            it = _node->includes.begin(),
+            it_end = _node->includes.end();
         it != it_end;
         ++it )
         {
-            const pugi::xml_node & child = *it;
+            const XmlNode * node_include = it->second;
+            
+            size_t incluidesCount;
+            this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
 
-            const char * child_name = child.name();
+            this->write( incluidesCount );
 
-            const XmlNode * node_includes = _node->getInclude( child_name );
+            this->writeSize( node_include->id );
 
-            if( node_includes == 0 )
+            for( pugi::xml_node::iterator
+                it = _xml_node.begin(),
+                it_end = _xml_node.end();
+            it != it_end;
+            ++it )
             {
-                continue;
-            }
+                const pugi::xml_node & child = *it;
 
-            if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
-            {
-                continue;
-            }
+                const char * child_name = child.name();
 
-            if( this->writeSize( node_includes->id ) == false )
-			{
-				return false;
-			}
+                if( node_include->name != child_name )
+                {
+                    continue;
+                }
 
-            if( node_includes->generator.empty() == true )
-            {
-                if( this->writeNode_( node_includes, child ) == false )
-				{
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_includes->name << std::endl;
-
-					return false;
-				}
-            }
-            else
-            {
-                pugi::xml_attribute attr_generator = child.attribute( node_includes->generator.c_str() );
+                if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+                {
+                    continue;
+                }
                 
+                if( this->writeNode_( node_include, child ) == false )
+                {
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_include->name << std::endl;
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    {
+        size_t generatorsTypeCount = _node->inheritances.size();
+        this->writeSize( generatorsTypeCount );
+
+        for( TMapNodes::const_iterator
+            it = _node->inheritances.begin(),
+            it_end = _node->inheritances.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlNode * node_inheritance = it->second;
+
+            size_t generatorsCount;
+            this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance->name, generatorsCount );
+
+            this->write( generatorsCount );
+
+            this->writeSize( node_inheritance->id );
+
+            for( pugi::xml_node::iterator
+                it = _xml_node.begin(),
+                it_end = _xml_node.end();
+            it != it_end;
+            ++it )
+            {
+                const pugi::xml_node & child = *it;
+
+                const char * child_name = child.name();
+
+                if( node_inheritance->name != child_name )
+                {
+                    continue;
+                }
+
+                if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+                {
+                    continue;
+                }
+                                                
+                pugi::xml_attribute attr_generator = child.attribute( node_inheritance->generator.c_str() );
+
                 const char * value_generator = attr_generator.value();
 
                 const XmlNode * node_generator = _node->getGenerator( value_generator );
 
                 if( node_generator == 0 )
                 {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_includes->name << " not found generator " << value_generator << std::endl;
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
 
                     return false;
                 }
 
+                this->writeSize( node_generator->id );
+
                 if( this->writeNode_( node_generator, child ) == false )
-				{
+                {
                     m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << std::endl;
 
-					return false;
-				}
-            }            
+                    return false;
+                }
+            }      
         }
-
+        
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, size_t & _count )
+    bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, size_t & _count )
     {
         size_t count = 0;
 
@@ -617,7 +671,12 @@ namespace Metabuf
 
             const char * child_name = child.name();
 
-            if( _node->getInclude( child_name ) == 0 )
+            if( _type != child_name )
+            {
+                continue;
+            }
+
+            if( _node->getInclude( child_name ) == NULL )
             {
                 continue;
             }
@@ -627,6 +686,43 @@ namespace Metabuf
                 continue;
             }
             
+            ++count;
+        }
+
+        _count = count;
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, size_t & _count )
+    {
+        size_t count = 0;
+
+        for( pugi::xml_node::iterator
+            it = _xml_node.begin(),
+            it_end = _xml_node.end();
+        it != it_end;
+        ++it )
+        {
+            const pugi::xml_node & child = *it;
+
+            const char * child_name = child.name();
+
+            if( _type != child_name )
+            {
+                continue;
+            }
+
+            if( _node->getInheritances( child_name ) == NULL )
+            {
+                continue;
+            }
+
+            if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+            {
+                continue;
+            }
+
             ++count;
         }
 

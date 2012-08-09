@@ -79,6 +79,20 @@ namespace Metabuf
         return node;
     }
     //////////////////////////////////////////////////////////////////////////
+    const XmlNode * XmlNode::getInheritances( const std::string & _name ) const
+    {
+        TMapNodes::const_iterator it_found = this->inheritances.find( _name );
+
+        if( it_found == this->inheritances.end() )
+        {
+            return 0;
+        }
+
+        XmlNode * node = it_found->second;
+
+        return node;
+    }
+    //////////////////////////////////////////////////////////////////////////
     const XmlNode * XmlNode::getGenerator( const std::string & _name ) const
     {
         TMapNodes::const_iterator it_found = this->generators.find( _name );
@@ -178,12 +192,18 @@ namespace Metabuf
             m_nodes.insert( std::make_pair(Name.value(), nodeXml) );
         }
         else
-        {
-            _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
-
-            if( Inheritance.empty() == false )
+        {           
+            if( Generator.empty() == false )
+            {
+                _node->inheritances.insert( std::make_pair(Name.value(), nodeXml) );
+            }
+            else if( Inheritance.empty() == false )
             {
                 _node->generators.insert( std::make_pair(Name.value(), nodeXml) );
+            }
+            else
+            {
+                _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
             }
         }
 
@@ -210,7 +230,7 @@ namespace Metabuf
 		{
 			nodeXml->inheritance = Inheritance.value();
 
-            nodeXml->node_inheritance = _node->getInclude( nodeXml->inheritance );
+            nodeXml->node_inheritance = _node->getInheritances( nodeXml->inheritance );
 
             nodeXml->enumerator = nodeXml->node_inheritance->enumerator;
 		}
@@ -258,6 +278,9 @@ namespace Metabuf
 				attributeXml.evict = Evict.value();
 				attributeXml.required = Required.empty() == false;
 			}
+            else if( strcmp( element.name(), "Inheritance" ) == 0 )
+            {
+            }
             else if( strcmp( element.name(), "Node" ) == 0 )
             {
                 this->readNode_( nodeXml, element );

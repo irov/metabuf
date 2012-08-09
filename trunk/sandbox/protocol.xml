@@ -9,6 +9,7 @@
             <Member Node="File" Name="Path" Type="Menge::WString" Evict = "wstring" Required="1"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString" Evict = "string"/>
             <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
+            <Member Node="File" Name="Size" Type="mt::vec2f" Evict = "float2"/>
             <Member Node="File" Name="UV" Type="mt::vec4f" Evict = "float4"/>
             <Member Node="File" Name="Alpha" Type="bool" Evict = "bool"/>
             <Member Node="File" Name="WrapX" Type="bool" Evict = "bool"/>
@@ -56,7 +57,7 @@
             <Node Name="Tracks">
                 <Node Name="Track">
                     <Attribute Name="File" Type="Menge::WString" Evict = "wstring" Required="1"/>
-                    <Attribute Name="Codec" Type="Menge::ConstString" Evict = "string"/>
+                    <Attribute Name="Codec" Type="Menge::ConstString" Evict = "string"/>                    
                 </Node>
             </Node>
         </Node>    
@@ -64,23 +65,23 @@
         <Node Name="ResourceWindow" Inheritance = "Resource">
             <Member Node="WindowBackground" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
             
-            <Member Node="WindowLeftTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowRightTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowRight" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowRightBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowLeftBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>
-            <Member Node="WindowLeft" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string"/>            
+            <Member Node="WindowLeftTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowRightTop" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowRight" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowRightBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowLeftBottom" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>
+            <Member Node="WindowLeft" Name="ResourceImageName" Type="Menge::ConstString" Evict = "string" Required="1"/>            
             
-            <Member Node="WindowLeftTop" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowTop" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowRightTop" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowRight" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowRightBottom" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowBottom" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowLeftBottom" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
-            <Member Node="WindowLeft" Name="Offset" Type="mt::vec2f" Evict = "float2"/>            
+            <Member Node="WindowLeftTop" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowTop" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowRightTop" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowRight" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowRightBottom" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowBottom" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowLeftBottom" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>
+            <Member Node="WindowLeft" Name="Offset" Type="mt::vec2f" Evict = "float2" Required="1"/>            
         </Node>
         
         <Node Name="ResourceMovie" Inheritance = "Resource">
@@ -143,7 +144,24 @@
         <Node Name="ResourceInternalObject" Inheritance = "Resource">
             <Member Node="Internal" Name="Name" Type="Menge::ConstString" Evict = "string" Required="1"/>
             <Member Node="Internal" Name="Group" Type="Menge::ConstString" Evict = "string" Required="1"/>
-        </Node>       
+        </Node>
+        
+        <Node Name="ResourceImageCombineRGBAndAlpha" Inheritance = "Resource">
+            <Member Node="File" Name="PathAlpha" Type="Menge::WString" Evict = "wstring"/>
+            <Member Node="File" Name="CodecAlpha" Type="Menge::ConstString" Evict = "string"/>
+
+            <Member Node="File" Name="PathRGB" Type="Menge::WString" Evict = "wstring"/>
+            <Member Node="File" Name="CodecRGB" Type="Menge::ConstString" Evict = "string"/>
+            
+            <Member Node="File" Name="Alpha" Type="bool" Evict = "bool"/>
+            <Member Node="File" Name="MaxSize" Type="mt::vec2f" Evict = "float2"/>
+            <Member Node="File" Name="Size" Type="mt::vec2f" Evict = "float2"/>            
+            <Member Node="File" Name="UV" Type="mt::vec4f" Evict = "float4"/>
+            <Member Node="File" Name="Offset" Type="mt::vec2f" Evict = "float2"/>
+            
+            <Member Node="File" Name="WrapX" Type="bool" Evict = "bool"/>
+            <Member Node="File" Name="WrapY" Type="bool" Evict = "bool"/>
+        </Node>
     </Node>
   
     
@@ -166,7 +184,6 @@
     </Node>
 
     <Node Name="Font">
-        <Attribute Name="size" Type="float" Evict = "float" Required="1"/>
         <Attribute Name="height" Type="float" Evict = "float" Required="1"/>
         
         <Node Name="Char">
@@ -185,7 +202,7 @@
     <Node Name="Texts">
         <Node Name="Text">
             <Attribute Name="Key" Type="Menge::ConstString" Evict = "string" Required="1"/>
-            <Attribute Name="Value" Type="Menge::WString" Evict = "wstring" Required="1"/>
+            <Attribute Name="Value" Type="Menge::WString" Evict = "wstring"/>
             <Attribute Name="Font" Type="Menge::ConstString" Evict = "string"/>
             <Attribute Name="CharOffset" Type="float" Evict = "float"/>
             <Attribute Name="LineOffset" Type="float" Evict = "float"/>
@@ -218,7 +235,7 @@
                 <Attribute Name="Position" Type="mt::vec3f" Evict = "float3"/>
                 <Attribute Name="Scale" Type="mt::vec3f" Evict = "float3"/>
                 <Attribute Name="Rotation" Type="mt::vec3f" Evict = "float3"/>
-                <Attribute Name="Opacity" Type="mt::vec3f" Evict = "float3"/>
+                <Attribute Name="Opacity" Type="float" Evict = "float"/>
             </Node>
         </Node>
     </Node>

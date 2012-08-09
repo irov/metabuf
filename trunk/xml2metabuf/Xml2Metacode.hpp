@@ -29,8 +29,10 @@ namespace Metabuf
 		bool writeHeaderAttributeSetup_( const XmlNode * _node );
         bool writeHeaderIncludesDefinition_( const XmlNode * _node );        
 		bool writeHeaderAttribute_( const XmlNode * _node );
-		bool writeHeaderIncludes_( const XmlNode * _node );        
+		bool writeHeaderIncludes_( const XmlNode * _node );
+        bool writeHeaderIncludesPreparation_( const XmlNode * _node );
 		bool writeHeaderIncludesReader_( const XmlNode * _node );
+        bool writeHeaderGeneratorsReader_( const XmlNode * _node );
 
     protected:
         bool generateSource( std::string & _header );
@@ -41,6 +43,7 @@ namespace Metabuf
     protected:
         bool writeSourceNodeGenerator_( const XmlNode * _node );
         bool writeSourceAttributeReader_( const XmlNode * _node );
+        bool writeSourceIncludesPreparation_( const XmlNode * _node );
         bool writeSourceIncludesReader_( const XmlNode * _node );
         bool writeSourceGeneratorsReader_( const XmlNode * _node );
         bool writeSourceIncludesDefinition_( const XmlNode * _node );
