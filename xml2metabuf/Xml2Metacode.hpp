@@ -41,7 +41,6 @@ namespace Metabuf
         bool writeSourceNode_( const XmlNode * _node );
 
     protected:
-        bool writeSourceNodeGenerator_( const XmlNode * _node );
         bool writeSourceAttributeReader_( const XmlNode * _node );
         bool writeSourceIncludesPreparation_( const XmlNode * _node );
         bool writeSourceIncludesReader_( const XmlNode * _node );
