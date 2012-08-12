@@ -192,6 +192,11 @@ namespace Metabuf
         m_serialization["float3"] = &Serialize::s_write_float3;
         m_serialization["float4"] = &Serialize::s_write_float4;
     }
+    //////////////////////////////////////////////////////////////////////////
+    void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator )
+    {
+        m_serialization[_type] = _serializator;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::convert( const void * _buff, size_t _size, size_t & _write )
 	{	
