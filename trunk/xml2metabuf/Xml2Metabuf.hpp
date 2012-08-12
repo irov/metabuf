@@ -10,6 +10,8 @@
 
 namespace Metabuf
 {
+    typedef bool (*ValueSerialization)( class Xml2Metabuf * _metabuf, const char * _value );
+
 	class Xml2Metabuf
 	{
 	public:
@@ -17,6 +19,7 @@ namespace Metabuf
 
     public:
         void initialize();
+        void addSerializator( const std::string & _type, ValueSerialization _serializator );
 
 	public:
 		bool convert( const void * _buff, size_t _size, size_t & _write );
@@ -64,8 +67,7 @@ namespace Metabuf
 		XmlProtocol * m_protocol;
 
 		std::stringstream m_error;
-
-        typedef bool (*ValueSerialization)( Xml2Metabuf * _metabuf, const char * _value );
+                
         typedef std::map<std::string, ValueSerialization> TMapSerialization;
         TMapSerialization m_serialization;
 	};
