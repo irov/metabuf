@@ -18,6 +18,47 @@ namespace Metabuf
 
         return attr;
     }
+    //////////////////////////////////////////////////////////////////////////
+    XmlNode::XmlNode()
+    {
+
+    }
+    //////////////////////////////////////////////////////////////////////////
+    XmlNode::~XmlNode()
+    {
+        for( TMapNodes::const_iterator
+            it = includes.begin(),
+            it_end = includes.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlNode * node = it->second;
+
+            delete node;
+        }
+
+        for( TMapNodes::const_iterator
+            it = inheritances.begin(),
+            it_end = inheritances.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlNode * node = it->second;
+
+            delete node;
+        }
+
+        for( TMapNodes::const_iterator
+            it = generators.begin(),
+            it_end = generators.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlNode * node = it->second;
+
+            delete node;
+        }
+    }
 	//////////////////////////////////////////////////////////////////////////
 	const XmlAttribute * XmlNode::getAttribute( const std::string & _name ) const
 	{
@@ -137,6 +178,25 @@ namespace Metabuf
 		: m_enumerator(0)
 	{
 	}
+    //////////////////////////////////////////////////////////////////////////
+    XmlProtocol::~XmlProtocol()
+    {
+        for( TMapNodes::const_iterator
+            it = m_nodes.begin(),
+            it_end = m_nodes.end();
+        it != it_end;
+        ++it )
+        {
+            const XmlNode * node = it->second;
+            
+            delete node;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlProtocol::getError()
+    {
+        return m_error.str();
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool XmlProtocol::readProtocol( const void * _buff, size_t _size )
 	{
@@ -146,9 +206,7 @@ namespace Metabuf
 
 		if( result == false )
 		{
-			printf("%s"
-				, result.description()
-				);
+            m_error << "XmlProtocol::readProtocol:" << result.description() << std::endl;
 
 			return false;
 		}
@@ -157,7 +215,7 @@ namespace Metabuf
 
 		if( root.empty() == true )
 		{
-			return 0;
+			return true;
 		}
 
 		for( pugi::xml_node::iterator
@@ -168,16 +226,51 @@ namespace Metabuf
 		{
 			const pugi::xml_node & element = *it;
 
-			
-			//element->attribute()
-			if( strcmp( element.name(), "Node" ) == 0 )
+            const char * element_name = element.name();
+
+            if( element_name == 0 )
+            {
+                return false;
+            }
+
+            if( strcmp( element_name, "Type" ) == 0 )
+            {
+                if( this->readType_( element ) == false )
+                {                   
+                    return false;
+                }
+            }			
+			else if( strcmp( element_name, "Node" ) == 0 )
 			{
-				this->readNode_( 0, element );
+				if( this->readNode_( 0, element ) == false )
+                {
+                    return false;
+                }
 			}
 		}
 
 		return true;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlProtocol::readType_( const pugi::xml_node & _xml_node )
+    {
+        pugi::xml_attribute Name = _xml_node.attribute("Name");
+        pugi::xml_attribute Evict = _xml_node.attribute("Evict");
+
+        const char * type_name = Name.value();
+        const char * type_evict = Evict.value();
+
+        if( type_name == 0 || type_evict == 0 )
+        {
+            m_error << "XmlProtocol::readType_: Name or Evict not set" << std::endl;
+
+            return false;
+        }
+
+        m_evictors.insert( std::make_pair(type_name, type_evict));
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool XmlProtocol::readNode_( XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
@@ -232,6 +325,13 @@ namespace Metabuf
 
             nodeXml->node_inheritance = _node->getInheritances( nodeXml->inheritance );
 
+            if( nodeXml->node_inheritance == NULL )
+            {
+                m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " not found inheritance " << nodeXml->inheritance << std::endl;
+
+                return false;
+            }
+            
             nodeXml->enumerator = nodeXml->node_inheritance->enumerator;
 		}
 
@@ -255,7 +355,6 @@ namespace Metabuf
 				attributeXml.id = ++nodeXml->enumerator;
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
-				attributeXml.evict = Evict.value();
 				attributeXml.required = Required.empty() == false;
 			}
 			else if( strcmp( element.name(), "Member" ) == 0 )
@@ -275,7 +374,6 @@ namespace Metabuf
 				attributeXml.id = ++nodeXml->enumerator;
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
-				attributeXml.evict = Evict.value();
 				attributeXml.required = Required.empty() == false;
 			}
             else if( strcmp( element.name(), "Inheritance" ) == 0 )
@@ -283,12 +381,29 @@ namespace Metabuf
             }
             else if( strcmp( element.name(), "Node" ) == 0 )
             {
-                this->readNode_( nodeXml, element );
+                if( this->readNode_( nodeXml, element ) == false )
+                {                    
+                    return false;
+                }
             }
 		}
 
 		return true;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlProtocol::getEvict( const std::string & _type, std::string & _evict ) const
+    {
+        TMapEvictors::const_iterator it_found = m_evictors.find( _type );
+
+        if( it_found == m_evictors.end() )
+        {
+            return false;
+        }
+
+        _evict = it_found->second;
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	const XmlNode * XmlProtocol::getNode( const std::string & _name ) const
 	{

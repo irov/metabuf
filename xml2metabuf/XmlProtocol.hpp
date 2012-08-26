@@ -6,6 +6,8 @@
 #	include <map>
 #	include <vector>
 
+#   include <sstream>
+
 namespace Metabuf
 {
 	struct XmlAttribute
@@ -13,7 +15,6 @@ namespace Metabuf
 		size_t id;
 		std::string name;
 		std::string type;
-		std::string evict;
 		bool required;
 	};
 
@@ -33,6 +34,9 @@ namespace Metabuf
 
 	struct XmlNode
 	{
+        XmlNode();
+        ~XmlNode();
+
 		size_t id;
 		std::string name;
 		std::string generator;
@@ -67,20 +71,31 @@ namespace Metabuf
 	{
 	public:
 		XmlProtocol();
+        ~XmlProtocol();
 
 	public:
 		const XmlNode * getNode( const std::string & _name ) const;
 		const TMapNodes & getNodes() const;
 
+    public:
+        bool getEvict( const std::string & _type, std::string & _evict ) const;
+
 	public:
 		bool readProtocol( const void * _buff, size_t _size );
+        std::string getError();
 
 	protected:
+        bool readType_( const pugi::xml_node & _xml_node );
 		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
 		size_t m_enumerator;
 
 		TMapNodes m_nodes;
+
+        typedef std::map<std::string, std::string> TMapEvictors;
+        TMapEvictors m_evictors;
+
+        std::stringstream m_error;
 	};
 }

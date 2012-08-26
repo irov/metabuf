@@ -10,6 +10,11 @@ namespace Metabuf
 	{
 
 	}
+    //////////////////////////////////////////////////////////////////////////
+    std::string Xml2Metacode::getError()
+    {
+        return m_error.str();
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::generate( std::string & _header, std::string & _source )
 	{
