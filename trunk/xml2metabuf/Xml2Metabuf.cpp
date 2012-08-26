@@ -398,11 +398,14 @@ namespace Metabuf
 			return false;
 		}
 
-		TMapSerialization::const_iterator it_serialize = m_serialization.find( _attr->evict );
+        std::string evict;
+        m_protocol->getEvict( _attr->type, evict );
+
+		TMapSerialization::const_iterator it_serialize = m_serialization.find( evict );
 
 		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << _attr->evict << " for attribute " << _attr->name << std::endl;
+			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << evict << " for attribute " << _attr->name << std::endl;
 
 			return false;
 		}
@@ -410,7 +413,7 @@ namespace Metabuf
 		const char * attr_value = _xml_attr.value();
 		if( (*it_serialize->second)( this, attr_value ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << _attr->evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+			m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
 
 			return false;
 		}

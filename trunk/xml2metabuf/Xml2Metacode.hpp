@@ -16,6 +16,7 @@ namespace Metabuf
 
 	public:
 		bool generate( std::string & _header, std::string & _source );
+        std::string getError();
 
     protected:
         bool generateHeader( std::string & _header );        
@@ -56,6 +57,6 @@ namespace Metabuf
 
 		XmlProtocol * m_protocol;
 
-		std::string m_error;
+		std::stringstream m_error;
 	};
 }
