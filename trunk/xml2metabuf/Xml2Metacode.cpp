@@ -28,7 +28,9 @@ namespace Metabuf
         _header = m_out.str();
 
         std::stringstream ss_source;
+        
         m_out.swap(ss_source);
+
         if( this->generateSource( _header ) == false )
         {
             return false;
