@@ -1,25 +1,15 @@
 #	include "Xml2Metabuf.hpp"
 #	include "XmlProtocol.hpp"
 
-#   include <Windows.h>
 #	include <sstream>
 
 namespace Metabuf
 {
-	//////////////////////////////////////////////////////////////////////////
-	Xml2Metabuf::Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol )
-		: m_out(_out)
-        , m_size(_size)
-		, m_write(0)
-		, m_protocol(_protocol)
-	{
-
-	}
     //////////////////////////////////////////////////////////////////////////
     namespace Serialize
     {
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             size_t size = strlen( _value );
             _metabuf->write( size );
@@ -29,33 +19,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_wstring( Xml2Metabuf * _metabuf, const char * _value )
-        {
-            int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
-
-            if( size == 0 )
-            {
-                return false;
-            }
-
-            _metabuf->write( size - 1 );
-
-            wchar_t * buffer = new wchar_t[size + 1];
-            int wc = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, buffer, size );
-
-            if( wc != size )
-            {
-                return false;
-            }
-            
-            _metabuf->writeCount( buffer, size - 1 );
-
-            delete [] buffer;
-
-            return true;
-        }
-        //////////////////////////////////////////////////////////////////////////
-        static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             int int_value;
             if( sscanf_s( _value, "%d", &int_value ) != 1 )
@@ -69,7 +33,7 @@ namespace Metabuf
             return true;
         }      
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             int value;
             if( sscanf_s( _value, "%d", &value ) != 1 )
@@ -82,7 +46,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             size_t value;
             if( sscanf_s( _value, "%u", &value ) != 1 )
@@ -95,29 +59,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_wchar_t( Xml2Metabuf * _metabuf, const char * _value )
-        {
-            int size = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, 0, 0 );
-
-            if( size == 0 )
-            {
-                return false;
-            }
-
-            wchar_t wch[2];
-            int wc = ::MultiByteToWideChar( CP_UTF8, 0, _value, -1, wch, size );
-
-            if( wc != size )
-            {
-                return false;
-            }
-
-            _metabuf->writeCount( wch, 1 );
-
-            return true;
-        }
-        //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value;
             if( sscanf_s( _value, "%f", &value ) != 1 )
@@ -130,7 +72,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[2];
             if( sscanf_s( _value, "%f;%f", &value[0], &value[1] ) != 2 )
@@ -146,7 +88,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[3];
             if( sscanf_s( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
@@ -162,7 +104,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value )
+        static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[4];
             if( sscanf_s( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
@@ -178,24 +120,37 @@ namespace Metabuf
             return true;
         }
     }
+	//////////////////////////////////////////////////////////////////////////
+	Xml2Metabuf::Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol )
+		: m_out(_out)
+        , m_size(_size)
+		, m_write(0)
+		, m_protocol(_protocol)
+	{
+
+	}
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::initialize()
     {
-        m_serialization["string"] = &Serialize::s_write_string;
-        m_serialization["wstring"] = &Serialize::s_write_wstring;
-        m_serialization["bool"] = &Serialize::s_write_bool;
-        m_serialization["int"] = &Serialize::s_write_int;
-        m_serialization["size_t"] = &Serialize::s_write_size_t;
-        m_serialization["wchar_t"] = &Serialize::s_write_wchar_t;        
-        m_serialization["float"] = &Serialize::s_write_float;
-        m_serialization["float2"] = &Serialize::s_write_float2;
-        m_serialization["float3"] = &Serialize::s_write_float3;
-        m_serialization["float4"] = &Serialize::s_write_float4;
+        this->addSerializator( "string", &Serialize::s_write_string, 0 );
+        
+        this->addSerializator( "bool", &Serialize::s_write_bool, 0 );
+        this->addSerializator( "int", &Serialize::s_write_int, 0 );
+        this->addSerializator( "size_t", &Serialize::s_write_size_t, 0 );
+        
+        this->addSerializator( "float", &Serialize::s_write_float, 0 );
+        this->addSerializator( "float2", &Serialize::s_write_float2, 0 );
+        this->addSerializator( "float3", &Serialize::s_write_float3, 0 );
+        this->addSerializator( "float4", &Serialize::s_write_float4, 0 );
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator )
+    void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
     {
-        m_serialization[_type] = _serializator;
+        SerializationDesc desc;
+        desc.serialization = _serializator;
+        desc.user = _user;
+
+        m_serialization[_type] = desc;
     }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::convert( const void * _buff, size_t _size, size_t & _write )
@@ -411,7 +366,10 @@ namespace Metabuf
 		}
 
 		const char * attr_value = _xml_attr.value();
-		if( (*it_serialize->second)( this, attr_value ) == false )
+
+        const SerializationDesc & desc = it_serialize->second;
+
+		if( (*desc.serialization)( this, attr_value, desc.user ) == false )
 		{
 			m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
 
