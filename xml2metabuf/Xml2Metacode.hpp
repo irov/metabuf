@@ -19,37 +19,37 @@ namespace Metabuf
         std::string getError();
 
     protected:
-        bool generateHeader( std::string & _header );        
+        bool generateHeader( std::stringstream & _ss );        
 
 	protected:		
-		bool writeHeaderNode_( const XmlNode * _node );
+		bool writeHeaderNode_( std::stringstream & _ss, const XmlNode * _node );
 				
     protected:
-        bool writeHeaderConstructor_( const XmlNode * _node );
-		bool writeHeaderAttributeReader_( const XmlNode * _node );
-		bool writeHeaderAttributeSetup_( const XmlNode * _node );
-        bool writeHeaderIncludesDefinition_( const XmlNode * _node );        
-		bool writeHeaderAttribute_( const XmlNode * _node );
-		bool writeHeaderIncludes_( const XmlNode * _node );
-        bool writeHeaderIncludesPreparation_( const XmlNode * _node );
-		bool writeHeaderIncludesReader_( const XmlNode * _node );
-        bool writeHeaderGeneratorsReader_( const XmlNode * _node );
+        bool writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderAttributeSetup_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node );        
+		bool writeHeaderAttribute_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderIncludes_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeHeaderGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node );
 
     protected:
-        bool generateSource( std::string & _header );
+        bool generateSource( std::stringstream & _ss );
 
     protected:
-        bool writeSourceNode_( const XmlNode * _node );
+        bool writeSourceNode_( std::stringstream & _ss, const XmlNode * _node );
 
     protected:
-        bool writeSourceAttributeReader_( const XmlNode * _node );
-        bool writeSourceIncludesPreparation_( const XmlNode * _node );
-        bool writeSourceIncludesReader_( const XmlNode * _node );
-        bool writeSourceGeneratorsReader_( const XmlNode * _node );
-        bool writeSourceIncludesDefinition_( const XmlNode * _node );
+        bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node );
 
 	protected:
-		std::stringstream & write();
+		std::stringstream & write( std::stringstream & _ss );
 
 	protected:
 		std::stringstream m_out;
