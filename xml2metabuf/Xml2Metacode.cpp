@@ -52,7 +52,7 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read );" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion );" << std::endl;
         this->write(_ss) << std::endl;
 
         m_indent += 4;
@@ -583,7 +583,7 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read )" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion )" << std::endl;
         this->write(_ss) << "    {" << std::endl;
         this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read);" << std::endl;
         this->write(_ss) << std::endl;
@@ -600,6 +600,9 @@ namespace Metabuf
         this->write(_ss) << std::endl;
 
         int version = m_protocol->getVersion();
+
+        this->write(_ss) << "       _readVersion = version;" << std::endl;
+        this->write(_ss) << "       _needVersion = " << version << ";" << std::endl;
 
         this->write(_ss) << "       if( version != " << version << " )" << std::endl;
         this->write(_ss) << "       {" << std::endl;
