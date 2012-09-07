@@ -78,6 +78,9 @@ namespace Metabuf
 		const TMapNodes & getNodes() const;
 
     public:
+        unsigned int getVersion() const;
+
+    public:
         bool getEvict( const std::string & _type, std::string & _evict ) const;
 
 	public:
@@ -89,6 +92,8 @@ namespace Metabuf
 		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
+        unsigned int m_version;
+
 		size_t m_enumerator;
 
 		TMapNodes m_nodes;
