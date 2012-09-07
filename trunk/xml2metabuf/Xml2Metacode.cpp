@@ -52,6 +52,8 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read );" << std::endl;
+        this->write(_ss) << std::endl;
 
         m_indent += 4;
 
@@ -581,9 +583,33 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read )" << std::endl;
+        this->write(_ss) << "    {" << std::endl;
+        this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read);" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       unsigned int head;" << std::endl;
+        this->write(_ss) << "       ar >> head;" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       if( head != 3133062829 )" << std::endl;
+        this->write(_ss) << "       {" << std::endl;
+        this->write(_ss) << "           return false;" << std::endl;
+        this->write(_ss) << "       }" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       unsigned int version;" << std::endl;
+        this->write(_ss) << "       ar >> version;" << std::endl;
+        this->write(_ss) << std::endl;
 
-        m_indent += 4;
+        int version = m_protocol->getVersion();
 
+        this->write(_ss) << "       if( version != " << version << " )" << std::endl;
+        this->write(_ss) << "       {" << std::endl;
+        this->write(_ss) << "           return false;" << std::endl;
+        this->write(_ss) << "       }" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       return true;" << std::endl;
+        this->write(_ss) << "    }" << std::endl;
+        this->write(_ss) << std::endl;
+        
         const TMapNodes & nodes = m_protocol->getNodes();
 
         for( TMapNodes::const_iterator
@@ -599,8 +625,6 @@ namespace Metabuf
                 return false;
             }
         }
-
-        m_indent -= 4;
 
         this->write(_ss) << "}" << std::endl;
 

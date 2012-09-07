@@ -176,6 +176,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::XmlProtocol()
 		: m_enumerator(0)
+        , m_version(0)
 	{
 	}
     //////////////////////////////////////////////////////////////////////////
@@ -217,6 +218,17 @@ namespace Metabuf
 		{
 			return true;
 		}
+
+        pugi::xml_attribute xml_version = root.attribute("Version");
+
+        const char * version_value = xml_version.value();
+
+        if( sscanf( version_value, "%u", &m_version ) != 1 )
+        {
+            m_error << "XmlProtocol::readProtocol: not set version!" << std::endl;
+
+            return false;
+        }
 
 		for( pugi::xml_node::iterator
 			it = root.begin(),
@@ -421,4 +433,9 @@ namespace Metabuf
 	{
 		return m_nodes;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    unsigned int XmlProtocol::getVersion() const
+    {
+        return m_version;
+    }
 }

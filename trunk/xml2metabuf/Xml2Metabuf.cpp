@@ -168,6 +168,11 @@ namespace Metabuf
 			return false;
 		}
 
+        this->write( 3133062829 );
+
+        unsigned int version = m_protocol->getVersion();
+        this->write( version );
+
 		pugi::xml_node root = doc.document_element();
 
         const char * root_name = root.name();
