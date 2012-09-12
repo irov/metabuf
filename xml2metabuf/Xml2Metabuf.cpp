@@ -161,7 +161,7 @@ namespace Metabuf
 
 		if( result == false )
 		{
-            m_error << "Xml2Metabuf::convert xml parser error " << result.description() << std::endl;
+            m_error << "Xml2Metabuf::convert xml parser error:" << std::endl << result.description() << std::endl;
 
 			return false;
 		}
@@ -272,7 +272,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
                 {
-                    const pugi::xml_node & child = *it;
+                    pugi::xml_node & child = *it;
 
                     const char * child_name = child.name();
 
@@ -283,7 +283,7 @@ namespace Metabuf
                     
                     pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
 
-                    if( xml_attr == false )
+                    if( xml_attr.empty() == true )
                     {
                         continue;
                     }
