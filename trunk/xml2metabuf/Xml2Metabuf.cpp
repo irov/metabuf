@@ -161,9 +161,7 @@ namespace Metabuf
 
 		if( result == false )
 		{
-			printf("%s"
-				, result.description()
-				);
+            m_error << "Xml2Metabuf::convert xml parser error " << result.description() << std::endl;
 
 			return false;
 		}
@@ -227,7 +225,10 @@ namespace Metabuf
     bool Xml2Metabuf::writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
         size_t attributeCount;
-        this->getNodeAttributeSize_( _node, _xml_node, attributeCount );
+        if( this->getNodeAttributeSize_( _node, _xml_node, attributeCount ) == false )
+        {
+            return false;
+        }
 
         if( this->writeSize( attributeCount ) == false )
         {
