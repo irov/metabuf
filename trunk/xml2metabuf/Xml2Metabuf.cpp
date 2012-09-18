@@ -177,8 +177,17 @@ namespace Metabuf
 
         const XmlNode * node_root = m_protocol->getNode( root_name );
 
+        if( node_root == NULL )
+        {
+            m_error << "Xml2Metabuf::convert: invalid root node" << root_name << std::endl;
+
+            return false;
+        }
+
 		if( this->writeNode_( node_root, root ) == false )
 		{
+            m_error << "Xml2Metabuf::convert: invalid write node" << root_name << std::endl;
+
 			return false;
 		}
 

@@ -10,6 +10,11 @@ namespace Menge
     typedef std::wstring WString;
 
     typedef std::string ConstString;
+
+    struct ColourValue
+    {
+
+    };
 }
 
 namespace Metabuf
