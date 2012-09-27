@@ -2,6 +2,10 @@
 
 #   include <algorithm>
 
+#   include <stdio.h>
+#   include <string.h>
+#   include <memory.h>
+
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
