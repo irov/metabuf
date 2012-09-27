@@ -3,6 +3,10 @@
 
 #	include <sstream>
 
+#   include <stdio.h>
+#   include <string.h>
+#   include <memory.h>
+
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
@@ -22,7 +26,7 @@ namespace Metabuf
         static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             int int_value;
-            if( sscanf_s( _value, "%d", &int_value ) != 1 )
+            if( sscanf( _value, "%d", &int_value ) != 1 )
             {
                 return false;
             }
@@ -36,7 +40,7 @@ namespace Metabuf
         static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             int value;
-            if( sscanf_s( _value, "%d", &value ) != 1 )
+            if( sscanf( _value, "%d", &value ) != 1 )
             {
                 return false;
             }
@@ -49,7 +53,7 @@ namespace Metabuf
         static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             size_t value;
-            if( sscanf_s( _value, "%u", &value ) != 1 )
+            if( sscanf( _value, "%u", &value ) != 1 )
             {
                 return false;
             }
@@ -62,7 +66,7 @@ namespace Metabuf
         static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value;
-            if( sscanf_s( _value, "%f", &value ) != 1 )
+            if( sscanf( _value, "%f", &value ) != 1 )
             {
                 return false;
             }
@@ -75,9 +79,9 @@ namespace Metabuf
         static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[2];
-            if( sscanf_s( _value, "%f;%f", &value[0], &value[1] ) != 2 )
+            if( sscanf( _value, "%f;%f", &value[0], &value[1] ) != 2 )
             {
-                if( sscanf_s( _value, "%f %f", &value[0], &value[1] ) != 2 )
+                if( sscanf( _value, "%f %f", &value[0], &value[1] ) != 2 )
                 {
                     return false;
                 }
@@ -91,9 +95,9 @@ namespace Metabuf
         static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[3];
-            if( sscanf_s( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
+            if( sscanf( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
             {
-                if( sscanf_s( _value, "%f %f %f", &value[0], &value[1], &value[2] ) != 3 )
+                if( sscanf( _value, "%f %f %f", &value[0], &value[1], &value[2] ) != 3 )
                 {
                     return false;
                 }
@@ -107,9 +111,9 @@ namespace Metabuf
         static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             float value[4];
-            if( sscanf_s( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+            if( sscanf( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
             {
-                if( sscanf_s( _value, "%f %f %f %f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+                if( sscanf( _value, "%f %f %f %f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
                 {
                     return false;
                 }
@@ -166,7 +170,8 @@ namespace Metabuf
 			return false;
 		}
 
-        this->write( 3133062829 );
+        unsigned int magic = 3133062829u;
+        this->write( magic );
 
         unsigned int version = m_protocol->getVersion();
         this->write( version );
@@ -335,7 +340,7 @@ namespace Metabuf
 
             pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-            if( xml_attr == false )
+            if( xml_attr.empty() == true )
             {
                 if( attr->required == true )
                 {
@@ -408,7 +413,7 @@ namespace Metabuf
 
             pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-            if( xml_attr == false )
+            if( xml_attr.empty() == true )
             {
                 if( attr->required == true )
                 {
@@ -437,7 +442,7 @@ namespace Metabuf
 
                 pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-                if( xml_attr == false )
+                if( xml_attr.empty() == true )
                 {
                     if( attr->required == true )
                     {
@@ -490,7 +495,7 @@ namespace Metabuf
 
                     pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
 
-                    if( xml_attr == false )
+                    if( xml_attr.empty() == true )
                     {
                         continue;
                     }
