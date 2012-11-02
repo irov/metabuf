@@ -22,7 +22,14 @@ namespace Metabuf
             this->readBuffer( buff, sizeof(T) );
         }
 
-    public:
+        template<class T>
+        inline void readCount( T * _t, size_t _size )
+        {
+            char * buff = reinterpret_cast<char *>(_t);
+            this->readBuffer( buff, sizeof(T) * _size );
+        }
+
+    public:        
         inline void readBuffer( char * _begin, size_t _size )
         {
             memcpy( _begin, m_buff + m_read, _size );
