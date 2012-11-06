@@ -851,7 +851,10 @@ namespace Metabuf
                 this->write(_ss) << "    case " << node->id << ":" << std::endl;
                 this->write(_ss) << "        {" << std::endl;
                 this->write(_ss) << "            " << node->getScope() << " metadata;" << std::endl;
-                this->write(_ss) << "            metadata.parse( _buff, _size, _read );" << std::endl;
+                this->write(_ss) << "            if( metadata.parse( _buff, _size, _read ) == false )" << std::endl;
+                this->write(_ss) << "            {" << std::endl;
+                this->write(_ss) << "                return false;" << std::endl;
+                this->write(_ss) << "            }" << std::endl;
                 this->write(_ss) << std::endl;
                 this->write(_ss) << "            includes_" << node->getName() << ".push_back(metadata);" << std::endl;
                 this->write(_ss) << "            return true;" << std::endl;
@@ -919,7 +922,12 @@ namespace Metabuf
                     this->write(_ss) << "    case " << node_generator->id << ":" << std::endl;
                     this->write(_ss) << "        {" << std::endl;
                     this->write(_ss) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
-                    this->write(_ss) << "            metadata->parse( _buff, _size, _read );" << std::endl;
+                    this->write(_ss) << "            if( metadata->parse( _buff, _size, _read ) == false )" << std::endl;
+                    this->write(_ss) << "            {" << std::endl;
+                    this->write(_ss) << "                delete metadata;" << std::endl;
+                    this->write(_ss) << std::endl;
+                    this->write(_ss) << "                return false;" << std::endl;
+                    this->write(_ss) << "            }" << std::endl;
                     this->write(_ss) << std::endl;
                     this->write(_ss) << "            includes_" << node_inheritance->getName() << ".push_back(metadata);" << std::endl;            
                     this->write(_ss) << "            return true;" << std::endl;
