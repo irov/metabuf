@@ -7,10 +7,7 @@ namespace Metabuf
     class ArchiveReader;
 
     template<class T>
-    void archive_read( ArchiveReader & ar, T & _value, void * _userData )
-    {
-        ar.readPOD( _value );
-    }
+    void archive_read( ArchiveReader & ar, T & _value, void * _userData );
 
     class ArchiveReader
     {
@@ -67,4 +64,12 @@ namespace Metabuf
         size_t & m_read;
         void * m_userData;
     };
+    
+    template<class T>
+    void archive_read( ArchiveReader & ar, T & _value, void * _userData )
+    {
+        ar.readPOD( _value );
+    }
 }
+
+
