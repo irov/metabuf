@@ -4,11 +4,6 @@
 
 namespace Metabuf
 {
-    class ArchiveReader;
-
-    template<class T>
-    void archive_read( ArchiveReader & ar, T & _value, void * _userData );
-
     class ArchiveReader
     {
     public:
@@ -22,10 +17,7 @@ namespace Metabuf
 
     public:
         template<class T>
-        inline void read( T & _t )
-        {
-            Metabuf::archive_read( *this, _t, m_userData );
-        }
+        inline void read( T & _t );
 
         template<class T>
         inline void readPOD( T & _t )
@@ -70,6 +62,10 @@ namespace Metabuf
     {
         ar.readPOD( _value );
     }
+    
+    template<class T>
+    inline void ArchiveReader::read( T & _t )
+    {
+        archive_read( *this, _t, m_userData );
+    }
 }
-
-
