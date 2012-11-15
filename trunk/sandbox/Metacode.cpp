@@ -2,12 +2,12 @@
 
 namespace Metacode
 {
-    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion )
+    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData )
     {
-       Metabuf::ArchiveReader ar(_buff, _size, _read);
+       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);
 
        unsigned int head;
-       ar >> head;
+       ar.read( head );
 
        if( head != 3133062829 )
        {
@@ -15,11 +15,12 @@ namespace Metacode
        }
 
        unsigned int version;
-       ar >> version;
+       ar.read( version );
 
        _readVersion = version;
-       _needVersion = 2;
-       if( version != 2 )
+       _needVersion = 3;
+
+       if( version != 3 )
        {
            return false;
        }
@@ -70,7 +71,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 14:
         {
             Meta_DataBlock::Meta_ResourceAnimation * metadata = new Meta_DataBlock::Meta_ResourceAnimation ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -79,7 +85,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 8:
         {
             Meta_DataBlock::Meta_ResourceCursorICO * metadata = new Meta_DataBlock::Meta_ResourceCursorICO ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -88,7 +99,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 7:
         {
             Meta_DataBlock::Meta_ResourceCursorSystem * metadata = new Meta_DataBlock::Meta_ResourceCursorSystem ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -97,7 +113,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 4:
         {
             Meta_DataBlock::Meta_ResourceEmitterContainer * metadata = new Meta_DataBlock::Meta_ResourceEmitterContainer ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -106,7 +127,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 20:
         {
             Meta_DataBlock::Meta_ResourceExternal * metadata = new Meta_DataBlock::Meta_ResourceExternal ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -115,7 +141,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 5:
         {
             Meta_DataBlock::Meta_ResourceFont * metadata = new Meta_DataBlock::Meta_ResourceFont ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -124,7 +155,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 6:
         {
             Meta_DataBlock::Meta_ResourceGlyph * metadata = new Meta_DataBlock::Meta_ResourceGlyph ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -133,7 +169,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 17:
         {
             Meta_DataBlock::Meta_ResourceImageCombineRGBAndAlpha * metadata = new Meta_DataBlock::Meta_ResourceImageCombineRGBAndAlpha ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -142,7 +183,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 3:
         {
             Meta_DataBlock::Meta_ResourceImageDefault * metadata = new Meta_DataBlock::Meta_ResourceImageDefault ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -151,7 +197,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 18:
         {
             Meta_DataBlock::Meta_ResourceImageMultiplyRGBAndAlpha * metadata = new Meta_DataBlock::Meta_ResourceImageMultiplyRGBAndAlpha ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -160,7 +211,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 15:
         {
             Meta_DataBlock::Meta_ResourceImageSolid * metadata = new Meta_DataBlock::Meta_ResourceImageSolid ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -169,7 +225,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 19:
         {
             Meta_DataBlock::Meta_ResourceImageSubstract * metadata = new Meta_DataBlock::Meta_ResourceImageSubstract ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -178,7 +239,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 16:
         {
             Meta_DataBlock::Meta_ResourceInternalObject * metadata = new Meta_DataBlock::Meta_ResourceInternalObject ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -187,7 +253,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 12:
         {
             Meta_DataBlock::Meta_ResourceMovie * metadata = new Meta_DataBlock::Meta_ResourceMovie ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -196,7 +267,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 10:
         {
             Meta_DataBlock::Meta_ResourcePlaylist * metadata = new Meta_DataBlock::Meta_ResourcePlaylist ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -205,7 +281,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 9:
         {
             Meta_DataBlock::Meta_ResourceSound * metadata = new Meta_DataBlock::Meta_ResourceSound ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -214,7 +295,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 13:
         {
             Meta_DataBlock::Meta_ResourceVideo * metadata = new Meta_DataBlock::Meta_ResourceVideo ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -223,7 +309,12 @@ bool Meta_DataBlock::_parseGenerators( const char * _buff, size_t _size, size_t 
     case 11:
         {
             Meta_DataBlock::Meta_ResourceWindow * metadata = new Meta_DataBlock::Meta_ResourceWindow ();
-            metadata->parse( _buff, _size, _read );
+            if( metadata->parse( _buff, _size, _read, m_userData ) == false )
+            {
+                delete metadata;
+
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -314,7 +405,10 @@ bool Meta_DataBlock::Meta_ResourceAnimation::_parseIncludes( const char * _buff,
     case 3:
         {
             Meta_DataBlock::Meta_ResourceAnimation::Meta_Sequence metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Sequence.push_back(metadata);
             return true;
@@ -1233,7 +1327,10 @@ bool Meta_DataBlock::Meta_ResourceMovie::_parseIncludes( const char * _buff, siz
     case 10:
         {
             Meta_DataBlock::Meta_ResourceMovie::Meta_MovieCamera3D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_MovieCamera3D.push_back(metadata);
             return true;
@@ -1242,7 +1339,10 @@ bool Meta_DataBlock::Meta_ResourceMovie::_parseIncludes( const char * _buff, siz
     case 8:
         {
             Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer2D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_MovieLayer2D.push_back(metadata);
             return true;
@@ -1251,7 +1351,10 @@ bool Meta_DataBlock::Meta_ResourceMovie::_parseIncludes( const char * _buff, siz
     case 9:
         {
             Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer3D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_MovieLayer3D.push_back(metadata);
             return true;
@@ -1561,7 +1664,10 @@ bool Meta_DataBlock::Meta_ResourcePlaylist::_parseIncludes( const char * _buff, 
     case 5:
         {
             Meta_DataBlock::Meta_ResourcePlaylist::Meta_Tracks metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Tracks.push_back(metadata);
             return true;
@@ -1610,7 +1716,10 @@ bool Meta_DataBlock::Meta_ResourcePlaylist::Meta_Tracks::_parseIncludes( const c
     case 1:
         {
             Meta_DataBlock::Meta_ResourcePlaylist::Meta_Tracks::Meta_Track metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Track.push_back(metadata);
             return true;
@@ -1988,7 +2097,10 @@ bool Meta_Font::_parseIncludes( const char * _buff, size_t _size, size_t & _read
     case 2:
         {
             Meta_Font::Meta_Char metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Char.push_back(metadata);
             return true;
@@ -2059,7 +2171,10 @@ bool Meta_Font::Meta_Char::_parseIncludes( const char * _buff, size_t _size, siz
     case 5:
         {
             Meta_Font::Meta_Char::Meta_Kerning metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Kerning.push_back(metadata);
             return true;
@@ -2156,7 +2271,10 @@ bool Meta_KeyFramesPack::_parseIncludes( const char * _buff, size_t _size, size_
     case 2:
         {
             Meta_KeyFramesPack::Meta_KeyFrames2D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_KeyFrames2D.push_back(metadata);
             return true;
@@ -2165,7 +2283,10 @@ bool Meta_KeyFramesPack::_parseIncludes( const char * _buff, size_t _size, size_
     case 3:
         {
             Meta_KeyFramesPack::Meta_KeyFrames3D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_KeyFrames3D.push_back(metadata);
             return true;
@@ -2232,7 +2353,10 @@ bool Meta_KeyFramesPack::Meta_KeyFrames2D::_parseIncludes( const char * _buff, s
     case 4:
         {
             Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_KeyFrame2D.push_back(metadata);
             return true;
@@ -2360,7 +2484,10 @@ bool Meta_KeyFramesPack::Meta_KeyFrames3D::_parseIncludes( const char * _buff, s
     case 2:
         {
             Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_KeyFrame3D.push_back(metadata);
             return true;
@@ -2484,7 +2611,10 @@ bool Meta_Pak::_parseIncludes( const char * _buff, size_t _size, size_t & _read,
     case 2:
         {
             Meta_Pak::Meta_Resources metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Resources.push_back(metadata);
             return true;
@@ -2493,7 +2623,10 @@ bool Meta_Pak::_parseIncludes( const char * _buff, size_t _size, size_t & _read,
     case 1:
         {
             Meta_Pak::Meta_Scripts metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Scripts.push_back(metadata);
             return true;
@@ -2502,7 +2635,10 @@ bool Meta_Pak::_parseIncludes( const char * _buff, size_t _size, size_t & _read,
     case 3:
         {
             Meta_Pak::Meta_Texts metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Texts.push_back(metadata);
             return true;
@@ -2546,7 +2682,10 @@ bool Meta_Pak::Meta_Resources::_parseIncludes( const char * _buff, size_t _size,
     case 1:
         {
             Meta_Pak::Meta_Resources::Meta_Resource metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Resource.push_back(metadata);
             return true;
@@ -2654,7 +2793,10 @@ bool Meta_Pak::Meta_Texts::_parseIncludes( const char * _buff, size_t _size, siz
     case 1:
         {
             Meta_Pak::Meta_Texts::Meta_Text metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Text.push_back(metadata);
             return true;
@@ -2730,7 +2872,10 @@ bool Meta_Texts::_parseIncludes( const char * _buff, size_t _size, size_t & _rea
     case 1:
         {
             Meta_Texts::Meta_Text metadata;
-            metadata.parse( _buff, _size, _read );
+            if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+            {
+                return false;
+            }
 
             includes_Meta_Text.push_back(metadata);
             return true;

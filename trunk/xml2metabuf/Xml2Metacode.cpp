@@ -52,7 +52,7 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion );" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );" << std::endl;
         this->write(_ss) << std::endl;
 
         m_indent += 4;
@@ -579,16 +579,18 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::generateSource( std::stringstream & _ss )
     {        
+        int version = m_protocol->getVersion();
+
         this->write(_ss) << "#   include \"Metacode.h\"" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion )" << std::endl;
+        this->write(_ss) << "    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData )" << std::endl;
         this->write(_ss) << "    {" << std::endl;
-        this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read);" << std::endl;
+        this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "       unsigned int head;" << std::endl;
-        this->write(_ss) << "       ar >> head;" << std::endl;
+        this->write(_ss) << "       ar.read( head );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "       if( head != 3133062829 )" << std::endl;
         this->write(_ss) << "       {" << std::endl;
@@ -596,14 +598,11 @@ namespace Metabuf
         this->write(_ss) << "       }" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "       unsigned int version;" << std::endl;
-        this->write(_ss) << "       ar >> version;" << std::endl;
+        this->write(_ss) << "       ar.read( version );" << std::endl;
         this->write(_ss) << std::endl;
-
-        int version = m_protocol->getVersion();
-
         this->write(_ss) << "       _readVersion = version;" << std::endl;
         this->write(_ss) << "       _needVersion = " << version << ";" << std::endl;
-
+        this->write(_ss) << std::endl;
         this->write(_ss) << "       if( version != " << version << " )" << std::endl;
         this->write(_ss) << "       {" << std::endl;
         this->write(_ss) << "           return false;" << std::endl;
@@ -851,7 +850,7 @@ namespace Metabuf
                 this->write(_ss) << "    case " << node->id << ":" << std::endl;
                 this->write(_ss) << "        {" << std::endl;
                 this->write(_ss) << "            " << node->getScope() << " metadata;" << std::endl;
-                this->write(_ss) << "            if( metadata.parse( _buff, _size, _read ) == false )" << std::endl;
+                this->write(_ss) << "            if( metadata.parse( _buff, _size, _read, m_userData ) == false )" << std::endl;
                 this->write(_ss) << "            {" << std::endl;
                 this->write(_ss) << "                return false;" << std::endl;
                 this->write(_ss) << "            }" << std::endl;
@@ -922,7 +921,7 @@ namespace Metabuf
                     this->write(_ss) << "    case " << node_generator->id << ":" << std::endl;
                     this->write(_ss) << "        {" << std::endl;
                     this->write(_ss) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
-                    this->write(_ss) << "            if( metadata->parse( _buff, _size, _read ) == false )" << std::endl;
+                    this->write(_ss) << "            if( metadata->parse( _buff, _size, _read, m_userData ) == false )" << std::endl;
                     this->write(_ss) << "            {" << std::endl;
                     this->write(_ss) << "                delete metadata;" << std::endl;
                     this->write(_ss) << std::endl;

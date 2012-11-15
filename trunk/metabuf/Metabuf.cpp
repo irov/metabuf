@@ -3,8 +3,10 @@
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
-    bool Metadata::parse( const char * _buff, size_t _size, size_t & _read )
+    bool Metadata::parse( const char * _buff, size_t _size, size_t & _read, void * _userData )
     {
+        m_userData = _userData;
+
 		size_t attributeCount;
 		this->readSize( _buff, _size, _read, attributeCount );
 
