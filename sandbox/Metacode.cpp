@@ -35,10 +35,13 @@ bool Meta_DataBlock::_parseArguments( const char * _buff, size_t _size, size_t &
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->Name );
+            if( this->read( _buff, _size, _read, this->Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -331,16 +334,22 @@ bool Meta_DataBlock::Meta_Resource::_parseArguments( const char * _buff, size_t 
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->Name );
+            if( this->read( _buff, _size, _read, this->Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Type );
+            if( this->read( _buff, _size, _read, this->Type ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -436,16 +445,22 @@ bool Meta_DataBlock::Meta_ResourceAnimation::Meta_Sequence::_parseArguments( con
     {
     case 2:
         {
-            this->read( _buff, _size, _read, this->Delay );
+            if( this->read( _buff, _size, _read, this->Delay ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->ResourceImageName );
+            if( this->read( _buff, _size, _read, this->ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -479,10 +494,13 @@ bool Meta_DataBlock::Meta_ResourceCursorICO::_parseArguments( const char * _buff
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -528,10 +546,13 @@ bool Meta_DataBlock::Meta_ResourceCursorSystem::_parseArguments( const char * _b
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -577,16 +598,22 @@ bool Meta_DataBlock::Meta_ResourceEmitterContainer::_parseArguments( const char 
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Folder_Path );
+            if( this->read( _buff, _size, _read, this->Folder_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -632,10 +659,13 @@ bool Meta_DataBlock::Meta_ResourceExternal::_parseArguments( const char * _buff,
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->External_Name );
+            if( this->read( _buff, _size, _read, this->External_Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -681,44 +711,66 @@ bool Meta_DataBlock::Meta_ResourceFont::_parseArguments( const char * _buff, siz
     {
     case 8:
         {
-            this->read( _buff, _size, _read, this->Color_Value );
+            if( this->read( _buff, _size, _read, this->Color_Value ) == false )
+            {
+                return false;
+            }
+
             this->Color_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Image_Codec );
+            if( this->read( _buff, _size, _read, this->Image_Codec ) == false )
+            {
+                return false;
+            }
+
             this->Image_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Image_Path );
+            if( this->read( _buff, _size, _read, this->Image_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->OutlineImage_Codec );
+            if( this->read( _buff, _size, _read, this->OutlineImage_Codec ) == false )
+            {
+                return false;
+            }
+
             this->OutlineImage_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->OutlineImage_Path );
+            if( this->read( _buff, _size, _read, this->OutlineImage_Path ) == false )
+            {
+                return false;
+            }
+
             this->OutlineImage_Path_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->ResourceGlyph_Name );
+            if( this->read( _buff, _size, _read, this->ResourceGlyph_Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -764,10 +816,13 @@ bool Meta_DataBlock::Meta_ResourceGlyph::_parseArguments( const char * _buff, si
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->GlyphPath_Path );
+            if( this->read( _buff, _size, _read, this->GlyphPath_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -813,60 +868,92 @@ bool Meta_DataBlock::Meta_ResourceImageCombineRGBAndAlpha::_parseArguments( cons
     {
     case 7:
         {
-            this->read( _buff, _size, _read, this->File_Alpha );
+            if( this->read( _buff, _size, _read, this->File_Alpha ) == false )
+            {
+                return false;
+            }
+
             this->File_Alpha_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->File_CodecAlpha );
+            if( this->read( _buff, _size, _read, this->File_CodecAlpha ) == false )
+            {
+                return false;
+            }
+
             this->File_CodecAlpha_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->File_CodecRGB );
+            if( this->read( _buff, _size, _read, this->File_CodecRGB ) == false )
+            {
+                return false;
+            }
+
             this->File_CodecRGB_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_PathAlpha );
+            if( this->read( _buff, _size, _read, this->File_PathAlpha ) == false )
+            {
+                return false;
+            }
+
             this->File_PathAlpha_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->File_PathRGB );
+            if( this->read( _buff, _size, _read, this->File_PathRGB ) == false )
+            {
+                return false;
+            }
+
             this->File_PathRGB_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->File_UV );
+            if( this->read( _buff, _size, _read, this->File_UV ) == false )
+            {
+                return false;
+            }
+
             this->File_UV_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 9:
         {
-            this->read( _buff, _size, _read, this->File_WrapX );
+            if( this->read( _buff, _size, _read, this->File_WrapX ) == false )
+            {
+                return false;
+            }
+
             this->File_WrapX_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 10:
         {
-            this->read( _buff, _size, _read, this->File_WrapY );
+            if( this->read( _buff, _size, _read, this->File_WrapY ) == false )
+            {
+                return false;
+            }
+
             this->File_WrapY_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -912,45 +999,68 @@ bool Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( const char * _b
     {
     case 6:
         {
-            this->read( _buff, _size, _read, this->File_Alpha );
+            if( this->read( _buff, _size, _read, this->File_Alpha ) == false )
+            {
+                return false;
+            }
+
             this->File_Alpha_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->File_Codec );
+            if( this->read( _buff, _size, _read, this->File_Codec ) == false )
+            {
+                return false;
+            }
+
             this->File_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->File_UV );
+            if( this->read( _buff, _size, _read, this->File_UV ) == false )
+            {
+                return false;
+            }
+
             this->File_UV_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->File_WrapX );
+            if( this->read( _buff, _size, _read, this->File_WrapX ) == false )
+            {
+                return false;
+            }
+
             this->File_WrapX_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->File_WrapY );
+            if( this->read( _buff, _size, _read, this->File_WrapY ) == false )
+            {
+                return false;
+            }
+
             this->File_WrapY_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -996,46 +1106,70 @@ bool Meta_DataBlock::Meta_ResourceImageMultiplyRGBAndAlpha::_parseArguments( con
     {
     case 7:
         {
-            this->read( _buff, _size, _read, this->FileAlpha_Codec );
+            if( this->read( _buff, _size, _read, this->FileAlpha_Codec ) == false )
+            {
+                return false;
+            }
+
             this->FileAlpha_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->FileAlpha_Path );
+            if( this->read( _buff, _size, _read, this->FileAlpha_Path ) == false )
+            {
+                return false;
+            }
+
             this->FileAlpha_Path_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->FileAlpha_UV );
+            if( this->read( _buff, _size, _read, this->FileAlpha_UV ) == false )
+            {
+                return false;
+            }
+
             this->FileAlpha_UV_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->FileRGB_Codec );
+            if( this->read( _buff, _size, _read, this->FileRGB_Codec ) == false )
+            {
+                return false;
+            }
+
             this->FileRGB_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->FileRGB_Path );
+            if( this->read( _buff, _size, _read, this->FileRGB_Path ) == false )
+            {
+                return false;
+            }
+
             this->FileRGB_Path_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->FileRGB_UV );
+            if( this->read( _buff, _size, _read, this->FileRGB_UV ) == false )
+            {
+                return false;
+            }
+
             this->FileRGB_UV_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1081,16 +1215,22 @@ bool Meta_DataBlock::Meta_ResourceImageSolid::_parseArguments( const char * _buf
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->Color_Value );
+            if( this->read( _buff, _size, _read, this->Color_Value ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Size_Value );
+            if( this->read( _buff, _size, _read, this->Size_Value ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1136,16 +1276,22 @@ bool Meta_DataBlock::Meta_ResourceImageSubstract::_parseArguments( const char * 
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->Image_Name );
+            if( this->read( _buff, _size, _read, this->Image_Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Image_UV );
+            if( this->read( _buff, _size, _read, this->Image_UV ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1191,16 +1337,22 @@ bool Meta_DataBlock::Meta_ResourceInternalObject::_parseArguments( const char * 
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->Internal_Group );
+            if( this->read( _buff, _size, _read, this->Internal_Group ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Internal_Name );
+            if( this->read( _buff, _size, _read, this->Internal_Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1246,39 +1398,59 @@ bool Meta_DataBlock::Meta_ResourceMovie::_parseArguments( const char * _buff, si
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->Duration_Value );
+            if( this->read( _buff, _size, _read, this->Duration_Value ) == false )
+            {
+                return false;
+            }
+
             this->Duration_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->FrameDuration_Value );
+            if( this->read( _buff, _size, _read, this->FrameDuration_Value ) == false )
+            {
+                return false;
+            }
+
             this->FrameDuration_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->Height_Value );
+            if( this->read( _buff, _size, _read, this->Height_Value ) == false )
+            {
+                return false;
+            }
+
             this->Height_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->KeyFramesPackPath_Path );
+            if( this->read( _buff, _size, _read, this->KeyFramesPackPath_Path ) == false )
+            {
+                return false;
+            }
+
             this->KeyFramesPackPath_Path_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Width_Value );
+            if( this->read( _buff, _size, _read, this->Width_Value ) == false )
+            {
+                return false;
+            }
+
             this->Width_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1382,40 +1554,58 @@ bool Meta_DataBlock::Meta_ResourceMovie::Meta_MovieCamera3D::_parseArguments( co
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->CameraAspect );
+            if( this->read( _buff, _size, _read, this->CameraAspect ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->CameraFOV );
+            if( this->read( _buff, _size, _read, this->CameraFOV ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->CameraInterest );
+            if( this->read( _buff, _size, _read, this->CameraInterest ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->CameraPosition );
+            if( this->read( _buff, _size, _read, this->CameraPosition ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->Height );
+            if( this->read( _buff, _size, _read, this->Height ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Width );
+            if( this->read( _buff, _size, _read, this->Width ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1444,65 +1634,96 @@ bool Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer2D::_parseArguments( con
     {
     case 9:
         {
-            this->read( _buff, _size, _read, this->BlendingMode );
+            if( this->read( _buff, _size, _read, this->BlendingMode ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->In );
+            if( this->read( _buff, _size, _read, this->In ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Index );
+            if( this->read( _buff, _size, _read, this->Index ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->Name );
+            if( this->read( _buff, _size, _read, this->Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->Out );
+            if( this->read( _buff, _size, _read, this->Out ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Parent );
+            if( this->read( _buff, _size, _read, this->Parent ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 10:
         {
-            this->read( _buff, _size, _read, this->PlayCount );
+            if( this->read( _buff, _size, _read, this->PlayCount ) == false )
+            {
+                return false;
+            }
+
             this->PlayCount_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Source );
+            if( this->read( _buff, _size, _read, this->Source ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->StartInterval );
+            if( this->read( _buff, _size, _read, this->StartInterval ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Type );
+            if( this->read( _buff, _size, _read, this->Type ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1531,58 +1752,85 @@ bool Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer3D::_parseArguments( con
     {
     case 9:
         {
-            this->read( _buff, _size, _read, this->BlendingMode );
+            if( this->read( _buff, _size, _read, this->BlendingMode ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->In );
+            if( this->read( _buff, _size, _read, this->In ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Index );
+            if( this->read( _buff, _size, _read, this->Index ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->Name );
+            if( this->read( _buff, _size, _read, this->Name ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->Out );
+            if( this->read( _buff, _size, _read, this->Out ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Parent );
+            if( this->read( _buff, _size, _read, this->Parent ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Source );
+            if( this->read( _buff, _size, _read, this->Source ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->StartInterval );
+            if( this->read( _buff, _size, _read, this->StartInterval ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Type );
+            if( this->read( _buff, _size, _read, this->Type ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1616,18 +1864,26 @@ bool Meta_DataBlock::Meta_ResourcePlaylist::_parseArguments( const char * _buff,
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->Loop_Value );
+            if( this->read( _buff, _size, _read, this->Loop_Value ) == false )
+            {
+                return false;
+            }
+
             this->Loop_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Shuffle_Value );
+            if( this->read( _buff, _size, _read, this->Shuffle_Value ) == false )
+            {
+                return false;
+            }
+
             this->Shuffle_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1742,17 +1998,24 @@ bool Meta_DataBlock::Meta_ResourcePlaylist::Meta_Tracks::Meta_Track::_parseArgum
     {
     case 2:
         {
-            this->read( _buff, _size, _read, this->Codec );
+            if( this->read( _buff, _size, _read, this->Codec ) == false )
+            {
+                return false;
+            }
+
             this->Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->File );
+            if( this->read( _buff, _size, _read, this->File ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1786,38 +2049,57 @@ bool Meta_DataBlock::Meta_ResourceSound::_parseArguments( const char * _buff, si
     {
     case 6:
         {
-            this->read( _buff, _size, _read, this->DefaultVolume_Value );
+            if( this->read( _buff, _size, _read, this->DefaultVolume_Value ) == false )
+            {
+                return false;
+            }
+
             this->DefaultVolume_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->File_Codec );
+            if( this->read( _buff, _size, _read, this->File_Codec ) == false )
+            {
+                return false;
+            }
+
             this->File_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->File_Converter );
+            if( this->read( _buff, _size, _read, this->File_Converter ) == false )
+            {
+                return false;
+            }
+
             this->File_Converter_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->IsStreamable_Value );
+            if( this->read( _buff, _size, _read, this->IsStreamable_Value ) == false )
+            {
+                return false;
+            }
+
             this->IsStreamable_Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1863,24 +2145,35 @@ bool Meta_DataBlock::Meta_ResourceVideo::_parseArguments( const char * _buff, si
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->File_Alpha );
+            if( this->read( _buff, _size, _read, this->File_Alpha ) == false )
+            {
+                return false;
+            }
+
             this->File_Alpha_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->File_Codec );
+            if( this->read( _buff, _size, _read, this->File_Codec ) == false )
+            {
+                return false;
+            }
+
             this->File_Codec_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->File_Path );
+            if( this->read( _buff, _size, _read, this->File_Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -1926,107 +2219,159 @@ bool Meta_DataBlock::Meta_ResourceWindow::_parseArguments( const char * _buff, s
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->WindowBackground_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowBackground_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             this->WindowBackground_ResourceImageName_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 17:
         {
-            this->read( _buff, _size, _read, this->WindowBottom_Offset );
+            if( this->read( _buff, _size, _read, this->WindowBottom_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 9:
         {
-            this->read( _buff, _size, _read, this->WindowBottom_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowBottom_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 19:
         {
-            this->read( _buff, _size, _read, this->WindowLeft_Offset );
+            if( this->read( _buff, _size, _read, this->WindowLeft_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 11:
         {
-            this->read( _buff, _size, _read, this->WindowLeft_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowLeft_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 18:
         {
-            this->read( _buff, _size, _read, this->WindowLeftBottom_Offset );
+            if( this->read( _buff, _size, _read, this->WindowLeftBottom_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 10:
         {
-            this->read( _buff, _size, _read, this->WindowLeftBottom_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowLeftBottom_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 12:
         {
-            this->read( _buff, _size, _read, this->WindowLeftTop_Offset );
+            if( this->read( _buff, _size, _read, this->WindowLeftTop_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->WindowLeftTop_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowLeftTop_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 15:
         {
-            this->read( _buff, _size, _read, this->WindowRight_Offset );
+            if( this->read( _buff, _size, _read, this->WindowRight_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->WindowRight_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowRight_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 16:
         {
-            this->read( _buff, _size, _read, this->WindowRightBottom_Offset );
+            if( this->read( _buff, _size, _read, this->WindowRightBottom_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 8:
         {
-            this->read( _buff, _size, _read, this->WindowRightBottom_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowRightBottom_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 14:
         {
-            this->read( _buff, _size, _read, this->WindowRightTop_Offset );
+            if( this->read( _buff, _size, _read, this->WindowRightTop_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->WindowRightTop_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowRightTop_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 13:
         {
-            this->read( _buff, _size, _read, this->WindowTop_Offset );
+            if( this->read( _buff, _size, _read, this->WindowTop_Offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->WindowTop_ResourceImageName );
+            if( this->read( _buff, _size, _read, this->WindowTop_ResourceImageName ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2067,10 +2412,13 @@ bool Meta_Font::_parseArguments( const char * _buff, size_t _size, size_t & _rea
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->height );
+            if( this->read( _buff, _size, _read, this->height ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2123,28 +2471,40 @@ bool Meta_Font::Meta_Char::_parseArguments( const char * _buff, size_t _size, si
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->code );
+            if( this->read( _buff, _size, _read, this->code ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->offset );
+            if( this->read( _buff, _size, _read, this->offset ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->rect );
+            if( this->read( _buff, _size, _read, this->rect ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->width );
+            if( this->read( _buff, _size, _read, this->width ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2197,16 +2557,22 @@ bool Meta_Font::Meta_Char::Meta_Kerning::_parseArguments( const char * _buff, si
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->advance );
+            if( this->read( _buff, _size, _read, this->advance ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->id );
+            if( this->read( _buff, _size, _read, this->id ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2235,10 +2601,13 @@ bool Meta_KeyFramesPack::_parseArguments( const char * _buff, size_t _size, size
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->MaxIndex );
+            if( this->read( _buff, _size, _read, this->MaxIndex ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2309,24 +2678,35 @@ bool Meta_KeyFramesPack::Meta_KeyFrames2D::_parseArguments( const char * _buff, 
     {
     case 3:
         {
-            this->read( _buff, _size, _read, this->Count );
+            if( this->read( _buff, _size, _read, this->Count ) == false )
+            {
+                return false;
+            }
+
             this->Count_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Immutable );
+            if( this->read( _buff, _size, _read, this->Immutable ) == false )
+            {
+                return false;
+            }
+
             this->Immutable_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->LayerIndex );
+            if( this->read( _buff, _size, _read, this->LayerIndex ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2379,53 +2759,81 @@ bool Meta_KeyFramesPack::Meta_KeyFrames2D::Meta_KeyFrame2D::_parseArguments( con
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->AnchorPoint );
+            if( this->read( _buff, _size, _read, this->AnchorPoint ) == false )
+            {
+                return false;
+            }
+
             this->AnchorPoint_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 7:
         {
-            this->read( _buff, _size, _read, this->Count );
+            if( this->read( _buff, _size, _read, this->Count ) == false )
+            {
+                return false;
+            }
+
             this->Count_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Opacity );
+            if( this->read( _buff, _size, _read, this->Opacity ) == false )
+            {
+                return false;
+            }
+
             this->Opacity_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Position );
+            if( this->read( _buff, _size, _read, this->Position ) == false )
+            {
+                return false;
+            }
+
             this->Position_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Rotation );
+            if( this->read( _buff, _size, _read, this->Rotation ) == false )
+            {
+                return false;
+            }
+
             this->Rotation_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Scale );
+            if( this->read( _buff, _size, _read, this->Scale ) == false )
+            {
+                return false;
+            }
+
             this->Scale_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->Volume );
+            if( this->read( _buff, _size, _read, this->Volume ) == false )
+            {
+                return false;
+            }
+
             this->Volume_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2454,10 +2862,13 @@ bool Meta_KeyFramesPack::Meta_KeyFrames3D::_parseArguments( const char * _buff, 
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->LayerIndex );
+            if( this->read( _buff, _size, _read, this->LayerIndex ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2510,46 +2921,70 @@ bool Meta_KeyFramesPack::Meta_KeyFrames3D::Meta_KeyFrame3D::_parseArguments( con
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->AnchorPoint );
+            if( this->read( _buff, _size, _read, this->AnchorPoint ) == false )
+            {
+                return false;
+            }
+
             this->AnchorPoint_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->Opacity );
+            if( this->read( _buff, _size, _read, this->Opacity ) == false )
+            {
+                return false;
+            }
+
             this->Opacity_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Position );
+            if( this->read( _buff, _size, _read, this->Position ) == false )
+            {
+                return false;
+            }
+
             this->Position_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 4:
         {
-            this->read( _buff, _size, _read, this->Rotation );
+            if( this->read( _buff, _size, _read, this->Rotation ) == false )
+            {
+                return false;
+            }
+
             this->Rotation_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Scale );
+            if( this->read( _buff, _size, _read, this->Scale ) == false )
+            {
+                return false;
+            }
+
             this->Scale_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 6:
         {
-            this->read( _buff, _size, _read, this->Volume );
+            if( this->read( _buff, _size, _read, this->Volume ) == false )
+            {
+                return false;
+            }
+
             this->Volume_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2708,10 +3143,13 @@ bool Meta_Pak::Meta_Resources::Meta_Resource::_parseArguments( const char * _buf
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->Path );
+            if( this->read( _buff, _size, _read, this->Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2740,10 +3178,13 @@ bool Meta_Pak::Meta_Scripts::_parseArguments( const char * _buff, size_t _size, 
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->Path );
+            if( this->read( _buff, _size, _read, this->Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2819,10 +3260,13 @@ bool Meta_Pak::Meta_Texts::Meta_Text::_parseArguments( const char * _buff, size_
     {
     case 1:
         {
-            this->read( _buff, _size, _read, this->Path );
+            if( this->read( _buff, _size, _read, this->Path ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
@@ -2898,38 +3342,57 @@ bool Meta_Texts::Meta_Text::_parseArguments( const char * _buff, size_t _size, s
     {
     case 4:
         {
-            this->read( _buff, _size, _read, this->CharOffset );
+            if( this->read( _buff, _size, _read, this->CharOffset ) == false )
+            {
+                return false;
+            }
+
             this->CharOffset_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 3:
         {
-            this->read( _buff, _size, _read, this->Font );
+            if( this->read( _buff, _size, _read, this->Font ) == false )
+            {
+                return false;
+            }
+
             this->Font_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 1:
         {
-            this->read( _buff, _size, _read, this->Key );
+            if( this->read( _buff, _size, _read, this->Key ) == false )
+            {
+                return false;
+            }
+
             return true;
-            break;
-        }
+        }break;
     case 5:
         {
-            this->read( _buff, _size, _read, this->LineOffset );
+            if( this->read( _buff, _size, _read, this->LineOffset ) == false )
+            {
+                return false;
+            }
+
             this->LineOffset_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     case 2:
         {
-            this->read( _buff, _size, _read, this->Value );
+            if( this->read( _buff, _size, _read, this->Value ) == false )
+            {
+                return false;
+            }
+
             this->Value_successful = true;
+
             return true;
-            break;
-        }
+        }break;
     }
     return false;
 }
