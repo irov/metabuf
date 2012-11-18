@@ -4,6 +4,10 @@
 
 namespace Metabuf
 {
+    class ArchiveException
+    {
+    };
+
     class ArchiveReader
     {
     public:

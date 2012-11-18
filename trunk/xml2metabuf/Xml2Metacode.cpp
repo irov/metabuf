@@ -695,15 +695,19 @@ namespace Metabuf
 
                 this->write(_ss) << "    case " << attr->id << ":" << std::endl;
                 this->write(_ss) << "        {" << std::endl;
-                this->write(_ss) << "            this->read( _buff, _size, _read, this->" << attr->name << " );" << std::endl;
+                this->write(_ss) << "            if( this->read( _buff, _size, _read, this->" << attr->name << " ) == false )" << std::endl;
+                this->write(_ss) << "            {" << std::endl;
+                this->write(_ss) << "                return false;" << std::endl;
+                this->write(_ss) << "            }" << std::endl;
+                this->write(_ss) << std::endl;
 
                 if( attr->required == false )
                 {
                     this->write(_ss) << "            this->" << attr->name << "_successful = true;" << std::endl;
+                    this->write(_ss) << std::endl;
                 }
                 this->write(_ss) << "            return true;" << std::endl;
-                this->write(_ss) << "            break;" << std::endl;
-                this->write(_ss) << "        }" << std::endl;
+                this->write(_ss) << "        }break;" << std::endl;
             }
 
             for( TMapMembers::const_iterator
@@ -724,15 +728,19 @@ namespace Metabuf
 
                     this->write(_ss) << "    case " << attr->id << ":" << std::endl;
                     this->write(_ss) << "        {" << std::endl;
-                    this->write(_ss) << "            this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " );" << std::endl;
+                    this->write(_ss) << "            if( this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " ) == false )" << std::endl;
+                    this->write(_ss) << "            {" << std::endl;
+                    this->write(_ss) << "                return false;" << std::endl;
+                    this->write(_ss) << "            }" << std::endl;
+                    this->write(_ss) << std::endl;
 
                     if( attr->required == false )
                     {
                         this->write(_ss) << "            this->" << member->name << "_" << attr->name << "_successful = true;" << std::endl;
+                        this->write(_ss) << std::endl;
                     }
                     this->write(_ss) << "            return true;" << std::endl;
-                    this->write(_ss) << "            break;" << std::endl;
-                    this->write(_ss) << "        }" << std::endl;
+                    this->write(_ss) << "        }break;" << std::endl;
                 }
             }
 
