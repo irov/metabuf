@@ -5,6 +5,11 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Metadata::parse( const char * _buff, size_t _size, size_t & _read, void * _userData )
     {
+        if( _size == _read )
+        {
+            return true;
+        }
+
         m_userData = _userData;
 
 		size_t attributeCount;
