@@ -612,6 +612,8 @@ namespace Metabuf
         this->write(_ss) << "    }" << std::endl;
         this->write(_ss) << std::endl;
         
+        m_indent += 4;
+
         const TMapNodes & nodes = m_protocol->getNodes();
 
         for( TMapNodes::const_iterator
@@ -627,6 +629,8 @@ namespace Metabuf
                 return false;
             }
         }
+
+        m_indent -= 4;
 
         this->write(_ss) << "}" << std::endl;
 
