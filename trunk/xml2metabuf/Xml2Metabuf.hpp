@@ -15,7 +15,7 @@ namespace Metabuf
 	class Xml2Metabuf
 	{
 	public:
-		Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol );
+		Xml2Metabuf( unsigned char * _out, size_t _size, XmlProtocol * _protocol );
 
     public:
         void initialize();
@@ -44,7 +44,7 @@ namespace Metabuf
         template<class T>
         void write( const T & _value )
         {
-            this->writeBuffer( (const char * )&_value, sizeof(T) );
+            this->writeBuffer( (const unsigned char * )&_value, sizeof(T) );
         }   
 
         bool writeSize( size_t _value );
@@ -52,14 +52,14 @@ namespace Metabuf
         template<class T>
         void writeCount( const T * _value, size_t _count )
         {
-            this->writeBuffer( (const char * )_value, sizeof(T) * _count );
+            this->writeBuffer( (const unsigned char * )_value, sizeof(T) * _count );
         }   
         
     protected:
-        void writeBuffer( const char * _buff, size_t _size );
+        void writeBuffer( const unsigned char * _buff, size_t _size );
 
 	protected:
-		char * m_out;
+		unsigned char * m_out;
         size_t m_size;
 
 		size_t m_write;

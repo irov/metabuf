@@ -9,7 +9,7 @@
 
 namespace Metacode
 {
-    bool readHeader( const char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );
+    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );
 
     class Meta_DataBlock
         : public Metabuf::Metadata
@@ -48,10 +48,10 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
         bool _preparationIncludes( size_t _includes, size_t _count ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
     public:
         class Meta_Resource
             : public Metabuf::Metadata
@@ -98,10 +98,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -119,10 +119,10 @@ namespace Metacode
             }
         public:
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_Sequence
                 : public Metabuf::Metadata
@@ -166,10 +166,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -217,10 +217,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -253,10 +253,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -305,10 +305,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -342,10 +342,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -538,10 +538,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -583,14 +583,126 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
             mutable Menge::String GlyphPath_Path;
+        };
+        
+        class Meta_ResourceHIT
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceHIT()
+                : Meta_Resource()
+                , File_Codec_successful(false)
+                , File_Converter_successful(false)
+            {
+            }
+        public:
+            bool get_File_Codec( Menge::ConstString & _value ) const
+            {
+                if( File_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Codec;
+            
+                return true;
+            }
+            
+            bool swap_File_Codec( Menge::ConstString & _value ) const
+            {
+                if( File_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Codec);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Codec( C * _self, M _method )
+            {
+                if( File_Codec_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Codec );
+            }
+            
+            bool get_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Converter;
+            
+                return true;
+            }
+            
+            bool swap_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Converter);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Converter( C * _self, M _method )
+            {
+                if( File_Converter_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Converter );
+            }
+            
+            const Menge::String & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::String & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+            template<class C, class M>
+            void method_File_Path( C * _self, M _method )
+            {
+                (_self->*_method)( this->File_Path );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _preparationIncludes( size_t _includes, size_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        public:
+        protected:
+        protected:
+            bool File_Codec_successful;
+            mutable Menge::ConstString File_Codec;
+            bool File_Converter_successful;
+            mutable Menge::ConstString File_Converter;
+            mutable Menge::String File_Path;
         };
         
         class Meta_ResourceImageCombineRGBAndAlpha
@@ -891,10 +1003,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -924,6 +1036,7 @@ namespace Metacode
                 : Meta_Resource()
                 , File_Alpha_successful(false)
                 , File_Codec_successful(false)
+                , File_Rotate_successful(false)
                 , File_UV_successful(false)
                 , File_WrapX_successful(false)
                 , File_WrapY_successful(false)
@@ -1014,6 +1127,41 @@ namespace Metacode
             void method_File_Path( C * _self, M _method )
             {
                 (_self->*_method)( this->File_Path );
+            }
+            
+            bool get_File_Rotate( bool & _value ) const
+            {
+                if( File_Rotate_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Rotate;
+            
+                return true;
+            }
+            
+            bool swap_File_Rotate( bool & _value ) const
+            {
+                if( File_Rotate_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Rotate);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Rotate( C * _self, M _method )
+            {
+                if( File_Rotate_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Rotate );
             }
             
             bool get_File_UV( mt::vec4f & _value ) const
@@ -1122,10 +1270,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -1134,6 +1282,8 @@ namespace Metacode
             bool File_Codec_successful;
             mutable Menge::ConstString File_Codec;
             mutable Menge::String File_Path;
+            bool File_Rotate_successful;
+            mutable bool File_Rotate;
             bool File_UV_successful;
             mutable mt::vec4f File_UV;
             bool File_WrapX_successful;
@@ -1368,10 +1518,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -1431,10 +1581,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -1484,10 +1634,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -1537,10 +1687,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -1738,10 +1888,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_MovieCamera3D
                 : public Metabuf::Metadata
@@ -1849,10 +1999,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -2054,10 +2204,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -2228,10 +2378,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -2372,10 +2522,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_Tracks
                 : public Metabuf::Metadata
@@ -2387,10 +2537,10 @@ namespace Metacode
                 }
             public:
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
                 class Meta_Track
                     : public Metabuf::Metadata
@@ -2454,10 +2604,10 @@ namespace Metacode
                     }
                     
                 protected:
-                    bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                    bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                     bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                    bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                    bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                    bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                    bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
                 public:
                 protected:
                 protected:
@@ -2668,10 +2818,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -2784,10 +2934,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -3100,10 +3250,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -3168,10 +3318,10 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
         bool _preparationIncludes( size_t _includes, size_t _count ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
     public:
         class Meta_Char
             : public Metabuf::Metadata
@@ -3247,10 +3397,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_Kerning
                 : public Metabuf::Metadata
@@ -3294,10 +3444,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -3364,10 +3514,10 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
         bool _preparationIncludes( size_t _includes, size_t _count ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
     public:
         class Meta_KeyFrames2D
             : public Metabuf::Metadata
@@ -3467,10 +3617,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_KeyFrame2D
                 : public Metabuf::Metadata
@@ -3734,10 +3884,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -3802,10 +3952,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_KeyFrame3D
                 : public Metabuf::Metadata
@@ -4033,10 +4183,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -4104,10 +4254,10 @@ namespace Metacode
         }
     public:
     protected:
-        bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
         bool _preparationIncludes( size_t _includes, size_t _count ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
     public:
         class Meta_Resources
             : public Metabuf::Metadata
@@ -4119,10 +4269,10 @@ namespace Metacode
             }
         public:
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_Resource
                 : public Metabuf::Metadata
@@ -4150,10 +4300,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -4200,10 +4350,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:
@@ -4220,10 +4370,10 @@ namespace Metacode
             }
         public:
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
             class Meta_Text
                 : public Metabuf::Metadata
@@ -4251,10 +4401,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
                 bool _preparationIncludes( size_t _includes, size_t _count ) override;
-                bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-                bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
             public:
             protected:
             protected:
@@ -4319,10 +4469,10 @@ namespace Metacode
         }
     public:
     protected:
-        bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
         bool _preparationIncludes( size_t _includes, size_t _count ) override;
-        bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-        bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
     public:
         class Meta_Text
             : public Metabuf::Metadata
@@ -4494,10 +4644,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const char * _buff, size_t _size, size_t & _read, size_t _id ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;
             bool _preparationIncludes( size_t _includes, size_t _count ) override;
-            bool _parseIncludes( const char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
-            bool _parseGenerators( const char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;
         public:
         protected:
         protected:

@@ -3,7 +3,7 @@
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
-    bool Metadata::parse( const char * _buff, size_t _size, size_t & _read, void * _userData )
+    bool Metadata::parse( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData )
     {
         if( _size == _read )
         {

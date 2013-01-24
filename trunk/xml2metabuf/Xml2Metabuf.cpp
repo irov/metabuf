@@ -125,7 +125,7 @@ namespace Metabuf
         }
     }
 	//////////////////////////////////////////////////////////////////////////
-	Xml2Metabuf::Xml2Metabuf( char * _out, size_t _size, XmlProtocol * _protocol )
+	Xml2Metabuf::Xml2Metabuf( unsigned char * _out, size_t _size, XmlProtocol * _protocol )
 		: m_out(_out)
         , m_size(_size)
 		, m_write(0)
@@ -726,12 +726,12 @@ namespace Metabuf
 
         unsigned char size = (unsigned char)_value;
 
-        this->writeBuffer( (const char * )&size, 1 );
+        this->writeBuffer( (const unsigned char * )&size, 1 );
 
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeBuffer( const char * _buff, size_t _size )
+    void Xml2Metabuf::writeBuffer( const unsigned char * _buff, size_t _size )
     {
         if( m_write + _size > m_size )
         {
