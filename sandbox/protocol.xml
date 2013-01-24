@@ -1,4 +1,4 @@
-<Protocol Version = "3">    
+<Protocol Version = "6">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -24,6 +24,7 @@
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="File" Name="UV" Type="mt::vec4f"/>
             <Member Node="File" Name="Alpha" Type="bool"/>
+            <Member Node="File" Name="Rotate" Type="bool"/>
             <Member Node="File" Name="WrapX" Type="bool"/>
             <Member Node="File" Name="WrapY" Type="bool"/>            
         </Node>
@@ -148,6 +149,12 @@
                 <Attribute Name="ResourceImageName" Type="Menge::ConstString" Required="1"/>
                 <Attribute Name="Delay" Type="float" Required="1"/>
             </Node>
+        </Node>
+        
+        <Node Name="ResourceHIT" Inheritance = "Resource">
+            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
+            <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
         </Node>
         
         <Node Name="ResourceImageSolid" Inheritance = "Resource">
