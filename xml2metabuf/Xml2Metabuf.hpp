@@ -15,16 +15,15 @@ namespace Metabuf
 	class Xml2Metabuf
 	{
 	public:
-		Xml2Metabuf( unsigned char * _out, size_t _size, XmlProtocol * _protocol );
+		Xml2Metabuf( XmlProtocol * _protocol );
 
     public:
         void initialize();
         void addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user );
 
 	public:
-		bool convert( const void * _buff, size_t _size, size_t & _write );
+		bool convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
 		std::string getError();
-
 
 	protected:
 		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
@@ -53,17 +52,14 @@ namespace Metabuf
         void writeCount( const T * _value, size_t _count )
         {
             this->writeBuffer( (const unsigned char * )_value, sizeof(T) * _count );
-        }   
+        }
+
+        size_t writeString( const char * _value );
         
     protected:
         void writeBuffer( const unsigned char * _buff, size_t _size );
 
 	protected:
-		unsigned char * m_out;
-        size_t m_size;
-
-		size_t m_write;
-
 		XmlProtocol * m_protocol;
 
 		std::stringstream m_error;
@@ -76,5 +72,11 @@ namespace Metabuf
 
         typedef std::map<std::string, SerializationDesc> TMapSerialization;
         TMapSerialization m_serialization;
+
+        typedef std::vector<std::string> TVectorStringCache;
+        TVectorStringCache m_stringCache;
+
+        typedef std::vector<unsigned char> TBlobject;
+        TBlobject m_buff;
 	};
 }

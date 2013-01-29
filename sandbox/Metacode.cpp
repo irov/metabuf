@@ -28,6 +28,30 @@ namespace Metacode
        return true;
     }
 
+    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData )
+    {
+       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);
+
+       unsigned int count;
+       ar.read( count );
+
+       _stringCount = count;
+
+       return true;
+    }
+
+    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData )
+    {
+       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);
+
+       unsigned int size;
+       ar.read( size );
+
+       const char * value = ar.current_buff<const char *>();
+       ar.skip( size );
+
+       return value;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Meta_DataBlock::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id )
     {

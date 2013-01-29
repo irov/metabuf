@@ -10,6 +10,8 @@
 namespace Metacode
 {
     bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );
+    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData );
+    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData );
 
     class Meta_DataBlock
         : public Metabuf::Metadata
@@ -200,12 +202,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -224,7 +226,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
         };
         
         class Meta_ResourceCursorSystem
@@ -236,12 +238,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -260,7 +262,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
         };
         
         class Meta_ResourceEmitterContainer
@@ -272,12 +274,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -288,12 +290,12 @@ namespace Metacode
                 (_self->*_method)( this->File_Path );
             }
             
-            const Menge::String & get_Folder_Path() const
+            const Menge::ConstString & get_Folder_Path() const
             {
                 return this->Folder_Path;
             }
             
-            void swap_Folder_Path( Menge::String & _value ) const
+            void swap_Folder_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->Folder_Path);
             }
@@ -312,8 +314,8 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::String File_Path;
-            mutable Menge::String Folder_Path;
+            mutable Menge::ConstString File_Path;
+            mutable Menge::ConstString Folder_Path;
         };
         
         class Meta_ResourceExternal
@@ -435,12 +437,12 @@ namespace Metacode
                 (_self->*_method)( this->Image_Codec );
             }
             
-            const Menge::String & get_Image_Path() const
+            const Menge::ConstString & get_Image_Path() const
             {
                 return this->Image_Path;
             }
             
-            void swap_Image_Path( Menge::String & _value ) const
+            void swap_Image_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->Image_Path);
             }
@@ -486,7 +488,7 @@ namespace Metacode
                 (_self->*_method)( this->OutlineImage_Codec );
             }
             
-            bool get_OutlineImage_Path( Menge::String & _value ) const
+            bool get_OutlineImage_Path( Menge::ConstString & _value ) const
             {
                 if( OutlineImage_Path_successful == false )
                 {
@@ -498,7 +500,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_OutlineImage_Path( Menge::String & _value ) const
+            bool swap_OutlineImage_Path( Menge::ConstString & _value ) const
             {
                 if( OutlineImage_Path_successful == false )
                 {
@@ -549,11 +551,11 @@ namespace Metacode
             mutable Menge::ColourValue Color_Value;
             bool Image_Codec_successful;
             mutable Menge::ConstString Image_Codec;
-            mutable Menge::String Image_Path;
+            mutable Menge::ConstString Image_Path;
             bool OutlineImage_Codec_successful;
             mutable Menge::ConstString OutlineImage_Codec;
             bool OutlineImage_Path_successful;
-            mutable Menge::String OutlineImage_Path;
+            mutable Menge::ConstString OutlineImage_Path;
             mutable Menge::ConstString ResourceGlyph_Name;
         };
         
@@ -566,12 +568,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::String & get_GlyphPath_Path() const
+            const Menge::ConstString & get_GlyphPath_Path() const
             {
                 return this->GlyphPath_Path;
             }
             
-            void swap_GlyphPath_Path( Menge::String & _value ) const
+            void swap_GlyphPath_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->GlyphPath_Path);
             }
@@ -590,7 +592,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::String GlyphPath_Path;
+            mutable Menge::ConstString GlyphPath_Path;
         };
         
         class Meta_ResourceHIT
@@ -674,12 +676,12 @@ namespace Metacode
                 (_self->*_method)( this->File_Converter );
             }
             
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -702,7 +704,7 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
         };
         
         class Meta_ResourceImageCombineRGBAndAlpha
@@ -827,7 +829,7 @@ namespace Metacode
                 (_self->*_method)( this->File_CodecRGB );
             }
             
-            bool get_File_PathAlpha( Menge::String & _value ) const
+            bool get_File_PathAlpha( Menge::ConstString & _value ) const
             {
                 if( File_PathAlpha_successful == false )
                 {
@@ -839,7 +841,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_File_PathAlpha( Menge::String & _value ) const
+            bool swap_File_PathAlpha( Menge::ConstString & _value ) const
             {
                 if( File_PathAlpha_successful == false )
                 {
@@ -862,7 +864,7 @@ namespace Metacode
                 (_self->*_method)( this->File_PathAlpha );
             }
             
-            bool get_File_PathRGB( Menge::String & _value ) const
+            bool get_File_PathRGB( Menge::ConstString & _value ) const
             {
                 if( File_PathRGB_successful == false )
                 {
@@ -874,7 +876,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_File_PathRGB( Menge::String & _value ) const
+            bool swap_File_PathRGB( Menge::ConstString & _value ) const
             {
                 if( File_PathRGB_successful == false )
                 {
@@ -1017,9 +1019,9 @@ namespace Metacode
             bool File_CodecRGB_successful;
             mutable Menge::ConstString File_CodecRGB;
             bool File_PathAlpha_successful;
-            mutable Menge::String File_PathAlpha;
+            mutable Menge::ConstString File_PathAlpha;
             bool File_PathRGB_successful;
-            mutable Menge::String File_PathRGB;
+            mutable Menge::ConstString File_PathRGB;
             bool File_UV_successful;
             mutable mt::vec4f File_UV;
             bool File_WrapX_successful;
@@ -1113,12 +1115,12 @@ namespace Metacode
                 (_self->*_method)( this->File_Codec );
             }
             
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -1281,7 +1283,7 @@ namespace Metacode
             mutable bool File_Alpha;
             bool File_Codec_successful;
             mutable Menge::ConstString File_Codec;
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
             bool File_Rotate_successful;
             mutable bool File_Rotate;
             bool File_UV_successful;
@@ -1342,7 +1344,7 @@ namespace Metacode
                 (_self->*_method)( this->FileAlpha_Codec );
             }
             
-            bool get_FileAlpha_Path( Menge::String & _value ) const
+            bool get_FileAlpha_Path( Menge::ConstString & _value ) const
             {
                 if( FileAlpha_Path_successful == false )
                 {
@@ -1354,7 +1356,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_FileAlpha_Path( Menge::String & _value ) const
+            bool swap_FileAlpha_Path( Menge::ConstString & _value ) const
             {
                 if( FileAlpha_Path_successful == false )
                 {
@@ -1447,7 +1449,7 @@ namespace Metacode
                 (_self->*_method)( this->FileRGB_Codec );
             }
             
-            bool get_FileRGB_Path( Menge::String & _value ) const
+            bool get_FileRGB_Path( Menge::ConstString & _value ) const
             {
                 if( FileRGB_Path_successful == false )
                 {
@@ -1459,7 +1461,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_FileRGB_Path( Menge::String & _value ) const
+            bool swap_FileRGB_Path( Menge::ConstString & _value ) const
             {
                 if( FileRGB_Path_successful == false )
                 {
@@ -1528,13 +1530,13 @@ namespace Metacode
             bool FileAlpha_Codec_successful;
             mutable Menge::ConstString FileAlpha_Codec;
             bool FileAlpha_Path_successful;
-            mutable Menge::String FileAlpha_Path;
+            mutable Menge::ConstString FileAlpha_Path;
             bool FileAlpha_UV_successful;
             mutable mt::vec4f FileAlpha_UV;
             bool FileRGB_Codec_successful;
             mutable Menge::ConstString FileRGB_Codec;
             bool FileRGB_Path_successful;
-            mutable Menge::String FileRGB_Path;
+            mutable Menge::ConstString FileRGB_Path;
             bool FileRGB_UV_successful;
             mutable mt::vec4f FileRGB_UV;
         };
@@ -1817,7 +1819,7 @@ namespace Metacode
                 (_self->*_method)( this->Height_Value );
             }
             
-            bool get_KeyFramesPackPath_Path( Menge::String & _value ) const
+            bool get_KeyFramesPackPath_Path( Menge::ConstString & _value ) const
             {
                 if( KeyFramesPackPath_Path_successful == false )
                 {
@@ -1829,7 +1831,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_KeyFramesPackPath_Path( Menge::String & _value ) const
+            bool swap_KeyFramesPackPath_Path( Menge::ConstString & _value ) const
             {
                 if( KeyFramesPackPath_Path_successful == false )
                 {
@@ -2405,7 +2407,7 @@ namespace Metacode
             bool Height_Value_successful;
             mutable float Height_Value;
             bool KeyFramesPackPath_Path_successful;
-            mutable Menge::String KeyFramesPackPath_Path;
+            mutable Menge::ConstString KeyFramesPackPath_Path;
             bool Width_Value_successful;
             mutable float Width_Value;
         public:
@@ -2587,12 +2589,12 @@ namespace Metacode
                         (_self->*_method)( this->Codec );
                     }
                     
-                    const Menge::String & get_File() const
+                    const Menge::ConstString & get_File() const
                     {
                         return this->File;
                     }
                     
-                    void swap_File( Menge::String & _value ) const
+                    void swap_File( Menge::ConstString & _value ) const
                     {
                         std::swap( _value, this->File);
                     }
@@ -2613,7 +2615,7 @@ namespace Metacode
                 protected:
                     bool Codec_successful;
                     mutable Menge::ConstString Codec;
-                    mutable Menge::String File;
+                    mutable Menge::ConstString File;
                 };
                 
             protected:
@@ -2766,12 +2768,12 @@ namespace Metacode
                 (_self->*_method)( this->File_Converter );
             }
             
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -2831,7 +2833,7 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
             bool IsStreamable_Value_successful;
             mutable bool IsStreamable_Value;
         };
@@ -2917,12 +2919,12 @@ namespace Metacode
                 (_self->*_method)( this->File_Codec );
             }
             
-            const Menge::String & get_File_Path() const
+            const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::String & _value ) const
+            void swap_File_Path( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
@@ -2945,7 +2947,7 @@ namespace Metacode
             mutable bool File_Alpha;
             bool File_Codec_successful;
             mutable Menge::ConstString File_Codec;
-            mutable Menge::String File_Path;
+            mutable Menge::ConstString File_Path;
         };
         
         class Meta_ResourceWindow
@@ -4283,12 +4285,12 @@ namespace Metacode
                 {
                 }
             public:
-                const Menge::String & get_Path() const
+                const Menge::ConstString & get_Path() const
                 {
                     return this->Path;
                 }
                 
-                void swap_Path( Menge::String & _value ) const
+                void swap_Path( Menge::ConstString & _value ) const
                 {
                     std::swap( _value, this->Path);
                 }
@@ -4307,7 +4309,7 @@ namespace Metacode
             public:
             protected:
             protected:
-                mutable Menge::String Path;
+                mutable Menge::ConstString Path;
             };
             
         protected:
@@ -4333,12 +4335,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::String & get_Path() const
+            const Menge::ConstString & get_Path() const
             {
                 return this->Path;
             }
             
-            void swap_Path( Menge::String & _value ) const
+            void swap_Path( Menge::ConstString & _value ) const
             {
                 std::swap( _value, this->Path);
             }
@@ -4357,7 +4359,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::String Path;
+            mutable Menge::ConstString Path;
         };
         
         class Meta_Texts
@@ -4384,12 +4386,12 @@ namespace Metacode
                 {
                 }
             public:
-                const Menge::String & get_Path() const
+                const Menge::ConstString & get_Path() const
                 {
                     return this->Path;
                 }
                 
-                void swap_Path( Menge::String & _value ) const
+                void swap_Path( Menge::ConstString & _value ) const
                 {
                     std::swap( _value, this->Path);
                 }
@@ -4408,7 +4410,7 @@ namespace Metacode
             public:
             protected:
             protected:
-                mutable Menge::String Path;
+                mutable Menge::ConstString Path;
             };
             
         protected:

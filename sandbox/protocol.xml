@@ -20,7 +20,7 @@
         </Node>
         
         <Node Name="ResourceImageDefault" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="File" Name="UV" Type="mt::vec4f"/>
             <Member Node="File" Name="Alpha" Type="bool"/>
@@ -30,33 +30,33 @@
         </Node>
 
         <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
-            <Member Node="Folder" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
+            <Member Node="Folder" Name="Path" Type="Menge::ConstString" Required="1"/>
         </Node>        
         
         <Node Name="ResourceFont" Inheritance = "Resource">
             <Member Node="ResourceGlyph" Name="Name" Type="Menge::ConstString" Required="1"/>
-            <Member Node="Image" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="Image" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="Image" Name="Codec" Type="Menge::ConstString"/>
-            <Member Node="OutlineImage" Name="Path" Type="Menge::String"/>
+            <Member Node="OutlineImage" Name="Path" Type="Menge::ConstString"/>
             <Member Node="OutlineImage" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="Color" Name="Value" Type="Menge::ColourValue"/>
         </Node>                
         
         <Node Name="ResourceGlyph" Inheritance = "Resource">
-            <Member Node="GlyphPath" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="GlyphPath" Name="Path" Type="Menge::ConstString" Required="1"/>
         </Node>
 
         <Node Name="ResourceCursorSystem" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
         </Node>
 
         <Node Name="ResourceCursorICO" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
         </Node>
         
         <Node Name="ResourceSound" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
             <Member Node="DefaultVolume" Name="Value" Type="float"/>
@@ -68,7 +68,7 @@
             <Member Node="Shuffle" Name="Value" Type="bool"/>
             <Node Name="Tracks">
                 <Node Name="Track">
-                    <Attribute Name="File" Type="Menge::String" Required="1"/>
+                    <Attribute Name="File" Type="Menge::ConstString" Required="1"/>
                     <Attribute Name="Codec" Type="Menge::ConstString"/>                    
                 </Node>
             </Node>
@@ -101,7 +101,7 @@
             <Member Node="Duration" Name="Value" Type="float"/>
             <Member Node="Width" Name="Value" Type="float"/>
             <Member Node="Height" Name="Value" Type="float"/>
-            <Member Node="KeyFramesPackPath" Name="Path" Type="Menge::String"/>
+            <Member Node="KeyFramesPackPath" Name="Path" Type="Menge::ConstString"/>
             
             <Node Name="MovieLayer2D">
                 <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
@@ -139,7 +139,7 @@
         </Node>
         
         <Node Name="ResourceVideo" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Alpha" Type="bool"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
         </Node>
@@ -152,7 +152,7 @@
         </Node>
         
         <Node Name="ResourceHIT" Inheritance = "Resource">
-            <Member Node="File" Name="Path" Type="Menge::String" Required="1"/>
+            <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
         </Node>
@@ -168,10 +168,10 @@
         </Node>
         
         <Node Name="ResourceImageCombineRGBAndAlpha" Inheritance = "Resource">
-            <Member Node="File" Name="PathAlpha" Type="Menge::String"/>
+            <Member Node="File" Name="PathAlpha" Type="Menge::ConstString"/>
             <Member Node="File" Name="CodecAlpha" Type="Menge::ConstString"/>
 
-            <Member Node="File" Name="PathRGB" Type="Menge::String"/>
+            <Member Node="File" Name="PathRGB" Type="Menge::ConstString"/>
             <Member Node="File" Name="CodecRGB" Type="Menge::ConstString"/>
             
             <Member Node="File" Name="Alpha" Type="bool"/>
@@ -182,11 +182,11 @@
         </Node>
         
         <Node Name="ResourceImageMultiplyRGBAndAlpha" Inheritance = "Resource">
-            <Member Node="FileRGB" Name="Path" Type="Menge::String"/>
+            <Member Node="FileRGB" Name="Path" Type="Menge::ConstString"/>
             <Member Node="FileRGB" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="FileRGB" Name="UV" Type="mt::vec4f"/>
 
-            <Member Node="FileAlpha" Name="Path" Type="Menge::String"/>
+            <Member Node="FileAlpha" Name="Path" Type="Menge::ConstString"/>
             <Member Node="FileAlpha" Name="Codec" Type="Menge::ConstString"/>                      
             <Member Node="FileAlpha" Name="UV" Type="mt::vec4f"/>            
         </Node>        
@@ -204,18 +204,18 @@
     
     <Node Name="Pak">
         <Node Name="Scripts">
-            <Attribute Name="Path" Type="Menge::String" Required="1"/>
+            <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
         </Node>
         
         <Node Name="Resources">
             <Node Name="Resource">
-                <Attribute Name="Path" Type="Menge::String" Required="1"/>
+                <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
             </Node>
         </Node>
         
         <Node Name="Texts">
             <Node Name="Text">
-                <Attribute Name="Path" Type="Menge::String" Required="1"/>
+                <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
             </Node>
         </Node>
     </Node>
