@@ -18,9 +18,9 @@ namespace Metacode
        ar.read( version );
 
        _readVersion = version;
-       _needVersion = 6;
+       _needVersion = 7;
 
-       if( version != 6 )
+       if( version != 7 )
        {
            return false;
        }
@@ -45,10 +45,12 @@ namespace Metacode
        Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);
 
        unsigned int size;
-       ar.read( size );
+       ar.readSize( size );
 
        const char * value = ar.current_buff<const char *>();
        ar.skip( size );
+
+       _stringSize = size;
 
        return value;
     }
