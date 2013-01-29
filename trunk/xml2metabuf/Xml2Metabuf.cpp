@@ -1,6 +1,7 @@
 #	include "Xml2Metabuf.hpp"
 #	include "XmlProtocol.hpp"
 
+#   include <algorithm>
 #	include <sstream>
 
 #   include <stdio.h>
@@ -15,10 +16,9 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            size_t size = strlen( _value );
-            _metabuf->write( size );
+            size_t index = _metabuf->writeString( _value );
 
-            _metabuf->writeCount( _value, size );
+            _metabuf->write( index );
 
             return true;
         }
@@ -125,13 +125,9 @@ namespace Metabuf
         }
     }
 	//////////////////////////////////////////////////////////////////////////
-	Xml2Metabuf::Xml2Metabuf( unsigned char * _out, size_t _size, XmlProtocol * _protocol )
-		: m_out(_out)
-        , m_size(_size)
-		, m_write(0)
-		, m_protocol(_protocol)
+	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
+		: m_protocol(_protocol)        
 	{
-
 	}
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::initialize()
@@ -157,11 +153,11 @@ namespace Metabuf
         m_serialization[_type] = desc;
     }
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::convert( const void * _buff, size_t _size, size_t & _write )
+	bool Xml2Metabuf::convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
 	{	
 		pugi::xml_document doc;
 
-		pugi::xml_parse_result result = doc.load_buffer( _buff, _size );
+		pugi::xml_parse_result result = doc.load_buffer( _xmlBuff, _xmlSize );
 
 		if( result == false )
 		{
@@ -170,11 +166,19 @@ namespace Metabuf
 			return false;
 		}
 
+        _writeSize = 0;
+
+        m_buff.clear();
+
         unsigned int magic = 3133062829u;
         this->write( magic );
 
         unsigned int version = m_protocol->getVersion();
         this->write( version );
+
+        TBlobject buffHeader;
+        buffHeader.swap( m_buff );
+        m_buff.clear();
 
 		pugi::xml_node root = doc.document_element();
 
@@ -196,7 +200,40 @@ namespace Metabuf
 			return false;
 		}
 
-		_write = m_write;
+        TBlobject buffBody;
+        buffBody.swap( m_buff );        
+        m_buff.clear();
+
+        size_t stringCacheCount = m_stringCache.size();
+        this->write( stringCacheCount );
+        
+        for( TVectorStringCache::iterator
+            it = m_stringCache.begin(),
+            it_end = m_stringCache.end();
+        it != it_end;
+        ++it )
+        {
+            const std::string & str = *it;
+
+            size_t strSize = str.size();
+            this->writeSize( strSize );
+
+            const char * strBuff = str.c_str();
+            this->writeCount( strBuff, strSize );
+        }
+
+        TBlobject buffStrCache;
+        buffStrCache.swap( m_buff );
+        m_buff.clear();
+
+        TBlobject buffFinal;
+
+        buffFinal.insert( buffFinal.end(), buffHeader.begin(), buffHeader.end() );
+        buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
+        buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
+
+        memcpy( _binBuff, &buffFinal[0], buffFinal.size() );
+        _writeSize += buffFinal.size();
 
 		return true;
 	}
@@ -527,7 +564,10 @@ namespace Metabuf
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
         size_t includesTypeCount = _node->includes.size();
-        this->writeSize( includesTypeCount );
+        if( this->writeSize( includesTypeCount ) == false )
+        {
+            return false;
+        }
 
         for( TMapNodes::const_iterator
             it = _node->includes.begin(),
@@ -542,7 +582,10 @@ namespace Metabuf
 
             this->write( incluidesCount );
 
-            this->writeSize( node_include->id );
+            if( this->writeSize( node_include->id ) == false )
+            {
+                return false;
+            }
 
             for( pugi::xml_node::iterator
                 it = _xml_node.begin(),
@@ -579,7 +622,10 @@ namespace Metabuf
     bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
         size_t generatorsTypeCount = _node->inheritances.size();
-        this->writeSize( generatorsTypeCount );
+        if( this->writeSize( generatorsTypeCount ) == false )
+        {
+            return false;
+        }
 
         for( TMapNodes::const_iterator
             it = _node->inheritances.begin(),
@@ -594,7 +640,10 @@ namespace Metabuf
 
             this->write( generatorsCount );
 
-            this->writeSize( node_inheritance->id );
+            if( this->writeSize( node_inheritance->id ) == false )
+            {
+                return false;
+            }
 
             for( pugi::xml_node::iterator
                 it = _xml_node.begin(),
@@ -629,7 +678,10 @@ namespace Metabuf
                     return false;
                 }
 
-                this->writeSize( node_generator->id );
+                if( this->writeSize( node_generator->id ) == false )
+                {
+                    return false;
+                }
 
                 if( this->writeNode_( node_generator, child ) == false )
                 {
@@ -731,14 +783,26 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeBuffer( const unsigned char * _buff, size_t _size )
+    size_t Xml2Metabuf::writeString( const char * _value )
     {
-        if( m_write + _size > m_size )
+        TVectorStringCache::iterator it_found = std::find( m_stringCache.begin(), m_stringCache.end(), _value );
+
+        if( it_found != m_stringCache.end() )
         {
-            throw std::exception();
+            size_t index = std::distance( m_stringCache.begin(), it_found );
+           
+            return index;
         }
 
-        memcpy( m_out + m_write, _buff, _size );
-        m_write += _size;
+        size_t new_index = m_stringCache.size();
+
+        m_stringCache.push_back( _value );
+
+        return new_index;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void Xml2Metabuf::writeBuffer( const unsigned char * _buff, size_t _size )
+    {
+        m_buff.insert( m_buff.end(), _buff, _buff + _size );
     }
 }

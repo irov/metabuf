@@ -54,6 +54,19 @@ namespace Metabuf
             _size = size_1;
         }
 
+    public:
+        template<class T>
+        inline T current_buff() const
+        {
+            const unsigned char * current = m_buff + m_read;
+            return reinterpret_cast<T>(current);
+        }
+
+        inline void skip( size_t _size )
+        {
+            m_read += _size;
+        }
+
     protected:
         const unsigned char * m_buff;
         size_t m_size;

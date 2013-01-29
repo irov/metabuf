@@ -53,6 +53,8 @@ namespace Metabuf
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
         this->write(_ss) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );" << std::endl;
+        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData );" << std::endl;
+        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData );" << std::endl;
         this->write(_ss) << std::endl;
 
         m_indent += 4;
@@ -611,6 +613,30 @@ namespace Metabuf
         this->write(_ss) << "       return true;" << std::endl;
         this->write(_ss) << "    }" << std::endl;
         this->write(_ss) << std::endl;
+        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData )" << std::endl;
+        this->write(_ss) << "    {" << std::endl;
+        this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       unsigned int count;" << std::endl;
+        this->write(_ss) << "       ar.read( count );" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       _stringCount = count;" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       return true;" << std::endl;
+        this->write(_ss) << "    }" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData )" << std::endl;
+        this->write(_ss) << "    {" << std::endl;
+        this->write(_ss) << "       Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       unsigned int size;" << std::endl;
+        this->write(_ss) << "       ar.readSize( size );" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       const char * value = ar.current_buff<const char *>();" << std::endl;
+        this->write(_ss) << "       ar.skip( size );" << std::endl;
+        this->write(_ss) << std::endl;
+        this->write(_ss) << "       return value;" << std::endl;
+        this->write(_ss) << "    }" << std::endl;
         
         m_indent += 4;
 

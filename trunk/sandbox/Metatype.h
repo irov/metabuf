@@ -33,7 +33,7 @@ namespace Metabuf
         _value.resize( size + 1 );
 
         //Archive::value_type * buff = reinterpret_cast<Archive::value_type *>(str);
-        ar.readBuffer( &_value[0], size );
+        ar.readCount( &_value[0], size );
     }
     //////////////////////////////////////////////////////////////////////////
     inline void operator >> ( ArchiveReader & ar, Menge::WString & _value )
@@ -49,7 +49,7 @@ namespace Metabuf
         _value.resize( size );
 
         //Archive::value_type * buff = reinterpret_cast<Archive::value_type *>(str);
-        ar.readBuffer( (char *)&_value[0], size * sizeof(wchar_t) );
+        ar.readCount( (unsigned char *)&_value[0], size * sizeof(wchar_t) );
     }
     //////////////////////////////////////////////////////////////////////////
     inline void operator >> ( ArchiveReader & ar, mt::vec2f & _value )
