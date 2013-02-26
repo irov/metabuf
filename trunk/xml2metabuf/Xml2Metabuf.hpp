@@ -46,7 +46,7 @@ namespace Metabuf
             this->writeBuffer( (const unsigned char * )&_value, sizeof(T) );
         }   
 
-        bool writeSize( size_t _value );
+        void writeSize( size_t _value );
 
         template<class T>
         void writeCount( const T * _value, size_t _count )

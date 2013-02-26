@@ -44,14 +44,19 @@ namespace Metabuf
             m_read += _size;
         }
 
-        inline void readSize( size_t & _size )
+        inline void readSize( unsigned int & _size )
         {
             unsigned char size_1;
-            unsigned char * begin = reinterpret_cast<unsigned char *>(&size_1);
-            memcpy( begin, m_buff + m_read, 1 );
-            m_read += 1;
+            this->readPOD( size_1 );
 
-            _size = size_1;
+            if( size_1 == 255 )
+            {
+                this->readPOD( _size );
+            }
+            else
+            {
+                _size = size_1;
+            }
         }
 
     public:

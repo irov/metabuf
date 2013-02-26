@@ -232,7 +232,7 @@ namespace Metabuf
         buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
         buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
 
-        memcpy( _binBuff, &buffFinal[0], buffFinal.size() );
+        std::copy( buffFinal.begin(), buffFinal.end(), _binBuff );
         _writeSize += buffFinal.size();
 
 		return true;
@@ -281,10 +281,7 @@ namespace Metabuf
             return false;
         }
 
-        if( this->writeSize( attributeCount ) == false )
-        {
-            return false;
-        }
+        this->writeSize( attributeCount );
 
         if( _node->inheritance.empty() == false )
         {
@@ -405,11 +402,8 @@ namespace Metabuf
 	bool Xml2Metabuf::writeNodeArguments_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
 	{
 		size_t id = _attr->id;
-		if( this->writeSize( id ) == false )
-		{
-			return false;
-		}
-
+		this->writeSize( id );
+		
         std::string evict;
         m_protocol->getEvict( _attr->type, evict );
 
@@ -564,10 +558,7 @@ namespace Metabuf
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
         size_t includesTypeCount = _node->includes.size();
-        if( this->writeSize( includesTypeCount ) == false )
-        {
-            return false;
-        }
+        this->writeSize( includesTypeCount );
 
         for( TMapNodes::const_iterator
             it = _node->includes.begin(),
@@ -582,10 +573,7 @@ namespace Metabuf
 
             this->write( incluidesCount );
 
-            if( this->writeSize( node_include->id ) == false )
-            {
-                return false;
-            }
+            this->writeSize( node_include->id );
 
             for( pugi::xml_node::iterator
                 it = _xml_node.begin(),
@@ -622,10 +610,7 @@ namespace Metabuf
     bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
         size_t generatorsTypeCount = _node->inheritances.size();
-        if( this->writeSize( generatorsTypeCount ) == false )
-        {
-            return false;
-        }
+        this->writeSize( generatorsTypeCount );
 
         for( TMapNodes::const_iterator
             it = _node->inheritances.begin(),
@@ -640,10 +625,7 @@ namespace Metabuf
 
             this->write( generatorsCount );
 
-            if( this->writeSize( node_inheritance->id ) == false )
-            {
-                return false;
-            }
+            this->writeSize( node_inheritance->id );
 
             for( pugi::xml_node::iterator
                 it = _xml_node.begin(),
@@ -678,10 +660,7 @@ namespace Metabuf
                     return false;
                 }
 
-                if( this->writeSize( node_generator->id ) == false )
-                {
-                    return false;
-                }
+                this->writeSize( node_generator->id );
 
                 if( this->writeNode_( node_generator, child ) == false )
                 {
@@ -769,18 +748,20 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeSize( size_t _value )
+    void Xml2Metabuf::writeSize( unsigned int _value )
     {
-        if( _value > 255 )
+        if( _value < 255 )
         {
-            return false;
+            unsigned char size = (unsigned char)_value;
+            this->writeBuffer( (const unsigned char * )&size, 1 );
         }
+        else
+        {
+            unsigned char size = 255;
+            this->writeBuffer( (const unsigned char * )&size, 1 );
 
-        unsigned char size = (unsigned char)_value;
-
-        this->writeBuffer( (const unsigned char * )&size, 1 );
-
-        return true;
+            this->write( size );
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     size_t Xml2Metabuf::writeString( const char * _value )
