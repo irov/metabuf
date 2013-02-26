@@ -26,18 +26,18 @@ namespace Metabuf
             return true;
 		}
 
-        inline void readSize( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _t ) const
+        inline void readSize( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int & _t ) const
         {
             ArchiveReader ar(_buff, _size, _read, m_userData);            
             ar.readSize( _t );
         }
 
 	protected:
-		virtual bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t id ) = 0;
+		virtual bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int id ) = 0;
 
-        virtual bool _preparationIncludes( size_t _includes, size_t _count ) = 0;
-		virtual bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) = 0;
-        virtual bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) = 0;
+        virtual bool _preparationIncludes( unsigned int _includes, unsigned int _count ) = 0;
+		virtual bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) = 0;
+        virtual bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) = 0;
 
     protected:
         void * m_userData;

@@ -53,7 +53,7 @@ namespace Metabuf
 
 	protected:
 		std::stringstream m_out;
-		size_t m_indent;
+		unsigned int m_indent;
 
 		XmlProtocol * m_protocol;
 

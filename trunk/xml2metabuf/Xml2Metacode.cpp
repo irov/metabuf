@@ -254,7 +254,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
 	{
-		this->write(_ss) << "bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id ) override;" << std::endl;
+		this->write(_ss) << "bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -560,21 +560,21 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
-        this->write(_ss) << "bool _preparationIncludes( size_t _includes, size_t _count ) override;" << std::endl;
+        this->write(_ss) << "bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;" << std::endl;
 
         return true;
     }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
 	{
-		this->write(_ss) << "bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes ) override;" << std::endl;
+		this->write(_ss) << "bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;" << std::endl;
 
         return true;
 	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-        this->write(_ss) << "bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators ) override;" << std::endl;
+        this->write(_ss) << "bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;" << std::endl;
 
         return true;
     }
@@ -698,7 +698,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, size_t _id )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
@@ -789,7 +789,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_preparationIncludes( size_t _includes, size_t _count )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_preparationIncludes( unsigned int _includes, unsigned int _count )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
@@ -856,7 +856,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, size_t _includes )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
@@ -914,7 +914,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, size_t _generators )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
@@ -1025,7 +1025,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	std::stringstream & Xml2Metacode::write( std::stringstream & _ss )
 	{
-		for( size_t i = 0; i != m_indent; ++i )
+		for( unsigned int i = 0; i != m_indent; ++i )
 		{
 			_ss << " ";
 		}
