@@ -12,12 +12,12 @@ namespace Metabuf
 
         m_userData = _userData;
 
-		size_t attributeCount;
+		unsigned int attributeCount;
 		this->readSize( _buff, _size, _read, attributeCount );
 
-		for( size_t i = 0; i != attributeCount; ++i )
+		for( unsigned int i = 0; i != attributeCount; ++i )
 		{
-			size_t id;
+			unsigned int id;
 			this->readSize( _buff, _size, _read, id );
 
 			if( this->_parseArguments( _buff, _size, _read, id ) == false )
@@ -26,15 +26,15 @@ namespace Metabuf
             }
 		}
 
-        size_t includeTypeCount;
+        unsigned int includeTypeCount;
         this->readSize( _buff, _size, _read, includeTypeCount );
 
-        for( size_t i = 0; i != includeTypeCount; ++i )
+        for( unsigned int i = 0; i != includeTypeCount; ++i )
         {
-    		size_t includeCount;
+    		unsigned int includeCount;
 	    	this->read( _buff, _size, _read, includeCount );
 		
-            size_t id_includes;
+            unsigned int id_includes;
             this->readSize( _buff, _size, _read, id_includes );
 
             if( this->_preparationIncludes( id_includes, includeCount ) == false )
@@ -42,7 +42,7 @@ namespace Metabuf
                 return false;
             }
 
-            for( size_t j = 0; j != includeCount; ++j )
+            for( unsigned int j = 0; j != includeCount; ++j )
             {
                 if( this->_parseIncludes( _buff, _size, _read, id_includes ) == false )
                 {
@@ -51,15 +51,15 @@ namespace Metabuf
             }
         }
 
-        size_t generatorTypeCount;
+        unsigned int generatorTypeCount;
         this->readSize( _buff, _size, _read, generatorTypeCount );
 
-        for( size_t i = 0; i != generatorTypeCount; ++i )
+        for( unsigned int i = 0; i != generatorTypeCount; ++i )
         {
-            size_t generatorCount;
+            unsigned int generatorCount;
             this->read( _buff, _size, _read, generatorCount );
 
-            size_t id_includes;
+            unsigned int id_includes;
             this->readSize( _buff, _size, _read, id_includes );
 
             if( this->_preparationIncludes( id_includes, generatorCount ) == false )
@@ -67,9 +67,9 @@ namespace Metabuf
                 return false;
             }
 
-            for( size_t j = 0; j != generatorCount; ++j )
+            for( unsigned int j = 0; j != generatorCount; ++j )
             {
-                size_t id_generators;
+                unsigned int id_generators;
                 this->readSize( _buff, _size, _read, id_generators );
 
                 if( this->_parseGenerators( _buff, _size, _read, id_generators ) == false )
