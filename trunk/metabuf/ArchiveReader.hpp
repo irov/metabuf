@@ -19,6 +19,14 @@ namespace Metabuf
         {
         }
 
+    private:
+        ArchiveReader & operator = ( const ArchiveReader & _ar )
+        {
+            (void)_ar;
+
+            return *this;
+        }
+
     public:
         template<class T>
         inline void read( T & _t );
@@ -82,6 +90,8 @@ namespace Metabuf
     template<class T>
     void archive_read( ArchiveReader & ar, T & _value, void * _userData )
     {
+        (void)_userData;
+
         ar.readPOD( _value );
     }
     

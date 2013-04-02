@@ -701,6 +701,15 @@ namespace Metabuf
         this->write(_ss) << "bool " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
+        if( _node->inheritance.empty() == true && _node->attributes.empty() == true && _node->members.empty() == true )
+        {
+            this->write(_ss) << "    (void)_buff;" << std::endl;
+            this->write(_ss) << "    (void)_size;" << std::endl;
+            this->write(_ss) << "    (void)_read;" << std::endl;
+            this->write(_ss) << "    (void)_id;" << std::endl;
+            this->write(_ss) << std::endl;
+        }
+
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
@@ -781,7 +790,6 @@ namespace Metabuf
         
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
-        this->write(_ss) << std::endl;
 
         return true;
     }
@@ -791,6 +799,13 @@ namespace Metabuf
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write(_ss) << "bool " << _node->getScope() << "::_preparationIncludes( unsigned int _includes, unsigned int _count )" << std::endl;
         this->write(_ss) << "{" << std::endl;
+
+        if( _node->inheritance.empty() == true && _node->includes.empty() == true && _node->inheritances.empty() == true )
+        {
+            this->write(_ss) << "    (void)_includes;" << std::endl;
+            this->write(_ss) << "    (void)_count;" << std::endl;
+            this->write(_ss) << std::endl;
+        }
 
         if( _node->inheritance.empty() == false )
         {
@@ -859,6 +874,15 @@ namespace Metabuf
         this->write(_ss) << "bool " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
+        if( _node->inheritance.empty() == true && _node->includes.empty() == true )
+        {
+            this->write(_ss) << "    (void)_buff;" << std::endl;
+            this->write(_ss) << "    (void)_size;" << std::endl;
+            this->write(_ss) << "    (void)_read;" << std::endl;
+            this->write(_ss) << "    (void)_includes;" << std::endl;
+            this->write(_ss) << std::endl;
+        }
+
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
@@ -906,7 +930,6 @@ namespace Metabuf
 
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
-        this->write(_ss) << std::endl;
 
         return true;
     }
@@ -916,6 +939,15 @@ namespace Metabuf
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write(_ss) << "bool " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators )" << std::endl;
         this->write(_ss) << "{" << std::endl;
+
+        if( _node->inheritance.empty() == true && _node->generators.empty() == true )
+        {
+            this->write(_ss) << "    (void)_buff;" << std::endl;
+            this->write(_ss) << "    (void)_size;" << std::endl;
+            this->write(_ss) << "    (void)_read;" << std::endl;
+            this->write(_ss) << "    (void)_generators;" << std::endl;
+            this->write(_ss) << std::endl;
+        }
 
         if( _node->inheritance.empty() == false )
         {
@@ -980,7 +1012,6 @@ namespace Metabuf
 
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
-        this->write(_ss) << std::endl;
 
         return true;
     }

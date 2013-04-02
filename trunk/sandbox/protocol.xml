@@ -1,4 +1,4 @@
-<Protocol Version = "7">
+<Protocol Version = "8">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -142,6 +142,8 @@
             <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Alpha" Type="bool"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
+            <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
+            <Member Node="File" Name="NoSeek" Type="bool"/>
         </Node>
         
         <Node Name="ResourceAnimation" Inheritance = "Resource">
