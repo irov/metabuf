@@ -2846,6 +2846,8 @@ namespace Metacode
                 : Meta_Resource()
                 , File_Alpha_successful(false)
                 , File_Codec_successful(false)
+                , File_Converter_successful(false)
+                , File_NoSeek_successful(false)
             {
             }
         public:
@@ -2919,6 +2921,76 @@ namespace Metacode
                 (_self->*_method)( this->File_Codec );
             }
             
+            bool get_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Converter;
+            
+                return true;
+            }
+            
+            bool swap_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Converter);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Converter( C * _self, M _method )
+            {
+                if( File_Converter_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Converter );
+            }
+            
+            bool get_File_NoSeek( bool & _value ) const
+            {
+                if( File_NoSeek_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_NoSeek;
+            
+                return true;
+            }
+            
+            bool swap_File_NoSeek( bool & _value ) const
+            {
+                if( File_NoSeek_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_NoSeek);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_NoSeek( C * _self, M _method )
+            {
+                if( File_NoSeek_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_NoSeek );
+            }
+            
             const Menge::ConstString & get_File_Path() const
             {
                 return this->File_Path;
@@ -2947,6 +3019,10 @@ namespace Metacode
             mutable bool File_Alpha;
             bool File_Codec_successful;
             mutable Menge::ConstString File_Codec;
+            bool File_Converter_successful;
+            mutable Menge::ConstString File_Converter;
+            bool File_NoSeek_successful;
+            mutable bool File_NoSeek;
             mutable Menge::ConstString File_Path;
         };
         
