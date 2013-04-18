@@ -16,6 +16,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             size_t index = _metabuf->writeString( _value );
 
             _metabuf->write( index );
@@ -25,6 +27,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             int int_value;
             if( sscanf( _value, "%d", &int_value ) != 1 )
             {
@@ -39,6 +43,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             int value;
             if( sscanf( _value, "%d", &value ) != 1 )
             {
@@ -52,6 +58,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_size_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             size_t value;
             if( sscanf( _value, "%u", &value ) != 1 )
             {
@@ -65,6 +73,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             float value;
             if( sscanf( _value, "%f", &value ) != 1 )
             {
@@ -78,6 +88,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             float value[2];
             if( sscanf( _value, "%f;%f", &value[0], &value[1] ) != 2 )
             {
@@ -94,6 +106,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             float value[3];
             if( sscanf( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
             {
@@ -110,6 +124,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             float value[4];
             if( sscanf( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
             {
@@ -166,7 +182,7 @@ namespace Metabuf
 			return false;
 		}
 
-        _writeSize = 0;
+        size_t writeSize = 0;
 
         m_buff.clear();
 
@@ -232,8 +248,17 @@ namespace Metabuf
         buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
         buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
 
-        std::copy( buffFinal.begin(), buffFinal.end(), _binBuff );
-        _writeSize += buffFinal.size();
+        writeSize += buffFinal.size();
+
+        if( writeSize > _binSize )
+        {
+            m_error << "Xml2Metabuf::convert: write buffer not enouge memory " << _binSize << " need " << writeSize << std::endl;
+
+            return false;
+        }
+
+        _writeSize = writeSize;
+        std::copy( buffFinal.begin(), buffFinal.end(), _binBuff );        
 
 		return true;
 	}
