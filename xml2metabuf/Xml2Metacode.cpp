@@ -254,6 +254,8 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
 	{
+        (void)_node;
+
 		this->write(_ss) << "bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;" << std::endl;
 
 		return true;
@@ -560,6 +562,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
+        (void)_node;
+
         this->write(_ss) << "bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;" << std::endl;
 
         return true;
@@ -567,6 +571,8 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
 	{
+        (void)_node;
+
 		this->write(_ss) << "bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;" << std::endl;
 
         return true;
@@ -574,6 +580,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node )
     {
+        (void)_node;
+
         this->write(_ss) << "bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;" << std::endl;
 
         return true;
