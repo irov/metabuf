@@ -4,6 +4,8 @@
 
 namespace Metabuf
 {
+    const size_t header_size = 8;
+
 	class Metadata
 	{
 	public:

@@ -168,6 +168,36 @@ namespace Metabuf
 
         m_serialization[_type] = desc;
     }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::header( unsigned char * _binBuff, size_t _binSize, size_t & _writeSize )
+    {
+        m_buff.clear();
+
+        size_t writeSize = 0;
+
+        unsigned int magic = 3133062829u;
+        this->write( magic );
+
+        unsigned int version = m_protocol->getVersion();
+        this->write( version );
+        
+        writeSize += m_buff.size();
+
+        if( writeSize > _binSize )
+        {
+            m_error << "Xml2Metabuf::header write size " << writeSize << " > binSize " << _binSize << std::endl;
+
+            return false;
+        }
+
+        std::copy( m_buff.begin(), m_buff.end(), _binBuff );
+        
+        _writeSize = writeSize;
+
+        m_buff.clear();
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
 	{	
@@ -184,16 +214,6 @@ namespace Metabuf
 
         size_t writeSize = 0;
 
-        m_buff.clear();
-
-        unsigned int magic = 3133062829u;
-        this->write( magic );
-
-        unsigned int version = m_protocol->getVersion();
-        this->write( version );
-
-        TBlobject buffHeader;
-        buffHeader.swap( m_buff );
         m_buff.clear();
 
 		pugi::xml_node root = doc.document_element();
@@ -244,7 +264,6 @@ namespace Metabuf
 
         TBlobject buffFinal;
 
-        buffFinal.insert( buffFinal.end(), buffHeader.begin(), buffHeader.end() );
         buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
         buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
 
