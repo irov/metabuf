@@ -602,7 +602,7 @@ namespace Metabuf
         this->write(_ss) << "        unsigned int head;" << std::endl;
         this->write(_ss) << "        ar.read( head );" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        if( head != 3133062829 )" << std::endl;
+        this->write(_ss) << "        if( head != 3133062829u )" << std::endl;
         this->write(_ss) << "        {" << std::endl;
         this->write(_ss) << "            return false;" << std::endl;
         this->write(_ss) << "        }" << std::endl;
