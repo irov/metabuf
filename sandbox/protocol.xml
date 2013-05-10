@@ -1,4 +1,4 @@
-<Protocol Version = "9">
+<Protocol Version = "11">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -23,10 +23,11 @@
             <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
             <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="File" Name="UV" Type="mt::vec4f"/>
+            <Member Node="File" Name="Bound" Type="mt::vec2f"/>
             <Member Node="File" Name="Alpha" Type="bool"/>
             <Member Node="File" Name="Rotate" Type="bool"/>
             <Member Node="File" Name="WrapX" Type="bool"/>
-            <Member Node="File" Name="WrapY" Type="bool"/>            
+            <Member Node="File" Name="WrapY" Type="bool"/>
         </Node>
 
         <Node Name="ResourceEmitterContainer" Inheritance = "Resource">
@@ -196,6 +197,7 @@
         <Node Name="ResourceImageSubstract" Inheritance = "Resource">
             <Member Node="Image" Name="Name" Type="Menge::ConstString" Required="1"/>
             <Member Node="Image" Name="UV" Type="mt::vec4f" Required="1"/>
+            <Member Node="Image" Name="Rotate" Type="bool"/>
         </Node>
         
         <Node Name="ResourceExternal" Inheritance = "Resource">
