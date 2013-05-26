@@ -1,6 +1,7 @@
 #	pragma once
 
-#	include "ArchiveReader.hpp"
+#	include <metabuf/ArchiveReader.hpp>
+#   include <metabuf/Array.hpp>
 
 namespace Metabuf
 {

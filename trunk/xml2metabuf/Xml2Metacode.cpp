@@ -45,10 +45,7 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "#   include <metabuf/Metabuf.hpp>" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "#   include \"Metatype.h\"" << std::endl;
-        this->write(_ss) << std::endl;
-        this->write(_ss) << "#   include <vector>" << std::endl;
-        this->write(_ss) << "#   include <algorithm>" << std::endl;
+        this->write(_ss) << "#   include \"Metatype.h\"" << std::endl;                
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
@@ -526,7 +523,7 @@ namespace Metabuf
 
             this->write(_ss) << "public:" << std::endl;
 
-            this->write(_ss) << "    typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
+            this->write(_ss) << "    typedef Metabuf::Array<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
             this->write(_ss) << std::endl;
             this->write(_ss) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
             this->write(_ss) << "    {" << std::endl;
@@ -546,7 +543,7 @@ namespace Metabuf
             const XmlNode * node_include = it->second;
 
             this->write(_ss) << "public:" << std::endl;
-            this->write(_ss) << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
+            this->write(_ss) << "    typedef Metabuf::Array<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
             this->write(_ss) << std::endl;
             this->write(_ss) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
             this->write(_ss) << "    {" << std::endl;
@@ -921,13 +918,13 @@ namespace Metabuf
                                   
                 this->write(_ss) << "    case " << node->id << ":" << std::endl;
                 this->write(_ss) << "        {" << std::endl;
-                this->write(_ss) << "            " << node->getScope() << " metadata;" << std::endl;
+                this->write(_ss) << "            " << node->getScope() << " & metadata = includes_" << node->getName() << ".emplace_back();" << std::endl;
+                this->write(_ss) << std::endl;
                 this->write(_ss) << "            if( metadata.parse( _buff, _size, _read, m_userData ) == false )" << std::endl;
                 this->write(_ss) << "            {" << std::endl;
                 this->write(_ss) << "                return false;" << std::endl;
                 this->write(_ss) << "            }" << std::endl;
                 this->write(_ss) << std::endl;
-                this->write(_ss) << "            includes_" << node->getName() << ".push_back(metadata);" << std::endl;
                 this->write(_ss) << "            return true;" << std::endl;
                 this->write(_ss) << "            break;" << std::endl;
                 this->write(_ss) << "        }" << std::endl;
