@@ -57,11 +57,6 @@ namespace Metabuf
             return m_end - m_begin;
         }
 
-        size_t capacity() const
-        {
-            return m_capacity - m_begin;
-        }
-
         bool empty() const
         {
             return m_end == m_begin;
