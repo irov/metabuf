@@ -1,4 +1,4 @@
-<Protocol Version = "14">
+<Protocol Version = "20">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -10,6 +10,8 @@
     <Type Name="mt::vec3f" Evict="float3"/>
     <Type Name="mt::vec4f" Evict="float4"/>
     <Type Name="Menge::ColourValue" Evict="float4"/>
+    <Type Name="Menge::GlyphChar" Evict="utf8"/>
+    <Type Name="Menge::Polygon" Evict="floats"/>
     
     <Node Name="DataBlock">
         <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
@@ -186,19 +188,27 @@
         </Node>
         
         <Node Name="ResourceImageMultiplyRGBAndAlpha" Inheritance = "Resource">
+            <Member Node="File" Name="WrapX" Type="bool"/>
+            <Member Node="File" Name="WrapY" Type="bool"/>  
+
             <Member Node="FileRGB" Name="Path" Type="Menge::ConstString"/>
             <Member Node="FileRGB" Name="Codec" Type="Menge::ConstString"/>
             <Member Node="FileRGB" Name="UV" Type="mt::vec4f"/>
 
             <Member Node="FileAlpha" Name="Path" Type="Menge::ConstString"/>
             <Member Node="FileAlpha" Name="Codec" Type="Menge::ConstString"/>                      
-            <Member Node="FileAlpha" Name="UV" Type="mt::vec4f"/>            
+            <Member Node="FileAlpha" Name="UV" Type="mt::vec4f"/>   
         </Node>        
         
         <Node Name="ResourceImageSubstract" Inheritance = "Resource">
             <Member Node="Image" Name="Name" Type="Menge::ConstString" Required="1"/>
             <Member Node="Image" Name="UV" Type="mt::vec4f" Required="1"/>
             <Member Node="Image" Name="Rotate" Type="bool"/>
+            <Member Node="Image" Name="Alpha" Type="bool"/>
+        </Node>
+        
+        <Node Name="ResourceShape" Inheritance = "Resource">
+            <Member Node="Polygon" Name="Value" Type="Menge::Polygon" Required="1"/>
         </Node>
         
         <Node Name="ResourceExternal" Inheritance = "Resource">
@@ -232,11 +242,11 @@
             <Attribute Name="width" Type="float" Required="1"/>
             <Attribute Name="offset" Type="mt::vec2f" Required="1"/>
             <Attribute Name="rect" Type="mt::vec4f" Required="1"/>
-            <Attribute Name="code" Type="Menge::WChar" Required="1"/>
+            <Attribute Name="code" Type="Menge::GlyphChar" Required="1"/>
            
             <Node Name="Kerning">
                 <Attribute Name="advance" Type="float" Required="1"/>
-                <Attribute Name="id" Type="Menge::WChar" Required="1"/>
+                <Attribute Name="id" Type="Menge::GlyphChar" Required="1"/>
             </Node>
         </Node>
     </Node>

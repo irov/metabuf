@@ -59,7 +59,10 @@ namespace Metabuf
 
             if( size_1 == 255 )
             {
-                this->readPOD( _size );
+                unsigned int size_2;
+                this->readPOD( size_2 );
+
+                _size = size_2;
             }
             else
             {

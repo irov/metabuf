@@ -1373,6 +1373,8 @@ namespace Metacode
         public:
             Meta_ResourceImageMultiplyRGBAndAlpha()
                 : Meta_Resource()
+                , File_WrapX_successful(false)
+                , File_WrapY_successful(false)
                 , FileAlpha_Codec_successful(false)
                 , FileAlpha_Path_successful(false)
                 , FileAlpha_UV_successful(false)
@@ -1382,6 +1384,76 @@ namespace Metacode
             {
             }
         public:
+            bool get_File_WrapX( bool & _value ) const
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_WrapX;
+            
+                return true;
+            }
+            
+            bool swap_File_WrapX( bool & _value ) const
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_WrapX);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_WrapX( C * _self, M _method )
+            {
+                if( File_WrapX_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_WrapX );
+            }
+            
+            bool get_File_WrapY( bool & _value ) const
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_WrapY;
+            
+                return true;
+            }
+            
+            bool swap_File_WrapY( bool & _value ) const
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_WrapY);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_WrapY( C * _self, M _method )
+            {
+                if( File_WrapY_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_WrapY );
+            }
+            
             bool get_FileAlpha_Codec( Menge::ConstString & _value ) const
             {
                 if( FileAlpha_Codec_successful == false )
@@ -1600,6 +1672,10 @@ namespace Metacode
         public:
         protected:
         protected:
+            bool File_WrapX_successful;
+            mutable bool File_WrapX;
+            bool File_WrapY_successful;
+            mutable bool File_WrapY;
             bool FileAlpha_Codec_successful;
             mutable Menge::ConstString FileAlpha_Codec;
             bool FileAlpha_Path_successful;
@@ -1673,10 +1749,46 @@ namespace Metacode
         public:
             Meta_ResourceImageSubstract()
                 : Meta_Resource()
+                , Image_Alpha_successful(false)
                 , Image_Rotate_successful(false)
             {
             }
         public:
+            bool get_Image_Alpha( bool & _value ) const
+            {
+                if( Image_Alpha_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_Alpha;
+            
+                return true;
+            }
+            
+            bool swap_Image_Alpha( bool & _value ) const
+            {
+                if( Image_Alpha_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_Alpha);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Image_Alpha( C * _self, M _method )
+            {
+                if( Image_Alpha_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Image_Alpha );
+            }
+            
             const Menge::ConstString & get_Image_Name() const
             {
                 return this->Image_Name;
@@ -1752,6 +1864,8 @@ namespace Metacode
         public:
         protected:
         protected:
+            bool Image_Alpha_successful;
+            mutable bool Image_Alpha;
             mutable Menge::ConstString Image_Name;
             bool Image_Rotate_successful;
             mutable bool Image_Rotate;
@@ -2761,6 +2875,42 @@ namespace Metacode
             TVectorMeta_Tracks includes_Meta_Tracks;
         };
         
+        class Meta_ResourceShape
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceShape()
+                : Meta_Resource()
+            {
+            }
+        public:
+            const Menge::Polygon & get_Polygon_Value() const
+            {
+                return this->Polygon_Value;
+            }
+            
+            void swap_Polygon_Value( Menge::Polygon & _value ) const
+            {
+                std::swap(_value, this->Polygon_Value);
+            }
+            
+            template<class C, class M>
+            void method_Polygon_Value( C * _self, M _method )
+            {
+                (_self->*_method)( this->Polygon_Value );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
+            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::Polygon Polygon_Value;
+        };
+        
         class Meta_ResourceSound
             : public Meta_Resource
         { 
@@ -3521,12 +3671,12 @@ namespace Metacode
             {
             }
         public:
-            const Menge::WChar & get_code() const
+            const Menge::GlyphChar & get_code() const
             {
                 return this->code;
             }
             
-            void swap_code( Menge::WChar & _value ) const
+            void swap_code( Menge::GlyphChar & _value ) const
             {
                 std::swap( _value, this->code);
             }
@@ -3616,12 +3766,12 @@ namespace Metacode
                     (_self->*_method)( this->advance );
                 }
                 
-                const Menge::WChar & get_id() const
+                const Menge::GlyphChar & get_id() const
                 {
                     return this->id;
                 }
                 
-                void swap_id( Menge::WChar & _value ) const
+                void swap_id( Menge::GlyphChar & _value ) const
                 {
                     std::swap( _value, this->id);
                 }
@@ -3641,12 +3791,12 @@ namespace Metacode
             protected:
             protected:
                 mutable float advance;
-                mutable Menge::WChar id;
+                mutable Menge::GlyphChar id;
             };
             
         protected:
         protected:
-            mutable Menge::WChar code;
+            mutable Menge::GlyphChar code;
             mutable mt::vec2f offset;
             mutable mt::vec4f rect;
             mutable float width;

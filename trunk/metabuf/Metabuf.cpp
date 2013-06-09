@@ -32,8 +32,8 @@ namespace Metabuf
         for( unsigned int i = 0; i != includeTypeCount; ++i )
         {
     		unsigned int includeCount;
-	    	this->read( _buff, _size, _read, includeCount );
-		
+	    	this->readSize( _buff, _size, _read, includeCount );
+
             unsigned int id_includes;
             this->readSize( _buff, _size, _read, id_includes );
 
@@ -57,7 +57,7 @@ namespace Metabuf
         for( unsigned int i = 0; i != generatorTypeCount; ++i )
         {
             unsigned int generatorCount;
-            this->read( _buff, _size, _read, generatorCount );
+            this->readSize( _buff, _size, _read, generatorCount );
 
             unsigned int id_includes;
             this->readSize( _buff, _size, _read, id_includes );
