@@ -19,8 +19,7 @@ namespace Metabuf
             (void)_user;
 
             size_t index = _metabuf->writeString( _value );
-
-            _metabuf->write( index );
+            _metabuf->writeSize( index );
 
             return true;
         }
@@ -139,6 +138,40 @@ namespace Metabuf
 
             return true;
         }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_floats( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            typedef std::vector<float> TVectorFloats;
+            TVectorFloats floats;
+
+            size_t len = strlen(_value);
+            char * parse_value = new char[len + 1];
+            strcpy( parse_value, _value );
+
+            char * pch = strtok( parse_value, " " );
+
+            while( pch != nullptr )
+            {
+                float value;
+                if( sscanf( pch, "%f", &value ) != 1 )
+                {
+                    return false;
+                }
+
+                floats.push_back( value );
+
+                pch = strtok (NULL, " ");
+            }
+
+            size_t count = floats.size();
+
+            _metabuf->writeSize( count );
+            _metabuf->writeCount( &floats[0], count );
+
+            return true;
+        }
     }
 	//////////////////////////////////////////////////////////////////////////
 	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
@@ -158,6 +191,7 @@ namespace Metabuf
         this->addSerializator( "float2", &Serialize::s_write_float2, 0 );
         this->addSerializator( "float3", &Serialize::s_write_float3, 0 );
         this->addSerializator( "float4", &Serialize::s_write_float4, 0 );
+        this->addSerializator( "floats", &Serialize::s_write_floats, 0 );
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
@@ -615,8 +649,7 @@ namespace Metabuf
             size_t incluidesCount;
             this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
 
-            this->write( incluidesCount );
-
+            this->writeSize( incluidesCount );
             this->writeSize( node_include->id );
 
             for( pugi::xml_node::iterator
@@ -667,8 +700,7 @@ namespace Metabuf
             size_t generatorsCount;
             this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance->name, generatorsCount );
 
-            this->write( generatorsCount );
-
+            this->writeSize( generatorsCount );
             this->writeSize( node_inheritance->id );
 
             for( pugi::xml_node::iterator
@@ -804,7 +836,7 @@ namespace Metabuf
             unsigned char size = 255;
             this->writeBuffer( (const unsigned char * )&size, 1 );
 
-            this->write( size );
+            this->write( _value );
         }
     }
     //////////////////////////////////////////////////////////////////////////
