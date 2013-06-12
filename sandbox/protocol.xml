@@ -276,7 +276,8 @@
                 <Attribute Name="Rotation" Type="float"/>
                 <Attribute Name="Opacity" Type="float"/>
                 <Attribute Name="Volume" Type="float"/>
-                <Attribute Name="Count" Type="size_t"/>                
+                <Attribute Name="Count" Type="size_t"/>
+                <Attribute Name="Mask" Type="Menge::Polygon"/>
             </Node>
         </Node>
         
@@ -292,6 +293,8 @@
                 <Attribute Name="Rotation" Type="mt::vec3f"/>
                 <Attribute Name="Opacity" Type="float"/>
                 <Attribute Name="Volume" Type="float"/>
+                <Attribute Name="Count" Type="size_t"/>
+                <Attribute Name="Mask" Type="Menge::Polygon"/>
             </Node>
         </Node>
     </Node>
