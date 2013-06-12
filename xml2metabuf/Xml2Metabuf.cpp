@@ -146,7 +146,7 @@ namespace Metabuf
             typedef std::vector<float> TVectorFloats;
             TVectorFloats floats;
 
-            size_t len = strlen(_value);
+            size_t len = strlen( _value );
             char * parse_value = new char[len + 1];
             strcpy( parse_value, _value );
 
