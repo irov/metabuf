@@ -274,6 +274,11 @@ namespace Metabuf
 
             if( attr->required == false )
             {
+                this->write(_ss) << "bool" << " " << "has_" << attr->name << "() const" << std::endl;
+                this->write(_ss) << "{" << std::endl;	    	
+                this->write(_ss) << "    return " << attr->name << "_successful;" << std::endl;
+                this->write(_ss) << "}" << std::endl;
+                this->write(_ss) << std::endl;
 		    	this->write(_ss) << "bool" << " " << "get_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
     			this->write(_ss) << "{" << std::endl;	    	
 				this->write(_ss) << "    if( " << attr->name << "_successful == false )" << std::endl;
@@ -351,6 +356,11 @@ namespace Metabuf
 
                 if( attr->required == false )
                 {
+                    this->write(_ss) << "bool" << " " << "has_" << member->name << "_" << attr->name << "() const" << std::endl;
+                    this->write(_ss) << "{" << std::endl;
+                    this->write(_ss) << "    return " << member->name << "_" << attr->name << "_successful;" << std::endl;
+                    this->write(_ss) << "}" << std::endl;
+                    this->write(_ss) << std::endl;
 				    this->write(_ss) << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
 				    this->write(_ss) << "{" << std::endl;
 					this->write(_ss) << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
