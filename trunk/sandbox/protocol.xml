@@ -1,4 +1,4 @@
-<Protocol Version = "20">
+<Protocol Version = "21">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -276,13 +276,15 @@
                 <Attribute Name="Rotation" Type="float"/>
                 <Attribute Name="Opacity" Type="float"/>
                 <Attribute Name="Volume" Type="float"/>
-                <Attribute Name="Count" Type="size_t"/>
+                <Attribute Name="Count" Type="size_t"/>                
             </Node>
         </Node>
         
         <Node Name="KeyFrames3D">
             <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
-            
+            <Attribute Name="Immutable" Type="bool"/>
+            <Attribute Name="Count" Type="size_t"/>
+
             <Node Name="KeyFrame3D">
                 <Attribute Name="AnchorPoint" Type="mt::vec3f"/>
                 <Attribute Name="Position" Type="mt::vec3f"/>
