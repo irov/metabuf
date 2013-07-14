@@ -533,7 +533,7 @@ namespace Metabuf
 
             this->write(_ss) << "public:" << std::endl;
 
-            this->write(_ss) << "    typedef Metabuf::Array<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
+            this->write(_ss) << "    typedef stdex::auto_array<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
             this->write(_ss) << std::endl;
             this->write(_ss) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
             this->write(_ss) << "    {" << std::endl;
@@ -553,7 +553,7 @@ namespace Metabuf
             const XmlNode * node_include = it->second;
 
             this->write(_ss) << "public:" << std::endl;
-            this->write(_ss) << "    typedef Metabuf::Array<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
+            this->write(_ss) << "    typedef stdex::auto_array<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
             this->write(_ss) << std::endl;
             this->write(_ss) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
             this->write(_ss) << "    {" << std::endl;
@@ -803,6 +803,7 @@ namespace Metabuf
             this->write(_ss) << "    }" << std::endl;
         }
         
+        this->write(_ss) << std::endl;
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
 
@@ -877,6 +878,7 @@ namespace Metabuf
             this->write(_ss) << "    }" << std::endl;
         }
 
+        this->write(_ss) << std::endl;
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
 
@@ -943,6 +945,7 @@ namespace Metabuf
             this->write(_ss) << "    }" << std::endl;
         }
 
+        this->write(_ss) << std::endl;
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
 
@@ -1016,6 +1019,7 @@ namespace Metabuf
                     this->write(_ss) << "            }" << std::endl;
                     this->write(_ss) << std::endl;
                     this->write(_ss) << "            includes_" << node_inheritance->getName() << ".push_back(metadata);" << std::endl;            
+                    this->write(_ss) << std::endl;
                     this->write(_ss) << "            return true;" << std::endl;
                     this->write(_ss) << "            break;" << std::endl;
                     this->write(_ss) << "        }" << std::endl;
@@ -1025,6 +1029,7 @@ namespace Metabuf
             this->write(_ss) << "    }" << std::endl;
         }
 
+        this->write(_ss) << std::endl;
         this->write(_ss) << "    return false;" << std::endl;
         this->write(_ss) << "}" << std::endl;
 

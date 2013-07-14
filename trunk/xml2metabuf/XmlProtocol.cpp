@@ -15,7 +15,7 @@ namespace Metabuf
 
         if( it_found == this->attributes.end() )
         {
-            return 0;
+            return nullptr;
         }
 
         const XmlAttribute * attr = &it_found->second;
@@ -24,6 +24,11 @@ namespace Metabuf
     }
     //////////////////////////////////////////////////////////////////////////
     XmlNode::XmlNode()
+        : id(0)
+        , node_inheritance(nullptr)
+        , node_scope(nullptr)
+        , enumerator(0)
+        , noWrite(false)
     {
 
     }
@@ -70,9 +75,9 @@ namespace Metabuf
 
 		if( it_found == this->attributes.end() )
 		{
-            if( this->node_inheritance == 0 )
+            if( this->node_inheritance == nullptr )
             {
-        		return 0;
+        		return nullptr;
             }
             else
             {
@@ -93,9 +98,9 @@ namespace Metabuf
 
 		if( it_found == this->members.end() )
 		{
-            if( this->node_inheritance == 0 )
+            if( this->node_inheritance == nullptr )
             {
-                return 0;
+                return nullptr;
             }
             else
             {
@@ -116,7 +121,7 @@ namespace Metabuf
 
         if( it_found == this->includes.end() )
         {
-            return 0;
+            return nullptr;
         }
 
         XmlNode * node = it_found->second;
@@ -130,7 +135,7 @@ namespace Metabuf
 
         if( it_found == this->inheritances.end() )
         {
-            return 0;
+            return nullptr;
         }
 
         XmlNode * node = it_found->second;
@@ -144,7 +149,7 @@ namespace Metabuf
 
         if( it_found == this->generators.end() )
         {
-            return 0;
+            return nullptr;
         }
 
         XmlNode * node = it_found->second;
@@ -165,7 +170,7 @@ namespace Metabuf
     {
         std::string write_scope;
 
-        if( this->node_scope == 0 )
+        if( this->node_scope == nullptr )
         {
             write_scope += this->getName();
             return write_scope;
@@ -176,6 +181,11 @@ namespace Metabuf
         write_scope += this->getName();
 
         return write_scope;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlNode::getNoWrite() const
+    {
+        return noWrite;
     }
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::XmlProtocol()
@@ -293,6 +303,7 @@ namespace Metabuf
 		pugi::xml_attribute Name = _xml_node.attribute("Name");
 		pugi::xml_attribute Generator = _xml_node.attribute("Generator");
 		pugi::xml_attribute Inheritance = _xml_node.attribute("Inheritance");
+        pugi::xml_attribute NoWrite = _xml_node.attribute("NoWrite");
 		
 		XmlNode * nodeXml = new XmlNode();
         
@@ -314,6 +325,11 @@ namespace Metabuf
             {
                 _node->includes.insert( std::make_pair(Name.value(), nodeXml) );
             }
+        }
+
+        if( NoWrite.empty() == false )
+        {
+            nodeXml->noWrite = true;
         }
 
         if( _node == 0 )

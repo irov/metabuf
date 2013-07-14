@@ -52,6 +52,42 @@ namespace Metacode
         bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
         bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
     public:
+        class Meta_Include
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_Include()
+                : Metabuf::Metadata()
+            {
+            }
+        public:
+            const Menge::ConstString & get_Path() const
+            {
+                return this->Path;
+            }
+            
+            void swap_Path( Menge::ConstString & _value ) const
+            {
+                std::swap( _value, this->Path);
+            }
+            
+            template<class C, class M>
+            void method_Path( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Path );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
+            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::ConstString Path;
+        };
+        
         class Meta_Resource
             : public Metabuf::Metadata
         { 
@@ -179,7 +215,7 @@ namespace Metacode
         protected:
         protected:
         public:
-            typedef Metabuf::Array<Meta_Sequence> TVectorMeta_Sequence;
+            typedef stdex::auto_array<Meta_Sequence> TVectorMeta_Sequence;
         
             const TVectorMeta_Sequence & get_IncludesSequence() const
             {
@@ -324,22 +360,6 @@ namespace Metacode
             {
             }
         public:
-            const Menge::ConstString & get_External_Name() const
-            {
-                return this->External_Name;
-            }
-            
-            void swap_External_Name( Menge::ConstString & _value ) const
-            {
-                std::swap(_value, this->External_Name);
-            }
-            
-            template<class C, class M>
-            void method_External_Name( C * _self, M _method )
-            {
-                (_self->*_method)( this->External_Name );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
             bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
@@ -348,7 +368,6 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString External_Name;
         };
         
         class Meta_ResourceFont
@@ -2095,6 +2114,7 @@ namespace Metacode
                 , FrameDuration_Value_successful(false)
                 , Height_Value_successful(false)
                 , KeyFramesPackPath_Path_successful(false)
+                , Loop_Segment_successful(false)
                 , Width_Value_successful(false)
             {
             }
@@ -2257,6 +2277,46 @@ namespace Metacode
                 }
             
                 (_self->*_method)( this->KeyFramesPackPath_Path );
+            }
+            
+            bool has_Loop_Segment() const
+            {
+                return Loop_Segment_successful;
+            }
+            
+            bool get_Loop_Segment( mt::vec2f & _value ) const
+            {
+                if( Loop_Segment_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Loop_Segment;
+            
+                return true;
+            }
+            
+            bool swap_Loop_Segment( mt::vec2f & _value ) const
+            {
+                if( Loop_Segment_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Loop_Segment);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Loop_Segment( C * _self, M _method )
+            {
+                if( Loop_Segment_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Loop_Segment );
             }
             
             bool has_Width_Value() const
@@ -2433,6 +2493,7 @@ namespace Metacode
                 Meta_MovieLayer2D()
                     : Metabuf::Metadata()
                     , PlayCount_successful(false)
+                    , Stretch_successful(false)
                 {
                 }
             public:
@@ -2604,6 +2665,46 @@ namespace Metacode
                     (_self->*_method)( this->StartInterval );
                 }
                 
+                bool has_Stretch() const
+                {
+                    return Stretch_successful;
+                }
+                
+                bool get_Stretch( float & _value ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Stretch;
+                
+                    return true;
+                }
+                
+                bool swap_Stretch( float & _value ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Stretch);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Stretch( C * _self, M _method ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Stretch );
+                }
+                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -2638,6 +2739,8 @@ namespace Metacode
                 mutable size_t PlayCount;
                 mutable Menge::ConstString Source;
                 mutable float StartInterval;
+                bool Stretch_successful;
+                mutable float Stretch;
                 mutable Menge::ConstString Type;
             };
             
@@ -2647,6 +2750,8 @@ namespace Metacode
             public:
                 Meta_MovieLayer3D()
                     : Metabuf::Metadata()
+                    , PlayCount_successful(false)
+                    , Stretch_successful(false)
                 {
                 }
             public:
@@ -2746,6 +2851,46 @@ namespace Metacode
                     (_self->*_method)( this->Parent );
                 }
                 
+                bool has_PlayCount() const
+                {
+                    return PlayCount_successful;
+                }
+                
+                bool get_PlayCount( size_t & _value ) const
+                {
+                    if( PlayCount_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->PlayCount;
+                
+                    return true;
+                }
+                
+                bool swap_PlayCount( size_t & _value ) const
+                {
+                    if( PlayCount_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->PlayCount);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_PlayCount( C * _self, M _method ) const
+                {
+                    if( PlayCount_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->PlayCount );
+                }
+                
                 const Menge::ConstString & get_Source() const
                 {
                     return this->Source;
@@ -2778,6 +2923,46 @@ namespace Metacode
                     (_self->*_method)( this->StartInterval );
                 }
                 
+                bool has_Stretch() const
+                {
+                    return Stretch_successful;
+                }
+                
+                bool get_Stretch( float & _value ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Stretch;
+                
+                    return true;
+                }
+                
+                bool swap_Stretch( float & _value ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Stretch);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Stretch( C * _self, M _method ) const
+                {
+                    if( Stretch_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Stretch );
+                }
+                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -2808,8 +2993,12 @@ namespace Metacode
                 mutable Menge::ConstString Name;
                 mutable float Out;
                 mutable size_t Parent;
+                bool PlayCount_successful;
+                mutable size_t PlayCount;
                 mutable Menge::ConstString Source;
                 mutable float StartInterval;
+                bool Stretch_successful;
+                mutable float Stretch;
                 mutable Menge::ConstString Type;
             };
             
@@ -2823,10 +3012,12 @@ namespace Metacode
             mutable float Height_Value;
             bool KeyFramesPackPath_Path_successful;
             mutable Menge::ConstString KeyFramesPackPath_Path;
+            bool Loop_Segment_successful;
+            mutable mt::vec2f Loop_Segment;
             bool Width_Value_successful;
             mutable float Width_Value;
         public:
-            typedef Metabuf::Array<Meta_MovieCamera3D> TVectorMeta_MovieCamera3D;
+            typedef stdex::auto_array<Meta_MovieCamera3D> TVectorMeta_MovieCamera3D;
         
             const TVectorMeta_MovieCamera3D & get_IncludesMovieCamera3D() const
             {
@@ -2836,7 +3027,7 @@ namespace Metacode
         protected:
             TVectorMeta_MovieCamera3D includes_Meta_MovieCamera3D;
         public:
-            typedef Metabuf::Array<Meta_MovieLayer2D> TVectorMeta_MovieLayer2D;
+            typedef stdex::auto_array<Meta_MovieLayer2D> TVectorMeta_MovieLayer2D;
         
             const TVectorMeta_MovieLayer2D & get_IncludesMovieLayer2D() const
             {
@@ -2846,7 +3037,7 @@ namespace Metacode
         protected:
             TVectorMeta_MovieLayer2D includes_Meta_MovieLayer2D;
         public:
-            typedef Metabuf::Array<Meta_MovieLayer3D> TVectorMeta_MovieLayer3D;
+            typedef stdex::auto_array<Meta_MovieLayer3D> TVectorMeta_MovieLayer3D;
         
             const TVectorMeta_MovieLayer3D & get_IncludesMovieLayer3D() const
             {
@@ -3051,7 +3242,7 @@ namespace Metacode
             protected:
             protected:
             public:
-                typedef Metabuf::Array<Meta_Track> TVectorMeta_Track;
+                typedef stdex::auto_array<Meta_Track> TVectorMeta_Track;
             
                 const TVectorMeta_Track & get_IncludesTrack() const
                 {
@@ -3069,7 +3260,7 @@ namespace Metacode
             bool Shuffle_Value_successful;
             mutable bool Shuffle_Value;
         public:
-            typedef Metabuf::Array<Meta_Tracks> TVectorMeta_Tracks;
+            typedef stdex::auto_array<Meta_Tracks> TVectorMeta_Tracks;
         
             const TVectorMeta_Tracks & get_IncludesTracks() const
             {
@@ -3333,6 +3524,7 @@ namespace Metacode
                 , File_Alpha_successful(false)
                 , File_Codec_successful(false)
                 , File_Converter_successful(false)
+                , File_FrameRate_successful(false)
                 , File_NoSeek_successful(false)
             {
             }
@@ -3457,6 +3649,46 @@ namespace Metacode
                 (_self->*_method)( this->File_Converter );
             }
             
+            bool has_File_FrameRate() const
+            {
+                return File_FrameRate_successful;
+            }
+            
+            bool get_File_FrameRate( float & _value ) const
+            {
+                if( File_FrameRate_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_FrameRate;
+            
+                return true;
+            }
+            
+            bool swap_File_FrameRate( float & _value ) const
+            {
+                if( File_FrameRate_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_FrameRate);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_FrameRate( C * _self, M _method )
+            {
+                if( File_FrameRate_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_FrameRate );
+            }
+            
             bool has_File_NoSeek() const
             {
                 return File_NoSeek_successful;
@@ -3527,6 +3759,8 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
+            bool File_FrameRate_successful;
+            mutable float File_FrameRate;
             bool File_NoSeek_successful;
             mutable bool File_NoSeek;
             mutable Menge::ConstString File_Path;
@@ -3870,7 +4104,17 @@ namespace Metacode
     protected:
         mutable Menge::ConstString Name;
     public:
-        typedef Metabuf::Array<Meta_Resource *> TVectorMeta_Resource;
+        typedef stdex::auto_array<Meta_Include> TVectorMeta_Include;
+    
+        const TVectorMeta_Include & get_IncludesInclude() const
+        {
+            return this->includes_Meta_Include;
+        }
+    
+    protected:
+        TVectorMeta_Include includes_Meta_Include;
+    public:
+        typedef stdex::auto_array<Meta_Resource *> TVectorMeta_Resource;
     
         const TVectorMeta_Resource & get_IncludesResource() const
         {
@@ -4051,7 +4295,7 @@ namespace Metacode
             mutable mt::vec4f rect;
             mutable float width;
         public:
-            typedef Metabuf::Array<Meta_Kerning> TVectorMeta_Kerning;
+            typedef stdex::auto_array<Meta_Kerning> TVectorMeta_Kerning;
         
             const TVectorMeta_Kerning & get_IncludesKerning() const
             {
@@ -4066,7 +4310,7 @@ namespace Metacode
     protected:
         mutable float height;
     public:
-        typedef Metabuf::Array<Meta_Char> TVectorMeta_Char;
+        typedef stdex::auto_array<Meta_Char> TVectorMeta_Char;
     
         const TVectorMeta_Char & get_IncludesChar() const
         {
@@ -4229,7 +4473,6 @@ namespace Metacode
                     : Metabuf::Metadata()
                     , AnchorPoint_successful(false)
                     , Count_successful(false)
-                    , Mask_successful(false)
                     , Opacity_successful(false)
                     , Position_successful(false)
                     , Rotation_successful(false)
@@ -4316,46 +4559,6 @@ namespace Metacode
                     }
                 
                     (_self->*_method)( this->Count );
-                }
-                
-                bool has_Mask() const
-                {
-                    return Mask_successful;
-                }
-                
-                bool get_Mask( Menge::Polygon & _value ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    _value = this->Mask;
-                
-                    return true;
-                }
-                
-                bool swap_Mask( Menge::Polygon & _value ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    std::swap( _value, this->Mask);
-                
-                    return true;
-                }
-                
-                template<class C, class M>
-                void method_Mask( C * _self, M _method ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Mask );
                 }
                 
                 bool has_Opacity() const
@@ -4570,8 +4773,6 @@ namespace Metacode
                 mutable mt::vec2f AnchorPoint;
                 bool Count_successful;
                 mutable size_t Count;
-                bool Mask_successful;
-                mutable Menge::Polygon Mask;
                 bool Opacity_successful;
                 mutable float Opacity;
                 bool Position_successful;
@@ -4592,7 +4793,7 @@ namespace Metacode
             mutable bool Immutable;
             mutable size_t LayerIndex;
         public:
-            typedef Metabuf::Array<Meta_KeyFrame2D> TVectorMeta_KeyFrame2D;
+            typedef stdex::auto_array<Meta_KeyFrame2D> TVectorMeta_KeyFrame2D;
         
             const TVectorMeta_KeyFrame2D & get_IncludesKeyFrame2D() const
             {
@@ -4724,7 +4925,6 @@ namespace Metacode
                     : Metabuf::Metadata()
                     , AnchorPoint_successful(false)
                     , Count_successful(false)
-                    , Mask_successful(false)
                     , Opacity_successful(false)
                     , Position_successful(false)
                     , Rotation_successful(false)
@@ -4811,46 +5011,6 @@ namespace Metacode
                     }
                 
                     (_self->*_method)( this->Count );
-                }
-                
-                bool has_Mask() const
-                {
-                    return Mask_successful;
-                }
-                
-                bool get_Mask( Menge::Polygon & _value ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    _value = this->Mask;
-                
-                    return true;
-                }
-                
-                bool swap_Mask( Menge::Polygon & _value ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    std::swap( _value, this->Mask);
-                
-                    return true;
-                }
-                
-                template<class C, class M>
-                void method_Mask( C * _self, M _method ) const
-                {
-                    if( Mask_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Mask );
                 }
                 
                 bool has_Opacity() const
@@ -5065,8 +5225,6 @@ namespace Metacode
                 mutable mt::vec3f AnchorPoint;
                 bool Count_successful;
                 mutable size_t Count;
-                bool Mask_successful;
-                mutable Menge::Polygon Mask;
                 bool Opacity_successful;
                 mutable float Opacity;
                 bool Position_successful;
@@ -5087,7 +5245,7 @@ namespace Metacode
             mutable bool Immutable;
             mutable size_t LayerIndex;
         public:
-            typedef Metabuf::Array<Meta_KeyFrame3D> TVectorMeta_KeyFrame3D;
+            typedef stdex::auto_array<Meta_KeyFrame3D> TVectorMeta_KeyFrame3D;
         
             const TVectorMeta_KeyFrame3D & get_IncludesKeyFrame3D() const
             {
@@ -5102,7 +5260,7 @@ namespace Metacode
     protected:
         mutable size_t MaxIndex;
     public:
-        typedef Metabuf::Array<Meta_KeyFrames2D> TVectorMeta_KeyFrames2D;
+        typedef stdex::auto_array<Meta_KeyFrames2D> TVectorMeta_KeyFrames2D;
     
         const TVectorMeta_KeyFrames2D & get_IncludesKeyFrames2D() const
         {
@@ -5112,7 +5270,7 @@ namespace Metacode
     protected:
         TVectorMeta_KeyFrames2D includes_Meta_KeyFrames2D;
     public:
-        typedef Metabuf::Array<Meta_KeyFrames3D> TVectorMeta_KeyFrames3D;
+        typedef stdex::auto_array<Meta_KeyFrames3D> TVectorMeta_KeyFrames3D;
     
         const TVectorMeta_KeyFrames3D & get_IncludesKeyFrames3D() const
         {
@@ -5192,7 +5350,7 @@ namespace Metacode
         protected:
         protected:
         public:
-            typedef Metabuf::Array<Meta_Resource> TVectorMeta_Resource;
+            typedef stdex::auto_array<Meta_Resource> TVectorMeta_Resource;
         
             const TVectorMeta_Resource & get_IncludesResource() const
             {
@@ -5293,7 +5451,7 @@ namespace Metacode
         protected:
         protected:
         public:
-            typedef Metabuf::Array<Meta_Text> TVectorMeta_Text;
+            typedef stdex::auto_array<Meta_Text> TVectorMeta_Text;
         
             const TVectorMeta_Text & get_IncludesText() const
             {
@@ -5307,7 +5465,7 @@ namespace Metacode
     protected:
     protected:
     public:
-        typedef Metabuf::Array<Meta_Resources> TVectorMeta_Resources;
+        typedef stdex::auto_array<Meta_Resources> TVectorMeta_Resources;
     
         const TVectorMeta_Resources & get_IncludesResources() const
         {
@@ -5317,7 +5475,7 @@ namespace Metacode
     protected:
         TVectorMeta_Resources includes_Meta_Resources;
     public:
-        typedef Metabuf::Array<Meta_Scripts> TVectorMeta_Scripts;
+        typedef stdex::auto_array<Meta_Scripts> TVectorMeta_Scripts;
     
         const TVectorMeta_Scripts & get_IncludesScripts() const
         {
@@ -5327,7 +5485,7 @@ namespace Metacode
     protected:
         TVectorMeta_Scripts includes_Meta_Scripts;
     public:
-        typedef Metabuf::Array<Meta_Texts> TVectorMeta_Texts;
+        typedef stdex::auto_array<Meta_Texts> TVectorMeta_Texts;
     
         const TVectorMeta_Texts & get_IncludesTexts() const
         {
@@ -5564,7 +5722,7 @@ namespace Metacode
     protected:
     protected:
     public:
-        typedef Metabuf::Array<Meta_Text> TVectorMeta_Text;
+        typedef stdex::auto_array<Meta_Text> TVectorMeta_Text;
     
         const TVectorMeta_Text & get_IncludesText() const
         {

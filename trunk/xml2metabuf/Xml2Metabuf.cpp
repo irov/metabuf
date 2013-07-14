@@ -335,16 +335,22 @@ namespace Metabuf
 
         if( this->writeNodeAttribute_( _node, _xml_node ) == false )
         {
+            m_error << "Xml2Metabuf::writeNodeAttribute_: error write node " << _node->name << " attribute" << std::endl;
+
             return false;
         }
 
         if( this->writeNodeIncludes_( _node, _xml_node ) == false )
         {
+            m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes" << std::endl;
+
             return false;
         }
 
         if( this->writeNodeGenerators_( _node, _xml_node ) == false )
         {
+            m_error << "Xml2Metabuf::writeNodeGenerators_: error write node " << _node->name << " generators" << std::endl;
+
             return false;
         }
 
@@ -698,7 +704,10 @@ namespace Metabuf
             const XmlNode * node_inheritance = it->second;
 
             size_t generatorsCount;
-            this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance->name, generatorsCount );
+            if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
+            {
+                return false;
+            }
 
             this->writeSize( generatorsCount );
             this->writeSize( node_inheritance->id );
@@ -734,6 +743,11 @@ namespace Metabuf
                     m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
 
                     return false;
+                }
+                
+                if( node_generator->getNoWrite() == true )
+                {
+                    continue;
                 }
 
                 this->writeSize( node_generator->id );
@@ -787,7 +801,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, size_t & _count )
+    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, size_t & _count )
     {
         size_t count = 0;
 
@@ -801,7 +815,7 @@ namespace Metabuf
 
             const char * child_name = child.name();
 
-            if( _type != child_name )
+            if( _inheritance->name != child_name )
             {
                 continue;
             }
@@ -812,6 +826,24 @@ namespace Metabuf
             }
 
             if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+            {
+                continue;
+            }
+
+            pugi::xml_attribute attr_generator = child.attribute( _inheritance->generator.c_str() );
+
+            const char * value_generator = attr_generator.value();
+
+            const XmlNode * node_generator = _node->getGenerator( value_generator );
+
+            if( node_generator == 0 )
+            {
+                m_error << "Xml2Metabuf::getNodeGeneratorSize_: error node " << _node->name << " includes " << _inheritance->name << " not found generator " << value_generator << std::endl;
+
+                return false;
+            }
+
+            if( node_generator->getNoWrite() == true )
             {
                 continue;
             }

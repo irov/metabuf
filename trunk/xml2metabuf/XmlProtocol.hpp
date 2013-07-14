@@ -54,6 +54,8 @@ namespace Metabuf
         TMapNodes inheritances;
         TMapNodes generators;
 
+        bool noWrite;
+
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         
@@ -65,6 +67,8 @@ namespace Metabuf
                 
         std::string getName() const;
         std::string getScope() const;
+
+        bool getNoWrite() const;
 	};
     
 	class XmlProtocol
