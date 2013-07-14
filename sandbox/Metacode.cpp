@@ -18,9 +18,9 @@ namespace Metacode
         ar.read( version );
 
         _readVersion = version;
-        _needVersion = 21;
+        _needVersion = 29;
 
-        if( version != 21 )
+        if( version != 29 )
         {
             return false;
         }
@@ -69,6 +69,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -78,20 +79,38 @@ namespace Metacode
         {
         case 2:
             {
+                includes_Meta_Include.reserve( _count );
+                return true;
+                break;
+            }
+        case 3:
+            {
                 includes_Meta_Resource.reserve( _count );
                 return true;
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Meta_DataBlock::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes )
     {
-        (void)_buff;
-        (void)_size;
-        (void)_read;
-        (void)_includes;
+        switch( _includes )
+        {
+        case 2:
+            {
+                Meta_DataBlock::Meta_Include & metadata = includes_Meta_Include.emplace_back();
+    
+                if( metadata.parse( _buff, _size, _read, m_userData ) == false )
+                {
+                    return false;
+                }
+    
+                return true;
+                break;
+            }
+        }
     
         return false;
     }
@@ -100,7 +119,7 @@ namespace Metacode
     {
         switch( _generators )
         {
-        case 14:
+        case 15:
             {
                 Meta_DataBlock::Meta_ResourceAnimation * metadata = new Meta_DataBlock::Meta_ResourceAnimation ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -111,10 +130,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 8:
+        case 9:
             {
                 Meta_DataBlock::Meta_ResourceCursorICO * metadata = new Meta_DataBlock::Meta_ResourceCursorICO ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -125,10 +145,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 7:
+        case 8:
             {
                 Meta_DataBlock::Meta_ResourceCursorSystem * metadata = new Meta_DataBlock::Meta_ResourceCursorSystem ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -139,10 +160,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 4:
+        case 5:
             {
                 Meta_DataBlock::Meta_ResourceEmitterContainer * metadata = new Meta_DataBlock::Meta_ResourceEmitterContainer ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -153,10 +175,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 22:
+        case 23:
             {
                 Meta_DataBlock::Meta_ResourceExternal * metadata = new Meta_DataBlock::Meta_ResourceExternal ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -167,10 +190,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 5:
+        case 6:
             {
                 Meta_DataBlock::Meta_ResourceFont * metadata = new Meta_DataBlock::Meta_ResourceFont ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -181,10 +205,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 6:
+        case 7:
             {
                 Meta_DataBlock::Meta_ResourceGlyph * metadata = new Meta_DataBlock::Meta_ResourceGlyph ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -195,10 +220,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 15:
+        case 16:
             {
                 Meta_DataBlock::Meta_ResourceHIT * metadata = new Meta_DataBlock::Meta_ResourceHIT ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -209,10 +235,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 18:
+        case 19:
             {
                 Meta_DataBlock::Meta_ResourceImageCombineRGBAndAlpha * metadata = new Meta_DataBlock::Meta_ResourceImageCombineRGBAndAlpha ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -223,10 +250,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 3:
+        case 4:
             {
                 Meta_DataBlock::Meta_ResourceImageDefault * metadata = new Meta_DataBlock::Meta_ResourceImageDefault ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -237,10 +265,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 19:
+        case 20:
             {
                 Meta_DataBlock::Meta_ResourceImageMultiplyRGBAndAlpha * metadata = new Meta_DataBlock::Meta_ResourceImageMultiplyRGBAndAlpha ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -251,10 +280,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 16:
+        case 17:
             {
                 Meta_DataBlock::Meta_ResourceImageSolid * metadata = new Meta_DataBlock::Meta_ResourceImageSolid ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -265,10 +295,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 20:
+        case 21:
             {
                 Meta_DataBlock::Meta_ResourceImageSubstract * metadata = new Meta_DataBlock::Meta_ResourceImageSubstract ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -279,10 +310,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 17:
+        case 18:
             {
                 Meta_DataBlock::Meta_ResourceInternalObject * metadata = new Meta_DataBlock::Meta_ResourceInternalObject ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -293,10 +325,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 12:
+        case 13:
             {
                 Meta_DataBlock::Meta_ResourceMovie * metadata = new Meta_DataBlock::Meta_ResourceMovie ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -307,10 +340,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 10:
+        case 11:
             {
                 Meta_DataBlock::Meta_ResourcePlaylist * metadata = new Meta_DataBlock::Meta_ResourcePlaylist ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -321,10 +355,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 21:
+        case 22:
             {
                 Meta_DataBlock::Meta_ResourceShape * metadata = new Meta_DataBlock::Meta_ResourceShape ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -335,10 +370,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 9:
+        case 10:
             {
                 Meta_DataBlock::Meta_ResourceSound * metadata = new Meta_DataBlock::Meta_ResourceSound ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -349,10 +385,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 13:
+        case 14:
             {
                 Meta_DataBlock::Meta_ResourceVideo * metadata = new Meta_DataBlock::Meta_ResourceVideo ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -363,10 +400,11 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
-        case 11:
+        case 12:
             {
                 Meta_DataBlock::Meta_ResourceWindow * metadata = new Meta_DataBlock::Meta_ResourceWindow ();
                 if( metadata->parse( _buff, _size, _read, m_userData ) == false )
@@ -377,10 +415,61 @@ namespace Metacode
                 }
     
                 includes_Meta_Resource.push_back(metadata);
+    
                 return true;
                 break;
             }
         }
+    
+        return false;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_DataBlock::Meta_Include::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id )
+    {
+        switch( _id )
+        {
+        case 1:
+            {
+                if( this->read( _buff, _size, _read, this->Path ) == false )
+                {
+                    return false;
+                }
+    
+                return true;
+            }break;
+        }
+    
+        return false;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_DataBlock::Meta_Include::_preparationIncludes( unsigned int _includes, unsigned int _count )
+    {
+        (void)_includes;
+        (void)_count;
+    
+    
+        return false;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_DataBlock::Meta_Include::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes )
+    {
+        (void)_buff;
+        (void)_size;
+        (void)_read;
+        (void)_includes;
+    
+    
+        return false;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Meta_DataBlock::Meta_Include::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators )
+    {
+        (void)_buff;
+        (void)_size;
+        (void)_read;
+        (void)_generators;
+    
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -407,6 +496,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -414,6 +504,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -425,6 +516,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -435,6 +527,7 @@ namespace Metacode
         (void)_read;
         (void)_generators;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -444,6 +537,7 @@ namespace Metacode
         {
             return true;
         }
+    
     
         return false;
     }
@@ -464,6 +558,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -489,6 +584,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -498,6 +594,7 @@ namespace Metacode
         {
             return true;
         }
+    
     
         return false;
     }
@@ -525,6 +622,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -532,6 +630,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -543,6 +642,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -552,6 +652,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -575,6 +676,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -584,6 +686,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -593,6 +696,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -602,6 +706,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -624,6 +729,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -633,6 +739,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -642,6 +749,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -651,6 +759,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -682,6 +791,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -691,6 +801,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -700,6 +811,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -709,6 +821,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -719,18 +832,7 @@ namespace Metacode
             return true;
         }
     
-        switch( _id )
-        {
-        case 3:
-            {
-                if( this->read( _buff, _size, _read, this->External_Name ) == false )
-                {
-                    return false;
-                }
     
-                return true;
-            }break;
-        }
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -740,6 +842,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -749,6 +852,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -758,6 +862,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -833,6 +938,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -842,6 +948,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -851,6 +958,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -860,6 +968,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -882,6 +991,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -891,6 +1001,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -900,6 +1011,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -909,6 +1021,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -953,6 +1066,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -962,6 +1076,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -971,6 +1086,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -980,6 +1096,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1081,6 +1198,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1090,6 +1208,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1099,6 +1218,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1108,6 +1228,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1218,6 +1339,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1227,6 +1349,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1236,6 +1359,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1245,6 +1369,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1346,6 +1471,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1355,6 +1481,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1364,6 +1491,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1373,6 +1501,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1404,6 +1533,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1413,6 +1543,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1422,6 +1553,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1431,6 +1563,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1484,6 +1617,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1493,6 +1627,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1502,6 +1637,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1511,6 +1647,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1542,6 +1679,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1551,6 +1689,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1560,6 +1699,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1569,6 +1709,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1625,6 +1766,17 @@ namespace Metacode
     
                 return true;
             }break;
+        case 8:
+            {
+                if( this->read( _buff, _size, _read, this->Loop_Segment ) == false )
+                {
+                    return false;
+                }
+    
+                this->Loop_Segment_successful = true;
+    
+                return true;
+            }break;
         case 5:
             {
                 if( this->read( _buff, _size, _read, this->Width_Value ) == false )
@@ -1637,6 +1789,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1649,25 +1802,26 @@ namespace Metacode
     
         switch( _includes )
         {
-        case 10:
+        case 11:
             {
                 includes_Meta_MovieCamera3D.reserve( _count );
                 return true;
                 break;
             }
-        case 8:
+        case 9:
             {
                 includes_Meta_MovieLayer2D.reserve( _count );
                 return true;
                 break;
             }
-        case 9:
+        case 10:
             {
                 includes_Meta_MovieLayer3D.reserve( _count );
                 return true;
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1680,7 +1834,7 @@ namespace Metacode
     
         switch( _includes )
         {
-        case 10:
+        case 11:
             {
                 Meta_DataBlock::Meta_ResourceMovie::Meta_MovieCamera3D & metadata = includes_Meta_MovieCamera3D.emplace_back();
     
@@ -1692,7 +1846,7 @@ namespace Metacode
                 return true;
                 break;
             }
-        case 8:
+        case 9:
             {
                 Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer2D & metadata = includes_Meta_MovieLayer2D.emplace_back();
     
@@ -1704,7 +1858,7 @@ namespace Metacode
                 return true;
                 break;
             }
-        case 9:
+        case 10:
             {
                 Meta_DataBlock::Meta_ResourceMovie::Meta_MovieLayer3D & metadata = includes_Meta_MovieLayer3D.emplace_back();
     
@@ -1717,6 +1871,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1726,6 +1881,7 @@ namespace Metacode
         {
             return true;
         }
+    
     
         return false;
     }
@@ -1789,6 +1945,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1796,6 +1953,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -1807,6 +1965,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1816,6 +1975,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -1907,6 +2067,17 @@ namespace Metacode
     
                 return true;
             }break;
+        case 11:
+            {
+                if( this->read( _buff, _size, _read, this->Stretch ) == false )
+                {
+                    return false;
+                }
+    
+                this->Stretch_successful = true;
+    
+                return true;
+            }break;
         case 4:
             {
                 if( this->read( _buff, _size, _read, this->Type ) == false )
@@ -1917,6 +2088,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1924,6 +2096,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -1935,6 +2108,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1944,6 +2118,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2006,6 +2181,17 @@ namespace Metacode
     
                 return true;
             }break;
+        case 10:
+            {
+                if( this->read( _buff, _size, _read, this->PlayCount ) == false )
+                {
+                    return false;
+                }
+    
+                this->PlayCount_successful = true;
+    
+                return true;
+            }break;
         case 3:
             {
                 if( this->read( _buff, _size, _read, this->Source ) == false )
@@ -2024,6 +2210,17 @@ namespace Metacode
     
                 return true;
             }break;
+        case 11:
+            {
+                if( this->read( _buff, _size, _read, this->Stretch ) == false )
+                {
+                    return false;
+                }
+    
+                this->Stretch_successful = true;
+    
+                return true;
+            }break;
         case 4:
             {
                 if( this->read( _buff, _size, _read, this->Type ) == false )
@@ -2034,6 +2231,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2041,6 +2239,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -2052,6 +2251,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2061,6 +2261,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2097,6 +2298,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2116,6 +2318,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2141,6 +2344,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2151,6 +2355,7 @@ namespace Metacode
             return true;
         }
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2160,6 +2365,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_id;
+    
     
         return false;
     }
@@ -2175,6 +2381,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2195,6 +2402,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2204,6 +2412,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2233,6 +2442,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2240,6 +2450,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -2251,6 +2462,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2260,6 +2472,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2283,6 +2496,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2292,6 +2506,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2301,6 +2516,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2310,6 +2526,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2376,6 +2593,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2385,6 +2603,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2394,6 +2613,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2403,6 +2623,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2448,6 +2669,17 @@ namespace Metacode
     
                 return true;
             }break;
+        case 8:
+            {
+                if( this->read( _buff, _size, _read, this->File_FrameRate ) == false )
+                {
+                    return false;
+                }
+    
+                this->File_FrameRate_successful = true;
+    
+                return true;
+            }break;
         case 7:
             {
                 if( this->read( _buff, _size, _read, this->File_NoSeek ) == false )
@@ -2469,6 +2701,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2478,6 +2711,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2487,6 +2721,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2496,6 +2731,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2664,6 +2900,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2673,6 +2910,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2682,6 +2920,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2691,6 +2930,7 @@ namespace Metacode
         {
             return true;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2708,6 +2948,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2722,6 +2963,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2742,6 +2984,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2751,6 +2994,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2796,6 +3040,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2810,6 +3055,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2830,6 +3076,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2839,6 +3086,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2866,6 +3114,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2873,6 +3122,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -2884,6 +3134,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2893,6 +3144,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -2911,6 +3163,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2931,6 +3184,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2963,6 +3217,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -2972,6 +3227,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3012,6 +3268,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3026,6 +3283,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3046,6 +3304,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3055,6 +3314,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3082,17 +3342,6 @@ namespace Metacode
                 }
     
                 this->Count_successful = true;
-    
-                return true;
-            }break;
-        case 8:
-            {
-                if( this->read( _buff, _size, _read, this->Mask ) == false )
-                {
-                    return false;
-                }
-    
-                this->Mask_successful = true;
     
                 return true;
             }break;
@@ -3152,6 +3401,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3159,6 +3409,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3170,6 +3421,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3179,6 +3431,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3219,6 +3472,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3233,6 +3487,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3253,6 +3508,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3262,6 +3518,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3289,17 +3546,6 @@ namespace Metacode
                 }
     
                 this->Count_successful = true;
-    
-                return true;
-            }break;
-        case 8:
-            {
-                if( this->read( _buff, _size, _read, this->Mask ) == false )
-                {
-                    return false;
-                }
-    
-                this->Mask_successful = true;
     
                 return true;
             }break;
@@ -3359,6 +3605,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3366,6 +3613,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3377,6 +3625,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3387,6 +3636,7 @@ namespace Metacode
         (void)_read;
         (void)_generators;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3396,6 +3646,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_id;
+    
     
         return false;
     }
@@ -3423,6 +3674,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3467,6 +3719,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3477,6 +3730,7 @@ namespace Metacode
         (void)_read;
         (void)_generators;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3486,6 +3740,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_id;
+    
     
         return false;
     }
@@ -3501,6 +3756,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3521,6 +3777,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3530,6 +3787,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3548,6 +3806,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3555,6 +3814,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3566,6 +3826,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3575,6 +3836,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3593,6 +3855,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3600,6 +3863,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3611,6 +3875,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3621,6 +3886,7 @@ namespace Metacode
         (void)_read;
         (void)_generators;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3630,6 +3896,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_id;
+    
     
         return false;
     }
@@ -3645,6 +3912,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3665,6 +3933,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3674,6 +3943,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3692,6 +3962,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3699,6 +3970,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3710,6 +3982,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3720,6 +3993,7 @@ namespace Metacode
         (void)_read;
         (void)_generators;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3729,6 +4003,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_id;
+    
     
         return false;
     }
@@ -3744,6 +4019,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3764,6 +4040,7 @@ namespace Metacode
                 break;
             }
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3773,6 +4050,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }
@@ -3835,6 +4113,7 @@ namespace Metacode
                 return true;
             }break;
         }
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3842,6 +4121,7 @@ namespace Metacode
     {
         (void)_includes;
         (void)_count;
+    
     
         return false;
     }
@@ -3853,6 +4133,7 @@ namespace Metacode
         (void)_read;
         (void)_includes;
     
+    
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -3862,6 +4143,7 @@ namespace Metacode
         (void)_size;
         (void)_read;
         (void)_generators;
+    
     
         return false;
     }

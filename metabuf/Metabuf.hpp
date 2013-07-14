@@ -1,7 +1,8 @@
 #	pragma once
 
 #	include <metabuf/ArchiveReader.hpp>
-#   include <metabuf/Array.hpp>
+
+#   include <stdex/auto_array.h>
 
 namespace Metabuf
 {
