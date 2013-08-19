@@ -2492,8 +2492,10 @@ namespace Metacode
             public:
                 Meta_MovieLayer2D()
                     : Metabuf::Metadata()
+                    , MaskPolygon_successful(false)
                     , PlayCount_successful(false)
                     , Stretch_successful(false)
+                    , TimeRemap_successful(false)
                 {
                 }
             public:
@@ -2543,6 +2545,46 @@ namespace Metacode
                 void method_Index( C * _self, M _method ) const
                 {
                     (_self->*_method)( this->Index );
+                }
+                
+                bool has_MaskPolygon() const
+                {
+                    return MaskPolygon_successful;
+                }
+                
+                bool get_MaskPolygon( Menge::Polygon & _value ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->MaskPolygon;
+                
+                    return true;
+                }
+                
+                bool swap_MaskPolygon( Menge::Polygon & _value ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->MaskPolygon);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_MaskPolygon( C * _self, M _method ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->MaskPolygon );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -2705,6 +2747,46 @@ namespace Metacode
                     (_self->*_method)( this->Stretch );
                 }
                 
+                bool has_TimeRemap() const
+                {
+                    return TimeRemap_successful;
+                }
+                
+                bool get_TimeRemap( bool & _value ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->TimeRemap;
+                
+                    return true;
+                }
+                
+                bool swap_TimeRemap( bool & _value ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->TimeRemap);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_TimeRemap( C * _self, M _method ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->TimeRemap );
+                }
+                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -2732,6 +2814,8 @@ namespace Metacode
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
                 mutable size_t Index;
+                bool MaskPolygon_successful;
+                mutable Menge::Polygon MaskPolygon;
                 mutable Menge::ConstString Name;
                 mutable float Out;
                 mutable size_t Parent;
@@ -2741,6 +2825,8 @@ namespace Metacode
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
+                bool TimeRemap_successful;
+                mutable bool TimeRemap;
                 mutable Menge::ConstString Type;
             };
             
@@ -2750,8 +2836,10 @@ namespace Metacode
             public:
                 Meta_MovieLayer3D()
                     : Metabuf::Metadata()
+                    , MaskPolygon_successful(false)
                     , PlayCount_successful(false)
                     , Stretch_successful(false)
+                    , TimeRemap_successful(false)
                 {
                 }
             public:
@@ -2801,6 +2889,46 @@ namespace Metacode
                 void method_Index( C * _self, M _method ) const
                 {
                     (_self->*_method)( this->Index );
+                }
+                
+                bool has_MaskPolygon() const
+                {
+                    return MaskPolygon_successful;
+                }
+                
+                bool get_MaskPolygon( Menge::Polygon & _value ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->MaskPolygon;
+                
+                    return true;
+                }
+                
+                bool swap_MaskPolygon( Menge::Polygon & _value ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->MaskPolygon);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_MaskPolygon( C * _self, M _method ) const
+                {
+                    if( MaskPolygon_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->MaskPolygon );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -2963,6 +3091,46 @@ namespace Metacode
                     (_self->*_method)( this->Stretch );
                 }
                 
+                bool has_TimeRemap() const
+                {
+                    return TimeRemap_successful;
+                }
+                
+                bool get_TimeRemap( bool & _value ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->TimeRemap;
+                
+                    return true;
+                }
+                
+                bool swap_TimeRemap( bool & _value ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->TimeRemap);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_TimeRemap( C * _self, M _method ) const
+                {
+                    if( TimeRemap_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->TimeRemap );
+                }
+                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -2990,6 +3158,8 @@ namespace Metacode
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
                 mutable size_t Index;
+                bool MaskPolygon_successful;
+                mutable Menge::Polygon MaskPolygon;
                 mutable Menge::ConstString Name;
                 mutable float Out;
                 mutable size_t Parent;
@@ -2999,6 +3169,8 @@ namespace Metacode
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
+                bool TimeRemap_successful;
+                mutable bool TimeRemap;
                 mutable Menge::ConstString Type;
             };
             
@@ -5256,6 +5428,59 @@ namespace Metacode
             TVectorMeta_KeyFrame3D includes_Meta_KeyFrame3D;
         };
         
+        class Meta_TimeRemap
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_TimeRemap()
+                : Metabuf::Metadata()
+            {
+            }
+        public:
+            const size_t & get_LayerIndex() const
+            {
+                return this->LayerIndex;
+            }
+            
+            void swap_LayerIndex( size_t & _value ) const
+            {
+                std::swap( _value, this->LayerIndex);
+            }
+            
+            template<class C, class M>
+            void method_LayerIndex( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->LayerIndex );
+            }
+            
+            const Menge::Floats & get_Time() const
+            {
+                return this->Time;
+            }
+            
+            void swap_Time( Menge::Floats & _value ) const
+            {
+                std::swap( _value, this->Time);
+            }
+            
+            template<class C, class M>
+            void method_Time( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Time );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
+            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable size_t LayerIndex;
+            mutable Menge::Floats Time;
+        };
+        
     protected:
     protected:
         mutable size_t MaxIndex;
@@ -5279,6 +5504,16 @@ namespace Metacode
     
     protected:
         TVectorMeta_KeyFrames3D includes_Meta_KeyFrames3D;
+    public:
+        typedef stdex::auto_array<Meta_TimeRemap> TVectorMeta_TimeRemap;
+    
+        const TVectorMeta_TimeRemap & get_IncludesTimeRemap() const
+        {
+            return this->includes_Meta_TimeRemap;
+        }
+    
+    protected:
+        TVectorMeta_TimeRemap includes_Meta_TimeRemap;
     };
     
     class Meta_Pak

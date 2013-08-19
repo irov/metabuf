@@ -1,4 +1,4 @@
-<Protocol Version = "29">
+<Protocol Version = "32">
     <Type Name="Menge::String" Evict="string"/>
     <Type Name="Menge::WString" Evict="wstring"/>
     <Type Name="Menge::ConstString" Evict="string"/>
@@ -12,6 +12,7 @@
     <Type Name="Menge::ColourValue" Evict="float4"/>
     <Type Name="Menge::GlyphChar" Evict="utf8"/>
     <Type Name="Menge::Polygon" Evict="floats"/>
+    <Type Name="Menge::Floats" Evict="floats"/>
     
     <Node Name="DataBlock">
         <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
@@ -119,9 +120,11 @@
                 <Attribute Name="Type" Type="Menge::ConstString" Required="1"/>
                 <Attribute Name="Index" Type="size_t" Required="1"/>
                 <Attribute Name="In" Type="float" Required="1"/>
-                <Attribute Name="Out" Type="float" Required="1"/>
+                <Attribute Name="Out" Type="float" Required="1"/>                
                 <Attribute Name="StartInterval" Type="float" Required="1"/>
                 <Attribute Name="BlendingMode" Type="Menge::ConstString" Required="1"/> 
+                <Attribute Name="TimeRemap" Type="bool"/>
+                <Attribute Name="MaskPolygon" Type="Menge::Polygon"/>
                 <Attribute Name="PlayCount" Type="size_t"/>
                 <Attribute Name="Stretch" Type="float"/>
             </Node>
@@ -136,6 +139,8 @@
                 <Attribute Name="Out" Type="float" Required="1"/>
                 <Attribute Name="StartInterval" Type="float" Required="1"/>
                 <Attribute Name="BlendingMode" Type="Menge::ConstString" Required="1"/>
+                <Attribute Name="TimeRemap" Type="bool"/>
+                <Attribute Name="MaskPolygon" Type="Menge::Polygon"/>
                 <Attribute Name="PlayCount" Type="size_t"/>
                 <Attribute Name="Stretch" Type="float"/>
             </Node>
@@ -270,6 +275,11 @@
     
     <Node Name="KeyFramesPack">
         <Attribute Name="MaxIndex" Type="size_t" Required="1"/>
+        
+        <Node Name="TimeRemap">
+            <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
+            <Attribute Name="Time" Type="Menge::Floats" Required="1"/>
+        </Node>
         
         <Node Name="KeyFrames2D">
             <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
