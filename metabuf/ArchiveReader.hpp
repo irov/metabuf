@@ -72,10 +72,10 @@ namespace Metabuf
 
     public:
         template<class T>
-        inline T current_buff() const
+        inline const T * current_buff() const
         {
             const unsigned char * current = m_buff + m_read;
-            return reinterpret_cast<T>(current);
+            return reinterpret_cast<const T *>(current);
         }
 
         inline void skip( size_t _size )
