@@ -647,7 +647,7 @@ namespace Metabuf
         this->write(_ss) << "        unsigned int size;" << std::endl;
         this->write(_ss) << "        ar.readSize( size );" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        const char * value = ar.current_buff<const char *>();" << std::endl;
+        this->write(_ss) << "        const char * value = ar.current_buff<char>();" << std::endl;
         this->write(_ss) << "        ar.skip( size );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "        _stringSize = size;" << std::endl;
