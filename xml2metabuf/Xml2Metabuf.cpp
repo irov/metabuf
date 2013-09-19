@@ -168,7 +168,11 @@ namespace Metabuf
             size_t count = floats.size();
 
             _metabuf->writeSize( count );
-            _metabuf->writeCount( &floats[0], count );
+
+			if( count > 0 )
+			{
+				_metabuf->writeCount( &floats[0], count );
+			}
 
             return true;
         }
