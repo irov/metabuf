@@ -11,6 +11,11 @@ namespace Metabuf
 	class Metadata
 	{
 	public:
+		Metadata();
+		virtual ~Metadata();
+
+	public:
+		bool parseRoot( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData );
 		bool parse( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData );
 
     protected:
@@ -42,6 +47,9 @@ namespace Metabuf
         virtual bool _preparationIncludes( unsigned int _includes, unsigned int _count ) = 0;
 		virtual bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) = 0;
         virtual bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) = 0;
+
+	protected:
+		virtual size_t getId() const = 0;
 
     protected:
         void * m_userData;

@@ -42,6 +42,7 @@ namespace Metabuf
         bool writeSourceNode_( std::stringstream & _ss, const XmlNode * _node );
 
     protected:
+		bool writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
