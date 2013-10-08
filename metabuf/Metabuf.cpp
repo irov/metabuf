@@ -2,6 +2,36 @@
 
 namespace Metabuf
 {
+	//////////////////////////////////////////////////////////////////////////
+	Metadata::Metadata()
+		: m_userData(nullptr)
+	{
+	}
+	//////////////////////////////////////////////////////////////////////////
+	Metadata::~Metadata()
+	{
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Metadata::parseRoot( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData )
+	{
+		if( _size == _read )
+		{
+			return true;
+		}
+
+		unsigned int rootId;
+		this->readSize( _buff, _size, _read, rootId );
+
+		unsigned int metaId = this->getId();
+		if( rootId != metaId )
+		{
+			return false;
+		}
+
+		bool result = this->parse( _buff, _size, _read, _userData );
+
+		return result;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Metadata::parse( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData )
     {

@@ -160,91 +160,16 @@ namespace Metabuf
 	bool Xml2Metacode::writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node )
 	{
 		this->write(_ss) << "public:" << std::endl;
-		
-		this->write(_ss) << "    " << _node->getName() << "()" << std::endl;
+		this->write(_ss) << "    " << _node->getName() << "();" << std::endl;
 
-		if( _node->inheritance.empty() == false )
+		if( _node->inheritances.empty() == false )
 		{
-            const XmlNode * node_inheritance = _node->node_inheritance;
-
-			this->write(_ss) << "        : " << node_inheritance->getName() << "()" << std::endl;
-		}
-		else
-		{
-			this->write(_ss) << "        : Metabuf::Metadata()" << std::endl;
+			this->write(_ss) << "    ~" << _node->getName() << "();" << std::endl;  
 		}
 
-		for( TMapAttributes::const_iterator
-			it = _node->attributes.begin(),
-			it_end = _node->attributes.end();
-		it != it_end;
-		++it )
-		{
-			const XmlAttribute * attr = &it->second;
-
-			if( attr->required == false )
-			{
-				this->write(_ss) << "        , " << attr->name << "_successful(false)" << std::endl;
-			}
-		}
-
-		for( TMapMembers::const_iterator
-			it = _node->members.begin(),
-			it_end = _node->members.end();
-		it != it_end;
-		++it )
-		{
-			const XmlMember * member = &it->second;
-
-			for( TMapAttributes::const_iterator
-				it = member->attributes.begin(),
-				it_end = member->attributes.end();
-			it != it_end;
-			++it )
-			{
-				const XmlAttribute * attr = &it->second;
-
-				if( attr->required == false )
-				{
-					this->write(_ss) << "        , " << member->name << "_" << attr->name << "_successful(false)" << std::endl;
-				}
-			}
-		}
-
-		this->write(_ss) << "    {" << std::endl;
-		this->write(_ss) << "    }" << std::endl;
-
-        if( _node->inheritances.empty() == false )
-        {
-            this->write(_ss) << "    ~" << _node->getName() << "()" << std::endl;
-            this->write(_ss) << "    {" << std::endl;
-
-            for( TMapNodes::const_iterator
-                it = _node->inheritances.begin(),
-                it_end = _node->inheritances.end();
-            it != it_end;
-            ++it )
-            {
-                const XmlNode * node_include = it->second;
-
-                this->write(_ss) << "        for( TVector" << node_include->getName() << "::const_iterator" << std::endl;
-                this->write(_ss) << "            it = includes_" << node_include->getName() << ".begin()," << std::endl;
-                this->write(_ss) << "            it_end = includes_" << node_include->getName() << ".end();" << std::endl;
-                this->write(_ss) << "        it != it_end;" << std::endl;
-                this->write(_ss) << "        ++it )" << std::endl;
-                this->write(_ss) << "        {" << std::endl;
-                this->write(_ss) << "            delete *it;" << std::endl;
-                this->write(_ss) << "        }" << std::endl;
-            }
-
-            this->write(_ss) << "    }" << std::endl;
-        }
-        else if( _node->generator.empty() == false )
-        {
-            this->write(_ss) << "    virtual ~" << _node->getName() << "()" << std::endl;
-            this->write(_ss) << "    {" << std::endl;
-            this->write(_ss) << "    }" << std::endl;
-        }
+		this->write(_ss) << std::endl;
+		this->write(_ss) << "public:" << std::endl;
+		this->write(_ss) << "    unsigned int getId() const override;" << std::endl;
 		
 		return true;
 	}
@@ -682,6 +607,11 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlNode * _node )
     {
+		if( this->writeSourceConstructor_( _ss, _node ) == false )
+		{
+			return false;
+		}
+
         if( this->writeSourceAttributeReader_( _ss, _node ) == false )
         {
             return false;
@@ -709,6 +639,98 @@ namespace Metabuf
 
         return true;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node )
+	{
+		this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+		this->write(_ss) << _node->getScope() << "::" << _node->getName() << "()" << std::endl;
+
+		if( _node->inheritance.empty() == false )
+		{
+			const XmlNode * node_inheritance = _node->node_inheritance;
+
+			this->write(_ss) << "    : " << node_inheritance->getName() << "()" << std::endl;
+		}
+		else
+		{
+			this->write(_ss) << "    : Metabuf::Metadata()" << std::endl;
+		}
+
+		for( TMapAttributes::const_iterator
+			it = _node->attributes.begin(),
+			it_end = _node->attributes.end();
+		it != it_end;
+		++it )
+		{
+			const XmlAttribute * attr = &it->second;
+
+			if( attr->required == false )
+			{
+				this->write(_ss) << "    , " << attr->name << "_successful(false)" << std::endl;
+			}
+		}
+
+		for( TMapMembers::const_iterator
+			it = _node->members.begin(),
+			it_end = _node->members.end();
+		it != it_end;
+		++it )
+		{
+			const XmlMember * member = &it->second;
+
+			for( TMapAttributes::const_iterator
+				it = member->attributes.begin(),
+				it_end = member->attributes.end();
+			it != it_end;
+			++it )
+			{
+				const XmlAttribute * attr = &it->second;
+
+				if( attr->required == false )
+				{
+					this->write(_ss) << "    , " << member->name << "_" << attr->name << "_successful(false)" << std::endl;
+				}
+			}
+		}
+
+		this->write(_ss) << "{" << std::endl;
+		this->write(_ss) << "}" << std::endl;		
+
+		if( _node->inheritances.empty() == false )
+		{
+			this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+			this->write(_ss) << _node->getScope() << "::~" << _node->getName() << "()" << std::endl;
+			this->write(_ss) << "{" << std::endl;
+
+			for( TMapNodes::const_iterator
+				it = _node->inheritances.begin(),
+				it_end = _node->inheritances.end();
+			it != it_end;
+			++it )
+			{
+				const XmlNode * node_include = it->second;
+
+				this->write(_ss) << "    for( TVector" << node_include->getName() << "::const_iterator" << std::endl;
+				this->write(_ss) << "        it = includes_" << node_include->getName() << ".begin()," << std::endl;
+				this->write(_ss) << "        it_end = includes_" << node_include->getName() << ".end();" << std::endl;
+				this->write(_ss) << "    it != it_end;" << std::endl;
+				this->write(_ss) << "    ++it )" << std::endl;
+				this->write(_ss) << "    {" << std::endl;
+				this->write(_ss) << "        delete *it;" << std::endl;
+				this->write(_ss) << "    }" << std::endl;
+			}
+
+			this->write(_ss) << "}" << std::endl;
+		}
+
+		this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;		
+		this->write(_ss) << "unsigned int " << _node->getScope() << "::getId() const" << std::endl;
+		this->write(_ss) << "{" << std::endl;
+		this->write(_ss) << "    return " << _node->id << ";" << std::endl;
+		this->write(_ss) << "}" << std::endl;
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
     {

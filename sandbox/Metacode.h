@@ -14,21 +14,11 @@ namespace Metacode
         : public Metabuf::Metadata
     { 
     public:
-        Meta_DataBlock()
-            : Metabuf::Metadata()
-        {
-        }
-        ~Meta_DataBlock()
-        {
-            for( TVectorMeta_Resource::const_iterator
-                it = includes_Meta_Resource.begin(),
-                it_end = includes_Meta_Resource.end();
-            it != it_end;
-            ++it )
-            {
-                delete *it;
-            }
-        }
+        Meta_DataBlock();
+        ~Meta_DataBlock();
+    
+    public:
+        unsigned int getId() const override;
     public:
         const Menge::ConstString & get_Name() const
         {
@@ -56,10 +46,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Include()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_Include();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_Path() const
             {
@@ -92,13 +82,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Resource()
-                : Metabuf::Metadata()
-            {
-            }
-            virtual ~Meta_Resource()
-            {
-            }
+            Meta_Resource();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_Name() const
             {
@@ -148,10 +135,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceAnimation()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceAnimation();
+        
+        public:
+            unsigned int getId() const override;
         public:
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -163,10 +150,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Sequence()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_Sequence();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const float & get_Delay() const
                 {
@@ -230,10 +217,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceCursorICO()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceCursorICO();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -266,10 +253,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceCursorSystem()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceCursorSystem();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -298,14 +285,126 @@ namespace Metacode
             mutable Menge::ConstString File_Path;
         };
         
+        class Meta_ResourceEmitter
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceEmitter();
+        
+        public:
+            unsigned int getId() const override;
+        public:
+            const Menge::ConstString & get_Container_Name() const
+            {
+                return this->Container_Name;
+            }
+            
+            void swap_Container_Name( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->Container_Name);
+            }
+            
+            template<class C, class M>
+            void method_Container_Name( C * _self, M _method )
+            {
+                (_self->*_method)( this->Container_Name );
+            }
+            
+            const Menge::ConstString & get_Emitter_Name() const
+            {
+                return this->Emitter_Name;
+            }
+            
+            void swap_Emitter_Name( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->Emitter_Name);
+            }
+            
+            template<class C, class M>
+            void method_Emitter_Name( C * _self, M _method )
+            {
+                (_self->*_method)( this->Emitter_Name );
+            }
+            
+            const bool & get_EmitterRelative_Value() const
+            {
+                return this->EmitterRelative_Value;
+            }
+            
+            void swap_EmitterRelative_Value( bool & _value ) const
+            {
+                std::swap(_value, this->EmitterRelative_Value);
+            }
+            
+            template<class C, class M>
+            void method_EmitterRelative_Value( C * _self, M _method )
+            {
+                (_self->*_method)( this->EmitterRelative_Value );
+            }
+            
+            bool has_Offset_Value() const
+            {
+                return Offset_Value_successful;
+            }
+            
+            bool get_Offset_Value( mt::vec2f & _value ) const
+            {
+                if( Offset_Value_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Offset_Value;
+            
+                return true;
+            }
+            
+            bool swap_Offset_Value( mt::vec2f & _value ) const
+            {
+                if( Offset_Value_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Offset_Value);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Offset_Value( C * _self, M _method )
+            {
+                if( Offset_Value_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Offset_Value );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
+            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::ConstString Container_Name;
+            mutable Menge::ConstString Emitter_Name;
+            mutable bool EmitterRelative_Value;
+            bool Offset_Value_successful;
+            mutable mt::vec2f Offset_Value;
+        };
+        
         class Meta_ResourceEmitterContainer
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceEmitterContainer()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceEmitterContainer();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -355,10 +454,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceExternal()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceExternal();
+        
+        public:
+            unsigned int getId() const override;
         public:
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -374,14 +473,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceFont()
-                : Meta_Resource()
-                , Color_Value_successful(false)
-                , Image_Codec_successful(false)
-                , OutlineImage_Codec_successful(false)
-                , OutlineImage_Path_successful(false)
-            {
-            }
+            Meta_ResourceFont();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Color_Value() const
             {
@@ -599,10 +694,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceGlyph()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceGlyph();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_GlyphPath_Path() const
             {
@@ -635,12 +730,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceHIT()
-                : Meta_Resource()
-                , File_Codec_successful(false)
-                , File_Converter_successful(false)
-            {
-            }
+            Meta_ResourceHIT();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_File_Codec() const
             {
@@ -757,18 +850,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageCombineRGBAndAlpha()
-                : Meta_Resource()
-                , File_Alpha_successful(false)
-                , File_CodecAlpha_successful(false)
-                , File_CodecRGB_successful(false)
-                , File_PathAlpha_successful(false)
-                , File_PathRGB_successful(false)
-                , File_UV_successful(false)
-                , File_WrapX_successful(false)
-                , File_WrapY_successful(false)
-            {
-            }
+            Meta_ResourceImageCombineRGBAndAlpha();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_File_Alpha() const
             {
@@ -1120,18 +1205,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageDefault()
-                : Meta_Resource()
-                , File_Alpha_successful(false)
-                , File_Codec_successful(false)
-                , File_MaxSize_successful(false)
-                , File_Rotate_successful(false)
-                , File_TextureSize_successful(false)
-                , File_UV_successful(false)
-                , File_WrapX_successful(false)
-                , File_WrapY_successful(false)
-            {
-            }
+            Meta_ResourceImageDefault();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_File_Alpha() const
             {
@@ -1500,18 +1577,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageMultiplyRGBAndAlpha()
-                : Meta_Resource()
-                , File_WrapX_successful(false)
-                , File_WrapY_successful(false)
-                , FileAlpha_Codec_successful(false)
-                , FileAlpha_Path_successful(false)
-                , FileAlpha_UV_successful(false)
-                , FileRGB_Codec_successful(false)
-                , FileRGB_Path_successful(false)
-                , FileRGB_UV_successful(false)
-            {
-            }
+            Meta_ResourceImageMultiplyRGBAndAlpha();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_File_WrapX() const
             {
@@ -1863,10 +1932,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageSolid()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceImageSolid();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ColourValue & get_Color_Value() const
             {
@@ -1916,12 +1985,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageSubstract()
-                : Meta_Resource()
-                , Image_Alpha_successful(false)
-                , Image_Rotate_successful(false)
-            {
-            }
+            Meta_ResourceImageSubstract();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Image_Alpha() const
             {
@@ -2055,10 +2122,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceInternalObject()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceInternalObject();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_Internal_Group() const
             {
@@ -2108,16 +2175,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceMovie()
-                : Meta_Resource()
-                , Duration_Value_successful(false)
-                , FrameDuration_Value_successful(false)
-                , Height_Value_successful(false)
-                , KeyFramesPackPath_Path_successful(false)
-                , Loop_Segment_successful(false)
-                , Width_Value_successful(false)
-            {
-            }
+            Meta_ResourceMovie();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Duration_Value() const
             {
@@ -2237,6 +2298,46 @@ namespace Metacode
                 }
             
                 (_self->*_method)( this->Height_Value );
+            }
+            
+            bool has_KeyFramesPackPath_Codec() const
+            {
+                return KeyFramesPackPath_Codec_successful;
+            }
+            
+            bool get_KeyFramesPackPath_Codec( Menge::ConstString & _value ) const
+            {
+                if( KeyFramesPackPath_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->KeyFramesPackPath_Codec;
+            
+                return true;
+            }
+            
+            bool swap_KeyFramesPackPath_Codec( Menge::ConstString & _value ) const
+            {
+                if( KeyFramesPackPath_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->KeyFramesPackPath_Codec);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_KeyFramesPackPath_Codec( C * _self, M _method )
+            {
+                if( KeyFramesPackPath_Codec_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->KeyFramesPackPath_Codec );
             }
             
             bool has_KeyFramesPackPath_Path() const
@@ -2369,10 +2470,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_MovieCamera3D()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_MovieCamera3D();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const float & get_CameraAspect() const
                 {
@@ -2490,14 +2591,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_MovieLayer2D()
-                    : Metabuf::Metadata()
-                    , MaskPolygon_successful(false)
-                    , PlayCount_successful(false)
-                    , Stretch_successful(false)
-                    , TimeRemap_successful(false)
-                {
-                }
+                Meta_MovieLayer2D();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const Menge::ConstString & get_BlendingMode() const
                 {
@@ -2834,14 +2931,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_MovieLayer3D()
-                    : Metabuf::Metadata()
-                    , MaskPolygon_successful(false)
-                    , PlayCount_successful(false)
-                    , Stretch_successful(false)
-                    , TimeRemap_successful(false)
-                {
-                }
+                Meta_MovieLayer3D();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const Menge::ConstString & get_BlendingMode() const
                 {
@@ -3182,6 +3275,8 @@ namespace Metacode
             mutable float FrameDuration_Value;
             bool Height_Value_successful;
             mutable float Height_Value;
+            bool KeyFramesPackPath_Codec_successful;
+            mutable Menge::ConstString KeyFramesPackPath_Codec;
             bool KeyFramesPackPath_Path_successful;
             mutable Menge::ConstString KeyFramesPackPath_Path;
             bool Loop_Segment_successful;
@@ -3224,12 +3319,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourcePlaylist()
-                : Meta_Resource()
-                , Loop_Value_successful(false)
-                , Shuffle_Value_successful(false)
-            {
-            }
+            Meta_ResourcePlaylist();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Loop_Value() const
             {
@@ -3321,10 +3414,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Tracks()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_Tracks();
+            
+            public:
+                unsigned int getId() const override;
             public:
             protected:
                 bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -3336,11 +3429,10 @@ namespace Metacode
                     : public Metabuf::Metadata
                 { 
                 public:
-                    Meta_Track()
-                        : Metabuf::Metadata()
-                        , Codec_successful(false)
-                    {
-                    }
+                    Meta_Track();
+                
+                public:
+                    unsigned int getId() const override;
                 public:
                     bool has_Codec() const
                     {
@@ -3447,10 +3539,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceShape()
-                : Meta_Resource()
-            {
-            }
+            Meta_ResourceShape();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::Polygon & get_Polygon_Value() const
             {
@@ -3483,14 +3575,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceSound()
-                : Meta_Resource()
-                , DefaultVolume_Value_successful(false)
-                , File_Codec_successful(false)
-                , File_Converter_successful(false)
-                , IsStreamable_Value_successful(false)
-            {
-            }
+            Meta_ResourceSound();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_DefaultVolume_Value() const
             {
@@ -3691,15 +3779,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceVideo()
-                : Meta_Resource()
-                , File_Alpha_successful(false)
-                , File_Codec_successful(false)
-                , File_Converter_successful(false)
-                , File_FrameRate_successful(false)
-                , File_NoSeek_successful(false)
-            {
-            }
+            Meta_ResourceVideo();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_File_Alpha() const
             {
@@ -3942,11 +4025,10 @@ namespace Metacode
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceWindow()
-                : Meta_Resource()
-                , WindowBackground_ResourceImageName_successful(false)
-            {
-            }
+            Meta_ResourceWindow();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_WindowBackground_ResourceImageName() const
             {
@@ -4301,10 +4383,10 @@ namespace Metacode
         : public Metabuf::Metadata
     { 
     public:
-        Meta_Font()
-            : Metabuf::Metadata()
-        {
-        }
+        Meta_Font();
+    
+    public:
+        unsigned int getId() const override;
     public:
         const float & get_height() const
         {
@@ -4332,10 +4414,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Char()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_Char();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::GlyphChar & get_code() const
             {
@@ -4411,10 +4493,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Kerning()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_Kerning();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const float & get_advance() const
                 {
@@ -4497,10 +4579,10 @@ namespace Metacode
         : public Metabuf::Metadata
     { 
     public:
-        Meta_KeyFramesPack()
-            : Metabuf::Metadata()
-        {
-        }
+        Meta_KeyFramesPack();
+    
+    public:
+        unsigned int getId() const override;
     public:
         const size_t & get_MaxIndex() const
         {
@@ -4528,12 +4610,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_KeyFrames2D()
-                : Metabuf::Metadata()
-                , Count_successful(false)
-                , Immutable_successful(false)
-            {
-            }
+            Meta_KeyFrames2D();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Count() const
             {
@@ -4641,17 +4721,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_KeyFrame2D()
-                    : Metabuf::Metadata()
-                    , AnchorPoint_successful(false)
-                    , Count_successful(false)
-                    , Opacity_successful(false)
-                    , Position_successful(false)
-                    , Rotation_successful(false)
-                    , Scale_successful(false)
-                    , Volume_successful(false)
-                {
-                }
+                Meta_KeyFrame2D();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 bool has_AnchorPoint() const
                 {
@@ -4980,12 +5053,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_KeyFrames3D()
-                : Metabuf::Metadata()
-                , Count_successful(false)
-                , Immutable_successful(false)
-            {
-            }
+            Meta_KeyFrames3D();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_Count() const
             {
@@ -5093,17 +5164,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_KeyFrame3D()
-                    : Metabuf::Metadata()
-                    , AnchorPoint_successful(false)
-                    , Count_successful(false)
-                    , Opacity_successful(false)
-                    , Position_successful(false)
-                    , Rotation_successful(false)
-                    , Scale_successful(false)
-                    , Volume_successful(false)
-                {
-                }
+                Meta_KeyFrame3D();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 bool has_AnchorPoint() const
                 {
@@ -5432,10 +5496,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_TimeRemap()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_TimeRemap();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const size_t & get_LayerIndex() const
             {
@@ -5520,10 +5584,10 @@ namespace Metacode
         : public Metabuf::Metadata
     { 
     public:
-        Meta_Pak()
-            : Metabuf::Metadata()
-        {
-        }
+        Meta_Pak();
+    
+    public:
+        unsigned int getId() const override;
     public:
     protected:
         bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -5535,10 +5599,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Resources()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_Resources();
+        
+        public:
+            unsigned int getId() const override;
         public:
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -5550,10 +5614,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Resource()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_Resource();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const Menge::ConstString & get_Path() const
                 {
@@ -5600,10 +5664,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Scripts()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_Scripts();
+        
+        public:
+            unsigned int getId() const override;
         public:
             const Menge::ConstString & get_Path() const
             {
@@ -5636,10 +5700,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Texts()
-                : Metabuf::Metadata()
-            {
-            }
+            Meta_Texts();
+        
+        public:
+            unsigned int getId() const override;
         public:
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -5651,10 +5715,10 @@ namespace Metacode
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Text()
-                    : Metabuf::Metadata()
-                {
-                }
+                Meta_Text();
+            
+            public:
+                unsigned int getId() const override;
             public:
                 const Menge::ConstString & get_Path() const
                 {
@@ -5735,10 +5799,10 @@ namespace Metacode
         : public Metabuf::Metadata
     { 
     public:
-        Meta_Texts()
-            : Metabuf::Metadata()
-        {
-        }
+        Meta_Texts();
+    
+    public:
+        unsigned int getId() const override;
     public:
     protected:
         bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
@@ -5750,14 +5814,10 @@ namespace Metacode
             : public Metabuf::Metadata
         { 
         public:
-            Meta_Text()
-                : Metabuf::Metadata()
-                , CharOffset_successful(false)
-                , Font_successful(false)
-                , LineOffset_successful(false)
-                , Value_successful(false)
-            {
-            }
+            Meta_Text();
+        
+        public:
+            unsigned int getId() const override;
         public:
             bool has_CharOffset() const
             {

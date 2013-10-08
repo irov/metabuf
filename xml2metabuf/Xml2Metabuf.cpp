@@ -267,6 +267,9 @@ namespace Metabuf
             return false;
         }
 
+		size_t id = node_root->id;
+		this->writeSize( id );
+
 		if( this->writeNode_( node_root, root ) == false )
 		{
             m_error << "Xml2Metabuf::convert: invalid write node" << root_name << std::endl;
