@@ -1,5 +1,6 @@
 #	pragma once
 
+#	include <stdint.h>
 #	include <memory.h>
 
 namespace Metabuf
@@ -52,14 +53,14 @@ namespace Metabuf
             m_read += _size;
         }
 
-        inline void readSize( unsigned int & _size )
+        inline void readSize( size_t & _size )
         {
             unsigned char size_1;
             this->readPOD( size_1 );
 
             if( size_1 == 255 )
             {
-                unsigned int size_2;
+                size_t size_2;
                 this->readPOD( size_2 );
 
                 _size = size_2;
