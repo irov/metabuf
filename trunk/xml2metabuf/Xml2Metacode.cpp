@@ -169,7 +169,7 @@ namespace Metabuf
 
 		this->write(_ss) << std::endl;
 		this->write(_ss) << "public:" << std::endl;
-		this->write(_ss) << "    unsigned int getId() const override;" << std::endl;
+		this->write(_ss) << "    size_t getId() const override;" << std::endl;
 		
 		return true;
 	}
@@ -724,7 +724,7 @@ namespace Metabuf
 		}
 
 		this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;		
-		this->write(_ss) << "unsigned int " << _node->getScope() << "::getId() const" << std::endl;
+		this->write(_ss) << "size_t " << _node->getScope() << "::getId() const" << std::endl;
 		this->write(_ss) << "{" << std::endl;
 		this->write(_ss) << "    return " << _node->id << ";" << std::endl;
 		this->write(_ss) << "}" << std::endl;
