@@ -53,14 +53,14 @@ namespace Metabuf
             m_read += _size;
         }
 
-        inline void readSize( size_t & _size )
+        inline void readSize( unsigned int & _size )
         {
             unsigned char size_1;
             this->readPOD( size_1 );
 
             if( size_1 == 255 )
             {
-                size_t size_2;
+                unsigned int size_2;
                 this->readPOD( size_2 );
 
                 _size = size_2;
