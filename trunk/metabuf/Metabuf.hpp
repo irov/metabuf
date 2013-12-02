@@ -49,7 +49,7 @@ namespace Metabuf
         virtual bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) = 0;
 
 	protected:
-		virtual size_t getId() const = 0;
+		virtual unsigned int getId() const = 0;
 
     protected:
         void * m_userData;
