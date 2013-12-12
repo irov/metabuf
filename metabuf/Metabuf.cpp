@@ -1,4 +1,15 @@
 #	include "metabuf.hpp"
+#	include "metaconfig.hpp"
+
+#	include <malloc.h>
+
+#	ifndef METABUF_MALLOC
+#	define METABUF_MALLOC malloc
+#	endif
+
+#	ifndef METABUF_FREE
+#	define METABUF_FREE free
+#	endif
 
 namespace Metabuf
 {
@@ -110,5 +121,15 @@ namespace Metabuf
         }
 
         return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void * Metadata::operator new ( size_t _size )
+	{
+		return METABUF_MALLOC(_size);
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void Metadata::operator delete ( void * _ptr, size_t _size )
+	{
+		METABUF_FREE(_ptr);
 	}
 }
