@@ -41,6 +41,10 @@ namespace Metabuf
             ar.readSize( _t );
         }
 
+	public:
+		void * operator new ( size_t _size );
+		void operator delete ( void * _ptr, size_t _size );
+
 	protected:
 		virtual bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int id ) = 0;
 
