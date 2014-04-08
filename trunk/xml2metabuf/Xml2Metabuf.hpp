@@ -8,6 +8,8 @@
 #	include <string>
 #	include <sstream>
 
+#	include <stdint.h>
+
 namespace Metabuf
 {
     typedef bool (*ValueSerialization)( class Xml2Metabuf * _metabuf, const char * _value, void * _user );
@@ -31,12 +33,12 @@ namespace Metabuf
 
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, size_t & _count );
+        bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
 
         bool writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, size_t & _count );
-        bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, size_t & _count );
+        bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
+        bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count );
 
 		bool writeNodeArguments_( const XmlAttribute * _node, const pugi::xml_attribute & _xml_attr );
 
@@ -47,10 +49,10 @@ namespace Metabuf
             this->writeBuffer( (const unsigned char * )&_value, sizeof(T) );
         }   
 
-        void writeSize( size_t _value );
+        void writeSize( uint32_t _value );
 
         template<class T>
-        void writeCount( const T * _value, size_t _count )
+        void writeCount( const T * _value, uint32_t _count )
         {
             this->writeBuffer( (const unsigned char * )_value, sizeof(T) * _count );
         }

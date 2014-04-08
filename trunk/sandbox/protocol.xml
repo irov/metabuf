@@ -1,16 +1,16 @@
-<Protocol Version = "37">
+<Protocol Version = "45">
   <Type Name="Menge::String" Evict="string"/>
   <Type Name="Menge::WString" Evict="wstring"/>
   <Type Name="Menge::ConstString" Evict="string"/>
   <Type Name="bool" Evict="bool"/>
-  <Type Name="size_t" Evict="size_t"/>
+  <Type Name="uint32_t" Evict="uint32_t"/>
   <Type Name="Menge::WChar" Evict="wchar_t"/>
   <Type Name="float" Evict="float"/>
   <Type Name="mt::vec2f" Evict="float2"/>
   <Type Name="mt::vec3f" Evict="float3"/>
   <Type Name="mt::vec4f" Evict="float4"/>
   <Type Name="Menge::ColourValue" Evict="float4"/>
-  <Type Name="Menge::GlyphChar" Evict="utf8"/>
+  <Type Name="Menge::GlyphCode" Evict="utf8"/>
   <Type Name="Menge::Polygon" Evict="floats"/>
   <Type Name="Menge::Floats" Evict="floats"/>
 
@@ -50,18 +50,18 @@
       <Member Node="Offset" Name="Value" Type="mt::vec2f"/>
     </Node>
 
-    <Node Name="ResourceFont" Inheritance = "Resource">
+    <!--<Node Name="ResourceFont" Inheritance = "Resource">
       <Member Node="ResourceGlyph" Name="Name" Type="Menge::ConstString" Required="1"/>
       <Member Node="Image" Name="Path" Type="Menge::ConstString" Required="1"/>
       <Member Node="Image" Name="Codec" Type="Menge::ConstString"/>
       <Member Node="OutlineImage" Name="Path" Type="Menge::ConstString"/>
       <Member Node="OutlineImage" Name="Codec" Type="Menge::ConstString"/>
       <Member Node="Color" Name="Value" Type="Menge::ColourValue"/>
-    </Node>
+    </Node>-->
 
-    <Node Name="ResourceGlyph" Inheritance = "Resource">
+    <!--<Node Name="ResourceGlyph" Inheritance = "Resource">
       <Member Node="GlyphPath" Name="Path" Type="Menge::ConstString" Required="1"/>
-    </Node>
+    </Node>-->
 
     <Node Name="ResourceCursorSystem" Inheritance = "Resource">
       <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
@@ -119,38 +119,42 @@
       <Member Node="Height" Name="Value" Type="float"/>
       <Member Node="KeyFramesPackPath" Name="Path" Type="Menge::ConstString"/>
       <Member Node="KeyFramesPackPath" Name="Codec" Type="Menge::ConstString"/>
+      <Member Node="KeyFramesPackPath" Name="Converter" Type="Menge::ConstString"/>
       <Member Node="Loop" Name="Segment" Type="mt::vec2f"/>
+      <Member Node="Anchor" Name="Point" Type="mt::vec3f"/>    
 
       <Node Name="MovieLayer2D">
         <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
-        <Attribute Name="Parent" Type="size_t" Required="1"/>
+        <Attribute Name="Parent" Type="uint32_t" Required="1"/>
         <Attribute Name="Source" Type="Menge::ConstString" Required="1"/>
         <Attribute Name="Type" Type="Menge::ConstString" Required="1"/>
-        <Attribute Name="Index" Type="size_t" Required="1"/>
+        <Attribute Name="Index" Type="uint32_t" Required="1"/>
         <Attribute Name="In" Type="float" Required="1"/>
         <Attribute Name="Out" Type="float" Required="1"/>
         <Attribute Name="StartInterval" Type="float" Required="1"/>
         <Attribute Name="BlendingMode" Type="Menge::ConstString" Required="1"/>
         <Attribute Name="TimeRemap" Type="bool"/>
         <Attribute Name="Shape" Type="bool"/>
-        <Attribute Name="PlayCount" Type="size_t"/>
+        <Attribute Name="PlayCount" Type="uint32_t"/>
         <Attribute Name="Stretch" Type="float"/>
+        <Attribute Name="Switch" Type="bool"/>
       </Node>
 
       <Node Name="MovieLayer3D">
         <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
-        <Attribute Name="Parent" Type="size_t" Required="1"/>
+        <Attribute Name="Parent" Type="uint32_t" Required="1"/>
         <Attribute Name="Source" Type="Menge::ConstString" Required="1"/>
         <Attribute Name="Type" Type="Menge::ConstString" Required="1"/>
-        <Attribute Name="Index" Type="size_t" Required="1"/>
+        <Attribute Name="Index" Type="uint32_t" Required="1"/>
         <Attribute Name="In" Type="float" Required="1"/>
         <Attribute Name="Out" Type="float" Required="1"/>
         <Attribute Name="StartInterval" Type="float" Required="1"/>
         <Attribute Name="BlendingMode" Type="Menge::ConstString" Required="1"/>
         <Attribute Name="TimeRemap" Type="bool"/>
         <Attribute Name="Shape" Type="bool"/>
-        <Attribute Name="PlayCount" Type="size_t"/>
+        <Attribute Name="PlayCount" Type="uint32_t"/>
         <Attribute Name="Stretch" Type="float"/>
+        <Attribute Name="Switch" Type="bool"/>
       </Node>
 
       <Node Name="MovieCamera3D">
@@ -183,6 +187,13 @@
       <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
       <Member Node="File" Name="Codec" Type="Menge::ConstString"/>
       <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
+    </Node>
+
+    <Node Name="ResourceModel3D" Inheritance = "Resource">
+      <Member Node="File" Name="Path" Type="Menge::ConstString" Required="1"/>
+      <Member Node="File" Name="Dataflow" Type="Menge::ConstString"/>
+      <Member Node="File" Name="Converter" Type="Menge::ConstString"/>
+      <Member Node="Image" Name="Resource" Type="Menge::ConstString" Required="1"/>
     </Node>
 
     <Node Name="ResourceImageSolid" Inheritance = "Resource">
@@ -242,6 +253,10 @@
       <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
     </Node>
 
+    <Node Name="Fonts">
+      <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
+    </Node>
+
     <Node Name="Resources">
       <Node Name="Resource">
         <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
@@ -257,17 +272,16 @@
 
   <Node Name="Font">
     <Attribute Name="height" Type="float" Required="1"/>
-    <Attribute Name="size" Type="float" Required="1"/>
 
     <Node Name="Char">
       <Attribute Name="width" Type="float" Required="1"/>
       <Attribute Name="offset" Type="mt::vec2f" Required="1"/>
       <Attribute Name="rect" Type="mt::vec4f" Required="1"/>
-      <Attribute Name="code" Type="Menge::GlyphChar" Required="1"/>
+      <Attribute Name="code" Type="Menge::GlyphCode" Required="1"/>
 
       <Node Name="Kerning">
         <Attribute Name="advance" Type="float" Required="1"/>
-        <Attribute Name="id" Type="Menge::GlyphChar" Required="1"/>
+        <Attribute Name="id" Type="Menge::GlyphCode" Required="1"/>
       </Node>
     </Node>
   </Node>
@@ -283,28 +297,28 @@
   </Node>
 
   <Node Name="KeyFramesPack">
-    <Attribute Name="MaxIndex" Type="size_t" Required="1"/>
+    <Attribute Name="MaxIndex" Type="uint32_t" Required="1"/>
 
     <Node Name="TimeRemap">
-      <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
+      <Attribute Name="LayerIndex" Type="uint32_t" Required="1"/>
       <Attribute Name="Time" Type="Menge::Floats" Required="1"/>
     </Node>
 
     <Node Name="ImageShape">
-      <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
+      <Attribute Name="LayerIndex" Type="uint32_t" Required="1"/>
       <Attribute Name="Width" Type="float" Required="1"/>
       <Attribute Name="Height" Type="float" Required="1"/>
       <Attribute Name="Immutable" Type="bool"/>
-      <Attribute Name="Count" Type="size_t"/>
+      <Attribute Name="Count" Type="uint32_t"/>
       <Node Name="Shape">
         <Attribute Name="Polygon" Type="Menge::Polygon" Required="1"/>
       </Node>
     </Node>
 
     <Node Name="KeyFrames2D">
-      <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
+      <Attribute Name="LayerIndex" Type="uint32_t" Required="1"/>
       <Attribute Name="Immutable" Type="bool"/>
-      <Attribute Name="Count" Type="size_t"/>
+      <Attribute Name="Count" Type="uint32_t"/>
 
       <Node Name="KeyFrame2D">
         <Attribute Name="AnchorPoint" Type="mt::vec2f"/>
@@ -313,14 +327,14 @@
         <Attribute Name="Rotation" Type="float"/>
         <Attribute Name="Opacity" Type="float"/>
         <Attribute Name="Volume" Type="float"/>
-        <Attribute Name="Count" Type="size_t"/>
+        <Attribute Name="Count" Type="uint32_t"/>
       </Node>
     </Node>
 
     <Node Name="KeyFrames3D">
-      <Attribute Name="LayerIndex" Type="size_t" Required="1"/>
+      <Attribute Name="LayerIndex" Type="uint32_t" Required="1"/>
       <Attribute Name="Immutable" Type="bool"/>
-      <Attribute Name="Count" Type="size_t"/>
+      <Attribute Name="Count" Type="uint32_t"/>
 
       <Node Name="KeyFrame3D">
         <Attribute Name="AnchorPoint" Type="mt::vec3f"/>
@@ -329,7 +343,7 @@
         <Attribute Name="Rotation" Type="mt::vec3f"/>
         <Attribute Name="Opacity" Type="float"/>
         <Attribute Name="Volume" Type="float"/>
-        <Attribute Name="Count" Type="size_t"/>
+        <Attribute Name="Count" Type="uint32_t"/>
       </Node>
     </Node>
   </Node>

@@ -6,9 +6,9 @@
 
 namespace Metacode
 {
-    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );
-    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData );
-    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData );
+    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, void * _userData );
+    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount, void * _userData );
+    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, void * _userData );
 
     class Meta_DataBlock
         : public Metabuf::Metadata
@@ -18,7 +18,8 @@ namespace Metacode
         ~Meta_DataBlock();
     
     public:
-        unsigned int getId() const override;
+        uint32_t getId() const override;
+    
     public:
         const Menge::ConstString & get_Name() const
         {
@@ -37,10 +38,10 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-        bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+        bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
         class Meta_Include
             : public Metabuf::Metadata
@@ -49,7 +50,8 @@ namespace Metacode
             Meta_Include();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_Path() const
             {
@@ -68,10 +70,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -85,7 +87,8 @@ namespace Metacode
             Meta_Resource();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_Name() const
             {
@@ -120,10 +123,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -138,13 +141,14 @@ namespace Metacode
             Meta_ResourceAnimation();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_Sequence
                 : public Metabuf::Metadata
@@ -153,7 +157,8 @@ namespace Metacode
                 Meta_Sequence();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const float & get_Delay() const
                 {
@@ -188,10 +193,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
@@ -220,7 +225,8 @@ namespace Metacode
             Meta_ResourceCursorICO();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -239,10 +245,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -256,7 +262,8 @@ namespace Metacode
             Meta_ResourceCursorSystem();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -275,10 +282,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -292,7 +299,8 @@ namespace Metacode
             Meta_ResourceEmitter();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_Container_Name() const
             {
@@ -383,10 +391,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -404,7 +412,8 @@ namespace Metacode
             Meta_ResourceEmitterContainer();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_File_Path() const
             {
@@ -439,10 +448,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -457,273 +466,17 @@ namespace Metacode
             Meta_ResourceExternal();
         
         public:
-            unsigned int getId() const override;
-        public:
-        protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
-        public:
-        protected:
-        protected:
-        };
-        
-        class Meta_ResourceFont
-            : public Meta_Resource
-        { 
-        public:
-            Meta_ResourceFont();
+            uint32_t getId() const override;
         
         public:
-            unsigned int getId() const override;
-        public:
-            bool has_Color_Value() const
-            {
-                return Color_Value_successful;
-            }
-            
-            bool get_Color_Value( Menge::ColourValue & _value ) const
-            {
-                if( Color_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Color_Value;
-            
-                return true;
-            }
-            
-            bool swap_Color_Value( Menge::ColourValue & _value ) const
-            {
-                if( Color_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->Color_Value);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_Color_Value( C * _self, M _method )
-            {
-                if( Color_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Color_Value );
-            }
-            
-            bool has_Image_Codec() const
-            {
-                return Image_Codec_successful;
-            }
-            
-            bool get_Image_Codec( Menge::ConstString & _value ) const
-            {
-                if( Image_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Image_Codec;
-            
-                return true;
-            }
-            
-            bool swap_Image_Codec( Menge::ConstString & _value ) const
-            {
-                if( Image_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->Image_Codec);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_Image_Codec( C * _self, M _method )
-            {
-                if( Image_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Image_Codec );
-            }
-            
-            const Menge::ConstString & get_Image_Path() const
-            {
-                return this->Image_Path;
-            }
-            
-            void swap_Image_Path( Menge::ConstString & _value ) const
-            {
-                std::swap(_value, this->Image_Path);
-            }
-            
-            template<class C, class M>
-            void method_Image_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->Image_Path );
-            }
-            
-            bool has_OutlineImage_Codec() const
-            {
-                return OutlineImage_Codec_successful;
-            }
-            
-            bool get_OutlineImage_Codec( Menge::ConstString & _value ) const
-            {
-                if( OutlineImage_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->OutlineImage_Codec;
-            
-                return true;
-            }
-            
-            bool swap_OutlineImage_Codec( Menge::ConstString & _value ) const
-            {
-                if( OutlineImage_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->OutlineImage_Codec);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_OutlineImage_Codec( C * _self, M _method )
-            {
-                if( OutlineImage_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->OutlineImage_Codec );
-            }
-            
-            bool has_OutlineImage_Path() const
-            {
-                return OutlineImage_Path_successful;
-            }
-            
-            bool get_OutlineImage_Path( Menge::ConstString & _value ) const
-            {
-                if( OutlineImage_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->OutlineImage_Path;
-            
-                return true;
-            }
-            
-            bool swap_OutlineImage_Path( Menge::ConstString & _value ) const
-            {
-                if( OutlineImage_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->OutlineImage_Path);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_OutlineImage_Path( C * _self, M _method )
-            {
-                if( OutlineImage_Path_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->OutlineImage_Path );
-            }
-            
-            const Menge::ConstString & get_ResourceGlyph_Name() const
-            {
-                return this->ResourceGlyph_Name;
-            }
-            
-            void swap_ResourceGlyph_Name( Menge::ConstString & _value ) const
-            {
-                std::swap(_value, this->ResourceGlyph_Name);
-            }
-            
-            template<class C, class M>
-            void method_ResourceGlyph_Name( C * _self, M _method )
-            {
-                (_self->*_method)( this->ResourceGlyph_Name );
-            }
-            
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
-            bool Color_Value_successful;
-            mutable Menge::ColourValue Color_Value;
-            bool Image_Codec_successful;
-            mutable Menge::ConstString Image_Codec;
-            mutable Menge::ConstString Image_Path;
-            bool OutlineImage_Codec_successful;
-            mutable Menge::ConstString OutlineImage_Codec;
-            bool OutlineImage_Path_successful;
-            mutable Menge::ConstString OutlineImage_Path;
-            mutable Menge::ConstString ResourceGlyph_Name;
-        };
-        
-        class Meta_ResourceGlyph
-            : public Meta_Resource
-        { 
-        public:
-            Meta_ResourceGlyph();
-        
-        public:
-            unsigned int getId() const override;
-        public:
-            const Menge::ConstString & get_GlyphPath_Path() const
-            {
-                return this->GlyphPath_Path;
-            }
-            
-            void swap_GlyphPath_Path( Menge::ConstString & _value ) const
-            {
-                std::swap(_value, this->GlyphPath_Path);
-            }
-            
-            template<class C, class M>
-            void method_GlyphPath_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->GlyphPath_Path );
-            }
-            
-        protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
-        public:
-        protected:
-        protected:
-            mutable Menge::ConstString GlyphPath_Path;
         };
         
         class Meta_ResourceHIT
@@ -733,7 +486,8 @@ namespace Metacode
             Meta_ResourceHIT();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_File_Codec() const
             {
@@ -832,10 +586,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -853,7 +607,8 @@ namespace Metacode
             Meta_ResourceImageCombineRGBAndAlpha();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_File_Alpha() const
             {
@@ -1176,10 +931,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -1208,7 +963,8 @@ namespace Metacode
             Meta_ResourceImageDefault();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_File_Alpha() const
             {
@@ -1547,10 +1303,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -1580,7 +1336,8 @@ namespace Metacode
             Meta_ResourceImageMultiplyRGBAndAlpha();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_File_WrapX() const
             {
@@ -1903,10 +1660,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -1935,7 +1692,8 @@ namespace Metacode
             Meta_ResourceImageSolid();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ColourValue & get_Color_Value() const
             {
@@ -1970,10 +1728,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -1988,7 +1746,8 @@ namespace Metacode
             Meta_ResourceImageSubstract();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_Image_Alpha() const
             {
@@ -2103,10 +1862,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -2125,7 +1884,8 @@ namespace Metacode
             Meta_ResourceInternalObject();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_Internal_Group() const
             {
@@ -2160,15 +1920,153 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
             mutable Menge::ConstString Internal_Group;
             mutable Menge::ConstString Internal_Name;
+        };
+        
+        class Meta_ResourceModel3D
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceModel3D();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            bool has_File_Converter() const
+            {
+                return File_Converter_successful;
+            }
+            
+            bool get_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Converter;
+            
+                return true;
+            }
+            
+            bool swap_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Converter);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Converter( C * _self, M _method )
+            {
+                if( File_Converter_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Converter );
+            }
+            
+            bool has_File_Dataflow() const
+            {
+                return File_Dataflow_successful;
+            }
+            
+            bool get_File_Dataflow( Menge::ConstString & _value ) const
+            {
+                if( File_Dataflow_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Dataflow;
+            
+                return true;
+            }
+            
+            bool swap_File_Dataflow( Menge::ConstString & _value ) const
+            {
+                if( File_Dataflow_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Dataflow);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_File_Dataflow( C * _self, M _method )
+            {
+                if( File_Dataflow_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->File_Dataflow );
+            }
+            
+            const Menge::ConstString & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+            template<class C, class M>
+            void method_File_Path( C * _self, M _method )
+            {
+                (_self->*_method)( this->File_Path );
+            }
+            
+            const Menge::ConstString & get_Image_Resource() const
+            {
+                return this->Image_Resource;
+            }
+            
+            void swap_Image_Resource( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->Image_Resource);
+            }
+            
+            template<class C, class M>
+            void method_Image_Resource( C * _self, M _method )
+            {
+                (_self->*_method)( this->Image_Resource );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            bool File_Converter_successful;
+            mutable Menge::ConstString File_Converter;
+            bool File_Dataflow_successful;
+            mutable Menge::ConstString File_Dataflow;
+            mutable Menge::ConstString File_Path;
+            mutable Menge::ConstString Image_Resource;
         };
         
         class Meta_ResourceMovie
@@ -2178,8 +2076,49 @@ namespace Metacode
             Meta_ResourceMovie();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
+            bool has_Anchor_Point() const
+            {
+                return Anchor_Point_successful;
+            }
+            
+            bool get_Anchor_Point( mt::vec3f & _value ) const
+            {
+                if( Anchor_Point_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Anchor_Point;
+            
+                return true;
+            }
+            
+            bool swap_Anchor_Point( mt::vec3f & _value ) const
+            {
+                if( Anchor_Point_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Anchor_Point);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Anchor_Point( C * _self, M _method )
+            {
+                if( Anchor_Point_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Anchor_Point );
+            }
+            
             bool has_Duration_Value() const
             {
                 return Duration_Value_successful;
@@ -2340,6 +2279,46 @@ namespace Metacode
                 (_self->*_method)( this->KeyFramesPackPath_Codec );
             }
             
+            bool has_KeyFramesPackPath_Converter() const
+            {
+                return KeyFramesPackPath_Converter_successful;
+            }
+            
+            bool get_KeyFramesPackPath_Converter( Menge::ConstString & _value ) const
+            {
+                if( KeyFramesPackPath_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->KeyFramesPackPath_Converter;
+            
+                return true;
+            }
+            
+            bool swap_KeyFramesPackPath_Converter( Menge::ConstString & _value ) const
+            {
+                if( KeyFramesPackPath_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->KeyFramesPackPath_Converter);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_KeyFramesPackPath_Converter( C * _self, M _method )
+            {
+                if( KeyFramesPackPath_Converter_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->KeyFramesPackPath_Converter );
+            }
+            
             bool has_KeyFramesPackPath_Path() const
             {
                 return KeyFramesPackPath_Path_successful;
@@ -2461,10 +2440,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_MovieCamera3D
                 : public Metabuf::Metadata
@@ -2473,7 +2452,8 @@ namespace Metacode
                 Meta_MovieCamera3D();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const float & get_CameraAspect() const
                 {
@@ -2572,10 +2552,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
@@ -2594,7 +2574,8 @@ namespace Metacode
                 Meta_MovieLayer2D();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const Menge::ConstString & get_BlendingMode() const
                 {
@@ -2628,12 +2609,12 @@ namespace Metacode
                     (_self->*_method)( this->In );
                 }
                 
-                const size_t & get_Index() const
+                const uint32_t & get_Index() const
                 {
                     return this->Index;
                 }
                 
-                void swap_Index( size_t & _value ) const
+                void swap_Index( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Index);
                 }
@@ -2642,46 +2623,6 @@ namespace Metacode
                 void method_Index( C * _self, M _method ) const
                 {
                     (_self->*_method)( this->Index );
-                }
-                
-                bool has_MaskPolygon() const
-                {
-                    return MaskPolygon_successful;
-                }
-                
-                bool get_MaskPolygon( Menge::Polygon & _value ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    _value = this->MaskPolygon;
-                
-                    return true;
-                }
-                
-                bool swap_MaskPolygon( Menge::Polygon & _value ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    std::swap( _value, this->MaskPolygon);
-                
-                    return true;
-                }
-                
-                template<class C, class M>
-                void method_MaskPolygon( C * _self, M _method ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->MaskPolygon );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -2716,12 +2657,12 @@ namespace Metacode
                     (_self->*_method)( this->Out );
                 }
                 
-                const size_t & get_Parent() const
+                const uint32_t & get_Parent() const
                 {
                     return this->Parent;
                 }
                 
-                void swap_Parent( size_t & _value ) const
+                void swap_Parent( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Parent);
                 }
@@ -2737,7 +2678,7 @@ namespace Metacode
                     return PlayCount_successful;
                 }
                 
-                bool get_PlayCount( size_t & _value ) const
+                bool get_PlayCount( uint32_t & _value ) const
                 {
                     if( PlayCount_successful == false )
                     {
@@ -2749,7 +2690,7 @@ namespace Metacode
                     return true;
                 }
                 
-                bool swap_PlayCount( size_t & _value ) const
+                bool swap_PlayCount( uint32_t & _value ) const
                 {
                     if( PlayCount_successful == false )
                     {
@@ -2770,6 +2711,46 @@ namespace Metacode
                     }
                 
                     (_self->*_method)( this->PlayCount );
+                }
+                
+                bool has_Shape() const
+                {
+                    return Shape_successful;
+                }
+                
+                bool get_Shape( bool & _value ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Shape;
+                
+                    return true;
+                }
+                
+                bool swap_Shape( bool & _value ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Shape);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Shape( C * _self, M _method ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Shape );
                 }
                 
                 const Menge::ConstString & get_Source() const
@@ -2844,6 +2825,46 @@ namespace Metacode
                     (_self->*_method)( this->Stretch );
                 }
                 
+                bool has_Switch() const
+                {
+                    return Switch_successful;
+                }
+                
+                bool get_Switch( bool & _value ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Switch;
+                
+                    return true;
+                }
+                
+                bool swap_Switch( bool & _value ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Switch);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Switch( C * _self, M _method ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Switch );
+                }
+                
                 bool has_TimeRemap() const
                 {
                     return TimeRemap_successful;
@@ -2901,27 +2922,29 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
-                mutable size_t Index;
-                bool MaskPolygon_successful;
-                mutable Menge::Polygon MaskPolygon;
+                mutable uint32_t Index;
                 mutable Menge::ConstString Name;
                 mutable float Out;
-                mutable size_t Parent;
+                mutable uint32_t Parent;
                 bool PlayCount_successful;
-                mutable size_t PlayCount;
+                mutable uint32_t PlayCount;
+                bool Shape_successful;
+                mutable bool Shape;
                 mutable Menge::ConstString Source;
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
+                bool Switch_successful;
+                mutable bool Switch;
                 bool TimeRemap_successful;
                 mutable bool TimeRemap;
                 mutable Menge::ConstString Type;
@@ -2934,7 +2957,8 @@ namespace Metacode
                 Meta_MovieLayer3D();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const Menge::ConstString & get_BlendingMode() const
                 {
@@ -2968,12 +2992,12 @@ namespace Metacode
                     (_self->*_method)( this->In );
                 }
                 
-                const size_t & get_Index() const
+                const uint32_t & get_Index() const
                 {
                     return this->Index;
                 }
                 
-                void swap_Index( size_t & _value ) const
+                void swap_Index( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Index);
                 }
@@ -2982,46 +3006,6 @@ namespace Metacode
                 void method_Index( C * _self, M _method ) const
                 {
                     (_self->*_method)( this->Index );
-                }
-                
-                bool has_MaskPolygon() const
-                {
-                    return MaskPolygon_successful;
-                }
-                
-                bool get_MaskPolygon( Menge::Polygon & _value ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    _value = this->MaskPolygon;
-                
-                    return true;
-                }
-                
-                bool swap_MaskPolygon( Menge::Polygon & _value ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return false;
-                    }
-                
-                    std::swap( _value, this->MaskPolygon);
-                
-                    return true;
-                }
-                
-                template<class C, class M>
-                void method_MaskPolygon( C * _self, M _method ) const
-                {
-                    if( MaskPolygon_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->MaskPolygon );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -3056,12 +3040,12 @@ namespace Metacode
                     (_self->*_method)( this->Out );
                 }
                 
-                const size_t & get_Parent() const
+                const uint32_t & get_Parent() const
                 {
                     return this->Parent;
                 }
                 
-                void swap_Parent( size_t & _value ) const
+                void swap_Parent( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Parent);
                 }
@@ -3077,7 +3061,7 @@ namespace Metacode
                     return PlayCount_successful;
                 }
                 
-                bool get_PlayCount( size_t & _value ) const
+                bool get_PlayCount( uint32_t & _value ) const
                 {
                     if( PlayCount_successful == false )
                     {
@@ -3089,7 +3073,7 @@ namespace Metacode
                     return true;
                 }
                 
-                bool swap_PlayCount( size_t & _value ) const
+                bool swap_PlayCount( uint32_t & _value ) const
                 {
                     if( PlayCount_successful == false )
                     {
@@ -3110,6 +3094,46 @@ namespace Metacode
                     }
                 
                     (_self->*_method)( this->PlayCount );
+                }
+                
+                bool has_Shape() const
+                {
+                    return Shape_successful;
+                }
+                
+                bool get_Shape( bool & _value ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Shape;
+                
+                    return true;
+                }
+                
+                bool swap_Shape( bool & _value ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Shape);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Shape( C * _self, M _method ) const
+                {
+                    if( Shape_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Shape );
                 }
                 
                 const Menge::ConstString & get_Source() const
@@ -3184,6 +3208,46 @@ namespace Metacode
                     (_self->*_method)( this->Stretch );
                 }
                 
+                bool has_Switch() const
+                {
+                    return Switch_successful;
+                }
+                
+                bool get_Switch( bool & _value ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Switch;
+                
+                    return true;
+                }
+                
+                bool swap_Switch( bool & _value ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Switch);
+                
+                    return true;
+                }
+                
+                template<class C, class M>
+                void method_Switch( C * _self, M _method ) const
+                {
+                    if( Switch_successful == false )
+                    {
+                        return;
+                    }
+                
+                    (_self->*_method)( this->Switch );
+                }
+                
                 bool has_TimeRemap() const
                 {
                     return TimeRemap_successful;
@@ -3241,27 +3305,29 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
-                mutable size_t Index;
-                bool MaskPolygon_successful;
-                mutable Menge::Polygon MaskPolygon;
+                mutable uint32_t Index;
                 mutable Menge::ConstString Name;
                 mutable float Out;
-                mutable size_t Parent;
+                mutable uint32_t Parent;
                 bool PlayCount_successful;
-                mutable size_t PlayCount;
+                mutable uint32_t PlayCount;
+                bool Shape_successful;
+                mutable bool Shape;
                 mutable Menge::ConstString Source;
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
+                bool Switch_successful;
+                mutable bool Switch;
                 bool TimeRemap_successful;
                 mutable bool TimeRemap;
                 mutable Menge::ConstString Type;
@@ -3269,6 +3335,8 @@ namespace Metacode
             
         protected:
         protected:
+            bool Anchor_Point_successful;
+            mutable mt::vec3f Anchor_Point;
             bool Duration_Value_successful;
             mutable float Duration_Value;
             bool FrameDuration_Value_successful;
@@ -3277,6 +3345,8 @@ namespace Metacode
             mutable float Height_Value;
             bool KeyFramesPackPath_Codec_successful;
             mutable Menge::ConstString KeyFramesPackPath_Codec;
+            bool KeyFramesPackPath_Converter_successful;
+            mutable Menge::ConstString KeyFramesPackPath_Converter;
             bool KeyFramesPackPath_Path_successful;
             mutable Menge::ConstString KeyFramesPackPath_Path;
             bool Loop_Segment_successful;
@@ -3322,7 +3392,8 @@ namespace Metacode
             Meta_ResourcePlaylist();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_Loop_Value() const
             {
@@ -3405,10 +3476,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_Tracks
                 : public Metabuf::Metadata
@@ -3417,13 +3488,14 @@ namespace Metacode
                 Meta_Tracks();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
                 class Meta_Track
                     : public Metabuf::Metadata
@@ -3432,7 +3504,8 @@ namespace Metacode
                     Meta_Track();
                 
                 public:
-                    unsigned int getId() const override;
+                    uint32_t getId() const override;
+                
                 public:
                     bool has_Codec() const
                     {
@@ -3491,10 +3564,10 @@ namespace Metacode
                     }
                     
                 protected:
-                    bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                    bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                    bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                    bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                    bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                    bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                    bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                    bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
                 public:
                 protected:
                 protected:
@@ -3542,7 +3615,8 @@ namespace Metacode
             Meta_ResourceShape();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::Polygon & get_Polygon_Value() const
             {
@@ -3561,10 +3635,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -3578,7 +3652,8 @@ namespace Metacode
             Meta_ResourceSound();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_DefaultVolume_Value() const
             {
@@ -3757,10 +3832,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -3782,7 +3857,8 @@ namespace Metacode
             Meta_ResourceVideo();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_File_Alpha() const
             {
@@ -4001,10 +4077,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -4028,7 +4104,8 @@ namespace Metacode
             Meta_ResourceWindow();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_WindowBackground_ResourceImageName() const
             {
@@ -4327,10 +4404,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -4386,7 +4463,8 @@ namespace Metacode
         Meta_Font();
     
     public:
-        unsigned int getId() const override;
+        uint32_t getId() const override;
+    
     public:
         const float & get_height() const
         {
@@ -4405,10 +4483,10 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-        bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+        bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
         class Meta_Char
             : public Metabuf::Metadata
@@ -4417,14 +4495,15 @@ namespace Metacode
             Meta_Char();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
-            const Menge::GlyphChar & get_code() const
+            const Menge::GlyphCode & get_code() const
             {
                 return this->code;
             }
             
-            void swap_code( Menge::GlyphChar & _value ) const
+            void swap_code( Menge::GlyphCode & _value ) const
             {
                 std::swap( _value, this->code);
             }
@@ -4484,10 +4563,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_Kerning
                 : public Metabuf::Metadata
@@ -4496,7 +4575,8 @@ namespace Metacode
                 Meta_Kerning();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const float & get_advance() const
                 {
@@ -4514,12 +4594,12 @@ namespace Metacode
                     (_self->*_method)( this->advance );
                 }
                 
-                const Menge::GlyphChar & get_id() const
+                const Menge::GlyphCode & get_id() const
                 {
                     return this->id;
                 }
                 
-                void swap_id( Menge::GlyphChar & _value ) const
+                void swap_id( Menge::GlyphCode & _value ) const
                 {
                     std::swap( _value, this->id);
                 }
@@ -4531,20 +4611,20 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
                 mutable float advance;
-                mutable Menge::GlyphChar id;
+                mutable Menge::GlyphCode id;
             };
             
         protected:
         protected:
-            mutable Menge::GlyphChar code;
+            mutable Menge::GlyphCode code;
             mutable mt::vec2f offset;
             mutable mt::vec4f rect;
             mutable float width;
@@ -4582,14 +4662,15 @@ namespace Metacode
         Meta_KeyFramesPack();
     
     public:
-        unsigned int getId() const override;
+        uint32_t getId() const override;
+    
     public:
-        const size_t & get_MaxIndex() const
+        const uint32_t & get_MaxIndex() const
         {
             return this->MaxIndex;
         }
         
-        void swap_MaxIndex( size_t & _value ) const
+        void swap_MaxIndex( uint32_t & _value ) const
         {
             std::swap( _value, this->MaxIndex);
         }
@@ -4601,26 +4682,27 @@ namespace Metacode
         }
         
     protected:
-        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-        bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+        bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
-        class Meta_KeyFrames2D
+        class Meta_ImageShape
             : public Metabuf::Metadata
         { 
         public:
-            Meta_KeyFrames2D();
+            Meta_ImageShape();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_Count() const
             {
                 return Count_successful;
             }
             
-            bool get_Count( size_t & _value ) const
+            bool get_Count( uint32_t & _value ) const
             {
                 if( Count_successful == false )
                 {
@@ -4632,7 +4714,209 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_Count( size_t & _value ) const
+            bool swap_Count( uint32_t & _value ) const
+            {
+                if( Count_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap( _value, this->Count);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Count( C * _self, M _method ) const
+            {
+                if( Count_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Count );
+            }
+            
+            const float & get_Height() const
+            {
+                return this->Height;
+            }
+            
+            void swap_Height( float & _value ) const
+            {
+                std::swap( _value, this->Height);
+            }
+            
+            template<class C, class M>
+            void method_Height( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Height );
+            }
+            
+            bool has_Immutable() const
+            {
+                return Immutable_successful;
+            }
+            
+            bool get_Immutable( bool & _value ) const
+            {
+                if( Immutable_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Immutable;
+            
+                return true;
+            }
+            
+            bool swap_Immutable( bool & _value ) const
+            {
+                if( Immutable_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap( _value, this->Immutable);
+            
+                return true;
+            }
+            
+            template<class C, class M>
+            void method_Immutable( C * _self, M _method ) const
+            {
+                if( Immutable_successful == false )
+                {
+                    return;
+                }
+            
+                (_self->*_method)( this->Immutable );
+            }
+            
+            const uint32_t & get_LayerIndex() const
+            {
+                return this->LayerIndex;
+            }
+            
+            void swap_LayerIndex( uint32_t & _value ) const
+            {
+                std::swap( _value, this->LayerIndex);
+            }
+            
+            template<class C, class M>
+            void method_LayerIndex( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->LayerIndex );
+            }
+            
+            const float & get_Width() const
+            {
+                return this->Width;
+            }
+            
+            void swap_Width( float & _value ) const
+            {
+                std::swap( _value, this->Width);
+            }
+            
+            template<class C, class M>
+            void method_Width( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Width );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+            class Meta_Shape
+                : public Metabuf::Metadata
+            { 
+            public:
+                Meta_Shape();
+            
+            public:
+                uint32_t getId() const override;
+            
+            public:
+                const Menge::Polygon & get_Polygon() const
+                {
+                    return this->Polygon;
+                }
+                
+                void swap_Polygon( Menge::Polygon & _value ) const
+                {
+                    std::swap( _value, this->Polygon);
+                }
+                
+                template<class C, class M>
+                void method_Polygon( C * _self, M _method ) const
+                {
+                    (_self->*_method)( this->Polygon );
+                }
+                
+            protected:
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+            public:
+            protected:
+            protected:
+                mutable Menge::Polygon Polygon;
+            };
+            
+        protected:
+        protected:
+            bool Count_successful;
+            mutable uint32_t Count;
+            mutable float Height;
+            bool Immutable_successful;
+            mutable bool Immutable;
+            mutable uint32_t LayerIndex;
+            mutable float Width;
+        public:
+            typedef stdex::auto_array<Meta_Shape> TVectorMeta_Shape;
+        
+            const TVectorMeta_Shape & get_IncludesShape() const
+            {
+                return this->includes_Meta_Shape;
+            }
+        
+        protected:
+            TVectorMeta_Shape includes_Meta_Shape;
+        };
+        
+        class Meta_KeyFrames2D
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_KeyFrames2D();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            bool has_Count() const
+            {
+                return Count_successful;
+            }
+            
+            bool get_Count( uint32_t & _value ) const
+            {
+                if( Count_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Count;
+            
+                return true;
+            }
+            
+            bool swap_Count( uint32_t & _value ) const
             {
                 if( Count_successful == false )
                 {
@@ -4695,12 +4979,12 @@ namespace Metacode
                 (_self->*_method)( this->Immutable );
             }
             
-            const size_t & get_LayerIndex() const
+            const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
             }
             
-            void swap_LayerIndex( size_t & _value ) const
+            void swap_LayerIndex( uint32_t & _value ) const
             {
                 std::swap( _value, this->LayerIndex);
             }
@@ -4712,10 +4996,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_KeyFrame2D
                 : public Metabuf::Metadata
@@ -4724,7 +5008,8 @@ namespace Metacode
                 Meta_KeyFrame2D();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 bool has_AnchorPoint() const
                 {
@@ -4771,7 +5056,7 @@ namespace Metacode
                     return Count_successful;
                 }
                 
-                bool get_Count( size_t & _value ) const
+                bool get_Count( uint32_t & _value ) const
                 {
                     if( Count_successful == false )
                     {
@@ -4783,7 +5068,7 @@ namespace Metacode
                     return true;
                 }
                 
-                bool swap_Count( size_t & _value ) const
+                bool swap_Count( uint32_t & _value ) const
                 {
                     if( Count_successful == false )
                     {
@@ -5007,17 +5292,17 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
                 bool AnchorPoint_successful;
                 mutable mt::vec2f AnchorPoint;
                 bool Count_successful;
-                mutable size_t Count;
+                mutable uint32_t Count;
                 bool Opacity_successful;
                 mutable float Opacity;
                 bool Position_successful;
@@ -5033,10 +5318,10 @@ namespace Metacode
         protected:
         protected:
             bool Count_successful;
-            mutable size_t Count;
+            mutable uint32_t Count;
             bool Immutable_successful;
             mutable bool Immutable;
-            mutable size_t LayerIndex;
+            mutable uint32_t LayerIndex;
         public:
             typedef stdex::auto_array<Meta_KeyFrame2D> TVectorMeta_KeyFrame2D;
         
@@ -5056,14 +5341,15 @@ namespace Metacode
             Meta_KeyFrames3D();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_Count() const
             {
                 return Count_successful;
             }
             
-            bool get_Count( size_t & _value ) const
+            bool get_Count( uint32_t & _value ) const
             {
                 if( Count_successful == false )
                 {
@@ -5075,7 +5361,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_Count( size_t & _value ) const
+            bool swap_Count( uint32_t & _value ) const
             {
                 if( Count_successful == false )
                 {
@@ -5138,12 +5424,12 @@ namespace Metacode
                 (_self->*_method)( this->Immutable );
             }
             
-            const size_t & get_LayerIndex() const
+            const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
             }
             
-            void swap_LayerIndex( size_t & _value ) const
+            void swap_LayerIndex( uint32_t & _value ) const
             {
                 std::swap( _value, this->LayerIndex);
             }
@@ -5155,10 +5441,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_KeyFrame3D
                 : public Metabuf::Metadata
@@ -5167,7 +5453,8 @@ namespace Metacode
                 Meta_KeyFrame3D();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 bool has_AnchorPoint() const
                 {
@@ -5214,7 +5501,7 @@ namespace Metacode
                     return Count_successful;
                 }
                 
-                bool get_Count( size_t & _value ) const
+                bool get_Count( uint32_t & _value ) const
                 {
                     if( Count_successful == false )
                     {
@@ -5226,7 +5513,7 @@ namespace Metacode
                     return true;
                 }
                 
-                bool swap_Count( size_t & _value ) const
+                bool swap_Count( uint32_t & _value ) const
                 {
                     if( Count_successful == false )
                     {
@@ -5450,17 +5737,17 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
                 bool AnchorPoint_successful;
                 mutable mt::vec3f AnchorPoint;
                 bool Count_successful;
-                mutable size_t Count;
+                mutable uint32_t Count;
                 bool Opacity_successful;
                 mutable float Opacity;
                 bool Position_successful;
@@ -5476,10 +5763,10 @@ namespace Metacode
         protected:
         protected:
             bool Count_successful;
-            mutable size_t Count;
+            mutable uint32_t Count;
             bool Immutable_successful;
             mutable bool Immutable;
-            mutable size_t LayerIndex;
+            mutable uint32_t LayerIndex;
         public:
             typedef stdex::auto_array<Meta_KeyFrame3D> TVectorMeta_KeyFrame3D;
         
@@ -5499,14 +5786,15 @@ namespace Metacode
             Meta_TimeRemap();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
-            const size_t & get_LayerIndex() const
+            const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
             }
             
-            void swap_LayerIndex( size_t & _value ) const
+            void swap_LayerIndex( uint32_t & _value ) const
             {
                 std::swap( _value, this->LayerIndex);
             }
@@ -5534,20 +5822,30 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
-            mutable size_t LayerIndex;
+            mutable uint32_t LayerIndex;
             mutable Menge::Floats Time;
         };
         
     protected:
     protected:
-        mutable size_t MaxIndex;
+        mutable uint32_t MaxIndex;
+    public:
+        typedef stdex::auto_array<Meta_ImageShape> TVectorMeta_ImageShape;
+    
+        const TVectorMeta_ImageShape & get_IncludesImageShape() const
+        {
+            return this->includes_Meta_ImageShape;
+        }
+    
+    protected:
+        TVectorMeta_ImageShape includes_Meta_ImageShape;
     public:
         typedef stdex::auto_array<Meta_KeyFrames2D> TVectorMeta_KeyFrames2D;
     
@@ -5587,14 +5885,52 @@ namespace Metacode
         Meta_Pak();
     
     public:
-        unsigned int getId() const override;
+        uint32_t getId() const override;
+    
     public:
     protected:
-        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-        bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+        bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
+        class Meta_Fonts
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_Fonts();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const Menge::ConstString & get_Path() const
+            {
+                return this->Path;
+            }
+            
+            void swap_Path( Menge::ConstString & _value ) const
+            {
+                std::swap( _value, this->Path);
+            }
+            
+            template<class C, class M>
+            void method_Path( C * _self, M _method ) const
+            {
+                (_self->*_method)( this->Path );
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::ConstString Path;
+        };
+        
         class Meta_Resources
             : public Metabuf::Metadata
         { 
@@ -5602,13 +5938,14 @@ namespace Metacode
             Meta_Resources();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_Resource
                 : public Metabuf::Metadata
@@ -5617,7 +5954,8 @@ namespace Metacode
                 Meta_Resource();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const Menge::ConstString & get_Path() const
                 {
@@ -5636,10 +5974,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
@@ -5667,7 +6005,8 @@ namespace Metacode
             Meta_Scripts();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             const Menge::ConstString & get_Path() const
             {
@@ -5686,10 +6025,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
@@ -5703,13 +6042,14 @@ namespace Metacode
             Meta_Texts();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
             class Meta_Text
                 : public Metabuf::Metadata
@@ -5718,7 +6058,8 @@ namespace Metacode
                 Meta_Text();
             
             public:
-                unsigned int getId() const override;
+                uint32_t getId() const override;
+            
             public:
                 const Menge::ConstString & get_Path() const
                 {
@@ -5737,10 +6078,10 @@ namespace Metacode
                 }
                 
             protected:
-                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-                bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
             public:
             protected:
             protected:
@@ -5763,6 +6104,16 @@ namespace Metacode
         
     protected:
     protected:
+    public:
+        typedef stdex::auto_array<Meta_Fonts> TVectorMeta_Fonts;
+    
+        const TVectorMeta_Fonts & get_IncludesFonts() const
+        {
+            return this->includes_Meta_Fonts;
+        }
+    
+    protected:
+        TVectorMeta_Fonts includes_Meta_Fonts;
     public:
         typedef stdex::auto_array<Meta_Resources> TVectorMeta_Resources;
     
@@ -5802,13 +6153,14 @@ namespace Metacode
         Meta_Texts();
     
     public:
-        unsigned int getId() const override;
+        uint32_t getId() const override;
+    
     public:
     protected:
-        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-        bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+        bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+        bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+        bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+        bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
         class Meta_Text
             : public Metabuf::Metadata
@@ -5817,7 +6169,8 @@ namespace Metacode
             Meta_Text();
         
         public:
-            unsigned int getId() const override;
+            uint32_t getId() const override;
+        
         public:
             bool has_CharOffset() const
             {
@@ -5996,10 +6349,10 @@ namespace Metacode
             }
             
         protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;
-            bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
         protected:
         protected:
