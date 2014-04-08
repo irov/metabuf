@@ -31,7 +31,10 @@ namespace Metabuf
 		}
 
 		uint32_t rootId;
-		this->readSize( _buff, _size, _read, rootId );
+		if( this->readSize( _buff, _size, _read, rootId ) == false )
+		{
+			return false;
+		}
 
 		uint32_t metaId = this->getId();
 		if( rootId != metaId )
@@ -54,12 +57,18 @@ namespace Metabuf
         m_userData = _userData;
 
 		uint32_t attributeCount;
-		this->readSize( _buff, _size, _read, attributeCount );
+		if( this->readSize( _buff, _size, _read, attributeCount ) == false )
+		{
+			return false;
+		}
 
 		for( uint32_t i = 0; i != attributeCount; ++i )
 		{
 			uint32_t id;
-			this->readSize( _buff, _size, _read, id );
+			if( this->readSize( _buff, _size, _read, id ) == false )
+			{
+				return false;
+			}
 
 			if( this->_parseArguments( _buff, _size, _read, id ) == false )
             {
@@ -68,15 +77,24 @@ namespace Metabuf
 		}
 
         uint32_t includeTypeCount;
-        this->readSize( _buff, _size, _read, includeTypeCount );
+        if( this->readSize( _buff, _size, _read, includeTypeCount ) == false )
+		{
+			return false;
+		}
 
         for( uint32_t i = 0; i != includeTypeCount; ++i )
         {
     		uint32_t includeCount;
-	    	this->readSize( _buff, _size, _read, includeCount );
+	    	if( this->readSize( _buff, _size, _read, includeCount ) == false )
+			{
+				return false;
+			}
 
             uint32_t id_includes;
-            this->readSize( _buff, _size, _read, id_includes );
+            if( this->readSize( _buff, _size, _read, id_includes ) == false )
+			{
+				return false;
+			}
 
             if( this->_preparationIncludes( id_includes, includeCount ) == false )
             {
@@ -93,15 +111,24 @@ namespace Metabuf
         }
 
         uint32_t generatorTypeCount;
-        this->readSize( _buff, _size, _read, generatorTypeCount );
+        if( this->readSize( _buff, _size, _read, generatorTypeCount ) == false )
+		{
+			return false;
+		}
 
         for( uint32_t i = 0; i != generatorTypeCount; ++i )
         {
             uint32_t generatorCount;
-            this->readSize( _buff, _size, _read, generatorCount );
+            if( this->readSize( _buff, _size, _read, generatorCount ) == false )
+			{
+				return false;
+			}
 
             uint32_t id_includes;
-            this->readSize( _buff, _size, _read, id_includes );
+            if( this->readSize( _buff, _size, _read, id_includes ) == false )
+			{
+				return false;
+			}
 
             if( this->_preparationIncludes( id_includes, generatorCount ) == false )
             {
@@ -111,7 +138,10 @@ namespace Metabuf
             for( uint32_t j = 0; j != generatorCount; ++j )
             {
                 uint32_t id_generators;
-                this->readSize( _buff, _size, _read, id_generators );
+                if( this->readSize( _buff, _size, _read, id_generators ) == false )
+				{
+					return false;
+				}
 
                 if( this->_parseGenerators( _buff, _size, _read, id_generators ) == false )
                 {
