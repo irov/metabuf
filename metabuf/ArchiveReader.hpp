@@ -49,8 +49,13 @@ namespace Metabuf
     public:        
         inline void readBuffer( unsigned char * _begin, size_t _size )
         {
+			if( m_read + _size > m_size )
+			{
+				throw ArchiveException();
+			}
+
             memcpy( _begin, m_buff + m_read, _size );
-            m_read += _size;
+            m_read += _size;			
         }
 
         inline void readSize( uint32_t & _size )

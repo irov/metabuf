@@ -35,10 +35,19 @@ namespace Metabuf
             return true;
 		}
 
-        inline void readSize( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _t ) const
+        inline bool readSize( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _t ) const
         {
-            ArchiveReader ar(_buff, _size, _read, m_userData);            
-            ar.readSize( _t );
+			try
+			{
+				ArchiveReader ar(_buff, _size, _read, m_userData);            
+				ar.readSize( _t );
+			}
+			catch( const ArchiveException & )
+			{
+				return false;
+			}
+
+			return true;
         }
 
 	public:
