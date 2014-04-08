@@ -49,9 +49,9 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData );" << std::endl;
-        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData );" << std::endl;
-        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData );" << std::endl;
+        this->write(_ss) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, void * _userData );" << std::endl;
+        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount, void * _userData );" << std::endl;
+        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, void * _userData );" << std::endl;
         this->write(_ss) << std::endl;
 
         m_indent += 4;
@@ -169,7 +169,8 @@ namespace Metabuf
 
 		this->write(_ss) << std::endl;
 		this->write(_ss) << "public:" << std::endl;
-		this->write(_ss) << "    unsigned int getId() const override;" << std::endl;
+		this->write(_ss) << "    uint32_t getId() const override;" << std::endl;
+		this->write(_ss) << std::endl;
 		
 		return true;
 	}
@@ -178,7 +179,7 @@ namespace Metabuf
 	{
         (void)_node;
 
-		this->write(_ss) << "bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id ) override;" << std::endl;
+		this->write(_ss) << "bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -496,7 +497,7 @@ namespace Metabuf
     {
         (void)_node;
 
-        this->write(_ss) << "bool _preparationIncludes( unsigned int _includes, unsigned int _count ) override;" << std::endl;
+        this->write(_ss) << "bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;" << std::endl;
 
         return true;
     }
@@ -505,7 +506,7 @@ namespace Metabuf
 	{
         (void)_node;
 
-		this->write(_ss) << "bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes ) override;" << std::endl;
+		this->write(_ss) << "bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;" << std::endl;
 
         return true;
 	}
@@ -514,7 +515,7 @@ namespace Metabuf
     {
         (void)_node;
 
-        this->write(_ss) << "bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators ) override;" << std::endl;
+        this->write(_ss) << "bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;" << std::endl;
 
         return true;
     }
@@ -527,11 +528,11 @@ namespace Metabuf
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
-        this->write(_ss) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _readVersion, size_t & _needVersion, void * _userData )" << std::endl;
+        this->write(_ss) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, void * _userData )" << std::endl;
         this->write(_ss) << "    {" << std::endl;
         this->write(_ss) << "        Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        unsigned int head;" << std::endl;
+        this->write(_ss) << "        uint32_t head;" << std::endl;
         this->write(_ss) << "        ar.read( head );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "        if( head != 3133062829u )" << std::endl;
@@ -539,7 +540,7 @@ namespace Metabuf
         this->write(_ss) << "            return false;" << std::endl;
         this->write(_ss) << "        }" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        unsigned int version;" << std::endl;
+        this->write(_ss) << "        uint32_t version;" << std::endl;
         this->write(_ss) << "        ar.read( version );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "        _readVersion = version;" << std::endl;
@@ -553,11 +554,11 @@ namespace Metabuf
         this->write(_ss) << "        return true;" << std::endl;
         this->write(_ss) << "    }" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringCount, void * _userData )" << std::endl;
+        this->write(_ss) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount, void * _userData )" << std::endl;
         this->write(_ss) << "    {" << std::endl;
         this->write(_ss) << "        Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        unsigned int count;" << std::endl;
+        this->write(_ss) << "        uint32_t count;" << std::endl;
         this->write(_ss) << "        ar.read( count );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "        _stringCount = count;" << std::endl;
@@ -565,11 +566,11 @@ namespace Metabuf
         this->write(_ss) << "        return true;" << std::endl;
         this->write(_ss) << "    }" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, size_t & _stringSize, void * _userData )" << std::endl;
+        this->write(_ss) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, void * _userData )" << std::endl;
         this->write(_ss) << "    {" << std::endl;
         this->write(_ss) << "        Metabuf::ArchiveReader ar(_buff, _size, _read, _userData);" << std::endl;
         this->write(_ss) << std::endl;
-        this->write(_ss) << "        unsigned int size;" << std::endl;
+        this->write(_ss) << "        uint32_t size;" << std::endl;
         this->write(_ss) << "        ar.readSize( size );" << std::endl;
         this->write(_ss) << std::endl;
         this->write(_ss) << "        const char * value = ar.current_buff<char>();" << std::endl;
@@ -724,7 +725,7 @@ namespace Metabuf
 		}
 
 		this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;		
-		this->write(_ss) << "unsigned int " << _node->getScope() << "::getId() const" << std::endl;
+		this->write(_ss) << "uint32_t " << _node->getScope() << "::getId() const" << std::endl;
 		this->write(_ss) << "{" << std::endl;
 		this->write(_ss) << "    return " << _node->id << ";" << std::endl;
 		this->write(_ss) << "}" << std::endl;
@@ -735,7 +736,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _id )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == true && _node->attributes.empty() == true && _node->members.empty() == true )
@@ -835,7 +836,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_preparationIncludes( unsigned int _includes, unsigned int _count )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_preparationIncludes( uint32_t _includes, uint32_t _count )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == true && _node->includes.empty() == true && _node->inheritances.empty() == true )
@@ -910,7 +911,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _includes )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == true && _node->includes.empty() == true )
@@ -977,7 +978,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write(_ss) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write(_ss) << "bool " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, unsigned int _generators )" << std::endl;
+        this->write(_ss) << "bool " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators )" << std::endl;
         this->write(_ss) << "{" << std::endl;
 
         if( _node->inheritance.empty() == true && _node->generators.empty() == true )
@@ -1098,7 +1099,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	std::stringstream & Xml2Metacode::write( std::stringstream & _ss )
 	{
-		for( unsigned int i = 0; i != m_indent; ++i )
+		for( size_t i = 0; i != m_indent; ++i )
 		{
 			_ss << " ";
 		}

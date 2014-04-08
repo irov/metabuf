@@ -40,7 +40,7 @@ namespace Metabuf
         }
 
         template<class T>
-        inline void readCount( T * _t, size_t _size )
+        inline void readCount( T * _t, uint32_t _size )
         {
             unsigned char * buff = reinterpret_cast<unsigned char *>(_t);
             this->readBuffer( buff, sizeof(T) * _size );
@@ -53,14 +53,14 @@ namespace Metabuf
             m_read += _size;
         }
 
-        inline void readSize( unsigned int & _size )
+        inline void readSize( uint32_t & _size )
         {
             unsigned char size_1;
             this->readPOD( size_1 );
 
             if( size_1 == 255 )
             {
-                unsigned int size_2;
+                uint32_t size_2;
                 this->readPOD( size_2 );
 
                 _size = size_2;
@@ -76,7 +76,9 @@ namespace Metabuf
         inline const T * current_buff() const
         {
             const unsigned char * current = m_buff + m_read;
-            return reinterpret_cast<const T *>(current);
+			const T * buff = reinterpret_cast<const T *>(current);
+
+            return buff;
         }
 
         inline void skip( size_t _size )
@@ -92,13 +94,8 @@ namespace Metabuf
     };
     
     template<class T>
-    void archive_read( ArchiveReader & ar, T & _value, void * _userData )
-    {
-        (void)_userData;
+    void archive_read( ArchiveReader & ar, T & _value, void * _userData );
 
-        ar.readPOD( _value );
-    }
-    
     template<class T>
     inline void ArchiveReader::read( T & _t )
     {

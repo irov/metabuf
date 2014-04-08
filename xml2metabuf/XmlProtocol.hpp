@@ -8,6 +8,8 @@
 
 #   include <sstream>
 
+#	include <stdint.h>
+
 namespace Metabuf
 {
 	struct XmlAttribute
@@ -37,7 +39,7 @@ namespace Metabuf
         XmlNode();
         ~XmlNode();
 
-		size_t id;
+		uint32_t id;
 		std::string name;
 		std::string generator;
 		std::string inheritance;
@@ -45,7 +47,7 @@ namespace Metabuf
         const XmlNode * node_inheritance;
         const XmlNode * node_scope;
 
-        mutable size_t enumerator;
+        mutable uint32_t enumerator;
 
 		TMapAttributes attributes;
 		TMapMembers members;
@@ -82,7 +84,7 @@ namespace Metabuf
 		const TMapNodes & getNodes() const;
 
     public:
-        unsigned int getVersion() const;
+        uint32_t getVersion() const;
 
     public:
         bool getEvict( const std::string & _type, std::string & _evict ) const;
@@ -96,7 +98,7 @@ namespace Metabuf
 		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
-        unsigned int m_version;
+        uint32_t m_version;
 
 		size_t m_enumerator;
 

@@ -22,7 +22,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     inline void operator >> ( ArchiveReader & ar, Menge::String & _value )
     {
-        size_t size;
+        uint32_t size;
         ar.readSize( size );
 
         if( size == 0 )
@@ -38,7 +38,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     inline void operator >> ( ArchiveReader & ar, Menge::WString & _value )
     {
-        size_t size;
+        uint32_t size;
         ar.readSize( size );
 
         if( size == 0 )

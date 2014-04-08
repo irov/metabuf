@@ -454,7 +454,7 @@ namespace Metabuf
 		return m_nodes;
 	}
     //////////////////////////////////////////////////////////////////////////
-    unsigned int XmlProtocol::getVersion() const
+    uint32_t XmlProtocol::getVersion() const
     {
         return m_version;
     }
