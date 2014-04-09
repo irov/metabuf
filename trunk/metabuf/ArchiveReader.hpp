@@ -54,7 +54,8 @@ namespace Metabuf
 				throw ArchiveException();
 			}
 
-            memcpy( _begin, m_buff + m_read, _size );
+			const unsigned char * read_buff = m_buff + m_read;
+            memcpy( _begin, (const void *)read_buff, _size );
             m_read += _size;			
         }
 
