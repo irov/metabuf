@@ -3,6 +3,8 @@
 #	include <stdint.h>
 #	include <memory.h>
 
+#	include <algorithm>
+
 namespace Metabuf
 {
     class ArchiveException
@@ -55,8 +57,9 @@ namespace Metabuf
 			}
 
 			const unsigned char * read_buff = m_buff + m_read;
-            memcpy( _begin, (const void *)read_buff, _size );
-            m_read += _size;			
+            //memcpy( _begin, (const void *)read_buff, _size );
+			std::copy( read_buff, read_buff + _size, (unsigned char *)_begin );
+            m_read += _size;
         }
 
         inline void readSize( uint32_t & _size )
