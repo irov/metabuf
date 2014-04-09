@@ -1,10 +1,13 @@
 #	pragma once
 
 #	include <stdint.h>
-#	include <memory.h>
 
-#	include <algorithm>
-#	include <iterator>
+#	include "Metaconfig.hpp"
+
+#	ifndef METABUF_MEMCPY
+#	include <memory.h>
+#	define METABUF_MEMCPY(Dest, Src, Size) memcpy(Dest, Src, Size)
+#	endif
 
 namespace Metabuf
 {
@@ -58,9 +61,8 @@ namespace Metabuf
 			}
 
 			const unsigned char * read_buff = m_buff + m_read;
-            //memcpy( _begin, (const void *)read_buff, _size );
-			stdext::checked_array_iterator<unsigned char *> chkd_dist((unsigned char *)_begin, _size);
-			std::copy( read_buff, read_buff + _size, chkd_dist );
+            METABUF_MEMCPY( _begin, read_buff, _size );
+
             m_read += _size;
         }
 
