@@ -4,6 +4,7 @@
 #	include <memory.h>
 
 #	include <algorithm>
+#	include <iterator>
 
 namespace Metabuf
 {
@@ -58,7 +59,8 @@ namespace Metabuf
 
 			const unsigned char * read_buff = m_buff + m_read;
             //memcpy( _begin, (const void *)read_buff, _size );
-			std::copy( read_buff, read_buff + _size, (unsigned char *)_begin );
+			stdext::checked_array_iterator<unsigned char *> chkd_dist((unsigned char *)_begin, _size);
+			std::copy( read_buff, read_buff + _size, chkd_dist );
             m_read += _size;
         }
 
