@@ -160,6 +160,8 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	void Metadata::operator delete ( void * _ptr, size_t _size )
 	{		
+		(void)_size;
+
 		METABUF_FREE(_ptr, _size);
 	}
 }
