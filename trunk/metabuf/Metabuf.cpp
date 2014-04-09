@@ -1,14 +1,14 @@
-#	include "metabuf.hpp"
-#	include "metaconfig.hpp"
-
-#	include <malloc.h>
+#	include "Metabuf.hpp"
+#	include "Metaconfig.hpp"
 
 #	ifndef METABUF_MALLOC
-#	define METABUF_MALLOC malloc
+#	include <malloc.h>
+#	define METABUF_MALLOC(S) malloc(S)
 #	endif
 
 #	ifndef METABUF_FREE
-#	define METABUF_FREE free
+#	include <malloc.h>
+#	define METABUF_FREE(B, S) free(B)
 #	endif
 
 namespace Metabuf
@@ -159,7 +159,7 @@ namespace Metabuf
 	}
 	//////////////////////////////////////////////////////////////////////////
 	void Metadata::operator delete ( void * _ptr, size_t _size )
-	{
-		METABUF_FREE(_ptr);
+	{		
+		METABUF_FREE(_ptr, _size);
 	}
 }
