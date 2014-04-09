@@ -35,19 +35,19 @@ namespace Metabuf
         template<class T>
         inline void readPOD( T & _t )
         {
-            unsigned char * buff = reinterpret_cast<unsigned char *>(&_t);
+            void * buff = (void *)(&_t);
             this->readBuffer( buff, sizeof(T) );
         }
 
         template<class T>
         inline void readCount( T * _t, uint32_t _size )
         {
-            unsigned char * buff = reinterpret_cast<unsigned char *>(_t);
+            void * buff = (void *)(_t);
             this->readBuffer( buff, sizeof(T) * _size );
         }
 
     public:        
-        inline void readBuffer( unsigned char * _begin, size_t _size )
+        inline void readBuffer( void * _begin, size_t _size )
         {
 			if( m_read + _size > m_size )
 			{
