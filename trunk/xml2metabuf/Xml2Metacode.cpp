@@ -42,10 +42,10 @@ namespace Metabuf
     bool Xml2Metacode::generateHeader( std::stringstream & _ss )
     {
         this->write(_ss) << "#   pragma once" << std::endl;
-        this->write(_ss) << std::endl;
+		this->write(_ss) << std::endl;
+		this->write(_ss) << "#   include \"Metatype.h\"" << std::endl;
+		this->write(_ss) << std::endl;
         this->write(_ss) << "#   include <metabuf/Metabuf.hpp>" << std::endl;
-        this->write(_ss) << std::endl;
-        this->write(_ss) << "#   include \"Metatype.h\"" << std::endl;                
         this->write(_ss) << std::endl;
         this->write(_ss) << "namespace Metacode" << std::endl;
         this->write(_ss) << "{" << std::endl;
