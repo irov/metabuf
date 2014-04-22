@@ -9,3 +9,8 @@
 #	include "stdex/allocator.h"
 #	define METABUF_FREE(B, S) stdex_free(B)
 #	endif 
+
+#	ifndef METABUF_MEMCPY
+#	include "stdex/memorycopy.h"
+#	define METABUF_MEMCPY(Dest, Src, Size) stdex::memorycopy(Dest, Src, Size)
+#	endif
