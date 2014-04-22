@@ -1,12 +1,14 @@
 #	pragma once
 
-#	include <metabuf/ArchiveReader.hpp>
-
 #   include <stdex/auto_array.h>
+#   include <stdex/memory_reader.h>
 
 namespace Metabuf
 {
     const size_t header_size = 8;
+
+	template<class T>
+	void archive_read( stdex::memory_reader & ar, T & _value, void * _userData );
 
 	class Metadata
 	{
@@ -24,10 +26,10 @@ namespace Metabuf
 		{
             try
             {
-			    ArchiveReader ar(_buff, _size, _read, m_userData);
-                ar.read( _t );
+			    stdex::memory_reader ar(_buff, _size, _read);
+                archive_read( ar, _t, m_userData );
             }
-            catch( const ArchiveException & )
+            catch( const stdex::memory_reader_exception & )
             {
                 return false;
             }
@@ -39,10 +41,10 @@ namespace Metabuf
         {
 			try
 			{
-				ArchiveReader ar(_buff, _size, _read, m_userData);            
+				stdex::memory_reader ar(_buff, _size, _read);            
 				ar.readSize( _t );
 			}
-			catch( const ArchiveException & )
+			catch( const stdex::memory_reader_exception & )
 			{
 				return false;
 			}

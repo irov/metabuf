@@ -1,4 +1,4 @@
-<Protocol Version = "45">
+<Protocol Version = "46">
   <Type Name="Menge::String" Evict="string"/>
   <Type Name="Menge::WString" Evict="wstring"/>
   <Type Name="Menge::ConstString" Evict="string"/>
@@ -251,6 +251,7 @@
   <Node Name="Pak">
     <Node Name="Scripts">
       <Attribute Name="Path" Type="Menge::ConstString" Required="1"/>
+      <Attribute Name="Module" Type="Menge::ConstString"/>      
     </Node>
 
     <Node Name="Fonts">
