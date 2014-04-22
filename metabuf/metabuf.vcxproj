@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArchiveReader.hpp" />
     <ClInclude Include="Metabuf.hpp" />
+    <ClInclude Include="Metaconfig.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Metabuf.cpp" />
