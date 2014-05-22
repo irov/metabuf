@@ -261,7 +261,7 @@ namespace Metabuf
 
         if( node_root == NULL )
         {
-            m_error << "Xml2Metabuf::convert: invalid root node" << root_name << std::endl;
+            m_error << "Xml2Metabuf::convert: invalid root node " << root_name << std::endl;
 
             return false;
         }
@@ -271,7 +271,7 @@ namespace Metabuf
 
 		if( this->writeNode_( node_root, root ) == false )
 		{
-            m_error << "Xml2Metabuf::convert: invalid write node" << root_name << std::endl;
+            m_error << "Xml2Metabuf::convert: invalid write node " << root_name << std::endl;
 
 			return false;
 		}
