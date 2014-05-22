@@ -42,7 +42,7 @@ void main()
     fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
     fclose( file_metacode_cpp );
 
-    convert("DebugInfo.xml", "DebugInfo.bin", &xml_protocol );
+    //convert("DebugInfo.xml", "DebugInfo.bin", &xml_protocol );
     //convert("Pak.xml", "Pak.bin", &xml_protocol );
 }
 //////////////////////////////////////////////////////////////////////////

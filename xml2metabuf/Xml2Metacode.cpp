@@ -563,7 +563,7 @@ namespace Metabuf
 		this->write(_ss) << std::endl;
 		this->write(_ss) << "            return successful;" << std::endl;
 		this->write(_ss) << "        }" << std::endl;
-		this->write(_ss) << "        catch( const stdex::memory_reader_exceprtion & )" << std::endl;
+		this->write(_ss) << "        catch( const stdex::memory_reader_exception & )" << std::endl;
 		this->write(_ss) << "        {" << std::endl;
 		this->write(_ss) << "        }" << std::endl;
 		this->write(_ss) << std::endl;
