@@ -19,15 +19,15 @@ namespace Metabuf
 			(void)_user;
 
 			uint32_t int_value;
-			if( sscanf( _value, "{{%u}}", &int_value ) == 0 )
+			if( sscanf( _value, "{{%u}}", &int_value ) == 1 )
+			{
+				_metabuf->write( int_value );
+			}
+			else
 			{
 				int_value = ((uint32_t)-1);
 				_metabuf->write( int_value );
 				_metabuf->writeString( _value );
-			}
-			else
-			{
-				_metabuf->write( int_value );
 			}
 
 			return true;
