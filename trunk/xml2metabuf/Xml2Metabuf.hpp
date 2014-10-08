@@ -57,7 +57,7 @@ namespace Metabuf
             this->writeBuffer( (const unsigned char * )_value, sizeof(T) * _count );
         }
 
-        size_t writeString( const char * _value );
+        void writeString( const char * _value );
         
     protected:
         void writeBuffer( const unsigned char * _buff, size_t _size );
