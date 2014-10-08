@@ -13,14 +13,32 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     namespace Serialize
     {
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_string_id( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			uint32_t int_value;
+			if( sscanf( _value, "{{%u}}", &int_value ) == 0 )
+			{
+				int_value = ((uint32_t)-1);
+				_metabuf->write( int_value );
+				_metabuf->writeString( _value );
+			}
+			else
+			{
+				_metabuf->write( int_value );
+			}
+
+			return true;
+		}
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
 
-            uint32_t index = _metabuf->writeString( _value );
-            _metabuf->writeSize( index );
-
+            _metabuf->writeString( _value );
+            
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
@@ -165,7 +183,7 @@ namespace Metabuf
                 pch = strtok (NULL, " ");
             }
 
-            uint32_t count = floats.size();
+            uint32_t count = (uint32_t)floats.size();
             _metabuf->writeSize( count );
 
 			if( count > 0 )
@@ -185,6 +203,7 @@ namespace Metabuf
     void Xml2Metabuf::initialize()
     {
         this->addSerializator( "string", &Serialize::s_write_string, 0 );
+		this->addSerializator( "string_id", &Serialize::s_write_string_id, 0 );
         
         this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, 0 );
         this->addSerializator( "int", &Serialize::s_write_int, 0 );
@@ -280,7 +299,7 @@ namespace Metabuf
         buffBody.swap( m_buff );        
         m_buff.clear();
 
-        uint32_t stringCacheCount = m_stringCache.size();
+        uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
         this->write( stringCacheCount );
         
         for( TVectorStringCache::iterator
@@ -291,7 +310,7 @@ namespace Metabuf
         {
             const std::string & str = *it;
 
-            uint32_t strSize = str.size();
+            uint32_t strSize = (uint32_t)str.size();
             this->writeSize( strSize );
 
             const char * strBuff = str.c_str();
@@ -491,7 +510,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::writeNodeArguments_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
 	{
-		uint32_t id = _attr->id;
+		uint32_t id = (uint32_t)_attr->id;
 		this->writeSize( id );
 		
         std::string evict;
@@ -647,7 +666,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        uint32_t includesTypeCount = _node->includes.size();
+        uint32_t includesTypeCount = (uint32_t)_node->includes.size();
         this->writeSize( includesTypeCount );
 
         for( TMapNodes::const_iterator
@@ -698,7 +717,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        uint32_t generatorsTypeCount = _node->inheritances.size();
+        uint32_t generatorsTypeCount = (uint32_t)_node->inheritances.size();
         this->writeSize( generatorsTypeCount );
 
         for( TMapNodes::const_iterator
@@ -867,33 +886,30 @@ namespace Metabuf
         if( _value < 255 )
         {
             unsigned char size = (unsigned char)_value;
-            this->writeBuffer( (const unsigned char * )&size, 1 );
+            this->write( size );
         }
         else
         {
             unsigned char size = 255;
-            this->writeBuffer( (const unsigned char * )&size, 1 );
-
+            this->write( size );
             this->write( _value );
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    uint32_t Xml2Metabuf::writeString( const char * _value )
+    void Xml2Metabuf::writeString( const char * _value )
     {
         TVectorStringCache::iterator it_found = std::find( m_stringCache.begin(), m_stringCache.end(), _value );
 
-        if( it_found != m_stringCache.end() )
+        if( it_found == m_stringCache.end() )
         {
-            uint32_t index = std::distance( m_stringCache.begin(), it_found );
-           
-            return index;
+			it_found = m_stringCache.insert( m_stringCache.end(), _value );
         }
 
-        uint32_t new_index = m_stringCache.size();
+		size_t index = std::distance( m_stringCache.begin(), it_found );
 
-        m_stringCache.push_back( _value );
+		uint32_t write_index = (uint32_t)index;
 
-        return new_index;
+		this->writeSize( write_index );
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::writeBuffer( const unsigned char * _buff, size_t _size )

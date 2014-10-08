@@ -100,7 +100,7 @@ namespace Metabuf
 	protected:
         uint32_t m_version;
 
-		size_t m_enumerator;
+		uint32_t m_enumerator;
 
 		TMapNodes m_nodes;
 
