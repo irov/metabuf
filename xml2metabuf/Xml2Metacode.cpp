@@ -243,25 +243,6 @@ namespace Metabuf
                 this->write(_ss) << "}" << std::endl;
                 this->write(_ss) << std::endl;
             }
-
-
-			this->write(_ss) << "template<class C, class M>" << std::endl;
-			this->write(_ss) << "void" << " " << "method_" << attr->name << "( C * _self, M _method ) const" << std::endl;
-			this->write(_ss) << "{" << std::endl;
-
-			if( attr->required == false )
-			{
-				this->write(_ss) << "    if( " << attr->name << "_successful == false )" << std::endl;
-				this->write(_ss) << "    {" << std::endl;
-				this->write(_ss) << "        return;" << std::endl;
-				this->write(_ss) << "    }" << std::endl;
-				this->write(_ss) << std::endl;
-			}
-
-			this->write(_ss) << "    (_self->*_method)( this->" << attr->name << " );" << std::endl;
-			this->write(_ss) << "}" << std::endl;
-
-			this->write(_ss) << std::endl;
 		}
 
 		for( TMapMembers::const_iterator
@@ -325,24 +306,6 @@ namespace Metabuf
                     this->write(_ss) << "}" << std::endl;
                     this->write(_ss) << std::endl;
                 }
-
-
-				this->write(_ss) << "template<class C, class M>" << std::endl;
-				this->write(_ss) << "void" << " " << "method_" << member->name << "_" << attr->name << "( C * _self, M _method )" << std::endl;
-				this->write(_ss) << "{" << std::endl;
-
-				if( attr->required == false )
-				{
-					this->write(_ss) << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
-					this->write(_ss) << "    {" << std::endl;
-					this->write(_ss) << "        return;" << std::endl;
-					this->write(_ss) << "    }" << std::endl;
-					this->write(_ss) << std::endl;
-				}
-
-				this->write(_ss) << "    (_self->*_method)( this->" << member->name << "_" << attr->name << " );" << std::endl;
-				this->write(_ss) << "}" << std::endl;
-				this->write(_ss) << std::endl;
 			}
 		}
 
