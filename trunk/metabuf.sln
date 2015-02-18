@@ -2,9 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml2metabuf", "xml2metabuf\xml2metabuf.vcxproj", "{7C794618-5C63-4024-AA30-AA4360EE543F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{89A1E353-E2DC-495C-B403-742BE206ACED} = {89A1E353-E2DC-495C-B403-742BE206ACED}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "sandbox\sandbox.vcxproj", "{F0FED2B0-1F77-4302-8DD6-B947898882F2}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -12,21 +9,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "sandbox\sandbox.
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167} = {7C7912D0-2D91-4A12-811E-5F70AEA7B167}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pugixml", "pugixml\scripts\pugixml_vs2010_static.vcxproj", "{89A1E353-E2DC-495C-B403-742BE206ACED}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "metabuf", "metabuf\metabuf.vcxproj", "{7C7912D0-2D91-4A12-811E-5F70AEA7B167}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox_reader", "sandbox_reader\sandbox_reader.vcxproj", "{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7C794618-5C63-4024-AA30-AA4360EE543F} = {7C794618-5C63-4024-AA30-AA4360EE543F}
-		{89A1E353-E2DC-495C-B403-742BE206ACED} = {89A1E353-E2DC-495C-B403-742BE206ACED}
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167} = {7C7912D0-2D91-4A12-811E-5F70AEA7B167}
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
-		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
@@ -46,14 +37,6 @@ Global
 		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|Win32.ActiveCfg = Release|Win32
 		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|Win32.Build.0 = Release|Win32
 		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|x64.ActiveCfg = Release|Win32
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Debug|Win32.ActiveCfg = Debug|Win32
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Debug|Win32.Build.0 = Debug|Win32
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Debug|x64.ActiveCfg = Debug|x64
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Debug|x64.Build.0 = Debug|x64
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Release|Win32.ActiveCfg = Release|Win32
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Release|Win32.Build.0 = Release|Win32
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Release|x64.ActiveCfg = Release|x64
-		{89A1E353-E2DC-495C-B403-742BE206ACED}.Release|x64.Build.0 = Release|x64
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|Win32.ActiveCfg = Debug|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|Win32.Build.0 = Debug|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|x64.ActiveCfg = Debug|Win32
@@ -69,5 +52,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
 EndGlobal

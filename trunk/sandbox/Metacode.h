@@ -1,8 +1,8 @@
 #   pragma once
 
-#   include <metabuf/Metabuf.hpp>
-
 #   include "Metatype.h"
+
+#   include <metabuf/Metabuf.hpp>
 
 namespace Metacode
 {
@@ -31,12 +31,6 @@ namespace Metacode
             std::swap( _value, this->Name);
         }
         
-        template<class C, class M>
-        void method_Name( C * _self, M _method ) const
-        {
-            (_self->*_method)( this->Name );
-        }
-        
     protected:
         bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
         bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -53,20 +47,14 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
-            const Menge::ConstString & get_Path() const
+            const Menge::FilePath & get_Path() const
             {
                 return this->Path;
             }
             
-            void swap_Path( Menge::ConstString & _value ) const
+            void swap_Path( Menge::FilePath & _value ) const
             {
                 std::swap( _value, this->Path);
-            }
-            
-            template<class C, class M>
-            void method_Path( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Path );
             }
             
         protected:
@@ -77,7 +65,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString Path;
+            mutable Menge::FilePath Path;
         };
         
         class Meta_Resource
@@ -100,12 +88,6 @@ namespace Metacode
                 std::swap( _value, this->Name);
             }
             
-            template<class C, class M>
-            void method_Name( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Name );
-            }
-            
             const Menge::ConstString & get_Type() const
             {
                 return this->Type;
@@ -114,12 +96,6 @@ namespace Metacode
             void swap_Type( Menge::ConstString & _value ) const
             {
                 std::swap( _value, this->Type);
-            }
-            
-            template<class C, class M>
-            void method_Type( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Type );
             }
             
         protected:
@@ -170,12 +146,6 @@ namespace Metacode
                     std::swap( _value, this->Delay);
                 }
                 
-                template<class C, class M>
-                void method_Delay( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Delay );
-                }
-                
                 const Menge::ConstString & get_ResourceImageName() const
                 {
                     return this->ResourceImageName;
@@ -184,12 +154,6 @@ namespace Metacode
                 void swap_ResourceImageName( Menge::ConstString & _value ) const
                 {
                     std::swap( _value, this->ResourceImageName);
-                }
-                
-                template<class C, class M>
-                void method_ResourceImageName( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->ResourceImageName );
                 }
                 
             protected:
@@ -218,30 +182,24 @@ namespace Metacode
             TVectorMeta_Sequence includes_Meta_Sequence;
         };
         
-        class Meta_ResourceCursorICO
+        class Meta_ResourceCal3dAnimation
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceCursorICO();
+            Meta_ResourceCal3dAnimation();
         
         public:
             uint32_t getId() const override;
         
         public:
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
         protected:
@@ -252,7 +210,100 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
+        };
+        
+        class Meta_ResourceCal3dMesh
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceCal3dMesh();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::FilePath File_Path;
+        };
+        
+        class Meta_ResourceCal3dSkeleton
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceCal3dSkeleton();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::FilePath File_Path;
+        };
+        
+        class Meta_ResourceCursorICO
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceCursorICO();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::FilePath File_Path;
         };
         
         class Meta_ResourceCursorSystem
@@ -265,20 +316,14 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
         protected:
@@ -289,7 +334,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
         };
         
         class Meta_ResourceEmitter
@@ -312,12 +357,6 @@ namespace Metacode
                 std::swap(_value, this->Container_Name);
             }
             
-            template<class C, class M>
-            void method_Container_Name( C * _self, M _method )
-            {
-                (_self->*_method)( this->Container_Name );
-            }
-            
             const Menge::ConstString & get_Emitter_Name() const
             {
                 return this->Emitter_Name;
@@ -328,12 +367,6 @@ namespace Metacode
                 std::swap(_value, this->Emitter_Name);
             }
             
-            template<class C, class M>
-            void method_Emitter_Name( C * _self, M _method )
-            {
-                (_self->*_method)( this->Emitter_Name );
-            }
-            
             const bool & get_EmitterRelative_Value() const
             {
                 return this->EmitterRelative_Value;
@@ -342,12 +375,6 @@ namespace Metacode
             void swap_EmitterRelative_Value( bool & _value ) const
             {
                 std::swap(_value, this->EmitterRelative_Value);
-            }
-            
-            template<class C, class M>
-            void method_EmitterRelative_Value( C * _self, M _method )
-            {
-                (_self->*_method)( this->EmitterRelative_Value );
             }
             
             bool has_Offset_Value() const
@@ -379,17 +406,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Offset_Value( C * _self, M _method )
-            {
-                if( Offset_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Offset_Value );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
             bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -415,20 +431,14 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
             const Menge::ConstString & get_Folder_Path() const
@@ -441,12 +451,6 @@ namespace Metacode
                 std::swap(_value, this->Folder_Path);
             }
             
-            template<class C, class M>
-            void method_Folder_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->Folder_Path );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
             bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -455,7 +459,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
             mutable Menge::ConstString Folder_Path;
         };
         
@@ -477,6 +481,37 @@ namespace Metacode
         public:
         protected:
         protected:
+        };
+        
+        class Meta_ResourceFile
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceFile();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable Menge::FilePath File_Path;
         };
         
         class Meta_ResourceHIT
@@ -518,17 +553,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Codec( C * _self, M _method )
-            {
-                if( File_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Codec );
-            }
-            
             bool has_File_Converter() const
             {
                 return File_Converter_successful;
@@ -558,31 +582,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Converter( C * _self, M _method )
-            {
-                if( File_Converter_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Converter );
-            }
-            
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
         protected:
@@ -597,337 +604,114 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
         };
         
-        class Meta_ResourceImageCombineRGBAndAlpha
+        class Meta_ResourceImageData
             : public Meta_Resource
         { 
         public:
-            Meta_ResourceImageCombineRGBAndAlpha();
+            Meta_ResourceImageData();
         
         public:
             uint32_t getId() const override;
         
         public:
-            bool has_File_Alpha() const
+            bool has_File_Codec() const
             {
-                return File_Alpha_successful;
+                return File_Codec_successful;
             }
             
-            bool get_File_Alpha( bool & _value ) const
+            bool get_File_Codec( Menge::ConstString & _value ) const
             {
-                if( File_Alpha_successful == false )
+                if( File_Codec_successful == false )
                 {
                     return false;
                 }
             
-                _value = this->File_Alpha;
+                _value = this->File_Codec;
             
                 return true;
             }
             
-            bool swap_File_Alpha( bool & _value ) const
+            bool swap_File_Codec( Menge::ConstString & _value ) const
             {
-                if( File_Alpha_successful == false )
+                if( File_Codec_successful == false )
                 {
                     return false;
                 }
             
-                std::swap(_value, this->File_Alpha);
+                std::swap(_value, this->File_Codec);
             
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Alpha( C * _self, M _method )
+            bool has_File_MaxSize() const
             {
-                if( File_Alpha_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Alpha );
+                return File_MaxSize_successful;
             }
             
-            bool has_File_CodecAlpha() const
+            bool get_File_MaxSize( mt::vec2f & _value ) const
             {
-                return File_CodecAlpha_successful;
-            }
-            
-            bool get_File_CodecAlpha( Menge::ConstString & _value ) const
-            {
-                if( File_CodecAlpha_successful == false )
+                if( File_MaxSize_successful == false )
                 {
                     return false;
                 }
             
-                _value = this->File_CodecAlpha;
+                _value = this->File_MaxSize;
             
                 return true;
             }
             
-            bool swap_File_CodecAlpha( Menge::ConstString & _value ) const
+            bool swap_File_MaxSize( mt::vec2f & _value ) const
             {
-                if( File_CodecAlpha_successful == false )
+                if( File_MaxSize_successful == false )
                 {
                     return false;
                 }
             
-                std::swap(_value, this->File_CodecAlpha);
+                std::swap(_value, this->File_MaxSize);
             
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_CodecAlpha( C * _self, M _method )
+            bool has_File_NoExist() const
             {
-                if( File_CodecAlpha_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_CodecAlpha );
+                return File_NoExist_successful;
             }
             
-            bool has_File_CodecRGB() const
+            bool get_File_NoExist( bool & _value ) const
             {
-                return File_CodecRGB_successful;
-            }
-            
-            bool get_File_CodecRGB( Menge::ConstString & _value ) const
-            {
-                if( File_CodecRGB_successful == false )
+                if( File_NoExist_successful == false )
                 {
                     return false;
                 }
             
-                _value = this->File_CodecRGB;
+                _value = this->File_NoExist;
             
                 return true;
             }
             
-            bool swap_File_CodecRGB( Menge::ConstString & _value ) const
+            bool swap_File_NoExist( bool & _value ) const
             {
-                if( File_CodecRGB_successful == false )
+                if( File_NoExist_successful == false )
                 {
                     return false;
                 }
             
-                std::swap(_value, this->File_CodecRGB);
+                std::swap(_value, this->File_NoExist);
             
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_CodecRGB( C * _self, M _method )
+            const Menge::FilePath & get_File_Path() const
             {
-                if( File_CodecRGB_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_CodecRGB );
+                return this->File_Path;
             }
             
-            bool has_File_PathAlpha() const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
-                return File_PathAlpha_successful;
-            }
-            
-            bool get_File_PathAlpha( Menge::ConstString & _value ) const
-            {
-                if( File_PathAlpha_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_PathAlpha;
-            
-                return true;
-            }
-            
-            bool swap_File_PathAlpha( Menge::ConstString & _value ) const
-            {
-                if( File_PathAlpha_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_PathAlpha);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_PathAlpha( C * _self, M _method )
-            {
-                if( File_PathAlpha_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_PathAlpha );
-            }
-            
-            bool has_File_PathRGB() const
-            {
-                return File_PathRGB_successful;
-            }
-            
-            bool get_File_PathRGB( Menge::ConstString & _value ) const
-            {
-                if( File_PathRGB_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_PathRGB;
-            
-                return true;
-            }
-            
-            bool swap_File_PathRGB( Menge::ConstString & _value ) const
-            {
-                if( File_PathRGB_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_PathRGB);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_PathRGB( C * _self, M _method )
-            {
-                if( File_PathRGB_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_PathRGB );
-            }
-            
-            bool has_File_UV() const
-            {
-                return File_UV_successful;
-            }
-            
-            bool get_File_UV( mt::vec4f & _value ) const
-            {
-                if( File_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_UV;
-            
-                return true;
-            }
-            
-            bool swap_File_UV( mt::vec4f & _value ) const
-            {
-                if( File_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_UV);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_UV( C * _self, M _method )
-            {
-                if( File_UV_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_UV );
-            }
-            
-            bool has_File_WrapX() const
-            {
-                return File_WrapX_successful;
-            }
-            
-            bool get_File_WrapX( bool & _value ) const
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_WrapX;
-            
-                return true;
-            }
-            
-            bool swap_File_WrapX( bool & _value ) const
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_WrapX);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_WrapX( C * _self, M _method )
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapX );
-            }
-            
-            bool has_File_WrapY() const
-            {
-                return File_WrapY_successful;
-            }
-            
-            bool get_File_WrapY( bool & _value ) const
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_WrapY;
-            
-                return true;
-            }
-            
-            bool swap_File_WrapY( bool & _value ) const
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_WrapY);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_WrapY( C * _self, M _method )
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapY );
+                std::swap(_value, this->File_Path);
             }
             
         protected:
@@ -938,22 +722,13 @@ namespace Metacode
         public:
         protected:
         protected:
-            bool File_Alpha_successful;
-            mutable bool File_Alpha;
-            bool File_CodecAlpha_successful;
-            mutable Menge::ConstString File_CodecAlpha;
-            bool File_CodecRGB_successful;
-            mutable Menge::ConstString File_CodecRGB;
-            bool File_PathAlpha_successful;
-            mutable Menge::ConstString File_PathAlpha;
-            bool File_PathRGB_successful;
-            mutable Menge::ConstString File_PathRGB;
-            bool File_UV_successful;
-            mutable mt::vec4f File_UV;
-            bool File_WrapX_successful;
-            mutable bool File_WrapX;
-            bool File_WrapY_successful;
-            mutable bool File_WrapY;
+            bool File_Codec_successful;
+            mutable Menge::ConstString File_Codec;
+            bool File_MaxSize_successful;
+            mutable mt::vec2f File_MaxSize;
+            bool File_NoExist_successful;
+            mutable bool File_NoExist;
+            mutable Menge::FilePath File_Path;
         };
         
         class Meta_ResourceImageDefault
@@ -995,17 +770,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Alpha( C * _self, M _method )
-            {
-                if( File_Alpha_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Alpha );
-            }
-            
             bool has_File_Codec() const
             {
                 return File_Codec_successful;
@@ -1033,17 +797,6 @@ namespace Metacode
                 std::swap(_value, this->File_Codec);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_Codec( C * _self, M _method )
-            {
-                if( File_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Codec );
             }
             
             bool has_File_MaxSize() const
@@ -1075,151 +828,101 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_MaxSize( C * _self, M _method )
+            bool has_File_NoExist() const
             {
-                if( File_MaxSize_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_MaxSize );
+                return File_NoExist_successful;
             }
             
-            const Menge::ConstString & get_File_Path() const
+            bool get_File_NoExist( bool & _value ) const
+            {
+                if( File_NoExist_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_NoExist;
+            
+                return true;
+            }
+            
+            bool swap_File_NoExist( bool & _value ) const
+            {
+                if( File_NoExist_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_NoExist);
+            
+                return true;
+            }
+            
+            bool has_File_Offset() const
+            {
+                return File_Offset_successful;
+            }
+            
+            bool get_File_Offset( mt::vec2f & _value ) const
+            {
+                if( File_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Offset;
+            
+                return true;
+            }
+            
+            bool swap_File_Offset( mt::vec2f & _value ) const
+            {
+                if( File_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Offset);
+            
+                return true;
+            }
+            
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
             }
             
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
+            bool has_File_Size() const
             {
-                (_self->*_method)( this->File_Path );
+                return File_Size_successful;
             }
             
-            bool has_File_Rotate() const
+            bool get_File_Size( mt::vec2f & _value ) const
             {
-                return File_Rotate_successful;
-            }
-            
-            bool get_File_Rotate( bool & _value ) const
-            {
-                if( File_Rotate_successful == false )
+                if( File_Size_successful == false )
                 {
                     return false;
                 }
             
-                _value = this->File_Rotate;
+                _value = this->File_Size;
             
                 return true;
             }
             
-            bool swap_File_Rotate( bool & _value ) const
+            bool swap_File_Size( mt::vec2f & _value ) const
             {
-                if( File_Rotate_successful == false )
+                if( File_Size_successful == false )
                 {
                     return false;
                 }
             
-                std::swap(_value, this->File_Rotate);
+                std::swap(_value, this->File_Size);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_Rotate( C * _self, M _method )
-            {
-                if( File_Rotate_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Rotate );
-            }
-            
-            bool has_File_TextureSize() const
-            {
-                return File_TextureSize_successful;
-            }
-            
-            bool get_File_TextureSize( mt::vec2f & _value ) const
-            {
-                if( File_TextureSize_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_TextureSize;
-            
-                return true;
-            }
-            
-            bool swap_File_TextureSize( mt::vec2f & _value ) const
-            {
-                if( File_TextureSize_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_TextureSize);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_TextureSize( C * _self, M _method )
-            {
-                if( File_TextureSize_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_TextureSize );
-            }
-            
-            bool has_File_UV() const
-            {
-                return File_UV_successful;
-            }
-            
-            bool get_File_UV( mt::vec4f & _value ) const
-            {
-                if( File_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_UV;
-            
-                return true;
-            }
-            
-            bool swap_File_UV( mt::vec4f & _value ) const
-            {
-                if( File_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_UV);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_UV( C * _self, M _method )
-            {
-                if( File_UV_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_UV );
             }
             
             bool has_File_WrapX() const
@@ -1251,17 +954,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_WrapX( C * _self, M _method )
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapX );
-            }
-            
             bool has_File_WrapY() const
             {
                 return File_WrapY_successful;
@@ -1289,17 +981,6 @@ namespace Metacode
                 std::swap(_value, this->File_WrapY);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_WrapY( C * _self, M _method )
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapY );
             }
             
         protected:
@@ -1316,373 +997,17 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_MaxSize_successful;
             mutable mt::vec2f File_MaxSize;
-            mutable Menge::ConstString File_Path;
-            bool File_Rotate_successful;
-            mutable bool File_Rotate;
-            bool File_TextureSize_successful;
-            mutable mt::vec2f File_TextureSize;
-            bool File_UV_successful;
-            mutable mt::vec4f File_UV;
+            bool File_NoExist_successful;
+            mutable bool File_NoExist;
+            bool File_Offset_successful;
+            mutable mt::vec2f File_Offset;
+            mutable Menge::FilePath File_Path;
+            bool File_Size_successful;
+            mutable mt::vec2f File_Size;
             bool File_WrapX_successful;
             mutable bool File_WrapX;
             bool File_WrapY_successful;
             mutable bool File_WrapY;
-        };
-        
-        class Meta_ResourceImageMultiplyRGBAndAlpha
-            : public Meta_Resource
-        { 
-        public:
-            Meta_ResourceImageMultiplyRGBAndAlpha();
-        
-        public:
-            uint32_t getId() const override;
-        
-        public:
-            bool has_File_WrapX() const
-            {
-                return File_WrapX_successful;
-            }
-            
-            bool get_File_WrapX( bool & _value ) const
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_WrapX;
-            
-                return true;
-            }
-            
-            bool swap_File_WrapX( bool & _value ) const
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_WrapX);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_WrapX( C * _self, M _method )
-            {
-                if( File_WrapX_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapX );
-            }
-            
-            bool has_File_WrapY() const
-            {
-                return File_WrapY_successful;
-            }
-            
-            bool get_File_WrapY( bool & _value ) const
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->File_WrapY;
-            
-                return true;
-            }
-            
-            bool swap_File_WrapY( bool & _value ) const
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->File_WrapY);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_File_WrapY( C * _self, M _method )
-            {
-                if( File_WrapY_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_WrapY );
-            }
-            
-            bool has_FileAlpha_Codec() const
-            {
-                return FileAlpha_Codec_successful;
-            }
-            
-            bool get_FileAlpha_Codec( Menge::ConstString & _value ) const
-            {
-                if( FileAlpha_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileAlpha_Codec;
-            
-                return true;
-            }
-            
-            bool swap_FileAlpha_Codec( Menge::ConstString & _value ) const
-            {
-                if( FileAlpha_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileAlpha_Codec);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileAlpha_Codec( C * _self, M _method )
-            {
-                if( FileAlpha_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileAlpha_Codec );
-            }
-            
-            bool has_FileAlpha_Path() const
-            {
-                return FileAlpha_Path_successful;
-            }
-            
-            bool get_FileAlpha_Path( Menge::ConstString & _value ) const
-            {
-                if( FileAlpha_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileAlpha_Path;
-            
-                return true;
-            }
-            
-            bool swap_FileAlpha_Path( Menge::ConstString & _value ) const
-            {
-                if( FileAlpha_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileAlpha_Path);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileAlpha_Path( C * _self, M _method )
-            {
-                if( FileAlpha_Path_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileAlpha_Path );
-            }
-            
-            bool has_FileAlpha_UV() const
-            {
-                return FileAlpha_UV_successful;
-            }
-            
-            bool get_FileAlpha_UV( mt::vec4f & _value ) const
-            {
-                if( FileAlpha_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileAlpha_UV;
-            
-                return true;
-            }
-            
-            bool swap_FileAlpha_UV( mt::vec4f & _value ) const
-            {
-                if( FileAlpha_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileAlpha_UV);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileAlpha_UV( C * _self, M _method )
-            {
-                if( FileAlpha_UV_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileAlpha_UV );
-            }
-            
-            bool has_FileRGB_Codec() const
-            {
-                return FileRGB_Codec_successful;
-            }
-            
-            bool get_FileRGB_Codec( Menge::ConstString & _value ) const
-            {
-                if( FileRGB_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileRGB_Codec;
-            
-                return true;
-            }
-            
-            bool swap_FileRGB_Codec( Menge::ConstString & _value ) const
-            {
-                if( FileRGB_Codec_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileRGB_Codec);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileRGB_Codec( C * _self, M _method )
-            {
-                if( FileRGB_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileRGB_Codec );
-            }
-            
-            bool has_FileRGB_Path() const
-            {
-                return FileRGB_Path_successful;
-            }
-            
-            bool get_FileRGB_Path( Menge::ConstString & _value ) const
-            {
-                if( FileRGB_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileRGB_Path;
-            
-                return true;
-            }
-            
-            bool swap_FileRGB_Path( Menge::ConstString & _value ) const
-            {
-                if( FileRGB_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileRGB_Path);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileRGB_Path( C * _self, M _method )
-            {
-                if( FileRGB_Path_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileRGB_Path );
-            }
-            
-            bool has_FileRGB_UV() const
-            {
-                return FileRGB_UV_successful;
-            }
-            
-            bool get_FileRGB_UV( mt::vec4f & _value ) const
-            {
-                if( FileRGB_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FileRGB_UV;
-            
-                return true;
-            }
-            
-            bool swap_FileRGB_UV( mt::vec4f & _value ) const
-            {
-                if( FileRGB_UV_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->FileRGB_UV);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_FileRGB_UV( C * _self, M _method )
-            {
-                if( FileRGB_UV_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FileRGB_UV );
-            }
-            
-        protected:
-            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
-            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
-            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
-            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
-        public:
-        protected:
-        protected:
-            bool File_WrapX_successful;
-            mutable bool File_WrapX;
-            bool File_WrapY_successful;
-            mutable bool File_WrapY;
-            bool FileAlpha_Codec_successful;
-            mutable Menge::ConstString FileAlpha_Codec;
-            bool FileAlpha_Path_successful;
-            mutable Menge::ConstString FileAlpha_Path;
-            bool FileAlpha_UV_successful;
-            mutable mt::vec4f FileAlpha_UV;
-            bool FileRGB_Codec_successful;
-            mutable Menge::ConstString FileRGB_Codec;
-            bool FileRGB_Path_successful;
-            mutable Menge::ConstString FileRGB_Path;
-            bool FileRGB_UV_successful;
-            mutable mt::vec4f FileRGB_UV;
         };
         
         class Meta_ResourceImageSolid
@@ -1705,12 +1030,6 @@ namespace Metacode
                 std::swap(_value, this->Color_Value);
             }
             
-            template<class C, class M>
-            void method_Color_Value( C * _self, M _method )
-            {
-                (_self->*_method)( this->Color_Value );
-            }
-            
             const mt::vec2f & get_Size_Value() const
             {
                 return this->Size_Value;
@@ -1719,12 +1038,6 @@ namespace Metacode
             void swap_Size_Value( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->Size_Value);
-            }
-            
-            template<class C, class M>
-            void method_Size_Value( C * _self, M _method )
-            {
-                (_self->*_method)( this->Size_Value );
             }
             
         protected:
@@ -1778,15 +1091,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Image_Alpha( C * _self, M _method )
+            const mt::vec2f & get_Image_MaxSize() const
             {
-                if( Image_Alpha_successful == false )
-                {
-                    return;
-                }
+                return this->Image_MaxSize;
+            }
             
-                (_self->*_method)( this->Image_Alpha );
+            void swap_Image_MaxSize( mt::vec2f & _value ) const
+            {
+                std::swap(_value, this->Image_MaxSize);
             }
             
             const Menge::ConstString & get_Image_Name() const
@@ -1799,10 +1111,33 @@ namespace Metacode
                 std::swap(_value, this->Image_Name);
             }
             
-            template<class C, class M>
-            void method_Image_Name( C * _self, M _method )
+            bool has_Image_Offset() const
             {
-                (_self->*_method)( this->Image_Name );
+                return Image_Offset_successful;
+            }
+            
+            bool get_Image_Offset( mt::vec2f & _value ) const
+            {
+                if( Image_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_Offset;
+            
+                return true;
+            }
+            
+            bool swap_Image_Offset( mt::vec2f & _value ) const
+            {
+                if( Image_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_Offset);
+            
+                return true;
             }
             
             bool has_Image_Rotate() const
@@ -1834,15 +1169,33 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Image_Rotate( C * _self, M _method )
+            bool has_Image_Size() const
             {
-                if( Image_Rotate_successful == false )
+                return Image_Size_successful;
+            }
+            
+            bool get_Image_Size( mt::vec2f & _value ) const
+            {
+                if( Image_Size_successful == false )
                 {
-                    return;
+                    return false;
                 }
             
-                (_self->*_method)( this->Image_Rotate );
+                _value = this->Image_Size;
+            
+                return true;
+            }
+            
+            bool swap_Image_Size( mt::vec2f & _value ) const
+            {
+                if( Image_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_Size);
+            
+                return true;
             }
             
             const mt::vec4f & get_Image_UV() const
@@ -1855,12 +1208,6 @@ namespace Metacode
                 std::swap(_value, this->Image_UV);
             }
             
-            template<class C, class M>
-            void method_Image_UV( C * _self, M _method )
-            {
-                (_self->*_method)( this->Image_UV );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
             bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -1871,10 +1218,214 @@ namespace Metacode
         protected:
             bool Image_Alpha_successful;
             mutable bool Image_Alpha;
+            mutable mt::vec2f Image_MaxSize;
             mutable Menge::ConstString Image_Name;
+            bool Image_Offset_successful;
+            mutable mt::vec2f Image_Offset;
             bool Image_Rotate_successful;
             mutable bool Image_Rotate;
+            bool Image_Size_successful;
+            mutable mt::vec2f Image_Size;
             mutable mt::vec4f Image_UV;
+        };
+        
+        class Meta_ResourceImageSubstractRGBAndAlpha
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceImageSubstractRGBAndAlpha();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const mt::vec2f & get_Image_MaxSize() const
+            {
+                return this->Image_MaxSize;
+            }
+            
+            void swap_Image_MaxSize( mt::vec2f & _value ) const
+            {
+                std::swap(_value, this->Image_MaxSize);
+            }
+            
+            const Menge::ConstString & get_Image_NameAlpha() const
+            {
+                return this->Image_NameAlpha;
+            }
+            
+            void swap_Image_NameAlpha( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->Image_NameAlpha);
+            }
+            
+            const Menge::ConstString & get_Image_NameRGB() const
+            {
+                return this->Image_NameRGB;
+            }
+            
+            void swap_Image_NameRGB( Menge::ConstString & _value ) const
+            {
+                std::swap(_value, this->Image_NameRGB);
+            }
+            
+            bool has_Image_Offset() const
+            {
+                return Image_Offset_successful;
+            }
+            
+            bool get_Image_Offset( mt::vec2f & _value ) const
+            {
+                if( Image_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_Offset;
+            
+                return true;
+            }
+            
+            bool swap_Image_Offset( mt::vec2f & _value ) const
+            {
+                if( Image_Offset_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_Offset);
+            
+                return true;
+            }
+            
+            bool has_Image_Size() const
+            {
+                return Image_Size_successful;
+            }
+            
+            bool get_Image_Size( mt::vec2f & _value ) const
+            {
+                if( Image_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_Size;
+            
+                return true;
+            }
+            
+            bool swap_Image_Size( mt::vec2f & _value ) const
+            {
+                if( Image_Size_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_Size);
+            
+                return true;
+            }
+            
+            const mt::vec4f & get_Image_UVAlpha() const
+            {
+                return this->Image_UVAlpha;
+            }
+            
+            void swap_Image_UVAlpha( mt::vec4f & _value ) const
+            {
+                std::swap(_value, this->Image_UVAlpha);
+            }
+            
+            bool has_Image_UVAlphaRotate() const
+            {
+                return Image_UVAlphaRotate_successful;
+            }
+            
+            bool get_Image_UVAlphaRotate( bool & _value ) const
+            {
+                if( Image_UVAlphaRotate_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_UVAlphaRotate;
+            
+                return true;
+            }
+            
+            bool swap_Image_UVAlphaRotate( bool & _value ) const
+            {
+                if( Image_UVAlphaRotate_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_UVAlphaRotate);
+            
+                return true;
+            }
+            
+            const mt::vec4f & get_Image_UVRGB() const
+            {
+                return this->Image_UVRGB;
+            }
+            
+            void swap_Image_UVRGB( mt::vec4f & _value ) const
+            {
+                std::swap(_value, this->Image_UVRGB);
+            }
+            
+            bool has_Image_UVRGBRotate() const
+            {
+                return Image_UVRGBRotate_successful;
+            }
+            
+            bool get_Image_UVRGBRotate( bool & _value ) const
+            {
+                if( Image_UVRGBRotate_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Image_UVRGBRotate;
+            
+                return true;
+            }
+            
+            bool swap_Image_UVRGBRotate( bool & _value ) const
+            {
+                if( Image_UVRGBRotate_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->Image_UVRGBRotate);
+            
+                return true;
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable mt::vec2f Image_MaxSize;
+            mutable Menge::ConstString Image_NameAlpha;
+            mutable Menge::ConstString Image_NameRGB;
+            bool Image_Offset_successful;
+            mutable mt::vec2f Image_Offset;
+            bool Image_Size_successful;
+            mutable mt::vec2f Image_Size;
+            mutable mt::vec4f Image_UVAlpha;
+            bool Image_UVAlphaRotate_successful;
+            mutable bool Image_UVAlphaRotate;
+            mutable mt::vec4f Image_UVRGB;
+            bool Image_UVRGBRotate_successful;
+            mutable bool Image_UVRGBRotate;
         };
         
         class Meta_ResourceInternalObject
@@ -1897,12 +1448,6 @@ namespace Metacode
                 std::swap(_value, this->Internal_Group);
             }
             
-            template<class C, class M>
-            void method_Internal_Group( C * _self, M _method )
-            {
-                (_self->*_method)( this->Internal_Group );
-            }
-            
             const Menge::ConstString & get_Internal_Name() const
             {
                 return this->Internal_Name;
@@ -1911,12 +1456,6 @@ namespace Metacode
             void swap_Internal_Name( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->Internal_Name);
-            }
-            
-            template<class C, class M>
-            void method_Internal_Name( C * _self, M _method )
-            {
-                (_self->*_method)( this->Internal_Name );
             }
             
         protected:
@@ -1970,17 +1509,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Converter( C * _self, M _method )
-            {
-                if( File_Converter_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Converter );
-            }
-            
             bool has_File_Dataflow() const
             {
                 return File_Dataflow_successful;
@@ -2010,31 +1538,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Dataflow( C * _self, M _method )
-            {
-                if( File_Dataflow_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Dataflow );
-            }
-            
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
             const Menge::ConstString & get_Image_Resource() const
@@ -2045,12 +1556,6 @@ namespace Metacode
             void swap_Image_Resource( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->Image_Resource);
-            }
-            
-            template<class C, class M>
-            void method_Image_Resource( C * _self, M _method )
-            {
-                (_self->*_method)( this->Image_Resource );
             }
             
         protected:
@@ -2065,7 +1570,7 @@ namespace Metacode
             mutable Menge::ConstString File_Converter;
             bool File_Dataflow_successful;
             mutable Menge::ConstString File_Dataflow;
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
             mutable Menge::ConstString Image_Resource;
         };
         
@@ -2108,135 +1613,63 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Anchor_Point( C * _self, M _method )
+            bool has_Bounds_Box() const
             {
-                if( Anchor_Point_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Anchor_Point );
+                return Bounds_Box_successful;
             }
             
-            bool has_Duration_Value() const
+            bool get_Bounds_Box( mt::box2f & _value ) const
             {
-                return Duration_Value_successful;
-            }
-            
-            bool get_Duration_Value( float & _value ) const
-            {
-                if( Duration_Value_successful == false )
+                if( Bounds_Box_successful == false )
                 {
                     return false;
                 }
             
-                _value = this->Duration_Value;
+                _value = this->Bounds_Box;
             
                 return true;
             }
             
-            bool swap_Duration_Value( float & _value ) const
+            bool swap_Bounds_Box( mt::box2f & _value ) const
             {
-                if( Duration_Value_successful == false )
+                if( Bounds_Box_successful == false )
                 {
                     return false;
                 }
             
+                std::swap(_value, this->Bounds_Box);
+            
+                return true;
+            }
+            
+            const float & get_Duration_Value() const
+            {
+                return this->Duration_Value;
+            }
+            
+            void swap_Duration_Value( float & _value ) const
+            {
                 std::swap(_value, this->Duration_Value);
-            
-                return true;
             }
             
-            template<class C, class M>
-            void method_Duration_Value( C * _self, M _method )
+            const float & get_FrameDuration_Value() const
             {
-                if( Duration_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Duration_Value );
+                return this->FrameDuration_Value;
             }
             
-            bool has_FrameDuration_Value() const
+            void swap_FrameDuration_Value( float & _value ) const
             {
-                return FrameDuration_Value_successful;
-            }
-            
-            bool get_FrameDuration_Value( float & _value ) const
-            {
-                if( FrameDuration_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->FrameDuration_Value;
-            
-                return true;
-            }
-            
-            bool swap_FrameDuration_Value( float & _value ) const
-            {
-                if( FrameDuration_Value_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->FrameDuration_Value);
-            
-                return true;
             }
             
-            template<class C, class M>
-            void method_FrameDuration_Value( C * _self, M _method )
+            const float & get_Height_Value() const
             {
-                if( FrameDuration_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->FrameDuration_Value );
+                return this->Height_Value;
             }
             
-            bool has_Height_Value() const
+            void swap_Height_Value( float & _value ) const
             {
-                return Height_Value_successful;
-            }
-            
-            bool get_Height_Value( float & _value ) const
-            {
-                if( Height_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Height_Value;
-            
-                return true;
-            }
-            
-            bool swap_Height_Value( float & _value ) const
-            {
-                if( Height_Value_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->Height_Value);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_Height_Value( C * _self, M _method )
-            {
-                if( Height_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Height_Value );
             }
             
             bool has_KeyFramesPackPath_Codec() const
@@ -2268,17 +1701,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_KeyFramesPackPath_Codec( C * _self, M _method )
-            {
-                if( KeyFramesPackPath_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->KeyFramesPackPath_Codec );
-            }
-            
             bool has_KeyFramesPackPath_Converter() const
             {
                 return KeyFramesPackPath_Converter_successful;
@@ -2308,55 +1730,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_KeyFramesPackPath_Converter( C * _self, M _method )
+            const Menge::ConstString & get_KeyFramesPackPath_Path() const
             {
-                if( KeyFramesPackPath_Converter_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->KeyFramesPackPath_Converter );
+                return this->KeyFramesPackPath_Path;
             }
             
-            bool has_KeyFramesPackPath_Path() const
+            void swap_KeyFramesPackPath_Path( Menge::ConstString & _value ) const
             {
-                return KeyFramesPackPath_Path_successful;
-            }
-            
-            bool get_KeyFramesPackPath_Path( Menge::ConstString & _value ) const
-            {
-                if( KeyFramesPackPath_Path_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->KeyFramesPackPath_Path;
-            
-                return true;
-            }
-            
-            bool swap_KeyFramesPackPath_Path( Menge::ConstString & _value ) const
-            {
-                if( KeyFramesPackPath_Path_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->KeyFramesPackPath_Path);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_KeyFramesPackPath_Path( C * _self, M _method )
-            {
-                if( KeyFramesPackPath_Path_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->KeyFramesPackPath_Path );
             }
             
             bool has_Loop_Segment() const
@@ -2388,55 +1769,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Loop_Segment( C * _self, M _method )
+            const float & get_Width_Value() const
             {
-                if( Loop_Segment_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Loop_Segment );
+                return this->Width_Value;
             }
             
-            bool has_Width_Value() const
+            void swap_Width_Value( float & _value ) const
             {
-                return Width_Value_successful;
-            }
-            
-            bool get_Width_Value( float & _value ) const
-            {
-                if( Width_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Width_Value;
-            
-                return true;
-            }
-            
-            bool swap_Width_Value( float & _value ) const
-            {
-                if( Width_Value_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap(_value, this->Width_Value);
-            
-                return true;
-            }
-            
-            template<class C, class M>
-            void method_Width_Value( C * _self, M _method )
-            {
-                if( Width_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Width_Value );
             }
             
         protected:
@@ -2465,12 +1805,6 @@ namespace Metacode
                     std::swap( _value, this->CameraAspect);
                 }
                 
-                template<class C, class M>
-                void method_CameraAspect( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->CameraAspect );
-                }
-                
                 const float & get_CameraFOV() const
                 {
                     return this->CameraFOV;
@@ -2479,12 +1813,6 @@ namespace Metacode
                 void swap_CameraFOV( float & _value ) const
                 {
                     std::swap( _value, this->CameraFOV);
-                }
-                
-                template<class C, class M>
-                void method_CameraFOV( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->CameraFOV );
                 }
                 
                 const mt::vec3f & get_CameraInterest() const
@@ -2497,12 +1825,6 @@ namespace Metacode
                     std::swap( _value, this->CameraInterest);
                 }
                 
-                template<class C, class M>
-                void method_CameraInterest( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->CameraInterest );
-                }
-                
                 const mt::vec3f & get_CameraPosition() const
                 {
                     return this->CameraPosition;
@@ -2511,12 +1833,6 @@ namespace Metacode
                 void swap_CameraPosition( mt::vec3f & _value ) const
                 {
                     std::swap( _value, this->CameraPosition);
-                }
-                
-                template<class C, class M>
-                void method_CameraPosition( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->CameraPosition );
                 }
                 
                 const float & get_Height() const
@@ -2529,12 +1845,6 @@ namespace Metacode
                     std::swap( _value, this->Height);
                 }
                 
-                template<class C, class M>
-                void method_Height( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Height );
-                }
-                
                 const float & get_Width() const
                 {
                     return this->Width;
@@ -2543,12 +1853,6 @@ namespace Metacode
                 void swap_Width( float & _value ) const
                 {
                     std::swap( _value, this->Width);
-                }
-                
-                template<class C, class M>
-                void method_Width( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Width );
                 }
                 
             protected:
@@ -2577,20 +1881,33 @@ namespace Metacode
                 uint32_t getId() const override;
             
             public:
-                const Menge::ConstString & get_BlendingMode() const
+                bool has_BlendingMode() const
                 {
-                    return this->BlendingMode;
+                    return BlendingMode_successful;
                 }
                 
-                void swap_BlendingMode( Menge::ConstString & _value ) const
+                bool get_BlendingMode( Menge::ConstString & _value ) const
                 {
+                    if( BlendingMode_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->BlendingMode;
+                
+                    return true;
+                }
+                
+                bool swap_BlendingMode( Menge::ConstString & _value ) const
+                {
+                    if( BlendingMode_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->BlendingMode);
-                }
                 
-                template<class C, class M>
-                void method_BlendingMode( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->BlendingMode );
+                    return true;
                 }
                 
                 const float & get_In() const
@@ -2603,12 +1920,6 @@ namespace Metacode
                     std::swap( _value, this->In);
                 }
                 
-                template<class C, class M>
-                void method_In( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->In );
-                }
-                
                 const uint32_t & get_Index() const
                 {
                     return this->Index;
@@ -2617,12 +1928,6 @@ namespace Metacode
                 void swap_Index( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Index);
-                }
-                
-                template<class C, class M>
-                void method_Index( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Index );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -2635,12 +1940,6 @@ namespace Metacode
                     std::swap( _value, this->Name);
                 }
                 
-                template<class C, class M>
-                void method_Name( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Name );
-                }
-                
                 const float & get_Out() const
                 {
                     return this->Out;
@@ -2651,26 +1950,62 @@ namespace Metacode
                     std::swap( _value, this->Out);
                 }
                 
-                template<class C, class M>
-                void method_Out( C * _self, M _method ) const
+                bool has_Params() const
                 {
-                    (_self->*_method)( this->Out );
+                    return Params_successful;
                 }
                 
-                const uint32_t & get_Parent() const
+                bool get_Params( uint32_t & _value ) const
                 {
-                    return this->Parent;
+                    if( Params_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Params;
+                
+                    return true;
                 }
                 
-                void swap_Parent( uint32_t & _value ) const
+                bool swap_Params( uint32_t & _value ) const
                 {
+                    if( Params_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Params);
+                
+                    return true;
+                }
+                
+                bool has_Parent() const
+                {
+                    return Parent_successful;
+                }
+                
+                bool get_Parent( uint32_t & _value ) const
+                {
+                    if( Parent_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Parent;
+                
+                    return true;
+                }
+                
+                bool swap_Parent( uint32_t & _value ) const
+                {
+                    if( Parent_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->Parent);
-                }
                 
-                template<class C, class M>
-                void method_Parent( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Parent );
+                    return true;
                 }
                 
                 bool has_PlayCount() const
@@ -2702,15 +2037,62 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_PlayCount( C * _self, M _method ) const
+                bool has_Polygon() const
                 {
-                    if( PlayCount_successful == false )
+                    return Polygon_successful;
+                }
+                
+                bool get_Polygon( bool & _value ) const
+                {
+                    if( Polygon_successful == false )
                     {
-                        return;
+                        return false;
                     }
                 
-                    (_self->*_method)( this->PlayCount );
+                    _value = this->Polygon;
+                
+                    return true;
+                }
+                
+                bool swap_Polygon( bool & _value ) const
+                {
+                    if( Polygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Polygon);
+                
+                    return true;
+                }
+                
+                bool has_Position() const
+                {
+                    return Position_successful;
+                }
+                
+                bool get_Position( mt::vec3f & _value ) const
+                {
+                    if( Position_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Position;
+                
+                    return true;
+                }
+                
+                bool swap_Position( mt::vec3f & _value ) const
+                {
+                    if( Position_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Position);
+                
+                    return true;
                 }
                 
                 bool has_Shape() const
@@ -2742,17 +2124,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Shape( C * _self, M _method ) const
-                {
-                    if( Shape_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Shape );
-                }
-                
                 const Menge::ConstString & get_Source() const
                 {
                     return this->Source;
@@ -2763,26 +2134,33 @@ namespace Metacode
                     std::swap( _value, this->Source);
                 }
                 
-                template<class C, class M>
-                void method_Source( C * _self, M _method ) const
+                bool has_StartInterval() const
                 {
-                    (_self->*_method)( this->Source );
+                    return StartInterval_successful;
                 }
                 
-                const float & get_StartInterval() const
+                bool get_StartInterval( float & _value ) const
                 {
-                    return this->StartInterval;
+                    if( StartInterval_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->StartInterval;
+                
+                    return true;
                 }
                 
-                void swap_StartInterval( float & _value ) const
+                bool swap_StartInterval( float & _value ) const
                 {
+                    if( StartInterval_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->StartInterval);
-                }
                 
-                template<class C, class M>
-                void method_StartInterval( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->StartInterval );
+                    return true;
                 }
                 
                 bool has_Stretch() const
@@ -2814,17 +2192,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Stretch( C * _self, M _method ) const
-                {
-                    if( Stretch_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Stretch );
-                }
-                
                 bool has_Switch() const
                 {
                     return Switch_successful;
@@ -2852,17 +2219,6 @@ namespace Metacode
                     std::swap( _value, this->Switch);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Switch( C * _self, M _method ) const
-                {
-                    if( Switch_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Switch );
                 }
                 
                 bool has_TimeRemap() const
@@ -2894,17 +2250,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_TimeRemap( C * _self, M _method ) const
-                {
-                    if( TimeRemap_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->TimeRemap );
-                }
-                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -2915,12 +2260,6 @@ namespace Metacode
                     std::swap( _value, this->Type);
                 }
                 
-                template<class C, class M>
-                void method_Type( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Type );
-                }
-                
             protected:
                 bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
                 bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -2929,17 +2268,26 @@ namespace Metacode
             public:
             protected:
             protected:
+                bool BlendingMode_successful;
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
                 mutable uint32_t Index;
                 mutable Menge::ConstString Name;
                 mutable float Out;
+                bool Params_successful;
+                mutable uint32_t Params;
+                bool Parent_successful;
                 mutable uint32_t Parent;
                 bool PlayCount_successful;
                 mutable uint32_t PlayCount;
+                bool Polygon_successful;
+                mutable bool Polygon;
+                bool Position_successful;
+                mutable mt::vec3f Position;
                 bool Shape_successful;
                 mutable bool Shape;
                 mutable Menge::ConstString Source;
+                bool StartInterval_successful;
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
@@ -2960,20 +2308,33 @@ namespace Metacode
                 uint32_t getId() const override;
             
             public:
-                const Menge::ConstString & get_BlendingMode() const
+                bool has_BlendingMode() const
                 {
-                    return this->BlendingMode;
+                    return BlendingMode_successful;
                 }
                 
-                void swap_BlendingMode( Menge::ConstString & _value ) const
+                bool get_BlendingMode( Menge::ConstString & _value ) const
                 {
+                    if( BlendingMode_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->BlendingMode;
+                
+                    return true;
+                }
+                
+                bool swap_BlendingMode( Menge::ConstString & _value ) const
+                {
+                    if( BlendingMode_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->BlendingMode);
-                }
                 
-                template<class C, class M>
-                void method_BlendingMode( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->BlendingMode );
+                    return true;
                 }
                 
                 const float & get_In() const
@@ -2986,12 +2347,6 @@ namespace Metacode
                     std::swap( _value, this->In);
                 }
                 
-                template<class C, class M>
-                void method_In( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->In );
-                }
-                
                 const uint32_t & get_Index() const
                 {
                     return this->Index;
@@ -3000,12 +2355,6 @@ namespace Metacode
                 void swap_Index( uint32_t & _value ) const
                 {
                     std::swap( _value, this->Index);
-                }
-                
-                template<class C, class M>
-                void method_Index( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Index );
                 }
                 
                 const Menge::ConstString & get_Name() const
@@ -3018,12 +2367,6 @@ namespace Metacode
                     std::swap( _value, this->Name);
                 }
                 
-                template<class C, class M>
-                void method_Name( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Name );
-                }
-                
                 const float & get_Out() const
                 {
                     return this->Out;
@@ -3034,26 +2377,62 @@ namespace Metacode
                     std::swap( _value, this->Out);
                 }
                 
-                template<class C, class M>
-                void method_Out( C * _self, M _method ) const
+                bool has_Params() const
                 {
-                    (_self->*_method)( this->Out );
+                    return Params_successful;
                 }
                 
-                const uint32_t & get_Parent() const
+                bool get_Params( uint32_t & _value ) const
                 {
-                    return this->Parent;
+                    if( Params_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Params;
+                
+                    return true;
                 }
                 
-                void swap_Parent( uint32_t & _value ) const
+                bool swap_Params( uint32_t & _value ) const
                 {
+                    if( Params_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Params);
+                
+                    return true;
+                }
+                
+                bool has_Parent() const
+                {
+                    return Parent_successful;
+                }
+                
+                bool get_Parent( uint32_t & _value ) const
+                {
+                    if( Parent_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Parent;
+                
+                    return true;
+                }
+                
+                bool swap_Parent( uint32_t & _value ) const
+                {
+                    if( Parent_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->Parent);
-                }
                 
-                template<class C, class M>
-                void method_Parent( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Parent );
+                    return true;
                 }
                 
                 bool has_PlayCount() const
@@ -3085,15 +2464,62 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_PlayCount( C * _self, M _method ) const
+                bool has_Polygon() const
                 {
-                    if( PlayCount_successful == false )
+                    return Polygon_successful;
+                }
+                
+                bool get_Polygon( bool & _value ) const
+                {
+                    if( Polygon_successful == false )
                     {
-                        return;
+                        return false;
                     }
                 
-                    (_self->*_method)( this->PlayCount );
+                    _value = this->Polygon;
+                
+                    return true;
+                }
+                
+                bool swap_Polygon( bool & _value ) const
+                {
+                    if( Polygon_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Polygon);
+                
+                    return true;
+                }
+                
+                bool has_Position() const
+                {
+                    return Position_successful;
+                }
+                
+                bool get_Position( mt::vec3f & _value ) const
+                {
+                    if( Position_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->Position;
+                
+                    return true;
+                }
+                
+                bool swap_Position( mt::vec3f & _value ) const
+                {
+                    if( Position_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Position);
+                
+                    return true;
                 }
                 
                 bool has_Shape() const
@@ -3125,17 +2551,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Shape( C * _self, M _method ) const
-                {
-                    if( Shape_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Shape );
-                }
-                
                 const Menge::ConstString & get_Source() const
                 {
                     return this->Source;
@@ -3146,26 +2561,33 @@ namespace Metacode
                     std::swap( _value, this->Source);
                 }
                 
-                template<class C, class M>
-                void method_Source( C * _self, M _method ) const
+                bool has_StartInterval() const
                 {
-                    (_self->*_method)( this->Source );
+                    return StartInterval_successful;
                 }
                 
-                const float & get_StartInterval() const
+                bool get_StartInterval( float & _value ) const
                 {
-                    return this->StartInterval;
+                    if( StartInterval_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    _value = this->StartInterval;
+                
+                    return true;
                 }
                 
-                void swap_StartInterval( float & _value ) const
+                bool swap_StartInterval( float & _value ) const
                 {
+                    if( StartInterval_successful == false )
+                    {
+                        return false;
+                    }
+                
                     std::swap( _value, this->StartInterval);
-                }
                 
-                template<class C, class M>
-                void method_StartInterval( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->StartInterval );
+                    return true;
                 }
                 
                 bool has_Stretch() const
@@ -3197,17 +2619,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Stretch( C * _self, M _method ) const
-                {
-                    if( Stretch_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Stretch );
-                }
-                
                 bool has_Switch() const
                 {
                     return Switch_successful;
@@ -3235,17 +2646,6 @@ namespace Metacode
                     std::swap( _value, this->Switch);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Switch( C * _self, M _method ) const
-                {
-                    if( Switch_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Switch );
                 }
                 
                 bool has_TimeRemap() const
@@ -3277,17 +2677,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_TimeRemap( C * _self, M _method ) const
-                {
-                    if( TimeRemap_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->TimeRemap );
-                }
-                
                 const Menge::ConstString & get_Type() const
                 {
                     return this->Type;
@@ -3298,12 +2687,6 @@ namespace Metacode
                     std::swap( _value, this->Type);
                 }
                 
-                template<class C, class M>
-                void method_Type( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Type );
-                }
-                
             protected:
                 bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
                 bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -3312,17 +2695,26 @@ namespace Metacode
             public:
             protected:
             protected:
+                bool BlendingMode_successful;
                 mutable Menge::ConstString BlendingMode;
                 mutable float In;
                 mutable uint32_t Index;
                 mutable Menge::ConstString Name;
                 mutable float Out;
+                bool Params_successful;
+                mutable uint32_t Params;
+                bool Parent_successful;
                 mutable uint32_t Parent;
                 bool PlayCount_successful;
                 mutable uint32_t PlayCount;
+                bool Polygon_successful;
+                mutable bool Polygon;
+                bool Position_successful;
+                mutable mt::vec3f Position;
                 bool Shape_successful;
                 mutable bool Shape;
                 mutable Menge::ConstString Source;
+                bool StartInterval_successful;
                 mutable float StartInterval;
                 bool Stretch_successful;
                 mutable float Stretch;
@@ -3337,21 +2729,18 @@ namespace Metacode
         protected:
             bool Anchor_Point_successful;
             mutable mt::vec3f Anchor_Point;
-            bool Duration_Value_successful;
+            bool Bounds_Box_successful;
+            mutable mt::box2f Bounds_Box;
             mutable float Duration_Value;
-            bool FrameDuration_Value_successful;
             mutable float FrameDuration_Value;
-            bool Height_Value_successful;
             mutable float Height_Value;
             bool KeyFramesPackPath_Codec_successful;
             mutable Menge::ConstString KeyFramesPackPath_Codec;
             bool KeyFramesPackPath_Converter_successful;
             mutable Menge::ConstString KeyFramesPackPath_Converter;
-            bool KeyFramesPackPath_Path_successful;
             mutable Menge::ConstString KeyFramesPackPath_Path;
             bool Loop_Segment_successful;
             mutable mt::vec2f Loop_Segment;
-            bool Width_Value_successful;
             mutable float Width_Value;
         public:
             typedef stdex::auto_array<Meta_MovieCamera3D> TVectorMeta_MovieCamera3D;
@@ -3383,6 +2772,131 @@ namespace Metacode
         
         protected:
             TVectorMeta_MovieLayer3D includes_Meta_MovieLayer3D;
+        };
+        
+        class Meta_ResourceParticle
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceParticle();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const uint32_t & get_AtlasCount_Value() const
+            {
+                return this->AtlasCount_Value;
+            }
+            
+            void swap_AtlasCount_Value( uint32_t & _value ) const
+            {
+                std::swap(_value, this->AtlasCount_Value);
+            }
+            
+            bool has_File_Converter() const
+            {
+                return File_Converter_successful;
+            }
+            
+            bool get_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Converter;
+            
+                return true;
+            }
+            
+            bool swap_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Converter);
+            
+                return true;
+            }
+            
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+            class Meta_Atlas
+                : public Metabuf::Metadata
+            { 
+            public:
+                Meta_Atlas();
+            
+            public:
+                uint32_t getId() const override;
+            
+            public:
+                const uint32_t & get_Index() const
+                {
+                    return this->Index;
+                }
+                
+                void swap_Index( uint32_t & _value ) const
+                {
+                    std::swap( _value, this->Index);
+                }
+                
+                const Menge::ConstString & get_ResourceName() const
+                {
+                    return this->ResourceName;
+                }
+                
+                void swap_ResourceName( Menge::ConstString & _value ) const
+                {
+                    std::swap( _value, this->ResourceName);
+                }
+                
+            protected:
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+            public:
+            protected:
+            protected:
+                mutable uint32_t Index;
+                mutable Menge::ConstString ResourceName;
+            };
+            
+        protected:
+        protected:
+            mutable uint32_t AtlasCount_Value;
+            bool File_Converter_successful;
+            mutable Menge::ConstString File_Converter;
+            mutable Menge::FilePath File_Path;
+        public:
+            typedef stdex::auto_array<Meta_Atlas> TVectorMeta_Atlas;
+        
+            const TVectorMeta_Atlas & get_IncludesAtlas() const
+            {
+                return this->includes_Meta_Atlas;
+            }
+        
+        protected:
+            TVectorMeta_Atlas includes_Meta_Atlas;
         };
         
         class Meta_ResourcePlaylist
@@ -3424,17 +2938,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Loop_Value( C * _self, M _method )
-            {
-                if( Loop_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Loop_Value );
-            }
-            
             bool has_Shuffle_Value() const
             {
                 return Shuffle_Value_successful;
@@ -3462,17 +2965,6 @@ namespace Metacode
                 std::swap(_value, this->Shuffle_Value);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_Shuffle_Value( C * _self, M _method )
-            {
-                if( Shuffle_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Shuffle_Value );
             }
             
         protected:
@@ -3536,31 +3028,14 @@ namespace Metacode
                         return true;
                     }
                     
-                    template<class C, class M>
-                    void method_Codec( C * _self, M _method ) const
-                    {
-                        if( Codec_successful == false )
-                        {
-                            return;
-                        }
-                    
-                        (_self->*_method)( this->Codec );
-                    }
-                    
-                    const Menge::ConstString & get_File() const
+                    const Menge::FilePath & get_File() const
                     {
                         return this->File;
                     }
                     
-                    void swap_File( Menge::ConstString & _value ) const
+                    void swap_File( Menge::FilePath & _value ) const
                     {
                         std::swap( _value, this->File);
-                    }
-                    
-                    template<class C, class M>
-                    void method_File( C * _self, M _method ) const
-                    {
-                        (_self->*_method)( this->File );
                     }
                     
                 protected:
@@ -3573,7 +3048,7 @@ namespace Metacode
                 protected:
                     bool Codec_successful;
                     mutable Menge::ConstString Codec;
-                    mutable Menge::ConstString File;
+                    mutable Menge::FilePath File;
                 };
                 
             protected:
@@ -3628,12 +3103,6 @@ namespace Metacode
                 std::swap(_value, this->Polygon_Value);
             }
             
-            template<class C, class M>
-            void method_Polygon_Value( C * _self, M _method )
-            {
-                (_self->*_method)( this->Polygon_Value );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
             bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -3684,17 +3153,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_DefaultVolume_Value( C * _self, M _method )
-            {
-                if( DefaultVolume_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->DefaultVolume_Value );
-            }
-            
             bool has_File_Codec() const
             {
                 return File_Codec_successful;
@@ -3722,17 +3180,6 @@ namespace Metacode
                 std::swap(_value, this->File_Codec);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_Codec( C * _self, M _method )
-            {
-                if( File_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Codec );
             }
             
             bool has_File_Converter() const
@@ -3764,31 +3211,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Converter( C * _self, M _method )
-            {
-                if( File_Converter_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Converter );
-            }
-            
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
             bool has_IsStreamable_Value() const
@@ -3820,17 +3250,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_IsStreamable_Value( C * _self, M _method )
-            {
-                if( IsStreamable_Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->IsStreamable_Value );
-            }
-            
         protected:
             bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
             bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -3845,7 +3264,7 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
             bool IsStreamable_Value_successful;
             mutable bool IsStreamable_Value;
         };
@@ -3889,17 +3308,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Alpha( C * _self, M _method )
-            {
-                if( File_Alpha_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Alpha );
-            }
-            
             bool has_File_Codec() const
             {
                 return File_Codec_successful;
@@ -3927,17 +3335,6 @@ namespace Metacode
                 std::swap(_value, this->File_Codec);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_Codec( C * _self, M _method )
-            {
-                if( File_Codec_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_Codec );
             }
             
             bool has_File_Converter() const
@@ -3969,15 +3366,33 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_Converter( C * _self, M _method )
+            bool has_File_Duration() const
             {
-                if( File_Converter_successful == false )
+                return File_Duration_successful;
+            }
+            
+            bool get_File_Duration( float & _value ) const
+            {
+                if( File_Duration_successful == false )
                 {
-                    return;
+                    return false;
                 }
             
-                (_self->*_method)( this->File_Converter );
+                _value = this->File_Duration;
+            
+                return true;
+            }
+            
+            bool swap_File_Duration( float & _value ) const
+            {
+                if( File_Duration_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Duration);
+            
+                return true;
             }
             
             bool has_File_FrameRate() const
@@ -3985,7 +3400,7 @@ namespace Metacode
                 return File_FrameRate_successful;
             }
             
-            bool get_File_FrameRate( float & _value ) const
+            bool get_File_FrameRate( uint32_t & _value ) const
             {
                 if( File_FrameRate_successful == false )
                 {
@@ -3997,7 +3412,7 @@ namespace Metacode
                 return true;
             }
             
-            bool swap_File_FrameRate( float & _value ) const
+            bool swap_File_FrameRate( uint32_t & _value ) const
             {
                 if( File_FrameRate_successful == false )
                 {
@@ -4007,17 +3422,6 @@ namespace Metacode
                 std::swap(_value, this->File_FrameRate);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_File_FrameRate( C * _self, M _method )
-            {
-                if( File_FrameRate_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_FrameRate );
             }
             
             bool has_File_NoSeek() const
@@ -4049,31 +3453,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_File_NoSeek( C * _self, M _method )
-            {
-                if( File_NoSeek_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->File_NoSeek );
-            }
-            
-            const Menge::ConstString & get_File_Path() const
+            const Menge::FilePath & get_File_Path() const
             {
                 return this->File_Path;
             }
             
-            void swap_File_Path( Menge::ConstString & _value ) const
+            void swap_File_Path( Menge::FilePath & _value ) const
             {
                 std::swap(_value, this->File_Path);
-            }
-            
-            template<class C, class M>
-            void method_File_Path( C * _self, M _method )
-            {
-                (_self->*_method)( this->File_Path );
             }
             
         protected:
@@ -4090,11 +3477,13 @@ namespace Metacode
             mutable Menge::ConstString File_Codec;
             bool File_Converter_successful;
             mutable Menge::ConstString File_Converter;
+            bool File_Duration_successful;
+            mutable float File_Duration;
             bool File_FrameRate_successful;
-            mutable float File_FrameRate;
+            mutable uint32_t File_FrameRate;
             bool File_NoSeek_successful;
             mutable bool File_NoSeek;
-            mutable Menge::ConstString File_Path;
+            mutable Menge::FilePath File_Path;
         };
         
         class Meta_ResourceWindow
@@ -4136,17 +3525,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_WindowBackground_ResourceImageName( C * _self, M _method )
-            {
-                if( WindowBackground_ResourceImageName_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->WindowBackground_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowBottom_Offset() const
             {
                 return this->WindowBottom_Offset;
@@ -4155,12 +3533,6 @@ namespace Metacode
             void swap_WindowBottom_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowBottom_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowBottom_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowBottom_Offset );
             }
             
             const Menge::ConstString & get_WindowBottom_ResourceImageName() const
@@ -4173,12 +3545,6 @@ namespace Metacode
                 std::swap(_value, this->WindowBottom_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowBottom_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowBottom_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowLeft_Offset() const
             {
                 return this->WindowLeft_Offset;
@@ -4187,12 +3553,6 @@ namespace Metacode
             void swap_WindowLeft_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowLeft_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowLeft_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeft_Offset );
             }
             
             const Menge::ConstString & get_WindowLeft_ResourceImageName() const
@@ -4205,12 +3565,6 @@ namespace Metacode
                 std::swap(_value, this->WindowLeft_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowLeft_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeft_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowLeftBottom_Offset() const
             {
                 return this->WindowLeftBottom_Offset;
@@ -4219,12 +3573,6 @@ namespace Metacode
             void swap_WindowLeftBottom_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowLeftBottom_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowLeftBottom_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeftBottom_Offset );
             }
             
             const Menge::ConstString & get_WindowLeftBottom_ResourceImageName() const
@@ -4237,12 +3585,6 @@ namespace Metacode
                 std::swap(_value, this->WindowLeftBottom_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowLeftBottom_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeftBottom_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowLeftTop_Offset() const
             {
                 return this->WindowLeftTop_Offset;
@@ -4251,12 +3593,6 @@ namespace Metacode
             void swap_WindowLeftTop_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowLeftTop_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowLeftTop_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeftTop_Offset );
             }
             
             const Menge::ConstString & get_WindowLeftTop_ResourceImageName() const
@@ -4269,12 +3605,6 @@ namespace Metacode
                 std::swap(_value, this->WindowLeftTop_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowLeftTop_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowLeftTop_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowRight_Offset() const
             {
                 return this->WindowRight_Offset;
@@ -4283,12 +3613,6 @@ namespace Metacode
             void swap_WindowRight_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowRight_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowRight_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRight_Offset );
             }
             
             const Menge::ConstString & get_WindowRight_ResourceImageName() const
@@ -4301,12 +3625,6 @@ namespace Metacode
                 std::swap(_value, this->WindowRight_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowRight_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRight_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowRightBottom_Offset() const
             {
                 return this->WindowRightBottom_Offset;
@@ -4315,12 +3633,6 @@ namespace Metacode
             void swap_WindowRightBottom_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowRightBottom_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowRightBottom_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRightBottom_Offset );
             }
             
             const Menge::ConstString & get_WindowRightBottom_ResourceImageName() const
@@ -4333,12 +3645,6 @@ namespace Metacode
                 std::swap(_value, this->WindowRightBottom_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowRightBottom_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRightBottom_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowRightTop_Offset() const
             {
                 return this->WindowRightTop_Offset;
@@ -4347,12 +3653,6 @@ namespace Metacode
             void swap_WindowRightTop_Offset( mt::vec2f & _value ) const
             {
                 std::swap(_value, this->WindowRightTop_Offset);
-            }
-            
-            template<class C, class M>
-            void method_WindowRightTop_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRightTop_Offset );
             }
             
             const Menge::ConstString & get_WindowRightTop_ResourceImageName() const
@@ -4365,12 +3665,6 @@ namespace Metacode
                 std::swap(_value, this->WindowRightTop_ResourceImageName);
             }
             
-            template<class C, class M>
-            void method_WindowRightTop_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowRightTop_ResourceImageName );
-            }
-            
             const mt::vec2f & get_WindowTop_Offset() const
             {
                 return this->WindowTop_Offset;
@@ -4381,12 +3675,6 @@ namespace Metacode
                 std::swap(_value, this->WindowTop_Offset);
             }
             
-            template<class C, class M>
-            void method_WindowTop_Offset( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowTop_Offset );
-            }
-            
             const Menge::ConstString & get_WindowTop_ResourceImageName() const
             {
                 return this->WindowTop_ResourceImageName;
@@ -4395,12 +3683,6 @@ namespace Metacode
             void swap_WindowTop_ResourceImageName( Menge::ConstString & _value ) const
             {
                 std::swap(_value, this->WindowTop_ResourceImageName);
-            }
-            
-            template<class C, class M>
-            void method_WindowTop_ResourceImageName( C * _self, M _method )
-            {
-                (_self->*_method)( this->WindowTop_ResourceImageName );
             }
             
         protected:
@@ -4476,12 +3758,6 @@ namespace Metacode
             std::swap( _value, this->height);
         }
         
-        template<class C, class M>
-        void method_height( C * _self, M _method ) const
-        {
-            (_self->*_method)( this->height );
-        }
-        
     protected:
         bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
         bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -4508,12 +3784,6 @@ namespace Metacode
                 std::swap( _value, this->code);
             }
             
-            template<class C, class M>
-            void method_code( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->code );
-            }
-            
             const mt::vec2f & get_offset() const
             {
                 return this->offset;
@@ -4522,12 +3792,6 @@ namespace Metacode
             void swap_offset( mt::vec2f & _value ) const
             {
                 std::swap( _value, this->offset);
-            }
-            
-            template<class C, class M>
-            void method_offset( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->offset );
             }
             
             const mt::vec4f & get_rect() const
@@ -4540,12 +3804,6 @@ namespace Metacode
                 std::swap( _value, this->rect);
             }
             
-            template<class C, class M>
-            void method_rect( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->rect );
-            }
-            
             const float & get_width() const
             {
                 return this->width;
@@ -4554,12 +3812,6 @@ namespace Metacode
             void swap_width( float & _value ) const
             {
                 std::swap( _value, this->width);
-            }
-            
-            template<class C, class M>
-            void method_width( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->width );
             }
             
         protected:
@@ -4588,12 +3840,6 @@ namespace Metacode
                     std::swap( _value, this->advance);
                 }
                 
-                template<class C, class M>
-                void method_advance( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->advance );
-                }
-                
                 const Menge::GlyphCode & get_id() const
                 {
                     return this->id;
@@ -4602,12 +3848,6 @@ namespace Metacode
                 void swap_id( Menge::GlyphCode & _value ) const
                 {
                     std::swap( _value, this->id);
-                }
-                
-                template<class C, class M>
-                void method_id( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->id );
                 }
                 
             protected:
@@ -4675,12 +3915,6 @@ namespace Metacode
             std::swap( _value, this->MaxIndex);
         }
         
-        template<class C, class M>
-        void method_MaxIndex( C * _self, M _method ) const
-        {
-            (_self->*_method)( this->MaxIndex );
-        }
-        
     protected:
         bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
         bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -4726,17 +3960,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Count( C * _self, M _method ) const
-            {
-                if( Count_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Count );
-            }
-            
             const float & get_Height() const
             {
                 return this->Height;
@@ -4745,12 +3968,6 @@ namespace Metacode
             void swap_Height( float & _value ) const
             {
                 std::swap( _value, this->Height);
-            }
-            
-            template<class C, class M>
-            void method_Height( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Height );
             }
             
             bool has_Immutable() const
@@ -4782,17 +3999,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Immutable( C * _self, M _method ) const
-            {
-                if( Immutable_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Immutable );
-            }
-            
             const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
@@ -4803,12 +4009,6 @@ namespace Metacode
                 std::swap( _value, this->LayerIndex);
             }
             
-            template<class C, class M>
-            void method_LayerIndex( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->LayerIndex );
-            }
-            
             const float & get_Width() const
             {
                 return this->Width;
@@ -4817,12 +4017,6 @@ namespace Metacode
             void swap_Width( float & _value ) const
             {
                 std::swap( _value, this->Width);
-            }
-            
-            template<class C, class M>
-            void method_Width( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Width );
             }
             
         protected:
@@ -4849,12 +4043,6 @@ namespace Metacode
                 void swap_Polygon( Menge::Polygon & _value ) const
                 {
                     std::swap( _value, this->Polygon);
-                }
-                
-                template<class C, class M>
-                void method_Polygon( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Polygon );
                 }
                 
             protected:
@@ -4928,17 +4116,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Count( C * _self, M _method ) const
-            {
-                if( Count_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Count );
-            }
-            
             bool has_Immutable() const
             {
                 return Immutable_successful;
@@ -4968,17 +4145,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Immutable( C * _self, M _method ) const
-            {
-                if( Immutable_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Immutable );
-            }
-            
             const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
@@ -4987,12 +4153,6 @@ namespace Metacode
             void swap_LayerIndex( uint32_t & _value ) const
             {
                 std::swap( _value, this->LayerIndex);
-            }
-            
-            template<class C, class M>
-            void method_LayerIndex( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->LayerIndex );
             }
             
         protected:
@@ -5040,17 +4200,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_AnchorPoint( C * _self, M _method ) const
-                {
-                    if( AnchorPoint_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->AnchorPoint );
-                }
-                
                 bool has_Count() const
                 {
                     return Count_successful;
@@ -5078,17 +4227,6 @@ namespace Metacode
                     std::swap( _value, this->Count);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Count( C * _self, M _method ) const
-                {
-                    if( Count_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Count );
                 }
                 
                 bool has_Opacity() const
@@ -5120,17 +4258,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Opacity( C * _self, M _method ) const
-                {
-                    if( Opacity_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Opacity );
-                }
-                
                 bool has_Position() const
                 {
                     return Position_successful;
@@ -5158,17 +4285,6 @@ namespace Metacode
                     std::swap( _value, this->Position);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Position( C * _self, M _method ) const
-                {
-                    if( Position_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Position );
                 }
                 
                 bool has_Rotation() const
@@ -5200,17 +4316,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Rotation( C * _self, M _method ) const
-                {
-                    if( Rotation_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Rotation );
-                }
-                
                 bool has_Scale() const
                 {
                     return Scale_successful;
@@ -5240,17 +4345,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Scale( C * _self, M _method ) const
-                {
-                    if( Scale_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Scale );
-                }
-                
                 bool has_Volume() const
                 {
                     return Volume_successful;
@@ -5278,17 +4372,6 @@ namespace Metacode
                     std::swap( _value, this->Volume);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Volume( C * _self, M _method ) const
-                {
-                    if( Volume_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Volume );
                 }
                 
             protected:
@@ -5373,17 +4456,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Count( C * _self, M _method ) const
-            {
-                if( Count_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Count );
-            }
-            
             bool has_Immutable() const
             {
                 return Immutable_successful;
@@ -5413,17 +4485,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Immutable( C * _self, M _method ) const
-            {
-                if( Immutable_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Immutable );
-            }
-            
             const uint32_t & get_LayerIndex() const
             {
                 return this->LayerIndex;
@@ -5432,12 +4493,6 @@ namespace Metacode
             void swap_LayerIndex( uint32_t & _value ) const
             {
                 std::swap( _value, this->LayerIndex);
-            }
-            
-            template<class C, class M>
-            void method_LayerIndex( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->LayerIndex );
             }
             
         protected:
@@ -5485,17 +4540,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_AnchorPoint( C * _self, M _method ) const
-                {
-                    if( AnchorPoint_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->AnchorPoint );
-                }
-                
                 bool has_Count() const
                 {
                     return Count_successful;
@@ -5523,17 +4567,6 @@ namespace Metacode
                     std::swap( _value, this->Count);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Count( C * _self, M _method ) const
-                {
-                    if( Count_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Count );
                 }
                 
                 bool has_Opacity() const
@@ -5565,15 +4598,33 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Opacity( C * _self, M _method ) const
+                bool has_Orientation() const
                 {
-                    if( Opacity_successful == false )
+                    return Orientation_successful;
+                }
+                
+                bool get_Orientation( mt::vec3f & _value ) const
+                {
+                    if( Orientation_successful == false )
                     {
-                        return;
+                        return false;
                     }
                 
-                    (_self->*_method)( this->Opacity );
+                    _value = this->Orientation;
+                
+                    return true;
+                }
+                
+                bool swap_Orientation( mt::vec3f & _value ) const
+                {
+                    if( Orientation_successful == false )
+                    {
+                        return false;
+                    }
+                
+                    std::swap( _value, this->Orientation);
+                
+                    return true;
                 }
                 
                 bool has_Position() const
@@ -5605,17 +4656,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Position( C * _self, M _method ) const
-                {
-                    if( Position_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Position );
-                }
-                
                 bool has_Rotation() const
                 {
                     return Rotation_successful;
@@ -5643,17 +4683,6 @@ namespace Metacode
                     std::swap( _value, this->Rotation);
                 
                     return true;
-                }
-                
-                template<class C, class M>
-                void method_Rotation( C * _self, M _method ) const
-                {
-                    if( Rotation_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Rotation );
                 }
                 
                 bool has_Scale() const
@@ -5685,17 +4714,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Scale( C * _self, M _method ) const
-                {
-                    if( Scale_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Scale );
-                }
-                
                 bool has_Volume() const
                 {
                     return Volume_successful;
@@ -5725,17 +4743,6 @@ namespace Metacode
                     return true;
                 }
                 
-                template<class C, class M>
-                void method_Volume( C * _self, M _method ) const
-                {
-                    if( Volume_successful == false )
-                    {
-                        return;
-                    }
-                
-                    (_self->*_method)( this->Volume );
-                }
-                
             protected:
                 bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
                 bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
@@ -5750,6 +4757,8 @@ namespace Metacode
                 mutable uint32_t Count;
                 bool Opacity_successful;
                 mutable float Opacity;
+                bool Orientation_successful;
+                mutable mt::vec3f Orientation;
                 bool Position_successful;
                 mutable mt::vec3f Position;
                 bool Rotation_successful;
@@ -5779,6 +4788,48 @@ namespace Metacode
             TVectorMeta_KeyFrame3D includes_Meta_KeyFrame3D;
         };
         
+        class Meta_Polygon
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_Polygon();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            const uint32_t & get_LayerIndex() const
+            {
+                return this->LayerIndex;
+            }
+            
+            void swap_LayerIndex( uint32_t & _value ) const
+            {
+                std::swap( _value, this->LayerIndex);
+            }
+            
+            const Menge::Polygon & get_Value() const
+            {
+                return this->Value;
+            }
+            
+            void swap_Value( Menge::Polygon & _value ) const
+            {
+                std::swap( _value, this->Value);
+            }
+            
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            mutable uint32_t LayerIndex;
+            mutable Menge::Polygon Value;
+        };
+        
         class Meta_TimeRemap
             : public Metabuf::Metadata
         { 
@@ -5799,12 +4850,6 @@ namespace Metacode
                 std::swap( _value, this->LayerIndex);
             }
             
-            template<class C, class M>
-            void method_LayerIndex( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->LayerIndex );
-            }
-            
             const Menge::Floats & get_Time() const
             {
                 return this->Time;
@@ -5813,12 +4858,6 @@ namespace Metacode
             void swap_Time( Menge::Floats & _value ) const
             {
                 std::swap( _value, this->Time);
-            }
-            
-            template<class C, class M>
-            void method_Time( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Time );
             }
             
         protected:
@@ -5867,6 +4906,16 @@ namespace Metacode
     protected:
         TVectorMeta_KeyFrames3D includes_Meta_KeyFrames3D;
     public:
+        typedef stdex::auto_array<Meta_Polygon> TVectorMeta_Polygon;
+    
+        const TVectorMeta_Polygon & get_IncludesPolygon() const
+        {
+            return this->includes_Meta_Polygon;
+        }
+    
+    protected:
+        TVectorMeta_Polygon includes_Meta_Polygon;
+    public:
         typedef stdex::auto_array<Meta_TimeRemap> TVectorMeta_TimeRemap;
     
         const TVectorMeta_TimeRemap & get_IncludesTimeRemap() const
@@ -5894,6 +4943,78 @@ namespace Metacode
         bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
         bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
+        class Meta_Datas
+            : public Metabuf::Metadata
+        { 
+        public:
+            Meta_Datas();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+        protected:
+            bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+            class Meta_Data
+                : public Metabuf::Metadata
+            { 
+            public:
+                Meta_Data();
+            
+            public:
+                uint32_t getId() const override;
+            
+            public:
+                const Menge::ConstString & get_Name() const
+                {
+                    return this->Name;
+                }
+                
+                void swap_Name( Menge::ConstString & _value ) const
+                {
+                    std::swap( _value, this->Name);
+                }
+                
+                const Menge::FilePath & get_Path() const
+                {
+                    return this->Path;
+                }
+                
+                void swap_Path( Menge::FilePath & _value ) const
+                {
+                    std::swap( _value, this->Path);
+                }
+                
+            protected:
+                bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                bool _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+                bool _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+                bool _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+            public:
+            protected:
+            protected:
+                mutable Menge::ConstString Name;
+                mutable Menge::FilePath Path;
+            };
+            
+        protected:
+        protected:
+        public:
+            typedef stdex::auto_array<Meta_Data> TVectorMeta_Data;
+        
+            const TVectorMeta_Data & get_IncludesData() const
+            {
+                return this->includes_Meta_Data;
+            }
+        
+        protected:
+            TVectorMeta_Data includes_Meta_Data;
+        };
+        
         class Meta_Fonts
             : public Metabuf::Metadata
         { 
@@ -5904,20 +5025,14 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
-            const Menge::ConstString & get_Path() const
+            const Menge::FilePath & get_Path() const
             {
                 return this->Path;
             }
             
-            void swap_Path( Menge::ConstString & _value ) const
+            void swap_Path( Menge::FilePath & _value ) const
             {
                 std::swap( _value, this->Path);
-            }
-            
-            template<class C, class M>
-            void method_Path( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Path );
             }
             
         protected:
@@ -5928,7 +5043,7 @@ namespace Metacode
         public:
         protected:
         protected:
-            mutable Menge::ConstString Path;
+            mutable Menge::FilePath Path;
         };
         
         class Meta_Resources
@@ -5957,20 +5072,14 @@ namespace Metacode
                 uint32_t getId() const override;
             
             public:
-                const Menge::ConstString & get_Path() const
+                const Menge::FilePath & get_Path() const
                 {
                     return this->Path;
                 }
                 
-                void swap_Path( Menge::ConstString & _value ) const
+                void swap_Path( Menge::FilePath & _value ) const
                 {
                     std::swap( _value, this->Path);
-                }
-                
-                template<class C, class M>
-                void method_Path( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Path );
                 }
                 
             protected:
@@ -5981,7 +5090,7 @@ namespace Metacode
             public:
             protected:
             protected:
-                mutable Menge::ConstString Path;
+                mutable Menge::FilePath Path;
             };
             
         protected:
@@ -6008,6 +5117,35 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
+            bool has_Initializer() const
+            {
+                return Initializer_successful;
+            }
+            
+            bool get_Initializer( Menge::ConstString & _value ) const
+            {
+                if( Initializer_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Initializer;
+            
+                return true;
+            }
+            
+            bool swap_Initializer( Menge::ConstString & _value ) const
+            {
+                if( Initializer_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap( _value, this->Initializer);
+            
+                return true;
+            }
+            
             bool has_Module() const
             {
                 return Module_successful;
@@ -6037,31 +5175,14 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Module( C * _self, M _method ) const
-            {
-                if( Module_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Module );
-            }
-            
-            const Menge::ConstString & get_Path() const
+            const Menge::FilePath & get_Path() const
             {
                 return this->Path;
             }
             
-            void swap_Path( Menge::ConstString & _value ) const
+            void swap_Path( Menge::FilePath & _value ) const
             {
                 std::swap( _value, this->Path);
-            }
-            
-            template<class C, class M>
-            void method_Path( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Path );
             }
             
         protected:
@@ -6072,9 +5193,11 @@ namespace Metacode
         public:
         protected:
         protected:
+            bool Initializer_successful;
+            mutable Menge::ConstString Initializer;
             bool Module_successful;
             mutable Menge::ConstString Module;
-            mutable Menge::ConstString Path;
+            mutable Menge::FilePath Path;
         };
         
         class Meta_Texts
@@ -6103,20 +5226,14 @@ namespace Metacode
                 uint32_t getId() const override;
             
             public:
-                const Menge::ConstString & get_Path() const
+                const Menge::FilePath & get_Path() const
                 {
                     return this->Path;
                 }
                 
-                void swap_Path( Menge::ConstString & _value ) const
+                void swap_Path( Menge::FilePath & _value ) const
                 {
                     std::swap( _value, this->Path);
-                }
-                
-                template<class C, class M>
-                void method_Path( C * _self, M _method ) const
-                {
-                    (_self->*_method)( this->Path );
                 }
                 
             protected:
@@ -6127,7 +5244,7 @@ namespace Metacode
             public:
             protected:
             protected:
-                mutable Menge::ConstString Path;
+                mutable Menge::FilePath Path;
             };
             
         protected:
@@ -6146,6 +5263,16 @@ namespace Metacode
         
     protected:
     protected:
+    public:
+        typedef stdex::auto_array<Meta_Datas> TVectorMeta_Datas;
+    
+        const TVectorMeta_Datas & get_IncludesDatas() const
+        {
+            return this->includes_Meta_Datas;
+        }
+    
+    protected:
+        TVectorMeta_Datas includes_Meta_Datas;
     public:
         typedef stdex::auto_array<Meta_Fonts> TVectorMeta_Fonts;
     
@@ -6243,17 +5370,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_CharOffset( C * _self, M _method ) const
-            {
-                if( CharOffset_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->CharOffset );
-            }
-            
             bool has_Font() const
             {
                 return Font_successful;
@@ -6283,17 +5399,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_Font( C * _self, M _method ) const
-            {
-                if( Font_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Font );
-            }
-            
             const Menge::ConstString & get_Key() const
             {
                 return this->Key;
@@ -6302,12 +5407,6 @@ namespace Metacode
             void swap_Key( Menge::ConstString & _value ) const
             {
                 std::swap( _value, this->Key);
-            }
-            
-            template<class C, class M>
-            void method_Key( C * _self, M _method ) const
-            {
-                (_self->*_method)( this->Key );
             }
             
             bool has_LineOffset() const
@@ -6339,17 +5438,6 @@ namespace Metacode
                 return true;
             }
             
-            template<class C, class M>
-            void method_LineOffset( C * _self, M _method ) const
-            {
-                if( LineOffset_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->LineOffset );
-            }
-            
             bool has_Value() const
             {
                 return Value_successful;
@@ -6377,17 +5465,6 @@ namespace Metacode
                 std::swap( _value, this->Value);
             
                 return true;
-            }
-            
-            template<class C, class M>
-            void method_Value( C * _self, M _method ) const
-            {
-                if( Value_successful == false )
-                {
-                    return;
-                }
-            
-                (_self->*_method)( this->Value );
             }
             
         protected:
