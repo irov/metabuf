@@ -340,6 +340,7 @@ namespace Metabuf
 
 		return true;
 	}
+	//////////////////////////////////////////////////////////////////////////
 	std::string Xml2Metabuf::getError()
 	{
 		return m_error.str();

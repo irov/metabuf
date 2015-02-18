@@ -12,8 +12,9 @@
 
 namespace Metabuf
 {
-	struct XmlAttribute
+	class XmlAttribute
 	{
+	public:
 		size_t id;
 		std::string name;
 		std::string type;
@@ -22,23 +23,27 @@ namespace Metabuf
 
 	typedef std::map<std::string, XmlAttribute> TMapAttributes;
 
-	struct XmlMember
+	class XmlMember
 	{
+	public:
 		std::string name;
 		TMapAttributes attributes;
 
+	public:
         const XmlAttribute * getAttribute( const std::string & _name ) const;
 	};
 	
 	typedef std::map<std::string, XmlMember> TMapMembers;
 
-    typedef std::map<std::string, struct XmlNode *> TMapNodes;
+    typedef std::map<std::string, class XmlNode *> TMapNodes;
 
-	struct XmlNode
+	class XmlNode
 	{
+	public:
         XmlNode();
         ~XmlNode();
 
+	public:
 		uint32_t id;
 		std::string name;
 		std::string generator;
@@ -58,6 +63,7 @@ namespace Metabuf
 
         bool noWrite;
 
+	public:
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         

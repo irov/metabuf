@@ -379,7 +379,7 @@ namespace Metabuf
 			{
 				pugi::xml_attribute Name = element.attribute("Name");
 				pugi::xml_attribute Type = element.attribute("Type");
-				pugi::xml_attribute Evict = element.attribute("Evict");
+				//pugi::xml_attribute Evict = element.attribute("Evict");
 				pugi::xml_attribute Required = element.attribute("Required");
 
 				XmlAttribute & attributeXml = nodeXml->attributes[ Name.value() ];
@@ -394,7 +394,7 @@ namespace Metabuf
 				pugi::xml_attribute Node = element.attribute("Node");
 				pugi::xml_attribute Name = element.attribute("Name");
 				pugi::xml_attribute Type = element.attribute("Type");
-				pugi::xml_attribute Evict = element.attribute("Evict");
+				//pugi::xml_attribute Evict = element.attribute("Evict");
                 pugi::xml_attribute Required = element.attribute("Required");
 
 				XmlMember & memberXml = nodeXml->members[ Node.value() ];

@@ -1,9 +1,10 @@
 #	pragma once
 
-#   include "XmlProtocol.hpp"
+//#   include "XmlProtocol.hpp"
 
 #	include <pugixml.hpp>
 
+#	include <vector>
 #   include <map>
 #	include <string>
 #	include <sstream>
@@ -12,6 +13,10 @@
 
 namespace Metabuf
 {
+	class XmlProtocol;
+	class XmlNode;
+	class XmlAttribute;
+
     typedef bool (*ValueSerialization)( class Xml2Metabuf * _metabuf, const char * _value, void * _user );
 
 	class Xml2Metabuf
