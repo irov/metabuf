@@ -156,6 +156,48 @@ namespace Metabuf
 
             return true;
         }
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_float8( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			float value[8];
+			if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7] ) != 8 )
+			{
+				if( sscanf( _value, "%f %f %f %f %f %f %f %f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7] ) != 8 )
+				{
+					return false;
+				}
+			}
+
+			_metabuf->writeCount( value, 8 );
+
+			return true;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_float16( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			float value[16];
+			if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f"
+				, &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7]
+			, &value[8], &value[9], &value[10], &value[11], &value[12], &value[13], &value[14], &value[15]
+			) != 16 )
+			{
+				if( sscanf( _value, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f"
+					, &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7]
+				, &value[8], &value[9], &value[10], &value[11], &value[12], &value[13], &value[14], &value[15]
+				) != 16 )
+				{
+					return false;
+				}
+			}
+
+			_metabuf->writeCount( value, 16 );
+
+			return true;
+		}
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_floats( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
@@ -213,6 +255,8 @@ namespace Metabuf
         this->addSerializator( "float2", &Serialize::s_write_float2, 0 );
         this->addSerializator( "float3", &Serialize::s_write_float3, 0 );
         this->addSerializator( "float4", &Serialize::s_write_float4, 0 );
+		this->addSerializator( "float8", &Serialize::s_write_float8, 0 );
+		this->addSerializator( "float16", &Serialize::s_write_float16, 0 );
         this->addSerializator( "floats", &Serialize::s_write_floats, 0 );
     }
     //////////////////////////////////////////////////////////////////////////
@@ -521,7 +565,7 @@ namespace Metabuf
 
 		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << evict << " for attribute " << _attr->name << std::endl;
+			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 			return false;
 		}
