@@ -265,8 +265,20 @@ namespace Metabuf
                 {                   
                     return false;
                 }
-            }			
-			else if( strcmp( element_name, "Node" ) == 0 )
+            }	
+		}
+		
+		for( pugi::xml_node::iterator
+			it = root.begin(),
+			it_end = root.end();
+		it != it_end;
+		++it )
+		{
+			const pugi::xml_node & element = *it;
+
+			const char * element_name = element.name();
+
+			if( strcmp( element_name, "Node" ) == 0 )
 			{
 				if( this->readNode_( 0, element ) == false )
                 {
@@ -388,6 +400,11 @@ namespace Metabuf
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
 				attributeXml.required = Required.empty() == false;
+
+				if( m_evictors.find( attributeXml.type ) == m_evictors.end() )
+				{
+					return false;
+				}
 			}
 			else if( strcmp( element.name(), "Member" ) == 0 )
 			{
@@ -407,6 +424,11 @@ namespace Metabuf
 				attributeXml.name = Name.value();
 				attributeXml.type = Type.value();
 				attributeXml.required = Required.empty() == false;
+
+				if( m_evictors.find( attributeXml.type ) == m_evictors.end() )
+				{
+					return false;
+				}
 			}
             else if( strcmp( element.name(), "Inheritance" ) == 0 )
             {
