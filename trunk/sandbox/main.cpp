@@ -4,6 +4,8 @@
 
 #	include <stdio.h>
 
+#	include <Windows.h>
+
 void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _protocol );
 
 void main()
@@ -24,13 +26,23 @@ void main()
 	
 	fclose( file_protocol );
 
-	xml_protocol.readProtocol( buf, size );
+	if( xml_protocol.readProtocol( buf, size ) == false )
+	{
+		MessageBoxA( NULL, xml_protocol.getError().c_str(), "Error", MB_OK );
+
+		return;
+	}
 	
 	Metabuf::Xml2Metacode xml_metacode(&xml_protocol);
 
 	std::string header;
     std::string source;
-	xml_metacode.generate( header, source );
+	if( xml_metacode.generate( header, source ) == false )
+	{
+		MessageBoxA( NULL, xml_metacode.getError().c_str(), "Error", MB_OK );
+
+		return;
+	}
 
 	FILE * file_metacode_hpp = fopen("Metacode.h", "wb");
 
@@ -72,9 +84,7 @@ void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _prot
     unsigned char * write_buff = new unsigned char[size_test * 2];
 	if( xml_metabuf.convert( write_buff, size_test * 2, buf_test, size_test, write_size ) == false )
     {
-        printf("Error: %s\n"
-            , xml_metabuf.getError().c_str()
-            );
+		MessageBoxA( NULL, xml_metabuf.getError().c_str(), "Error", MB_OK );
 
         return;
     }

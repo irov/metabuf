@@ -553,32 +553,85 @@ namespace Metabuf
         return true;
     }
 	//////////////////////////////////////////////////////////////////////////
+	static bool s_getTypeEnumeratorIndex( const XmlType & _type, const char * _value, uint32_t & _index )
+	{
+		for( XmlType::TVectorEnumerators::const_iterator
+			it = _type.enumerators.begin(),
+			it_end = _type.enumerators.end();
+		it != it_end;
+		++it )
+		{
+			const std::string & enumerat = *it;
+
+			if( enumerat != _value )
+			{
+				continue;
+			}
+
+			uint32_t index = std::distance( _type.enumerators.begin(), it );
+
+			_index = index;
+
+			return true;
+		}
+
+		return false;
+	}
+	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::writeNodeArguments_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
 	{
 		uint32_t id = (uint32_t)_attr->id;
 		this->writeSize( id );
 		
-        std::string evict;
-        m_protocol->getEvict( _attr->type, evict );
-
-		TMapSerialization::const_iterator it_serialize = m_serialization.find( evict );
-
-		if( it_serialize == m_serialization.end() )
+        XmlType type;
+		if( m_protocol->getType( _attr->type, type ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeArguments_: not found attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 			return false;
 		}
 
-		const char * attr_value = _xml_attr.value();
+		TMapSerialization::const_iterator it_serialize = m_serialization.find( type.evict );
 
-        const SerializationDesc & desc = it_serialize->second;
-
-		if( (*desc.serialization)( this, attr_value, desc.user ) == false )
+		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 			return false;
+		}
+
+		const SerializationDesc & desc = it_serialize->second;
+
+		const char * attr_value = _xml_attr.value();
+
+		if( type.is_enumerator == true )
+		{
+			uint32_t index;
+			if( s_getTypeEnumeratorIndex( type, attr_value, index ) == false )
+			{
+				m_error << "Xml2Metabuf::writeNodeArguments_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+
+				return false;
+			}
+
+			char enumerator_attr_value[16];
+			sprintf( enumerator_attr_value, "%d", index );
+
+			if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
+			{
+				m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << " [enum]" << std::endl;
+
+				return false;
+			}
+		}
+		else
+		{
+			if( (*desc.serialization)(this, attr_value, desc.user) == false )
+			{
+				m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+
+				return false;
+			}
 		}
 
         return true;

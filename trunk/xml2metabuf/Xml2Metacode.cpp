@@ -232,16 +232,30 @@ namespace Metabuf
 			}
             else
             {
-                this->write(_ss) << "const " << attr->type << " & get_" << attr->name << "() const" << std::endl;
-                this->write(_ss) << "{" << std::endl;	    	
-                this->write(_ss) << "    return this->" << attr->name << ";" << std::endl;
-                this->write(_ss) << "}" << std::endl;
-                this->write(_ss) << std::endl;
-                this->write(_ss) << "void" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
-                this->write(_ss) << "{" << std::endl;
-                this->write(_ss) << "    std::swap( _value, this->" << attr->name << ");" << std::endl;
-                this->write(_ss) << "}" << std::endl;
-                this->write(_ss) << std::endl;
+				XmlType type;
+				m_protocol->getType( attr->type, type );
+
+				if( type.is_ncr == true || type.is_enumerator == true )
+				{
+					this->write( _ss ) << attr->type << " get_" << attr->name << "() const" << std::endl;
+					this->write( _ss ) << "{" << std::endl;
+					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "}" << std::endl;
+				}
+				else
+				{
+					this->write( _ss ) << "const " << attr->type << " & get_" << attr->name << "() const" << std::endl;
+					this->write( _ss ) << "{" << std::endl;
+					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "}" << std::endl;					
+				}
+
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "void" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+				this->write( _ss ) << "{" << std::endl;
+				this->write( _ss ) << "    std::swap( _value, this->" << attr->name << ");" << std::endl;
+				this->write( _ss ) << "}" << std::endl;
+				this->write( _ss ) << std::endl;
             }
 		}
 
@@ -295,10 +309,24 @@ namespace Metabuf
 				}
                 else
                 {
-                    this->write(_ss) << "const " << attr->type << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
-                    this->write(_ss) << "{" << std::endl;
-                    this->write(_ss) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
-                    this->write(_ss) << "}" << std::endl;
+					XmlType type;
+					m_protocol->getType( attr->type, type );
+
+					if( type.is_ncr == true || type.is_enumerator == true )
+					{
+						this->write( _ss ) << attr->type << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
+						this->write( _ss ) << "{" << std::endl;
+						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
+						this->write( _ss ) << "}" << std::endl;
+					}
+					else
+					{
+						this->write( _ss ) << "const " << attr->type << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
+						this->write( _ss ) << "{" << std::endl;
+						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
+						this->write( _ss ) << "}" << std::endl;
+					}
+
                     this->write(_ss) << std::endl;
                     this->write(_ss) << "void" << " " << "swap_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
                     this->write(_ss) << "{" << std::endl;
@@ -1051,7 +1079,7 @@ namespace Metabuf
                     this->write(_ss) << "                return false;" << std::endl;
                     this->write(_ss) << "            }" << std::endl;
                     this->write(_ss) << std::endl;
-                    this->write(_ss) << "            includes_" << node_inheritance->getName() << ".push_back(metadata);" << std::endl;            
+                    this->write(_ss) << "            includes_" << node_inheritance->getName() << ".push_back(metadata);" << std::endl;
                     this->write(_ss) << std::endl;
                     this->write(_ss) << "            return true;" << std::endl;
                     this->write(_ss) << "            break;" << std::endl;
