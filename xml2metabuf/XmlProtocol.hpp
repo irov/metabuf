@@ -12,6 +12,19 @@
 
 namespace Metabuf
 {
+	struct XmlType
+	{
+		typedef std::vector<std::string> TVectorEnumerators;
+		TVectorEnumerators enumerators;
+		
+		std::string evict;
+
+		bool is_enumerator;
+		bool is_ncr;
+	};
+
+	typedef std::map<std::string, XmlType> TMapTypes;
+
 	class XmlAttribute
 	{
 	public:
@@ -93,7 +106,7 @@ namespace Metabuf
         uint32_t getVersion() const;
 
     public:
-        bool getEvict( const std::string & _type, std::string & _evict ) const;
+		bool getType( const std::string & _name, XmlType & _type ) const;
 
 	public:
 		bool readProtocol( const void * _buff, size_t _size );
@@ -101,6 +114,7 @@ namespace Metabuf
 
 	protected:
         bool readType_( const pugi::xml_node & _xml_node );
+		bool readEnum_( const pugi::xml_node & _xml_node );
 		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
@@ -110,8 +124,7 @@ namespace Metabuf
 
 		TMapNodes m_nodes;
 
-        typedef std::map<std::string, std::string> TMapEvictors;
-        TMapEvictors m_evictors;
+		TMapTypes m_types;
 
         std::stringstream m_error;
 	};

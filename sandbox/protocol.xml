@@ -1,12 +1,12 @@
-<Protocol Version = "77">
+<Protocol Version = "81">
   <Type Name="Menge::String" Evict="string"/>
   <Type Name="Menge::WString" Evict="wstring"/>
   <Type Name="Menge::ConstString" Evict="string"/>
   <Type Name="Menge::FilePath" Evict="string"/>
-  <Type Name="bool" Evict="uint8_t"/>
-  <Type Name="uint32_t" Evict="uint32_t"/>
-  <Type Name="Menge::WChar" Evict="wchar_t"/>
-  <Type Name="float" Evict="float"/>
+  <Type Name="bool" Evict="uint8_t" NCR="1"/>
+  <Type Name="uint32_t" Evict="uint32_t" NCR="1"/>
+  <Type Name="Menge::WChar" Evict="wchar_t" NCR="1"/>
+  <Type Name="float" Evict="float" NCR="1"/>
   <Type Name="mt::vec2f" Evict="float2"/>
   <Type Name="mt::vec3f" Evict="float3"/>
   <Type Name="mt::vec4f" Evict="float4"/>
@@ -15,12 +15,85 @@
   <Type Name="Menge::ColourValue" Evict="float4"/>
   <Type Name="Menge::Polygon" Evict="floats"/>
   <Type Name="Menge::Floats" Evict="floats"/>
+  
+  <Enum Name="Menge::EBlendFactor">
+    <ONE/>
+    <ZERO/>
+    <DEST_COLOUR/>
+    <SOURCE_COLOUR/>
+    <ONE_MINUS_DEST_COLOUR/>
+    <ONE_MINUS_SOURCE_COLOUR/>
+    <DEST_ALPHA/>
+    <SOURCE_ALPHA/>
+    <ONE_MINUS_DEST_ALPHA/>
+    <ONE_MINUS_SOURCE_ALPHA/>
+  </Enum>
 
-  <Node Name="DataBlock">
+  <Enum Name="Menge::ETextureOp">
+    <DISABLE/>
+    <SELECTARG1/>
+    <SELECTARG2/>
+    <MODULATE/>
+    <ADD/>
+    <SUBSTRACT/>
+  </Enum>
+
+  <Enum Name="Menge::ETextureArgument">
+    <CURRENT/>
+    <DIFFUSE/>
+    <SPECULAR/>
+    <TEXTURE/>
+    <TFACTOR/>
+  </Enum>
+
+  <Node Name="DataBlock">    
     <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
 
     <Node Name="Include">
       <Attribute Name="Path" Type="Menge::FilePath" Required="1"/>
+    </Node>
+
+    <Node Name="VertexShader">
+      <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
+      <Attribute Name="Platform" Type="Menge::ConstString" Required="1"/>
+
+      <Member Node="File" Name="Path" Type="Menge::FilePath" Required="1"/>
+      <Member Node="File" Name="Compile" Type="bool"/>
+    </Node>
+
+    <Node Name="FragmentShader">
+      <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
+      <Attribute Name="Platform" Type="Menge::ConstString" Required="1"/>
+
+      <Member Node="File" Name="Path" Type="Menge::FilePath" Required="1"/>
+      <Member Node="File" Name="Compile" Type="bool"/>
+    </Node>
+
+    <Node Name="Material">
+      <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
+
+      <Member Node="BlendFactor" Name="Source" Type="Menge::EBlendFactor"/>
+      <Member Node="BlendFactor" Name="Dest" Type="Menge::EBlendFactor"/>
+      <Member Node="DepthBufferWrite" Name="Enable" Type="bool"/>
+      <Member Node="AlphaTest" Name="Enable" Type="bool"/>
+      <Member Node="AlphaBlend" Name="Enable" Type="bool"/>
+
+      <Node Name="TextureStages">
+        <Attribute Name="Stage" Type="uint32_t" Required="1"/>
+
+        <Member Node="Color" Name="Operator" Type="Menge::ETextureOp" Required="1"/>
+        <Member Node="Color" Name="Arg1" Type="Menge::ETextureArgument"/>
+        <Member Node="Color" Name="Arg2" Type="Menge::ETextureArgument"/>
+
+        <Member Node="Alpha" Name="Operator" Type="Menge::ETextureOp" Required="1"/>
+        <Member Node="Alpha" Name="Arg1" Type="Menge::ETextureArgument"/>
+        <Member Node="Alpha" Name="Arg2" Type="Menge::ETextureArgument"/>
+
+        <Member Node="TextureCoord" Name="Index" Type="uint32_t"/>
+      </Node>
+
+      <Member Node="Program" Name="VertexShader" Type="Menge::ConstString"/>
+      <Member Node="Program" Name="FragmentShader" Type="Menge::ConstString"/>
     </Node>
 
     <Node Name="Resource" Generator="Type">
@@ -43,7 +116,7 @@
       <Member Node="File" Name="WrapX" Type="bool"/>
       <Member Node="File" Name="WrapY" Type="bool"/>
       
-      <Member Node="File" Name="MaxSize" Type="mt::vec2f"/>
+      <Member Node="File" Name="MaxSize" Type="mt::vec2f" Required="1"/>
       <Member Node="File" Name="Size" Type="mt::vec2f"/>
       <Member Node="File" Name="Offset" Type="mt::vec2f"/>
 
@@ -160,6 +233,7 @@
       <Member Node="KeyFramesPackPath" Name="Converter" Type="Menge::ConstString"/>
       <Member Node="Loop" Name="Segment" Type="mt::vec2f"/>      
       <Member Node="Anchor" Name="Point" Type="mt::vec3f"/>
+      <Member Node="Offset" Name="Point" Type="mt::vec3f"/>
       <Member Node="Bounds" Name="Box" Type="mt::box2f"/>
 
       <Node Name="MovieLayer2D">
@@ -298,6 +372,12 @@
     <Node Name="Datas">
       <Node Name="Data">
         <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
+        <Attribute Name="Path" Type="Menge::FilePath" Required="1"/>
+      </Node>
+    </Node>
+
+    <Node Name="Materials">
+      <Node Name="Material">
         <Attribute Name="Path" Type="Menge::FilePath" Required="1"/>
       </Node>
     </Node>

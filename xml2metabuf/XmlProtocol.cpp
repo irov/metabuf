@@ -267,6 +267,30 @@ namespace Metabuf
                 }
             }	
 		}
+
+		for( pugi::xml_node::iterator
+			it = root.begin(),
+			it_end = root.end();
+		it != it_end;
+		++it )
+		{
+			const pugi::xml_node & element = *it;
+
+			const char * element_name = element.name();
+
+			if( element_name == 0 )
+			{
+				return false;
+			}
+
+			if( strcmp( element_name, "Enum" ) == 0 )
+			{
+				if( this->readEnum_( element ) == false )
+				{
+					return false;
+				}
+			}
+		}
 		
 		for( pugi::xml_node::iterator
 			it = root.begin(),
@@ -289,23 +313,86 @@ namespace Metabuf
 
 		return true;
 	}
+	//////////////////////////////////////////////////////////////////////////
+	bool XmlProtocol::readEnum_( const pugi::xml_node & _xml_node )
+	{ 
+		pugi::xml_attribute Name = _xml_node.attribute( "Name" );
+
+		const char * type_name = Name.value();
+
+		if( type_name == 0 )
+		{
+			m_error << "XmlProtocol::readEnum_: Name not set" << std::endl;
+
+			return false;
+		}
+
+		XmlType type;
+		type.is_enumerator = true;
+		type.evict = "uint32_t";
+		
+		for( pugi::xml_node::iterator
+			it = _xml_node.begin(),
+			it_end = _xml_node.end();
+		it != it_end;
+		++it )
+		{
+			const pugi::xml_node & element = *it;
+
+			const char * element_name = element.name();
+
+			if( element_name == 0 )
+			{
+				m_error << "XmlProtocol::readEnum_: Enum '" << type_name << "' invalid Enum Value" << std::endl;
+
+				return false;
+			}
+
+			type.enumerators.push_back( element_name );
+		}
+
+		m_types.insert( std::make_pair( type_name, type ) );
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool XmlProtocol::readType_( const pugi::xml_node & _xml_node )
     {
         pugi::xml_attribute Name = _xml_node.attribute("Name");
         pugi::xml_attribute Evict = _xml_node.attribute("Evict");
+		pugi::xml_attribute NCR = _xml_node.attribute( "NCR" );
 
-        const char * type_name = Name.value();
-        const char * type_evict = Evict.value();
-
-        if( type_name == 0 || type_evict == 0 )
+		if( Name == 0 || Evict == 0 )
         {
             m_error << "XmlProtocol::readType_: Name or Evict not set" << std::endl;
 
             return false;
         }
 
-        m_evictors.insert( std::make_pair(type_name, type_evict));
+		const char * type_name = Name.value();
+		const char * type_evict = Evict.value();
+		
+		XmlType type;
+		type.is_enumerator = false;
+		type.evict = type_evict;
+
+		uint32_t type_NCR_value = 0;
+
+		if( NCR != nullptr )
+		{
+			const char * type_NCR = NCR.value();
+
+			if( sscanf( type_NCR, "%d", &type_NCR_value ) != 1 )
+			{
+				m_error << "XmlProtocol::readType_: NCR invalid" << std::endl;
+
+				return false;
+			}
+		}
+
+		type.is_ncr = (type_NCR_value != 0);
+
+		m_types.insert( std::make_pair( type_name, type ) );
 
         return true;
     }
@@ -401,8 +488,10 @@ namespace Metabuf
 				attributeXml.type = Type.value();
 				attributeXml.required = Required.empty() == false;
 
-				if( m_evictors.find( attributeXml.type ) == m_evictors.end() )
+				if( m_types.find( attributeXml.type ) == m_types.end() )
 				{
+					m_error << "XmlProtocol::readNode_: Attribute " << nodeXml->name << " not found type " << attributeXml.type << std::endl;
+
 					return false;
 				}
 			}
@@ -425,8 +514,10 @@ namespace Metabuf
 				attributeXml.type = Type.value();
 				attributeXml.required = Required.empty() == false;
 
-				if( m_evictors.find( attributeXml.type ) == m_evictors.end() )
+				if( m_types.find( attributeXml.type ) == m_types.end() )
 				{
+					m_error << "XmlProtocol::readNode_: Member " << nodeXml->name << " not found type " << attributeXml.type << std::endl;
+
 					return false;
 				}
 			}
@@ -445,16 +536,16 @@ namespace Metabuf
 		return true;
 	}
     //////////////////////////////////////////////////////////////////////////
-    bool XmlProtocol::getEvict( const std::string & _type, std::string & _evict ) const
+	bool XmlProtocol::getType( const std::string & _name, XmlType & _type ) const
     {
-        TMapEvictors::const_iterator it_found = m_evictors.find( _type );
+		TMapTypes::const_iterator it_found = m_types.find( _name );
 
-        if( it_found == m_evictors.end() )
+		if( it_found == m_types.end() )
         {
             return false;
         }
 
-        _evict = it_found->second;
+		_type = it_found->second;
 
         return true;
     }
