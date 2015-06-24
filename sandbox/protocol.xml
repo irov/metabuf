@@ -1,9 +1,9 @@
-<Protocol Version = "82">
+<Protocol Version = "83">
   <Type Name="Menge::String" Evict="string"/>
   <Type Name="Menge::WString" Evict="wstring"/>
   <Type Name="Menge::ConstString" Evict="string"/>
   <Type Name="Menge::FilePath" Evict="string"/>
-  <Type Name="bool" Evict="uint8_t" NCR="1"/>
+  <Type Name="bool" Evict="bool" NCR="1"/>
   <Type Name="uint32_t" Evict="uint32_t" NCR="1"/>
   <Type Name="Menge::WChar" Evict="wchar_t" NCR="1"/>
   <Type Name="float" Evict="float" NCR="1"/>

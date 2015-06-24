@@ -41,12 +41,47 @@ namespace Metabuf
             
             return true;
         }
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			if( strcmp( _value, "true" ) == 0 ||
+				strcmp( _value, "True" ) == 0 ||
+				strcmp( _value, "TRUE" ) == 0 )
+			{
+				uint8_t write_value = 1;
+				_metabuf->write( write_value );
+
+				return true;
+			}
+			else if( strcmp( _value, "false" ) == 0 ||
+				strcmp( _value, "False" ) == 0 ||
+				strcmp( _value, "FALSE" ) == 0 )
+			{
+				uint8_t write_value = 0;
+				_metabuf->write( write_value );
+
+				return true;
+			}
+
+			uint32_t int_value;
+			if( sscanf( _value, "%u", &int_value ) != 1 )
+			{
+				return false;
+			}
+
+			uint8_t write_value = (uint8_t)int_value;
+			_metabuf->write( write_value );
+
+			return true;
+		}
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
 
-            uint32_t int_value;
+			uint32_t int_value;
             if( sscanf( _value, "%u", &int_value ) != 1 )
             {
                 return false;
@@ -247,6 +282,7 @@ namespace Metabuf
         this->addSerializator( "string", &Serialize::s_write_string, 0 );
 		this->addSerializator( "string_id", &Serialize::s_write_string_id, 0 );
         
+		this->addSerializator( "bool", &Serialize::s_write_bool, 0 );
         this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, 0 );
         this->addSerializator( "int", &Serialize::s_write_int, 0 );
         this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, 0 );
