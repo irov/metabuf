@@ -1,4 +1,4 @@
-<Protocol Version = "83">
+<Protocol Version = "85">
   <Type Name="Menge::String" Evict="string"/>
   <Type Name="Menge::WString" Evict="wstring"/>
   <Type Name="Menge::ConstString" Evict="string"/>
@@ -69,6 +69,16 @@
       <Member Node="File" Name="Compile" Type="bool"/>
     </Node>
 
+    <Node Name="Program">
+      <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
+      <Attribute Name="Platform" Type="Menge::ConstString" Required="1"/>
+
+      <Member Node="VertexShader" Name="Name" Type="Menge::ConstString" Required="1"/>
+      <Member Node="FragmentShader" Name="Name" Type="Menge::ConstString" Required="1"/>
+      
+      <Member Node="Sampler" Name="Count" Type="uint32_t" Required="1"/>
+    </Node>
+
     <Node Name="Material">
       <Attribute Name="Name" Type="Menge::ConstString" Required="1"/>
       <Attribute Name="Debug" Type="bool"/>
@@ -93,8 +103,7 @@
         <Member Node="TextureCoord" Name="Index" Type="uint32_t"/>
       </Node>
 
-      <Member Node="Program" Name="VertexShader" Type="Menge::ConstString"/>
-      <Member Node="Program" Name="FragmentShader" Type="Menge::ConstString"/>
+      <Member Node="Program" Name="Name" Type="Menge::ConstString"/>
     </Node>
 
     <Node Name="Resource" Generator="Type">
