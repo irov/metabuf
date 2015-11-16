@@ -56,6 +56,8 @@ void main()
 
     //convert("DebugInfo.xml", "DebugInfo.bin", &xml_protocol );
     //convert("Pak.xml", "Pak.bin", &xml_protocol );
+
+	printf( "done\n" );
 }
 //////////////////////////////////////////////////////////////////////////
 void convert( const char * _xml, const char * _bin, Metabuf::XmlProtocol * _protocol )
