@@ -56,8 +56,13 @@ namespace Metabuf
 
         m_userData = _userData;
 
+		if (this->_parseData(_buff, _size, _read) == false)
+		{
+			return false;
+		}
+
 		uint32_t attributeCount;
-		if( this->readSize( _buff, _size, _read, attributeCount ) == false )
+		if (this->readSize(_buff, _size, _read, attributeCount) == false)
 		{
 			return false;
 		}

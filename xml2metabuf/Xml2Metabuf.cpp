@@ -13,25 +13,6 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     namespace Serialize
     {
-		//////////////////////////////////////////////////////////////////////////
-		static bool s_write_string_id( Xml2Metabuf * _metabuf, const char * _value, void * _user )
-		{
-			(void)_user;
-
-			uint32_t int_value;
-			if( sscanf( _value, "{{%u}}", &int_value ) == 1 )
-			{
-				_metabuf->write( int_value );
-			}
-			else
-			{
-				int_value = ((uint32_t)-1);
-				_metabuf->write( int_value );
-				_metabuf->writeString( _value );
-			}
-
-			return true;
-		}
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
@@ -280,7 +261,6 @@ namespace Metabuf
     void Xml2Metabuf::initialize()
     {
         this->addSerializator( "string", &Serialize::s_write_string, 0 );
-		this->addSerializator( "string_id", &Serialize::s_write_string_id, 0 );
         
 		this->addSerializator( "bool", &Serialize::s_write_bool, 0 );
         this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, 0 );
@@ -432,12 +412,6 @@ namespace Metabuf
         {
             return true;
         }
-
-		//size_t id = _node->id;
-		//if( this->writeSize( id ) == false )
-  //      {
-  //          return false;
-  //      }
 
         if( this->writeNodeAttribute_( _node, _xml_node ) == false )
         {

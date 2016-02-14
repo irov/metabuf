@@ -60,6 +60,7 @@ namespace Metabuf
 		void operator delete [] ( void * _ptr, size_t _size );
 
 	protected:
+		virtual bool _parseData(const unsigned char * _buff, size_t _size, size_t & _read) = 0;
 		virtual bool _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t id ) = 0;
 
         virtual bool _preparationIncludes( uint32_t _includes, uint32_t _count ) = 0;

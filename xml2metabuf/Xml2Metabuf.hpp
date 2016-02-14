@@ -36,6 +36,8 @@ namespace Metabuf
 	protected:
 		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
 
+		bool writeNodeData_(const XmlNode * _node, const pugi::xml_node & _xml_node);
+
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
