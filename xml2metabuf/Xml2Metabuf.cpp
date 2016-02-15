@@ -413,6 +413,13 @@ namespace Metabuf
             return true;
         }
 
+		if( this->writeNodeData_( _node, _xml_node ) == false )
+		{
+			m_error << "Xml2Metabuf::writeNodeData_: error write node " << _node->name << " attribute" << std::endl;
+
+			return false;
+		}
+		
         if( this->writeNodeAttribute_( _node, _xml_node ) == false )
         {
             m_error << "Xml2Metabuf::writeNodeAttribute_: error write node " << _node->name << " attribute" << std::endl;
@@ -436,6 +443,250 @@ namespace Metabuf
 
         return true;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeData_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+	{
+		if( _node->inheritance.empty() == false )
+		{
+			if( this->writeNodeData2_( _node->node_inheritance, _xml_node ) == false )
+			{
+				return false;
+			}
+		}
+
+		if( this->writeNodeData2_( _node, _xml_node ) == false )
+		{
+			return false;
+		}
+
+		for( TMapMembers::const_iterator
+			it = _node->members.begin(),
+			it_end = _node->members.end();
+		it != it_end;
+		++it )
+		{
+			const XmlMember * member = &it->second;
+
+			for( TMapAttributes::const_iterator
+				it = member->attributes.begin(),
+				it_end = member->attributes.end();
+			it != it_end;
+			++it )
+			{
+				const XmlAttribute * attr = &it->second;
+
+				if( attr->required == false )
+				{
+					continue;
+				}
+
+				bool member_found = false;
+
+				for( pugi::xml_node::iterator
+					it = _xml_node.begin(),
+					it_end = _xml_node.end();
+				it != it_end;
+				++it )
+				{
+					pugi::xml_node & child = *it;
+
+					const char * child_name = child.name();
+
+					if( member->name != child_name )
+					{
+						continue;
+					}
+
+					pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+
+					if( xml_attr.empty() == true )
+					{
+						m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " not found required member " << member->name << " argument " << attr->name << std::endl;
+
+						return false;
+					}
+
+					if( this->writeNodeDataValue_( attr, xml_attr ) == false )
+					{
+						m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
+
+						return false;
+					}
+
+					member_found = true;
+					break;
+				}
+
+				if( member_found == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+
+					return false;
+				}
+
+			}
+		}
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeData2_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+	{
+		for( TMapAttributes::const_iterator
+			it = _node->attributes.begin(),
+			it_end = _node->attributes.end();
+		it != it_end;
+		++it )
+		{
+			const XmlAttribute * attr = &it->second;
+
+			if( attr->required == false )
+			{
+				continue;
+			}
+
+			pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+			if( xml_attr.empty() == true )
+			{
+				m_error << "Xml2Metabuf::writeNodeData2_:" << _node->name << " not found required argument " << attr->name << std::endl;
+
+				return false;
+			}
+
+			if( this->writeNodeDataValue_( attr, xml_attr ) == false )
+			{
+				m_error << "Xml2Metabuf::writeNodeData2_:" << _node->name << " not write argument " << attr->name << std::endl;
+
+				return false;
+			}
+		}
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count )
+	{
+		uint32_t count = 0;
+
+		for( TMapAttributes::const_iterator
+			it = _node->attributes.begin(),
+			it_end = _node->attributes.end();
+		it != it_end;
+		++it )
+		{
+			const XmlAttribute * attr = &it->second;
+
+			if( attr->required == false )
+			{
+				continue;
+			}
+
+			pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+			if( xml_attr.empty() == true )
+			{
+				m_error << "Xml2Metabuf::getNodeDataSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+
+				return false;
+			}
+
+			++count;
+		}
+
+		if( _node->inheritance.empty() == false )
+		{
+			for( TMapAttributes::const_iterator
+				it = _node->node_inheritance->attributes.begin(),
+				it_end = _node->node_inheritance->attributes.end();
+			it != it_end;
+			++it )
+			{
+				const XmlAttribute * attr = &it->second;
+
+				if( attr->required == false )
+				{
+					continue;
+				}
+
+				pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+				if( xml_attr.empty() == true )
+				{
+					m_error << "Xml2Metabuf::getNodeDataSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+
+					return false;
+				}
+
+				++count;
+			}
+		}
+
+		for( TMapMembers::const_iterator
+			it = _node->members.begin(),
+			it_end = _node->members.end();
+		it != it_end;
+		++it )
+		{
+			const XmlMember * member = &it->second;
+
+			for( TMapAttributes::const_iterator
+				it = member->attributes.begin(),
+				it_end = member->attributes.end();
+			it != it_end;
+			++it )
+			{
+				const XmlAttribute * attr = &it->second;
+
+				if( attr->required == false )
+				{
+					continue;
+				}
+
+				bool member_found = false;
+
+				for( pugi::xml_node::iterator
+					it = _xml_node.begin(),
+					it_end = _xml_node.end();
+				it != it_end;
+				++it )
+				{
+					const pugi::xml_node & child = *it;
+
+					const char * child_name = child.name();
+
+					if( member->name != child_name )
+					{
+						continue;
+					}
+
+					pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+
+					if( xml_attr.empty() == true )
+					{
+						continue;
+					}
+
+					++count;
+
+					member_found = true;
+
+					break;
+				}
+
+				if( member_found == false )
+				{
+					m_error << "Xml2Metabuf::getNodeDataSize_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+
+					return false;
+				}
+			}
+		}
+
+		_count = count;
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
@@ -476,7 +727,10 @@ namespace Metabuf
             {
                 const XmlAttribute * attr = &it->second;
 
-                bool member_found = false;
+				if( attr->required == true )
+				{
+					continue;
+				}
 
                 for( pugi::xml_node::iterator
                     it = _xml_node.begin(),
@@ -500,25 +754,14 @@ namespace Metabuf
                         continue;
                     }
 
-                    if( this->writeNodeArguments_( attr, xml_attr ) == false )
+                    if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
                     {
                         m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
 
                         return false;
                     }
 
-                    member_found = true;
                     break;
-                }
-
-                if( attr->required == true )
-                {
-                    if( member_found == false )
-                    {                   
-                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
-                            
-                        return false;
-                    }
                 }
             }
         }
@@ -536,23 +779,19 @@ namespace Metabuf
         {
             const XmlAttribute * attr = &it->second;
 
+			if( attr->required == true )
+			{
+				continue;
+			}
+
             pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-            if( xml_attr.empty() == true )
-            {
-                if( attr->required == true )
-                {
-                    m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not found required argument " << attr->name << std::endl;
+			if( xml_attr.empty() == true )
+			{
+				continue;
+			}
 
-                    return false;
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            if( this->writeNodeArguments_( attr, xml_attr ) == false )
+            if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
             {
                 m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write argument " << attr->name << std::endl;
 
@@ -588,15 +827,12 @@ namespace Metabuf
 		return false;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::writeNodeArguments_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
+	bool Xml2Metabuf::writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
 	{
-		uint32_t id = (uint32_t)_attr->id;
-		this->writeSize( id );
-		
-        XmlType type;
+		XmlType type;
 		if( m_protocol->getType( _attr->type, type ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: not found attribute " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 			return false;
 		}
@@ -605,7 +841,7 @@ namespace Metabuf
 
 		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 			return false;
 		}
@@ -619,7 +855,7 @@ namespace Metabuf
 			uint32_t index;
 			if( s_getTypeEnumeratorIndex( type, attr_value, index ) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeArguments_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
 
 				return false;
 			}
@@ -629,7 +865,7 @@ namespace Metabuf
 
 			if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << " [enum]" << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << " [enum]" << std::endl;
 
 				return false;
 			}
@@ -638,12 +874,27 @@ namespace Metabuf
 		{
 			if( (*desc.serialization)(this, attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeAttribute_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
 
 				return false;
 			}
 		}
 
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
+	{
+		uint32_t id = (uint32_t)_attr->id;
+		this->writeSize( id );
+
+		if( this->writeNodeDataValue_( _attr, _xml_attr ) == false )
+		{
+			m_error << "Xml2Metabuf::writeNodeArguments_: invalid write data " << _attr->name << " type " << _attr->type << std::endl;
+
+			return false;
+		}
+		
         return true;
 	}
     //////////////////////////////////////////////////////////////////////////
@@ -659,21 +910,17 @@ namespace Metabuf
         {
             const XmlAttribute * attr = &it->second;
 
+			if( attr->required == true )
+			{
+				continue;
+			}
+
             pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-            if( xml_attr.empty() == true )
-            {
-                if( attr->required == true )
-                {
-                    m_error << "Xml2Metabuf::getNodeAttributeSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
-
-                    return false;
-                }
-                else
-                {
-                    continue;
-                }
-            }
+			if( xml_attr.empty() == true )
+			{
+				continue;
+			}
 
             ++count;
         }
@@ -688,21 +935,17 @@ namespace Metabuf
             {
                 const XmlAttribute * attr = &it->second;
 
+				if( attr->required == true )
+				{
+					continue;
+				}
+
                 pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
 
-                if( xml_attr.empty() == true )
-                {
-                    if( attr->required == true )
-                    {
-                        m_error << "Xml2Metabuf::getNodeAttributeSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
-
-                        return false;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
+				if( xml_attr.empty() == true )
+				{
+					continue;
+				}
 
                 ++count;
             }
@@ -724,7 +967,10 @@ namespace Metabuf
             {
                 const XmlAttribute * attr = &it->second;
 
-                bool member_found = false;
+				if( attr->required == true )
+				{
+					continue;
+				}
 
                 for( pugi::xml_node::iterator
                     it = _xml_node.begin(),
@@ -750,19 +996,7 @@ namespace Metabuf
 
                     ++count;
                     
-                    member_found = true;
-
                     break;
-                }
-
-                if( attr->required == true )
-                {
-                    if( member_found == false )
-                    {                   
-                        m_error << "Xml2Metabuf::getNodeAttributeSize_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
-
-                        return false;
-                    }
                 }
             }
         }
@@ -774,8 +1008,28 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        uint32_t includesTypeCount = (uint32_t)_node->includes.size();
-        this->writeSize( includesTypeCount );
+		uint32_t includesTypeCount = 0;
+
+		for( TMapNodes::const_iterator
+			it = _node->includes.begin(),
+			it_end = _node->includes.end();
+		it != it_end;
+		++it )
+		{
+			const XmlNode * node_include = it->second;
+
+			uint32_t includeCount;
+			this->getNodeIncludesSize_( _node, _xml_node, node_include->name, includeCount );
+
+			if( includeCount == 0 )
+			{
+				continue;
+			}
+
+			++includesTypeCount;
+		}
+
+		this->writeSize( includesTypeCount );
 
         for( TMapNodes::const_iterator
             it = _node->includes.begin(),
@@ -788,7 +1042,13 @@ namespace Metabuf
             uint32_t incluidesCount;
             this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
 
-            this->writeSize( incluidesCount );
+			if( incluidesCount == 0 )
+			{
+				continue;
+			}
+
+			this->writeSize( incluidesCount );
+
             this->writeSize( node_include->id );
 
             for( pugi::xml_node::iterator
@@ -825,7 +1085,30 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-        uint32_t generatorsTypeCount = (uint32_t)_node->inheritances.size();
+		uint32_t generatorsTypeCount = 0;
+
+		for( TMapNodes::const_iterator
+			it = _node->inheritances.begin(),
+			it_end = _node->inheritances.end();
+		it != it_end;
+		++it )
+		{
+			const XmlNode * node_inheritance = it->second;
+
+			uint32_t generatorsCount;
+			if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
+			{
+				return false;
+			}
+
+			if( generatorsCount == 0 )
+			{
+				continue;
+			}
+
+			++generatorsTypeCount;
+		}
+
         this->writeSize( generatorsTypeCount );
 
         for( TMapNodes::const_iterator
@@ -842,7 +1125,13 @@ namespace Metabuf
                 return false;
             }
 
-            this->writeSize( generatorsCount );
+			if( generatorsCount == 0 )
+			{
+				continue;
+			}
+
+			this->writeSize( generatorsCount );
+
             this->writeSize( node_inheritance->id );
 
             for( pugi::xml_node::iterator
@@ -969,7 +1258,7 @@ namespace Metabuf
 
             const XmlNode * node_generator = _node->getGenerator( value_generator );
 
-            if( node_generator == 0 )
+            if( node_generator == nullptr )
             {
                 m_error << "Xml2Metabuf::getNodeGeneratorSize_: error node " << _node->name << " includes " << _inheritance->name << " not found generator " << value_generator << std::endl;
 

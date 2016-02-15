@@ -36,7 +36,9 @@ namespace Metabuf
 	protected:
 		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
 
-		bool writeNodeData_(const XmlNode * _node, const pugi::xml_node & _xml_node);
+		bool writeNodeData_( const XmlNode * _node, const pugi::xml_node & _xml_node );
+		bool writeNodeData2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
+		bool getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
 
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
@@ -47,7 +49,8 @@ namespace Metabuf
         bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
         bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count );
 
-		bool writeNodeArguments_( const XmlAttribute * _node, const pugi::xml_attribute & _xml_attr );
+		bool writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
+		bool writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
 
     public:
         template<class T>
