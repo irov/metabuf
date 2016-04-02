@@ -214,43 +214,94 @@ namespace Metabuf
 
 			return true;
 		}
-        //////////////////////////////////////////////////////////////////////////
-        static bool s_write_floats( Xml2Metabuf * _metabuf, const char * _value, void * _user )
-        {
-            (void)_user;
+		//////////////////////////////////////////////////////////////////////////
+		template<class T>
+		static bool s_write_pods( Xml2Metabuf * _metabuf, const char * _format, const char * _value, void * _user )
+		{
+			(void)_user;
 
-            typedef std::vector<float> TVectorFloats;
-            TVectorFloats floats;
+			typedef std::vector<T> TVectorPods;
+			TVectorPods pods;
 
-            size_t len = strlen( _value );
-            char * parse_value = new char[len + 1];
-            strcpy( parse_value, _value );
+			size_t len = strlen( _value );
+			char * parse_value = new char[len + 1];
+			strcpy( parse_value, _value );
 
-            char * pch = strtok( parse_value, " " );
+			char * pch = strtok( parse_value, " " );
 
-            while( pch != nullptr )
-            {
-                float value;
-                if( sscanf( pch, "%f", &value ) != 1 )
-                {
-                    return false;
-                }
+			while( pch != nullptr )
+			{
+				T value;
+				if( sscanf( pch, _format, &value ) != 1 )
+				{
+					return false;
+				}
 
-                floats.push_back( value );
+				pods.push_back( value );
 
-                pch = strtok (NULL, " ");
-            }
+				pch = strtok( NULL, " " );
+			}
 
-            uint32_t count = (uint32_t)floats.size();
-            _metabuf->writeSize( count );
+			uint32_t count = (uint32_t)pods.size();
+
+			_metabuf->writeSize( count );
 
 			if( count > 0 )
 			{
-				_metabuf->writeCount( &floats[0], count );
+				_metabuf->writeCount( &pods[0], count );
 			}
 
-            return true;
+			return true;
+		}
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_floats( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+			bool successful = s_write_pods<float>( _metabuf, "%f", _value, _user );
+
+            return successful;
         }
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_int8s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<int8_t>( _metabuf, "%d", _value, _user );
+
+			return successful;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_int16s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<int16_t>( _metabuf, "%d", _value, _user );
+
+			return successful;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_int32s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<int32_t>( _metabuf, "%d", _value, _user );
+
+			return successful;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_uint8s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<uint8_t>( _metabuf, "%u", _value, _user );
+
+			return successful;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_uint16s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<uint16_t>( _metabuf, "%u", _value, _user );
+
+			return successful;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_uint32s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			bool successful = s_write_pods<uint32_t>( _metabuf, "%u", _value, _user );
+
+			return successful;
+		}
     }
 	//////////////////////////////////////////////////////////////////////////
 	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
@@ -274,6 +325,13 @@ namespace Metabuf
 		this->addSerializator( "float8", &Serialize::s_write_float8, 0 );
 		this->addSerializator( "float16", &Serialize::s_write_float16, 0 );
         this->addSerializator( "floats", &Serialize::s_write_floats, 0 );
+		this->addSerializator( "int8s", &Serialize::s_write_int8s, 0 );
+		this->addSerializator( "int16s", &Serialize::s_write_int16s, 0 );
+		this->addSerializator( "int32s", &Serialize::s_write_int32s, 0 );
+		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, 0 );
+		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, 0 );
+		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );
+		
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
