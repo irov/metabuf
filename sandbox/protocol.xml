@@ -444,14 +444,16 @@
       <Attribute Name="Value" Type="Menge::Polygon" Required="1"/>
     </Node>    
 
-    <Node Name="ImageMesh">
+    <Node Name="ImageShape">
       <Attribute Name="LayerIndex" Type="uint32_t" Required="1"/>
-      <Attribute Name="Count" Type="uint32_t" Required="1"/>
-      <Attribute Name="Immutable" Type="bool" Required="1"/>
-      <Node Name="Mesh">
-        <Attribute Name="VertexPositions" Type="Menge::Floats" Required="1"/>
-        <Attribute Name="VertexUVs" Type="Menge::Floats" Required="1"/>
-        <Attribute Name="Indices" Type="Menge::UInt16s" Required="1"/>
+      <Attribute Name="ImageMaxSize" Type="mt::vec2f" Required="1"/>
+      <Attribute Name="ImageSize" Type="mt::vec2f"/>
+      <Attribute Name="ImageOffset" Type="mt::vec2f"/>
+      <Attribute Name="Immutable" Type="bool"/>
+      <Attribute Name="Subtract" Type="bool"/>
+      <Attribute Name="Count" Type="uint32_t"/>
+      <Node Name="Shape">
+        <Attribute Name="Polygon" Type="Menge::Polygon" Required="1"/>
       </Node>
     </Node>
 
