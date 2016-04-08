@@ -3441,6 +3441,162 @@ namespace Metacode
             TVectorMeta_MovieLayer3D includes_Meta_MovieLayer3D;
         };
         
+        class Meta_ResourceMusic
+            : public Meta_Resource
+        { 
+        public:
+            Meta_ResourceMusic();
+        
+        public:
+            uint32_t getId() const override;
+        
+        public:
+            bool has_DefaultVolume_Value() const
+            {
+                return DefaultVolume_Value_successful;
+            }
+            
+            bool get_DefaultVolume_Value( float & _value ) const
+            {
+                if( DefaultVolume_Value_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->DefaultVolume_Value;
+            
+                return true;
+            }
+            
+            bool swap_DefaultVolume_Value( float & _value ) const
+            {
+                if( DefaultVolume_Value_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->DefaultVolume_Value);
+            
+                return true;
+            }
+            
+            bool has_File_Codec() const
+            {
+                return File_Codec_successful;
+            }
+            
+            bool get_File_Codec( Menge::ConstString & _value ) const
+            {
+                if( File_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Codec;
+            
+                return true;
+            }
+            
+            bool swap_File_Codec( Menge::ConstString & _value ) const
+            {
+                if( File_Codec_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Codec);
+            
+                return true;
+            }
+            
+            bool has_File_Converter() const
+            {
+                return File_Converter_successful;
+            }
+            
+            bool get_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_Converter;
+            
+                return true;
+            }
+            
+            bool swap_File_Converter( Menge::ConstString & _value ) const
+            {
+                if( File_Converter_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_Converter);
+            
+                return true;
+            }
+            
+            bool has_File_External() const
+            {
+                return File_External_successful;
+            }
+            
+            bool get_File_External( bool & _value ) const
+            {
+                if( File_External_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->File_External;
+            
+                return true;
+            }
+            
+            bool swap_File_External( bool & _value ) const
+            {
+                if( File_External_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap(_value, this->File_External);
+            
+                return true;
+            }
+            
+            const Menge::FilePath & get_File_Path() const
+            {
+                return this->File_Path;
+            }
+            
+            void swap_File_Path( Menge::FilePath & _value ) const
+            {
+                std::swap(_value, this->File_Path);
+            }
+            
+        protected:
+            void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
+            void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            void _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
+            void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
+            void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
+        public:
+        protected:
+        protected:
+            bool DefaultVolume_Value_successful;
+            mutable float DefaultVolume_Value;
+            bool File_Codec_successful;
+            mutable Menge::ConstString File_Codec;
+            bool File_Converter_successful;
+            mutable Menge::ConstString File_Converter;
+            bool File_External_successful;
+            mutable bool File_External;
+            mutable Menge::FilePath File_Path;
+        };
+        
         class Meta_ResourceParticle
             : public Meta_Resource
         { 
@@ -3566,224 +3722,6 @@ namespace Metacode
         
         protected:
             TVectorMeta_Atlas includes_Meta_Atlas;
-        };
-        
-        class Meta_ResourcePlaylist
-            : public Meta_Resource
-        { 
-        public:
-            Meta_ResourcePlaylist();
-        
-        public:
-            uint32_t getId() const override;
-        
-        public:
-            bool has_Loop_Value() const
-            {
-                return Loop_Value_successful;
-            }
-            
-            bool get_Loop_Value( bool & _value ) const
-            {
-                if( Loop_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Loop_Value;
-            
-                return true;
-            }
-            
-            bool swap_Loop_Value( bool & _value ) const
-            {
-                if( Loop_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->Loop_Value);
-            
-                return true;
-            }
-            
-            bool has_Shuffle_Value() const
-            {
-                return Shuffle_Value_successful;
-            }
-            
-            bool get_Shuffle_Value( bool & _value ) const
-            {
-                if( Shuffle_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Shuffle_Value;
-            
-                return true;
-            }
-            
-            bool swap_Shuffle_Value( bool & _value ) const
-            {
-                if( Shuffle_Value_successful == false )
-                {
-                    return false;
-                }
-            
-                std::swap(_value, this->Shuffle_Value);
-            
-                return true;
-            }
-            
-        protected:
-            void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
-            void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
-            void _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
-            void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
-            void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
-        public:
-            class Meta_Tracks
-                : public Metabuf::Metadata
-            { 
-            public:
-                Meta_Tracks();
-            
-            public:
-                uint32_t getId() const override;
-            
-            public:
-            protected:
-                void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
-                void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
-                void _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
-                void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
-                void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
-            public:
-                class Meta_Track
-                    : public Metabuf::Metadata
-                { 
-                public:
-                    Meta_Track();
-                
-                public:
-                    uint32_t getId() const override;
-                
-                public:
-                    bool has_Codec() const
-                    {
-                        return Codec_successful;
-                    }
-                    
-                    bool get_Codec( Menge::ConstString & _value ) const
-                    {
-                        if( Codec_successful == false )
-                        {
-                            return false;
-                        }
-                    
-                        _value = this->Codec;
-                    
-                        return true;
-                    }
-                    
-                    bool swap_Codec( Menge::ConstString & _value ) const
-                    {
-                        if( Codec_successful == false )
-                        {
-                            return false;
-                        }
-                    
-                        std::swap( _value, this->Codec);
-                    
-                        return true;
-                    }
-                    
-                    bool has_External() const
-                    {
-                        return External_successful;
-                    }
-                    
-                    bool get_External( bool & _value ) const
-                    {
-                        if( External_successful == false )
-                        {
-                            return false;
-                        }
-                    
-                        _value = this->External;
-                    
-                        return true;
-                    }
-                    
-                    bool swap_External( bool & _value ) const
-                    {
-                        if( External_successful == false )
-                        {
-                            return false;
-                        }
-                    
-                        std::swap( _value, this->External);
-                    
-                        return true;
-                    }
-                    
-                    const Menge::FilePath & get_File() const
-                    {
-                        return this->File;
-                    }
-                    
-                    void swap_File( Menge::FilePath & _value ) const
-                    {
-                        std::swap( _value, this->File);
-                    }
-                    
-                protected:
-                    void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
-                    void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
-                    void _preparationIncludes( uint32_t _includes, uint32_t _count ) override;
-                    void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
-                    void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
-                public:
-                protected:
-                protected:
-                    bool Codec_successful;
-                    mutable Menge::ConstString Codec;
-                    bool External_successful;
-                    mutable bool External;
-                    mutable Menge::FilePath File;
-                };
-                
-            protected:
-            protected:
-            public:
-                typedef stdex::auto_array<Meta_Track> TVectorMeta_Track;
-            
-                const TVectorMeta_Track & get_IncludesTrack() const
-                {
-                    return this->includes_Meta_Track;
-                }
-            
-            protected:
-                TVectorMeta_Track includes_Meta_Track;
-            };
-            
-        protected:
-        protected:
-            bool Loop_Value_successful;
-            mutable bool Loop_Value;
-            bool Shuffle_Value_successful;
-            mutable bool Shuffle_Value;
-        public:
-            typedef stdex::auto_array<Meta_Tracks> TVectorMeta_Tracks;
-        
-            const TVectorMeta_Tracks & get_IncludesTracks() const
-            {
-                return this->includes_Meta_Tracks;
-            }
-        
-        protected:
-            TVectorMeta_Tracks includes_Meta_Tracks;
         };
         
         class Meta_ResourceShape
@@ -4601,6 +4539,16 @@ namespace Metacode
             std::swap( _value, this->MaxIndex);
         }
         
+        uint32_t get_Version() const
+        {
+            return this->Version;
+        }
+        
+        void swap_Version( uint32_t & _value ) const
+        {
+            std::swap( _value, this->Version);
+        }
+        
     protected:
         void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
         void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
@@ -4608,82 +4556,34 @@ namespace Metacode
         void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
         void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
     public:
-        class Meta_ImageShape
+        class Meta_ImageMesh
             : public Metabuf::Metadata
         { 
         public:
-            Meta_ImageShape();
+            Meta_ImageMesh();
         
         public:
             uint32_t getId() const override;
         
         public:
-            bool has_Count() const
+            uint32_t get_Count() const
             {
-                return Count_successful;
+                return this->Count;
             }
             
-            bool get_Count( uint32_t & _value ) const
+            void swap_Count( uint32_t & _value ) const
             {
-                if( Count_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Count;
-            
-                return true;
-            }
-            
-            bool swap_Count( uint32_t & _value ) const
-            {
-                if( Count_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap( _value, this->Count);
-            
-                return true;
             }
             
-            float get_Height() const
+            bool get_Immutable() const
             {
-                return this->Height;
+                return this->Immutable;
             }
             
-            void swap_Height( float & _value ) const
+            void swap_Immutable( bool & _value ) const
             {
-                std::swap( _value, this->Height);
-            }
-            
-            bool has_Immutable() const
-            {
-                return Immutable_successful;
-            }
-            
-            bool get_Immutable( bool & _value ) const
-            {
-                if( Immutable_successful == false )
-                {
-                    return false;
-                }
-            
-                _value = this->Immutable;
-            
-                return true;
-            }
-            
-            bool swap_Immutable( bool & _value ) const
-            {
-                if( Immutable_successful == false )
-                {
-                    return false;
-                }
-            
                 std::swap( _value, this->Immutable);
-            
-                return true;
             }
             
             uint32_t get_LayerIndex() const
@@ -4696,16 +4596,6 @@ namespace Metacode
                 std::swap( _value, this->LayerIndex);
             }
             
-            float get_Width() const
-            {
-                return this->Width;
-            }
-            
-            void swap_Width( float & _value ) const
-            {
-                std::swap( _value, this->Width);
-            }
-            
         protected:
             void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;
             void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
@@ -4713,24 +4603,44 @@ namespace Metacode
             void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) override;
             void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) override;
         public:
-            class Meta_Shape
+            class Meta_Mesh
                 : public Metabuf::Metadata
             { 
             public:
-                Meta_Shape();
+                Meta_Mesh();
             
             public:
                 uint32_t getId() const override;
             
             public:
-                const Menge::Polygon & get_Polygon() const
+                const Menge::UInt16s & get_Indices() const
                 {
-                    return this->Polygon;
+                    return this->Indices;
                 }
                 
-                void swap_Polygon( Menge::Polygon & _value ) const
+                void swap_Indices( Menge::UInt16s & _value ) const
                 {
-                    std::swap( _value, this->Polygon);
+                    std::swap( _value, this->Indices);
+                }
+                
+                const Menge::Floats & get_VertexPositions() const
+                {
+                    return this->VertexPositions;
+                }
+                
+                void swap_VertexPositions( Menge::Floats & _value ) const
+                {
+                    std::swap( _value, this->VertexPositions);
+                }
+                
+                const Menge::Floats & get_VertexUVs() const
+                {
+                    return this->VertexUVs;
+                }
+                
+                void swap_VertexUVs( Menge::Floats & _value ) const
+                {
+                    std::swap( _value, this->VertexUVs);
                 }
                 
             protected:
@@ -4742,28 +4652,26 @@ namespace Metacode
             public:
             protected:
             protected:
-                mutable Menge::Polygon Polygon;
+                mutable Menge::UInt16s Indices;
+                mutable Menge::Floats VertexPositions;
+                mutable Menge::Floats VertexUVs;
             };
             
         protected:
         protected:
-            bool Count_successful;
             mutable uint32_t Count;
-            mutable float Height;
-            bool Immutable_successful;
             mutable bool Immutable;
             mutable uint32_t LayerIndex;
-            mutable float Width;
         public:
-            typedef stdex::auto_array<Meta_Shape> TVectorMeta_Shape;
+            typedef stdex::auto_array<Meta_Mesh> TVectorMeta_Mesh;
         
-            const TVectorMeta_Shape & get_IncludesShape() const
+            const TVectorMeta_Mesh & get_IncludesMesh() const
             {
-                return this->includes_Meta_Shape;
+                return this->includes_Meta_Mesh;
             }
         
         protected:
-            TVectorMeta_Shape includes_Meta_Shape;
+            TVectorMeta_Mesh includes_Meta_Mesh;
         };
         
         class Meta_KeyFrames2D
@@ -5570,16 +5478,17 @@ namespace Metacode
     protected:
     protected:
         mutable uint32_t MaxIndex;
+        mutable uint32_t Version;
     public:
-        typedef stdex::auto_array<Meta_ImageShape> TVectorMeta_ImageShape;
+        typedef stdex::auto_array<Meta_ImageMesh> TVectorMeta_ImageMesh;
     
-        const TVectorMeta_ImageShape & get_IncludesImageShape() const
+        const TVectorMeta_ImageMesh & get_IncludesImageMesh() const
         {
-            return this->includes_Meta_ImageShape;
+            return this->includes_Meta_ImageMesh;
         }
     
     protected:
-        TVectorMeta_ImageShape includes_Meta_ImageShape;
+        TVectorMeta_ImageMesh includes_Meta_ImageMesh;
     public:
         typedef stdex::auto_array<Meta_KeyFrames2D> TVectorMeta_KeyFrames2D;
     
@@ -5881,6 +5790,35 @@ namespace Metacode
             uint32_t getId() const override;
         
         public:
+            bool has_Finalizer() const
+            {
+                return Finalizer_successful;
+            }
+            
+            bool get_Finalizer( Menge::ConstString & _value ) const
+            {
+                if( Finalizer_successful == false )
+                {
+                    return false;
+                }
+            
+                _value = this->Finalizer;
+            
+                return true;
+            }
+            
+            bool swap_Finalizer( Menge::ConstString & _value ) const
+            {
+                if( Finalizer_successful == false )
+                {
+                    return false;
+                }
+            
+                std::swap( _value, this->Finalizer);
+            
+                return true;
+            }
+            
             bool has_Initializer() const
             {
                 return Initializer_successful;
@@ -5958,6 +5896,8 @@ namespace Metacode
         public:
         protected:
         protected:
+            bool Finalizer_successful;
+            mutable Menge::ConstString Finalizer;
             bool Initializer_successful;
             mutable Menge::ConstString Initializer;
             bool Module_successful;
