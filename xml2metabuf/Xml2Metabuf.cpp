@@ -27,18 +27,14 @@ namespace Metabuf
 		{
 			(void)_user;
 
-			if( strcmp( _value, "true" ) == 0 ||
-				strcmp( _value, "True" ) == 0 ||
-				strcmp( _value, "TRUE" ) == 0 )
+			if( strcmpi( _value, "true" ) == 0 )
 			{
 				uint8_t write_value = 1;
 				_metabuf->write( write_value );
 
 				return true;
 			}
-			else if( strcmp( _value, "false" ) == 0 ||
-				strcmp( _value, "False" ) == 0 ||
-				strcmp( _value, "FALSE" ) == 0 )
+			else if( strcmpi( _value, "false" ) == 0 )
 			{
 				uint8_t write_value = 0;
 				_metabuf->write( write_value );
@@ -303,6 +299,32 @@ namespace Metabuf
 			return successful;
 		}
     }
+    //////////////////////////////////////////////////////////////////////////
+    static int32_t makeHash( const void * _data, size_t _len )
+    {
+        if( _len == 0 )
+        {
+            return 0;
+        }
+
+        const unsigned char * p = (const unsigned char *)_data;
+
+        int32_t x = *p << 7;
+
+        for( size_t i = 0; i != _len; ++i )
+        {
+            x = (1000003 * x) ^ *p++;
+        }
+
+        x ^= (int32_t)_len;
+
+        if( x == -1 )
+        {
+            x = -2;
+        }
+
+        return x;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
 		: m_protocol(_protocol)        
@@ -352,8 +374,11 @@ namespace Metabuf
         uint32_t magic = 3133062829u;
         this->write( magic );
 
-        uint32_t version = m_protocol->getVersion();
+        uint32_t version = METABUF_BIN_VERSION;
         this->write( version );
+
+        uint32_t protocol = m_protocol->getVersion();
+        this->write( protocol );
         
         writeSize += m_buff.size();
 
@@ -432,6 +457,10 @@ namespace Metabuf
             this->writeSize( strSize );
 
             const char * strBuff = str.c_str();
+
+            int32_t hash = makeHash( strBuff, strSize );
+            this->write( hash );
+
             this->writeCount( strBuff, strSize );
         }
 

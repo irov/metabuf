@@ -10,6 +10,8 @@
 
 #	include <stdint.h>
 
+#   define METABUF_BIN_VERSION 3
+
 namespace Metabuf
 {
 	struct XmlType

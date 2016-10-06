@@ -5,7 +5,7 @@
 
 namespace Metabuf
 {
-    const size_t header_size = 8;
+    const size_t header_size = 12;
 
 	template<class T>
 	void archive_read( stdex::memory_reader & ar, T & _value, void * _userData );
