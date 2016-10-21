@@ -27,14 +27,14 @@ namespace Metabuf
 		{
 			(void)_user;
 
-			if( strcmpi( _value, "true" ) == 0 )
+			if( strcmp( _value, "true" ) == 0 )
 			{
 				uint8_t write_value = 1;
 				_metabuf->write( write_value );
 
 				return true;
 			}
-			else if( strcmpi( _value, "false" ) == 0 )
+			else if( strcmp( _value, "false" ) == 0 )
 			{
 				uint8_t write_value = 0;
 				_metabuf->write( write_value );
