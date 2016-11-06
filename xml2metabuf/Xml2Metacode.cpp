@@ -54,7 +54,7 @@ namespace Metabuf
         this->write( _ss ) << "    uint32_t get_metacode_protocol();" << std::endl;
 		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol );" << std::endl;
 		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
-		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int32_t & _stringHash );" << std::endl;
+		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
 		this->write( _ss ) << std::endl;
 
 		m_indent += 4;
@@ -618,14 +618,14 @@ namespace Metabuf
 		this->write( _ss ) << "        return successful;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    static const char * readString2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int32_t & _stringHash )" << std::endl;
+		this->write( _ss ) << "    static const char * readString2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        stdex::memory_reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t size;" << std::endl;
 		this->write( _ss ) << "        ar.readSize( size );" << std::endl;
 		this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        int32_t hash;" << std::endl;
+        this->write( _ss ) << "        int64_t hash;" << std::endl;
         this->write( _ss ) << "        ar.readPOD( hash );" << std::endl;
         this->write( _ss ) << std::endl;        
 		this->write( _ss ) << "        const char * value = ar.current_buff<char>();" << std::endl;
@@ -637,7 +637,7 @@ namespace Metabuf
 		this->write( _ss ) << "        return value;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int32_t & _stringHash )" << std::endl;
+		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        const char * value = readString2( _buff, _size, _read, _stringSize, _stringHash );" << std::endl;
 		this->write( _ss ) << std::endl;

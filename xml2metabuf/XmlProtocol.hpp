@@ -10,7 +10,7 @@
 
 #	include <stdint.h>
 
-#   define METABUF_BIN_VERSION 3
+#   define METABUF_BIN_VERSION 4
 
 namespace Metabuf
 {

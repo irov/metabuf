@@ -300,7 +300,7 @@ namespace Metabuf
 		}
     }
     //////////////////////////////////////////////////////////////////////////
-    static int32_t makeHash( const void * _data, size_t _len )
+    static int64_t makeHash( const void * _data, size_t _len )
     {
         if( _len == 0 )
         {
@@ -309,14 +309,14 @@ namespace Metabuf
 
         const unsigned char * p = (const unsigned char *)_data;
 
-        int32_t x = *p << 7;
+		int64_t x = *p << 7;
 
         for( size_t i = 0; i != _len; ++i )
         {
             x = (1000003 * x) ^ *p++;
         }
 
-        x ^= (int32_t)_len;
+		x ^= (int64_t)_len;
 
         if( x == -1 )
         {
@@ -458,7 +458,7 @@ namespace Metabuf
 
             const char * strBuff = str.c_str();
 
-            int32_t hash = makeHash( strBuff, strSize );
+			int64_t hash = makeHash( strBuff, strSize );
             this->write( hash );
 
             this->writeCount( strBuff, strSize );
