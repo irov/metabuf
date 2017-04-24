@@ -1,6 +1,6 @@
 #	pragma once
 
-#	include <pugixml.hpp>
+#	include "pugixml.hpp"
 
 #	include <string>
 #	include <map>
@@ -19,6 +19,7 @@ namespace Metabuf
 		typedef std::vector<std::string> TVectorEnumerators;
 		TVectorEnumerators enumerators;
 		
+		std::string write;
 		std::string evict;
 
 		bool is_enumerator;

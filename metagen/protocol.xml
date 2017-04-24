@@ -1,27 +1,20 @@
-<Protocol Version = "111">
-  <Type Name="Menge::String" Evict="string"/>
-  <Type Name="Menge::WString" Evict="wstring"/>
-  <Type Name="Menge::ConstString" Evict="string"/>
-  <Type Name="Menge::FilePath" Evict="string"/>
+<Protocol Version = "1">
   <Type Name="bool" Evict="bool" NCR="1"/>
   <Type Name="uint32_t" Evict="uint32_t" NCR="1"/>
-  <Type Name="Menge::WChar" Evict="wchar_t" NCR="1"/>
   <Type Name="float" Evict="float" NCR="1"/>
   <Type Name="mt::vec2f" Evict="float2"/>
   <Type Name="mt::vec3f" Evict="float3"/>
   <Type Name="mt::vec4f" Evict="float4"/>
   <Type Name="mt::box2f" Evict="float4"/>
-  <Type Name="mt::uv4f" Evict="float8"/>  
-  <Type Name="Menge::ColourValue" Evict="float4"/>
-  <Type Name="Menge::Polygon" Evict="floats"/>
-  <Type Name="Menge::Viewport" Evict="float4"/>  
-  <Type Name="Menge::Floats" Evict="floats"/>
-  <Type Name="Menge::Int8s" Evict="int8s"/>
-  <Type Name="Menge::Int16s" Evict="int16s"/>
-  <Type Name="Menge::Int32s" Evict="int32s"/>
-  <Type Name="Menge::UInt8s" Evict="uint8s"/>
-  <Type Name="Menge::UInt16s" Evict="uint16s"/>
-  <Type Name="Menge::UInt32s" Evict="uint32s"/>
+  <Type Name="mt::uv4f" Evict="float8"/>
+  <Type Name="Boolat2::String" Evict="string"/>
+  <Type Name="Boolat2::WString" Evict="wstring"/>
+  <Type Name="Boolat2::ConstString" Evict="string"/>
+  <Type Name="Boolat2::FilePath" Evict="string"/>
+  <Type Name="Boolat2::WChar" Evict="wchar_t" NCR="1"/>
+  <Type Name="Boolat2::ColourValue" Evict="float4"/>
+  <Type Name="Boolat2::Polygon" Evict="floats"/>
+  <Type Name="Boolat2::Viewport" Evict="float4"/>  
   
   <Enum Name="Menge::EBlendFactor">
     <ONE/>

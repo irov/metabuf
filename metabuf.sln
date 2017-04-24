@@ -1,13 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml2metabuf", "xml2metabuf\xml2metabuf.vcxproj", "{7C794618-5C63-4024-AA30-AA4360EE543F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "sandbox\sandbox.vcxproj", "{F0FED2B0-1F77-4302-8DD6-B947898882F2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7C794618-5C63-4024-AA30-AA4360EE543F} = {7C794618-5C63-4024-AA30-AA4360EE543F}
-		{7C7912D0-2D91-4A12-811E-5F70AEA7B167} = {7C7912D0-2D91-4A12-811E-5F70AEA7B167}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "metabuf", "metabuf\metabuf.vcxproj", "{7C7912D0-2D91-4A12-811E-5F70AEA7B167}"
 EndProject
@@ -16,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox_reader", "sandbox_r
 		{7C794618-5C63-4024-AA30-AA4360EE543F} = {7C794618-5C63-4024-AA30-AA4360EE543F}
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167} = {7C7912D0-2D91-4A12-811E-5F70AEA7B167}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "metagen", "metagen\metagen.vcxproj", "{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,12 +29,6 @@ Global
 		{7C794618-5C63-4024-AA30-AA4360EE543F}.Release|Win32.ActiveCfg = Release|Win32
 		{7C794618-5C63-4024-AA30-AA4360EE543F}.Release|Win32.Build.0 = Release|Win32
 		{7C794618-5C63-4024-AA30-AA4360EE543F}.Release|x64.ActiveCfg = Release|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Debug|Win32.Build.0 = Debug|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Debug|x64.ActiveCfg = Debug|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|Win32.ActiveCfg = Release|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|Win32.Build.0 = Release|Win32
-		{F0FED2B0-1F77-4302-8DD6-B947898882F2}.Release|x64.ActiveCfg = Release|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|Win32.ActiveCfg = Debug|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|Win32.Build.0 = Debug|Win32
 		{7C7912D0-2D91-4A12-811E-5F70AEA7B167}.Debug|x64.ActiveCfg = Debug|Win32
@@ -49,6 +41,12 @@ Global
 		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|Win32.ActiveCfg = Release|Win32
 		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|Win32.Build.0 = Release|Win32
 		{4747D5A4-FEAF-4D5E-A7F9-DD3E18B68F02}.Release|x64.ActiveCfg = Release|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Debug|Win32.Build.0 = Debug|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Debug|x64.ActiveCfg = Debug|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Release|Win32.ActiveCfg = Release|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Release|Win32.Build.0 = Release|Win32
+		{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

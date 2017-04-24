@@ -45,7 +45,7 @@ namespace Metabuf
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "#   include \"Metatype.h\"" << std::endl;
 		this->write( _ss ) << std::endl;
-		this->write( _ss ) << "#   include <metabuf/Metabuf.hpp>" << std::endl;
+		this->write( _ss ) << "#   include \"metabuf/Metadata.hpp\"" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "namespace Metacode" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
@@ -215,6 +215,9 @@ namespace Metabuf
 		{
 			const XmlAttribute * attr = &it_attributes->second;
 
+			XmlType type;
+			m_protocol->getType( attr->type, type );
+
 			if( attr->required == false )
 			{
 				this->write( _ss ) << "bool" << " " << "has_" << attr->name << "() const" << std::endl;
@@ -222,7 +225,7 @@ namespace Metabuf
 				this->write( _ss ) << "    return " << attr->name << "_successful;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
 				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+				this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 				this->write( _ss ) << "{" << std::endl;
 				this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
 				this->write( _ss ) << "    {" << std::endl;
@@ -234,7 +237,7 @@ namespace Metabuf
 				this->write( _ss ) << "    return true;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
 				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "bool" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+				this->write( _ss ) << "bool" << " " << "swap_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 				this->write( _ss ) << "{" << std::endl;
 				this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
 				this->write( _ss ) << "    {" << std::endl;
@@ -249,26 +252,23 @@ namespace Metabuf
 			}
 			else
 			{
-				XmlType type;
-				m_protocol->getType( attr->type, type );
-
 				if( type.is_ncr == true || type.is_enumerator == true )
 				{
-					this->write( _ss ) << attr->type << " get_" << attr->name << "() const" << std::endl;
+					this->write( _ss ) << type.write << " get_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 				}
 				else
 				{
-					this->write( _ss ) << "const " << attr->type << " & get_" << attr->name << "() const" << std::endl;
+					this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 				}
 
 				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "void" << " " << "swap_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+				this->write( _ss ) << "void" << " " << "swap_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 				this->write( _ss ) << "{" << std::endl;
 				this->write( _ss ) << "    std::swap( _value, this->" << attr->name << ");" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
@@ -292,6 +292,9 @@ namespace Metabuf
 			{
 				const XmlAttribute * attr = &it_attributes->second;
 
+				XmlType type;
+				m_protocol->getType( attr->type, type );
+
 				if( attr->required == false )
 				{
 					this->write( _ss ) << "bool" << " " << "has_" << member->name << "_" << attr->name << "() const" << std::endl;
@@ -299,7 +302,7 @@ namespace Metabuf
 					this->write( _ss ) << "    return " << member->name << "_" << attr->name << "_successful;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+					this->write( _ss ) << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
 					this->write( _ss ) << "    {" << std::endl;
@@ -311,7 +314,7 @@ namespace Metabuf
 					this->write( _ss ) << "    return true;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "bool" << " " << "swap_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+					this->write( _ss ) << "bool" << " " << "swap_" << member->name << "_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
 					this->write( _ss ) << "    {" << std::endl;
@@ -326,26 +329,23 @@ namespace Metabuf
 				}
 				else
 				{
-					XmlType type;
-					m_protocol->getType( attr->type, type );
-
 					if( type.is_ncr == true || type.is_enumerator == true )
 					{
-						this->write( _ss ) << attr->type << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
+						this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
 						this->write( _ss ) << "{" << std::endl;
 						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
 						this->write( _ss ) << "}" << std::endl;
 					}
 					else
 					{
-						this->write( _ss ) << "const " << attr->type << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
+						this->write( _ss ) << "const " << type.write << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
 						this->write( _ss ) << "{" << std::endl;
 						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
 						this->write( _ss ) << "}" << std::endl;
 					}
 
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "void" << " " << "swap_" << member->name << "_" << attr->name << "( " << attr->type << " & _value ) const" << std::endl;
+					this->write( _ss ) << "void" << " " << "swap_" << member->name << "_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    std::swap(_value, this->" << member->name << "_" << attr->name << ");" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
@@ -422,7 +422,10 @@ namespace Metabuf
 				this->write( _ss ) << "bool" << " " << attr->name << "_successful;" << std::endl;
 			}
 
-			this->write( _ss ) << "mutable " << attr->type << " " << attr->name << ";" << std::endl;
+			XmlType type;
+			m_protocol->getType( attr->type, type );
+
+			this->write( _ss ) << "mutable " << type.write << " " << attr->name << ";" << std::endl;
 		}
 
 		for( TMapMembers::const_iterator
@@ -446,7 +449,10 @@ namespace Metabuf
 					this->write( _ss ) << "bool" << " " << member->name << "_" << attr->name << "_successful" << ";" << std::endl;
 				}
 
-				this->write( _ss ) << "mutable " << attr->type << " " << member->name << "_" << attr->name << ";" << std::endl;
+				XmlType type;
+				m_protocol->getType( attr->type, type );
+
+				this->write( _ss ) << "mutable " << type.write << " " << member->name << "_" << attr->name << ";" << std::endl;
 			}
 		}
 
@@ -467,7 +473,7 @@ namespace Metabuf
 
 			this->write( _ss ) << "public:" << std::endl;
 
-			this->write( _ss ) << "    typedef stdex::auto_array<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
@@ -487,7 +493,7 @@ namespace Metabuf
 			const XmlNode * node_include = it_inheritances->second;
 
 			this->write( _ss ) << "public:" << std::endl;
-			this->write( _ss ) << "    typedef stdex::auto_array<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
@@ -556,9 +562,9 @@ namespace Metabuf
 		this->write( _ss ) << "        return metacode_protocol;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    static bool readHeader2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol )" << std::endl;
+		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        stdex::memory_reader ar(_buff, _size, _read);" << std::endl;
+		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t head;" << std::endl;
 		this->write( _ss ) << "        ar.readPOD( head );" << std::endl;
@@ -592,16 +598,9 @@ namespace Metabuf
         this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol )" << std::endl;
-		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        bool successful = readHeader2( _buff, _size, _read, _readVersion, _needVersion, _readProtocol, _needProtocol );" << std::endl;
-		this->write( _ss ) << std::endl;
-		this->write( _ss ) << "        return successful;" << std::endl;
-		this->write( _ss ) << "    }" << std::endl;
-		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
 		this->write( _ss ) << "    static bool readStrings2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        stdex::memory_reader ar(_buff, _size, _read);" << std::endl;
+		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t count;" << std::endl;
 		this->write( _ss ) << "        ar.readPOD( count );" << std::endl;
@@ -620,7 +619,7 @@ namespace Metabuf
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
 		this->write( _ss ) << "    static const char * readString2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        stdex::memory_reader ar(_buff, _size, _read);" << std::endl;
+		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t size;" << std::endl;
 		this->write( _ss ) << "        ar.readSize( size );" << std::endl;
@@ -1168,7 +1167,8 @@ namespace Metabuf
 
 				this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 				this->write( _ss ) << "        {" << std::endl;
-				this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getName() << ".emplace_back();" << std::endl;
+				this->write( _ss ) << "            includes_" << node->getName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
+				this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getName() << ".back();" << std::endl;
 				this->write( _ss ) << std::endl;
 				this->write( _ss ) << "            metadata.parse( _buff, _size, _read, m_userData );" << std::endl;
 				this->write( _ss ) << "        }break;" << std::endl;

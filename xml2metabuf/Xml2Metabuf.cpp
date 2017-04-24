@@ -919,7 +919,7 @@ namespace Metabuf
 		XmlType type;
 		if( m_protocol->getType( _attr->type, type ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute " << _attr->name << " type " << type.write << std::endl;
 
 			return false;
 		}
@@ -928,7 +928,7 @@ namespace Metabuf
 
 		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << type.write << std::endl;
 
 			return false;
 		}
@@ -942,7 +942,7 @@ namespace Metabuf
 			uint32_t index;
 			if( s_getTypeEnumeratorIndex( type, attr_value, index ) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << _attr->type << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << type.write << std::endl;
 
 				return false;
 			}

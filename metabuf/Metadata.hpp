@@ -1,14 +1,15 @@
 #	pragma once
 
-#   include <stdex/auto_array.h>
-#   include <stdex/memory_reader.h>
+//#   include <stdex/auto_array.h>
+
+#   include "Reader.hpp"
 
 namespace Metabuf
 {
     const size_t header_size = 12;
 
 	template<class T>
-	void archive_read( stdex::memory_reader & ar, T & _value, void * _userData );
+	void archive_read( Reader & ar, T & _value, void * _userData );
 
 	class Metadata
 	{
@@ -24,13 +25,13 @@ namespace Metabuf
 		template<class T>
 		inline void read( const unsigned char * _buff, size_t _size, size_t & _read, T & _t ) const
 		{
-			stdex::memory_reader ar( _buff, _size, _read );
+			Reader ar( _buff, _size, _read );
 			archive_read( ar, _t, m_userData );
 		}
 
         inline void readSize( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _t ) const
         {
-			stdex::memory_reader ar(_buff, _size, _read);            
+			Reader ar(_buff, _size, _read);
 			ar.readSize( _t );			
         }
 

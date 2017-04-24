@@ -1,15 +1,5 @@
-#	include "Metabuf.hpp"
+#	include "Metadata.hpp"
 #	include "Metaconfig.hpp"
-
-#	ifndef METABUF_MALLOC
-#	include <malloc.h>
-#	define METABUF_MALLOC(S) malloc(S)
-#	endif
-
-#	ifndef METABUF_FREE
-#	include <malloc.h>
-#	define METABUF_FREE(B, S) free(B)
-#	endif
 
 namespace Metabuf
 {
