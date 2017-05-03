@@ -319,19 +319,20 @@ namespace Metabuf
 		pugi::xml_attribute Name = _xml_node.attribute( "Name" );
 		pugi::xml_attribute Type = _xml_node.attribute( "Type" );
 
-		const char * type_name = Name.value();
-		const char * type_write = Type.value();
-
-		if( type_name == 0 || type_write == 0 )
+		if( Name == false )
 		{
 			m_error << "XmlProtocol::readEnum_: Name not set" << std::endl;
 
 			return false;
 		}
 
+		const char * type_name = Name.value();
+		const char * type_write = Type.value();
+
+
 		XmlType type;
 		type.is_enumerator = true;
-		type.write = type_write;
+		type.write = (strlen( type_write ) == 0) ? type_name : type_write;
 		type.evict = "uint32_t";
 		
 		for( pugi::xml_node::iterator
@@ -366,7 +367,7 @@ namespace Metabuf
         pugi::xml_attribute Evict = _xml_node.attribute("Evict");
 		pugi::xml_attribute NCR = _xml_node.attribute( "NCR" );
 
-		if( Name == 0 || Type == 0 || Evict == 0 )
+		if( Name == false || Evict == false )
         {
             m_error << "XmlProtocol::readType_: Name or Evict not set" << std::endl;
 
@@ -379,7 +380,7 @@ namespace Metabuf
 		
 		XmlType type;
 		type.is_enumerator = false;
-		type.write = type_write;
+		type.write = (strlen( type_write ) == 0) ? type_name : type_write;
 		type.evict = type_evict;
 
 		uint32_t type_NCR_value = 0;
