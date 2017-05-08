@@ -483,17 +483,16 @@ namespace Metabuf
 
 			if( strcmp( element.name(), "Attribute" ) == 0 )
 			{
-				pugi::xml_attribute Name = element.attribute("Name");
-				pugi::xml_attribute Type = element.attribute("Type");
-				//pugi::xml_attribute Evict = element.attribute("Evict");
-				pugi::xml_attribute Required = element.attribute("Required");
+				pugi::xml_attribute AttributeName = element.attribute("Name");
+				pugi::xml_attribute AttributeType = element.attribute("Type");
+				pugi::xml_attribute AttributeRequired = element.attribute("Required");
 
-				XmlAttribute & attributeXml = nodeXml->attributes[ Name.value() ];
+				XmlAttribute & attributeXml = nodeXml->attributes[ AttributeName.value() ];
                 
 				attributeXml.id = ++nodeXml->enumerator;
-				attributeXml.name = Name.value();
-				attributeXml.type = Type.value();
-				attributeXml.required = Required.empty() == false;
+				attributeXml.name = AttributeName.value();
+				attributeXml.type = AttributeType.value();
+				attributeXml.required = AttributeRequired.empty() == false;
 
 				if( m_types.find( attributeXml.type ) == m_types.end() )
 				{
@@ -504,22 +503,22 @@ namespace Metabuf
 			}
 			else if( strcmp( element.name(), "Member" ) == 0 )
 			{
-				pugi::xml_attribute Node = element.attribute("Node");
-				pugi::xml_attribute Name = element.attribute("Name");
-				pugi::xml_attribute Type = element.attribute("Type");
+				pugi::xml_attribute MemberNode = element.attribute("Node");
+				pugi::xml_attribute MemberName = element.attribute("Name");
+				pugi::xml_attribute MemberType = element.attribute("Type");
 				//pugi::xml_attribute Evict = element.attribute("Evict");
-                pugi::xml_attribute Required = element.attribute("Required");
+                pugi::xml_attribute MemberRequired = element.attribute("Required");
 
-				XmlMember & memberXml = nodeXml->members[ Node.value() ];
+				XmlMember & memberXml = nodeXml->members[ MemberNode.value() ];
 
-				memberXml.name = Node.value();
+				memberXml.name = MemberNode.value();
 
-				XmlAttribute & attributeXml = memberXml.attributes[ Name.value() ];
+				XmlAttribute & attributeXml = memberXml.attributes[ MemberName.value() ];
 
 				attributeXml.id = ++nodeXml->enumerator;
-				attributeXml.name = Name.value();
-				attributeXml.type = Type.value();
-				attributeXml.required = Required.empty() == false;
+				attributeXml.name = MemberName.value();
+				attributeXml.type = MemberType.value();
+				attributeXml.required = MemberRequired.empty() == false;
 
 				if( m_types.find( attributeXml.type ) == m_types.end() )
 				{
