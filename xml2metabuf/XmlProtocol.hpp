@@ -51,6 +51,15 @@ namespace Metabuf
 	
 	typedef std::map<std::string, XmlMember> TMapMembers;
 
+	class XmlChildren
+	{
+	public:
+		std::string group;
+		std::string type;		
+	};
+
+	typedef std::map<std::string, XmlChildren> TMapChildren;
+
     typedef std::map<std::string, class XmlNode *> TMapNodes;
 
 	class XmlNode
@@ -72,6 +81,7 @@ namespace Metabuf
 
 		TMapAttributes attributes;
 		TMapMembers members;
+		TMapChildren children;
 
 		TMapNodes includes;
         TMapNodes inheritances;
@@ -86,13 +96,15 @@ namespace Metabuf
         const XmlNode * getInclude( const std::string & _name ) const;
         const XmlNode * getInheritances( const std::string & _name ) const;
         const XmlNode * getGenerator( const std::string & _name ) const;
-
-        const TMapNodes & getGenerators() const;
                 
         std::string getName() const;
         std::string getScope() const;
 
         bool getNoWrite() const;
+
+	public:
+		bool hasNode( const std::string & _type ) const;
+		const XmlNode * getNode( const std::string & _type ) const;
 	};
     
 	class XmlProtocol
@@ -102,13 +114,17 @@ namespace Metabuf
         ~XmlProtocol();
 
 	public:
-		const XmlNode * getNode( const std::string & _name ) const;
 		const TMapNodes & getNodes() const;
 
     public:
         uint32_t getVersion() const;
 
+	public:
+		bool hasNode( const std::string & _type ) const;
+		const XmlNode * getNode( const std::string & _type ) const;
+
     public:
+		bool hasType( const std::string & _name ) const;
 		bool getType( const std::string & _name, XmlType & _type ) const;
 
 	public:

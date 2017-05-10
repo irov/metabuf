@@ -44,11 +44,11 @@ namespace Metabuf
 
 	protected:
 		virtual void _parseData(const unsigned char * _buff, size_t _size, size_t & _read) = 0;
-		virtual void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t id ) = 0;
+		virtual void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
 
 		virtual void _preparationIncludes( uint32_t _includes, uint32_t _count ) = 0;
-		virtual void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _includes ) = 0;
-		virtual void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _generators ) = 0;
+		virtual void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
+		virtual void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
 
 	protected:
 		virtual uint32_t getId() const = 0;

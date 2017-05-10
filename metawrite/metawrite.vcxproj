@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4CFDC0DA-B28B-4EB6-8354-F9EB60A7C4B4}</ProjectGuid>
+    <ProjectGuid>{5367F49B-0F50-420A-A509-D82D6AC509B2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>sandbox</RootNamespace>
   </PropertyGroup>

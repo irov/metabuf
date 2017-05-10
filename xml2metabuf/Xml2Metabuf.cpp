@@ -53,28 +53,76 @@ namespace Metabuf
 
 			return true;
 		}
-        //////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_int8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			int32_t value;
+			if( sscanf( _value, "%d", &value ) != 1 )
+			{
+				return false;
+			}
+
+			int8_t write_value = (int8_t)value;
+			_metabuf->write( write_value );
+
+			return true;
+		}
+		//////////////////////////////////////////////////////////////////////////
         static bool s_write_uint8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
 
-			uint32_t int_value;
-            if( sscanf( _value, "%u", &int_value ) != 1 )
+			uint32_t value;
+            if( sscanf( _value, "%u", &value ) != 1 )
             {
                 return false;
             }
 
-			uint8_t write_value = (uint8_t)int_value;
+			uint8_t write_value = (uint8_t)value;
             _metabuf->write( write_value );
 
             return true;
-        }      
+        }    
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_int16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			int32_t value;
+			if( sscanf( _value, "%d", &value ) != 1 )
+			{
+				return false;
+			}
+
+			int16_t write_value = (int16_t)value;
+			_metabuf->write( write_value );
+
+			return true;
+		}
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_uint16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			uint32_t value;
+			if( sscanf( _value, "%u", &value ) != 1 )
+			{
+				return false;
+			}
+
+			uint16_t write_value = (uint16_t)value;
+			_metabuf->write( write_value );
+
+			return true;
+		}
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
 
-            int value;
+            int32_t value;
             if( sscanf( _value, "%d", &value ) != 1 )
             {
                 return false;
@@ -169,6 +217,24 @@ namespace Metabuf
             return true;
         }
 		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_float6( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			float value[6];
+			if( sscanf( _value, "%f;%f;%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5] ) != 6 )
+			{
+				if( sscanf( _value, "%f %f %f %f %f %f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5] ) != 6 )
+				{
+					return false;
+				}
+			}
+
+			_metabuf->writeCount( value, 6 );
+
+			return true;
+		}
+		//////////////////////////////////////////////////////////////////////////
 		static bool s_write_float8( Xml2Metabuf * _metabuf, const char * _value, void * _user )
 		{
 			(void)_user;
@@ -183,6 +249,30 @@ namespace Metabuf
 			}
 
 			_metabuf->writeCount( value, 8 );
+
+			return true;
+		}		
+		//////////////////////////////////////////////////////////////////////////
+		static bool s_write_float12( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+		{
+			(void)_user;
+
+			float value[12];
+			if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f"
+				, &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7]
+				, &value[8], &value[9], &value[10], &value[11]
+			) != 12 )
+			{
+				if( sscanf( _value, "%f %f %f %f %f %f %f %f %f %f %f %f"
+					, &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7]
+					, &value[8], &value[9], &value[10], &value[11]
+				) != 12 )
+				{
+					return false;
+				}
+			}
+
+			_metabuf->writeCount( value, 12 );
 
 			return true;
 		}
@@ -336,15 +426,20 @@ namespace Metabuf
         this->addSerializator( "string", &Serialize::s_write_string, 0 );
         
 		this->addSerializator( "bool", &Serialize::s_write_bool, 0 );
+		this->addSerializator( "int8_t", &Serialize::s_write_int8_t, 0 );
         this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, 0 );
-        this->addSerializator( "int", &Serialize::s_write_int, 0 );
+		this->addSerializator( "int16_t", &Serialize::s_write_int16_t, 0 );
+		this->addSerializator( "uint16_t", &Serialize::s_write_uint16_t, 0 );
+        this->addSerializator( "int32_t", &Serialize::s_write_int32_t, 0 );
         this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, 0 );
         
         this->addSerializator( "float", &Serialize::s_write_float, 0 );
         this->addSerializator( "float2", &Serialize::s_write_float2, 0 );
         this->addSerializator( "float3", &Serialize::s_write_float3, 0 );
         this->addSerializator( "float4", &Serialize::s_write_float4, 0 );
+		this->addSerializator( "float6", &Serialize::s_write_float6, 0 );
 		this->addSerializator( "float8", &Serialize::s_write_float8, 0 );
+		this->addSerializator( "float12", &Serialize::s_write_float12, 0 );
 		this->addSerializator( "float16", &Serialize::s_write_float16, 0 );
         this->addSerializator( "floats", &Serialize::s_write_floats, 0 );
 		this->addSerializator( "int8s", &Serialize::s_write_int8s, 0 );
@@ -352,8 +447,7 @@ namespace Metabuf
 		this->addSerializator( "int32s", &Serialize::s_write_int32s, 0 );
 		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, 0 );
 		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, 0 );
-		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );
-		
+		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );		
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
