@@ -615,6 +615,13 @@ namespace Metabuf
             return false;
         }
 
+		if( this->writeNodeChildren_( _node, _xml_node ) == false )
+		{
+			m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes" << std::endl;
+
+			return false;
+		}
+
         if( this->writeNodeGenerators_( _node, _xml_node ) == false )
         {
             m_error << "Xml2Metabuf::writeNodeGenerators_: error write node " << _node->name << " generators" << std::endl;
@@ -1264,109 +1271,6 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
-    {
-		uint32_t generatorsTypeCount = 0;
-
-		for( TMapNodes::const_iterator
-			it = _node->inheritances.begin(),
-			it_end = _node->inheritances.end();
-		it != it_end;
-		++it )
-		{
-			const XmlNode * node_inheritance = it->second;
-
-			uint32_t generatorsCount;
-			if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
-			{
-				return false;
-			}
-
-			if( generatorsCount == 0 )
-			{
-				continue;
-			}
-
-			++generatorsTypeCount;
-		}
-
-        this->writeSize( generatorsTypeCount );
-
-        for( TMapNodes::const_iterator
-            it = _node->inheritances.begin(),
-            it_end = _node->inheritances.end();
-        it != it_end;
-        ++it )
-        {
-            const XmlNode * node_inheritance = it->second;
-
-            uint32_t generatorsCount;
-            if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
-            {
-                return false;
-            }
-
-			if( generatorsCount == 0 )
-			{
-				continue;
-			}
-
-			this->writeSize( generatorsCount );
-
-            this->writeSize( node_inheritance->id );
-
-            for( pugi::xml_node::iterator
-                it = _xml_node.begin(),
-                it_end = _xml_node.end();
-            it != it_end;
-            ++it )
-            {
-                const pugi::xml_node & child = *it;
-
-                const char * child_name = child.name();
-
-                if( node_inheritance->name != child_name )
-                {
-                    continue;
-                }
-
-                if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
-                {
-                    continue;
-                }
-                                                
-                pugi::xml_attribute attr_generator = child.attribute( node_inheritance->generator.c_str() );
-
-                const char * value_generator = attr_generator.value();
-
-                const XmlNode * node_generator = _node->getGenerator( value_generator );
-
-                if( node_generator == 0 )
-                {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
-
-                    return false;
-                }
-                
-                if( node_generator->getNoWrite() == true )
-                {
-                    continue;
-                }
-
-                this->writeSize( node_generator->id );
-
-                if( this->writeNode_( node_generator, child ) == false )
-                {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << std::endl;
-
-                    return false;
-                }
-            }      
-        }
-        
-        return true;
-    }
-    //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count )
     {
         uint32_t count = 0;
@@ -1386,7 +1290,7 @@ namespace Metabuf
                 continue;
             }
 
-            if( _node->getInclude( child_name ) == NULL )
+            if( _node->getInclude( child_name ) == nullptr )
             {
                 continue;
             }
@@ -1403,6 +1307,312 @@ namespace Metabuf
 
         return true;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeChildren_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+	{
+		uint32_t childrenTypeCount = 0;
+		
+		for( TMapChildren::const_iterator
+			it = _node->children.begin(),
+			it_end = _node->children.end();
+			it != it_end;
+			++it )
+		{
+			const XmlChildren & children = it->second;
+
+			const XmlNode * children_node = m_protocol->getNode( children.type );
+
+			uint32_t includeCount;
+			this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, includeCount );
+
+			if( includeCount == 0 )
+			{
+				continue;
+			}
+
+			++childrenTypeCount;
+		}
+				
+		if( _node->node_inheritance != nullptr )
+		{
+			for( TMapChildren::const_iterator
+				it = _node->node_inheritance->children.begin(),
+				it_end = _node->node_inheritance->children.end();
+				it != it_end;
+				++it )
+			{
+				const XmlChildren & children = it->second;
+
+				const XmlNode * children_node = m_protocol->getNode( children.type );
+
+				uint32_t includeCount;
+				this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, includeCount );
+
+				if( includeCount == 0 )
+				{
+					continue;
+				}
+
+				++childrenTypeCount;
+			}
+		}
+
+		this->writeSize( childrenTypeCount );
+
+		for( TMapChildren::const_iterator
+			it = _node->children.begin(),
+			it_end = _node->children.end();
+			it != it_end;
+			++it )
+		{
+			const XmlChildren & children = it->second;
+
+			const XmlNode * node_children = m_protocol->getNode( children.type );
+
+			uint32_t childrenCount;
+			this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, childrenCount );
+
+			if( childrenCount == 0 )
+			{
+				continue;
+			}
+
+			this->writeSize( childrenCount );
+
+			this->writeSize( node_children->id );
+
+			const char * group_value = children.group.c_str();
+
+			pugi::xml_node group_child = _xml_node.child( group_value );
+
+			for( pugi::xml_node::iterator
+				it = group_child.begin(),
+				it_end = group_child.end();
+				it != it_end;
+				++it )
+			{
+				const pugi::xml_node & child = *it;
+
+				const char * child_name = child.name();
+
+				if( node_children->name != child_name )
+				{
+					continue;
+				}
+
+				if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+				{
+					continue;
+				}
+
+				if( this->writeNode_( node_children, child ) == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_children->name << std::endl;
+
+					return false;
+				}
+			}
+		}
+
+		if( _node->node_inheritance != nullptr )
+		{
+			for( TMapChildren::const_iterator
+				it = _node->node_inheritance->children.begin(),
+				it_end = _node->node_inheritance->children.end();
+				it != it_end;
+				++it )
+			{
+				const XmlChildren & children = it->second;
+
+				const XmlNode * node_children = m_protocol->getNode( children.type );
+
+				uint32_t childrenCount;
+				this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, childrenCount );
+
+				if( childrenCount == 0 )
+				{
+					continue;
+				}
+
+				this->writeSize( childrenCount );
+
+				this->writeSize( node_children->id );
+
+				const char * group_value = children.group.c_str();
+
+				pugi::xml_node group_child = _xml_node.child( group_value );
+
+				for( pugi::xml_node::iterator
+					it = group_child.begin(),
+					it_end = group_child.end();
+					it != it_end;
+					++it )
+				{
+					const pugi::xml_node & child = *it;
+
+					const char * child_name = child.name();
+
+					if( node_children->name != child_name )
+					{
+						continue;
+					}
+
+					if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+					{
+						continue;
+					}
+
+					if( this->writeNode_( node_children, child ) == false )
+					{
+						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_children->name << std::endl;
+
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count )
+	{
+		const char * group_value = _group.c_str();
+
+		pugi::xml_node group_child = _xml_node.child( group_value );
+
+		uint32_t count = 0;
+
+		for( pugi::xml_node::iterator
+			it = group_child.begin(),
+			it_end = group_child.end();
+			it != it_end;
+			++it )
+		{
+			const pugi::xml_node & child = *it;
+
+			const char * child_name = child.name();
+
+			if( _type != child_name )
+			{
+				continue;
+			}
+
+			if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+			{
+				continue;
+			}
+
+			++count;
+		}
+
+		_count = count;
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+	{
+		uint32_t generatorsTypeCount = 0;
+
+		for( TMapNodes::const_iterator
+			it = _node->inheritances.begin(),
+			it_end = _node->inheritances.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node_inheritance = it->second;
+
+			uint32_t generatorsCount;
+			if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
+			{
+				return false;
+			}
+
+			if( generatorsCount == 0 )
+			{
+				continue;
+			}
+
+			++generatorsTypeCount;
+		}
+
+		this->writeSize( generatorsTypeCount );
+
+		for( TMapNodes::const_iterator
+			it = _node->inheritances.begin(),
+			it_end = _node->inheritances.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node_inheritance = it->second;
+
+			uint32_t generatorsCount;
+			if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
+			{
+				return false;
+			}
+
+			if( generatorsCount == 0 )
+			{
+				continue;
+			}
+
+			this->writeSize( generatorsCount );
+
+			this->writeSize( node_inheritance->id );
+
+			for( pugi::xml_node::iterator
+				it = _xml_node.begin(),
+				it_end = _xml_node.end();
+				it != it_end;
+				++it )
+			{
+				const pugi::xml_node & child = *it;
+
+				const char * child_name = child.name();
+
+				if( node_inheritance->name != child_name )
+				{
+					continue;
+				}
+
+				if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+				{
+					continue;
+				}
+
+				pugi::xml_attribute attr_generator = child.attribute( node_inheritance->generator.c_str() );
+
+				const char * value_generator = attr_generator.value();
+
+				const XmlNode * node_generator = _node->getGenerator( value_generator );
+
+				if( node_generator == 0 )
+				{
+					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
+
+					return false;
+				}
+
+				if( node_generator->getNoWrite() == true )
+				{
+					continue;
+				}
+
+				this->writeSize( node_generator->id );
+
+				if( this->writeNode_( node_generator, child ) == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << std::endl;
+
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count )
     {
@@ -1423,7 +1633,7 @@ namespace Metabuf
                 continue;
             }
 
-            if( _node->getInheritances( child_name ) == NULL )
+            if( _node->getInheritances( child_name ) == nullptr )
             {
                 continue;
             }

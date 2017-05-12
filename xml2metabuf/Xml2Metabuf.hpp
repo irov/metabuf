@@ -45,8 +45,12 @@ namespace Metabuf
         bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
 
         bool writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
+
+		bool writeNodeChildren_( const XmlNode * _node, const pugi::xml_node & _xml_node );
+		bool getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count );
+
+		bool writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count );
 
 		bool writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );

@@ -526,23 +526,23 @@ namespace Metabuf
 			it_children != it_children_end;
 			++it_children )
 		{
-			const XmlChildren & xml_children = it_children->second;
+			const XmlChildren & children = it_children->second;
 
 			this->write( _ss ) << "public:" << std::endl;
 
-			std::string xml_children_name = xml_children.type;
+			const XmlNode * node_children = m_protocol->getNode( children.type );
 
-			std::string ss_vector_children_name = "TVector" + xml_children_name;
+			std::string ss_vector_children_name = "TVector" + node_children->name;
 
-			this->write( _ss ) << "    typedef std::vector<" << xml_children_name << "> " << ss_vector_children_name << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_children->getName() << "> " << ss_vector_children_name << ";" << std::endl;
 			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "    const " << ss_vector_children_name << " & " << "get_Children_" << xml_children_name << "() const" << std::endl;
+			this->write( _ss ) << "    const " << ss_vector_children_name << " & " << "get_Children_" << node_children->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
-			this->write( _ss ) << "        return this->children_" << xml_children_name << ";" << std::endl;
+			this->write( _ss ) << "        return this->children_" << node_children->getName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "protected:" << std::endl;
-			this->write( _ss ) << "    " << ss_vector_children_name << " children_" << xml_children_name << ";" << std::endl;
+			this->write( _ss ) << "    " << ss_vector_children_name << " children_" << node_children->getName() << ";" << std::endl;
 		}
 
 		return true;
@@ -550,7 +550,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node )
 	{
-		if( _node->children.empty() == true && _node->inheritances.empty() == true )
+		if( _node->children.empty() == true )
 		{
 			return true;
 		}
@@ -648,7 +648,7 @@ namespace Metabuf
         this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    static bool readStrings2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
+		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -660,35 +660,21 @@ namespace Metabuf
 		this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
-		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        bool successful = readStrings2( _buff, _size, _read, _stringCount );" << std::endl;
-		this->write( _ss ) << std::endl;
-		this->write( _ss ) << "        return successful;" << std::endl;
-		this->write( _ss ) << "    }" << std::endl;
-		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    static const char * readString2( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
+		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t size;" << std::endl;
 		this->write( _ss ) << "        ar.readSize( size );" << std::endl;
 		this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        int64_t hash;" << std::endl;
-        this->write( _ss ) << "        ar.readPOD( hash );" << std::endl;
-        this->write( _ss ) << std::endl;        
+		this->write( _ss ) << "        int64_t hash;" << std::endl;
+		this->write( _ss ) << "        ar.readPOD( hash );" << std::endl;
+		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        const char * value = ar.current_buff<char>();" << std::endl;
 		this->write( _ss ) << "        ar.skip( size );" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        _stringSize = size;" << std::endl;
-        this->write( _ss ) << "        _stringHash = hash;" << std::endl;
-		this->write( _ss ) << std::endl;
-		this->write( _ss ) << "        return value;" << std::endl;
-		this->write( _ss ) << "    }" << std::endl;
-		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
-		this->write( _ss ) << "    {" << std::endl;
-		this->write( _ss ) << "        const char * value = readString2( _buff, _size, _read, _stringSize, _stringHash );" << std::endl;
+		this->write( _ss ) << "        _stringHash = hash;" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        return value;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
@@ -1225,7 +1211,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node )
 	{
-		if( _node->children.empty() == true && _node->inheritances.empty() == true )
+		if( _node->children.empty() == true )
 		{
 			return true;
 		}
@@ -1246,7 +1232,7 @@ namespace Metabuf
 			}
 		}
 
-		if( _node->children.empty() == false || _node->inheritances.empty() == false )
+		if( _node->children.empty() == false )
 		{
 			this->write( _ss ) << "    switch( _id )" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
