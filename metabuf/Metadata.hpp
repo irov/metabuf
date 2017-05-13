@@ -43,12 +43,14 @@ namespace Metabuf
 		void operator delete [] ( void * _ptr, size_t _size );
 
 	protected:
-		virtual void _parseData(const unsigned char * _buff, size_t _size, size_t & _read) = 0;
-		virtual void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
+		virtual void _parseData(const unsigned char * _buff, size_t _size, size_t & _read);
+		virtual void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
 
-		virtual void _preparationIncludes( uint32_t _includes, uint32_t _count ) = 0;
-		virtual void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
-		virtual void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) = 0;
+		virtual void _preparationIncludes( uint32_t _includes, uint32_t _count );
+		virtual void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
+		virtual void _preparationChildren( uint32_t _id, uint32_t _count );
+		virtual void _parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
+		virtual void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
 
 	protected:
 		virtual uint32_t getId() const = 0;

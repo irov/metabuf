@@ -65,14 +65,33 @@ namespace Metabuf
 			uint32_t includeCount;
 			this->readSize( _buff, _size, _read, includeCount );
 
-			uint32_t id_includes;
-			this->readSize( _buff, _size, _read, id_includes );
+			uint32_t id;
+			this->readSize( _buff, _size, _read, id );
 
-			this->_preparationIncludes( id_includes, includeCount );
+			this->_preparationIncludes( id, includeCount );
 
 			for( uint32_t j = 0; j != includeCount; ++j )
 			{
-				this->_parseIncludes( _buff, _size, _read, id_includes );
+				this->_parseIncludes( _buff, _size, _read, id );
+			}
+		}
+
+		uint32_t childrenTypeCount;
+		this->readSize( _buff, _size, _read, childrenTypeCount );
+
+		for( uint32_t i = 0; i != childrenTypeCount; ++i )
+		{
+			uint32_t childrenCount;
+			this->readSize( _buff, _size, _read, childrenCount );
+
+			uint32_t id;
+			this->readSize( _buff, _size, _read, id );
+
+			this->_preparationChildren( id, childrenCount );
+
+			for( uint32_t j = 0; j != childrenCount; ++j )
+			{
+				this->_parseChildren( _buff, _size, _read, id );
 			}
 		}
 
@@ -84,17 +103,17 @@ namespace Metabuf
 			uint32_t generatorCount;
 			this->readSize( _buff, _size, _read, generatorCount );
 
-			uint32_t id_includes;
-			this->readSize( _buff, _size, _read, id_includes );
+			uint32_t id;
+			this->readSize( _buff, _size, _read, id );
 
-			this->_preparationIncludes( id_includes, generatorCount );
+			this->_preparationIncludes( id, generatorCount );
 
 			for( uint32_t j = 0; j != generatorCount; ++j )
 			{
-				uint32_t id_generators;
-				this->readSize( _buff, _size, _read, id_generators );
+				uint32_t id;
+				this->readSize( _buff, _size, _read, id );
 
-				this->_parseGenerators( _buff, _size, _read, id_generators );
+				this->_parseGenerators( _buff, _size, _read, id );
 			}
 		}
 
@@ -154,6 +173,20 @@ namespace Metabuf
 		(void)_id;
 	}
 	//////////////////////////////////////////////////////////////////////////
+	void Metadata::_preparationChildren( uint32_t _id, uint32_t _count )
+	{
+		(void)_id;
+		(void)_count;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void Metadata::_parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	{
+		(void)_buff;
+		(void)_size;
+		(void)_read;
+		(void)_id;
+	}
+	//////////////////////////////////////////////////////////////////////////
 	void Metadata::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
 	{
 		(void)_buff;
@@ -161,5 +194,4 @@ namespace Metabuf
 		(void)_read;
 		(void)_id;
 	}
-
 }
