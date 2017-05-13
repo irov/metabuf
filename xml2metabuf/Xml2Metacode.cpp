@@ -159,7 +159,13 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "protected:" << std::endl;
+
 		if( this->writeHeaderAttribute_( _ss, _node ) == false )
+		{
+			return false;
+		}
+		
+		if( this->writeHeaderSingles_( _ss, _node ) == false )
 		{
 			return false;
 		}
@@ -448,6 +454,29 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metacode::writeHeaderSingles_( std::stringstream & _ss, const XmlNode * _node )
+	{
+		for( TMapNodes::const_iterator
+			it_singles = _node->singles.begin(),
+			it_singles_end = _node->singles.end();
+			it_singles != it_singles_end;
+			++it_singles )
+		{
+			const XmlNode * node_single = it_singles->second;
+
+			this->write( _ss ) << "public:" << std::endl;
+			this->write( _ss ) << "    const " << node_single->name << " & " << "get_Single_" << node_single->name << "() const" << std::endl;
+			this->write( _ss ) << "    {" << std::endl;
+			this->write( _ss ) << "        return this->single_" << node_single->getName() << ";" << std::endl;
+			this->write( _ss ) << "    }" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "protected:" << std::endl;
+			this->write( _ss ) << "    " << node_single->name << " single_" << node_single->getName() << ";" << std::endl;
+		}
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeHeaderIncludes_( std::stringstream & _ss, const XmlNode * _node )
 	{
 		for( TMapNodes::const_iterator
@@ -462,7 +491,7 @@ namespace Metabuf
 
 			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
+			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
 			this->write( _ss ) << "        return this->includes_" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
@@ -482,7 +511,7 @@ namespace Metabuf
 			this->write( _ss ) << "public:" << std::endl;
 			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes" << node_include->name << "() const" << std::endl;
+			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
 			this->write( _ss ) << "        return this->includes_" << node_include->getName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;

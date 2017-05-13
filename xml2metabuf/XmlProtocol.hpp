@@ -73,7 +73,7 @@ namespace Metabuf
 		std::string name;
 		std::string generator;
 		std::string inheritance;
-
+		
         const XmlNode * node_inheritance;
         const XmlNode * node_scope;
 
@@ -83,7 +83,8 @@ namespace Metabuf
 		TMapMembers members;
 		TMapChildren children;
 
-		TMapNodes includes;
+		TMapNodes singles;
+		TMapNodes includes;		
         TMapNodes inheritances;
         TMapNodes generators;
 

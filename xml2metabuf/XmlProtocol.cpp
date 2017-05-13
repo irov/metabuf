@@ -478,34 +478,46 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool XmlProtocol::readNode_( XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
-		pugi::xml_attribute Name = _xml_node.attribute( "Name" );
-		pugi::xml_attribute Generator = _xml_node.attribute( "Generator" );
-		pugi::xml_attribute Inheritance = _xml_node.attribute( "Inheritance" );
-		pugi::xml_attribute NoWrite = _xml_node.attribute( "NoWrite" );
+		pugi::xml_attribute NodeName = _xml_node.attribute( "Name" );
+		pugi::xml_attribute NodeGenerator = _xml_node.attribute( "Generator" );
+		pugi::xml_attribute NodeInheritance = _xml_node.attribute( "Inheritance" );
+		pugi::xml_attribute NodeNoWrite = _xml_node.attribute( "NoWrite" );
+		pugi::xml_attribute NodeSingle = _xml_node.attribute( "Single" );
 
 		XmlNode * nodeXml = new XmlNode();
 
-		if( _node == 0 )
+		if( _node == nullptr )
 		{
-			m_nodes.insert( std::make_pair( Name.value(), nodeXml ) );
+			m_nodes.insert( std::make_pair( NodeName.value(), nodeXml ) );
 		}
 		else
 		{
-			if( Generator.empty() == false )
+			if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
 			{
-				_node->inheritances.insert( std::make_pair( Name.value(), nodeXml ) );
+				if( _node->singles.find( NodeName.value() ) != _node->singles.end() )
+				{
+					m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " have multiply single element " << NodeSingle.value() << std::endl;
+
+					return false;
+				}
+
+				_node->singles.insert( std::make_pair( NodeName.value(), nodeXml ) );
 			}
-			else if( Inheritance.empty() == false )
+			else if( NodeGenerator.empty() == false )
 			{
-				_node->generators.insert( std::make_pair( Name.value(), nodeXml ) );
+				_node->inheritances.insert( std::make_pair( NodeName.value(), nodeXml ) );
+			}
+			else if( NodeInheritance.empty() == false )
+			{
+				_node->generators.insert( std::make_pair( NodeName.value(), nodeXml ) );
 			}
 			else
 			{
-				_node->includes.insert( std::make_pair( Name.value(), nodeXml ) );
+				_node->includes.insert( std::make_pair( NodeName.value(), nodeXml ) );
 			}
 		}
 
-		if( NoWrite.empty() == false )
+		if( NodeNoWrite.empty() == false )
 		{
 			nodeXml->noWrite = true;
 		}
@@ -522,16 +534,16 @@ namespace Metabuf
 		nodeXml->enumerator = 0;
 		nodeXml->node_inheritance = NULL;
 		nodeXml->node_scope = _node;
-		nodeXml->name = Name.value();
+		nodeXml->name = NodeName.value();
 
-		if( Generator.empty() == false )
+		if( NodeGenerator.empty() == false )
 		{
-			nodeXml->generator = Generator.value();
+			nodeXml->generator = NodeGenerator.value();
 		}
 
-		if( Inheritance.empty() == false )
+		if( NodeInheritance.empty() == false )
 		{
-			nodeXml->inheritance = Inheritance.value();
+			nodeXml->inheritance = NodeInheritance.value();
 
 			nodeXml->node_inheritance = _node->getInheritances( nodeXml->inheritance );
 
