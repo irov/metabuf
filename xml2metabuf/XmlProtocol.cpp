@@ -115,6 +115,20 @@ namespace Metabuf
 		return member;
 	}
 	//////////////////////////////////////////////////////////////////////////
+	const XmlNode * XmlNode::getSingle( const std::string & _name ) const
+	{
+		TMapNodes::const_iterator it_found = this->singles.find( _name );
+
+		if( it_found == this->singles.end() )
+		{
+			return nullptr;
+		}
+
+		XmlNode * node = it_found->second;
+
+		return node;
+	}
+	//////////////////////////////////////////////////////////////////////////
 	const XmlNode * XmlNode::getInclude( const std::string & _name ) const
 	{
 		TMapNodes::const_iterator it_found = this->includes.find( _name );
@@ -190,16 +204,30 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool XmlNode::hasNode( const std::string & _type ) const
 	{
-		TMapNodes::const_iterator it_includes_found = includes.find( _type );
+		TMapNodes::const_iterator it_singles_found = singles.find( _type );
 
-		if( it_includes_found != includes.end() )
+		if( it_singles_found != singles.end() )
 		{
 			return true;
 		}
 
-		TMapNodes::const_iterator it_inheritances_found = inheritances.find( _type );
+		for( TMapNodes::const_iterator
+			it = singles.begin(),
+			it_end = singles.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
 
-		if( it_inheritances_found != inheritances.end() )
+			if( node->hasNode( _type ) == true )
+			{
+				return true;
+			}
+		}
+
+		TMapNodes::const_iterator it_includes_found = includes.find( _type );
+
+		if( it_includes_found != includes.end() )
 		{
 			return true;
 		}
@@ -218,27 +246,64 @@ namespace Metabuf
 			}
 		}
 
+		TMapNodes::const_iterator it_inheritances_found = inheritances.find( _type );
+
+		if( it_inheritances_found != inheritances.end() )
+		{
+			return true;
+		}
+
+		for( TMapNodes::const_iterator
+			it = inheritances.begin(),
+			it_end = inheritances.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
+
+			if( node->hasNode( _type ) == true )
+			{
+				return true;
+			}
+		}
+
 		return false;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	const XmlNode * XmlNode::getNode( const std::string & _type ) const
 	{
+		TMapNodes::const_iterator it_singles_found = singles.find( _type );
+
+		if( it_singles_found != singles.end() )
+		{
+			const XmlNode * node = it_singles_found->second;
+
+			return node;
+		}
+
+		for( TMapNodes::const_iterator
+			it = singles.begin(),
+			it_end = singles.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
+
+			const XmlNode * found_node = node->getNode( _type );
+
+			if( found_node != nullptr )
+			{
+				return found_node;
+			}
+		}
+
 		TMapNodes::const_iterator it_includes_found = includes.find( _type );
 
 		if( it_includes_found != includes.end() )
 		{
-			const XmlNode * found_node = it_includes_found->second;
+			const XmlNode * node = it_includes_found->second;
 
-			return found_node;
-		}
-
-		TMapNodes::const_iterator it_inheritances_found = inheritances.find( _type );
-
-		if( it_inheritances_found != inheritances.end() )
-		{
-			const XmlNode * found_node = it_inheritances_found->second;
-
-			return found_node;
+			return node;
 		}
 
 		for( TMapNodes::const_iterator
@@ -248,9 +313,34 @@ namespace Metabuf
 			++it )
 		{
 			const XmlNode * node = it->second;
-			
+
 			const XmlNode * found_node = node->getNode( _type );
-			
+
+			if( found_node != nullptr )
+			{
+				return found_node;
+			}
+		}
+
+		TMapNodes::const_iterator it_inheritances_found = inheritances.find( _type );
+
+		if( it_inheritances_found != inheritances.end() )
+		{
+			const XmlNode * node = it_inheritances_found->second;
+
+			return node;
+		}
+
+		for( TMapNodes::const_iterator
+			it = inheritances.begin(),
+			it_end = inheritances.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
+
+			const XmlNode * found_node = node->getNode( _type );
+
 			if( found_node != nullptr )
 			{
 				return found_node;

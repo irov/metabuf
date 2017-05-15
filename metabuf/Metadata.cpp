@@ -57,6 +57,17 @@ namespace Metabuf
 			this->_parseArguments( _buff, _size, _read, id );
 		}
 
+		uint32_t singleTypeCount;
+		this->readSize( _buff, _size, _read, singleTypeCount );
+
+		for( uint32_t i = 0; i != singleTypeCount; ++i )
+		{
+			uint32_t id;
+			this->readSize( _buff, _size, _read, id );
+
+			this->_parseSingles( _buff, _size, _read, id );
+		}
+
 		uint32_t includeTypeCount;
 		this->readSize( _buff, _size, _read, includeTypeCount );
 
@@ -152,6 +163,14 @@ namespace Metabuf
 	}
 	//////////////////////////////////////////////////////////////////////////
 	void Metadata::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	{
+		(void)_buff;
+		(void)_size;
+		(void)_read;
+		(void)_id;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void Metadata::_parseSingles( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;

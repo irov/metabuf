@@ -417,7 +417,8 @@ namespace Metabuf
     }
 	//////////////////////////////////////////////////////////////////////////
 	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
-		: m_protocol(_protocol)        
+		: m_protocol(_protocol)
+		, m_hashable( nullptr )
 	{
 	}
     //////////////////////////////////////////////////////////////////////////
@@ -447,8 +448,15 @@ namespace Metabuf
 		this->addSerializator( "int32s", &Serialize::s_write_int32s, 0 );
 		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, 0 );
 		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, 0 );
-		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );		
+		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );
+
+		m_hashable = &makeHash;
     }
+	//////////////////////////////////////////////////////////////////////////
+	void Xml2Metabuf::setHashable( MakeHash _hashable )
+	{
+		m_hashable = _hashable;
+	}
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
     {
@@ -608,6 +616,13 @@ namespace Metabuf
             return false;
         }
 
+		if( this->writeNodeSingles_( _node, _xml_node ) == false )
+		{
+			m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " includes" << std::endl;
+
+			return false;
+		}
+
         if( this->writeNodeIncludes_( _node, _xml_node ) == false )
         {
             m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes" << std::endl;
@@ -656,12 +671,12 @@ namespace Metabuf
 			const XmlMember * member = &it->second;
 
 			for( TMapAttributes::const_iterator
-				it = member->attributes.begin(),
-				it_end = member->attributes.end();
-			it != it_end;
-			++it )
+				it_attributes = member->attributes.begin(),
+				it_attributes_end = member->attributes.end();
+			it_attributes != it_attributes_end;
+			++it_attributes )
 			{
-				const XmlAttribute * attr = &it->second;
+				const XmlAttribute * attr = &it_attributes->second;
 
 				if( attr->required == false )
 				{
@@ -671,12 +686,12 @@ namespace Metabuf
 				bool member_found = false;
 
 				for( pugi::xml_node::iterator
-					it = _xml_node.begin(),
-					it_end = _xml_node.end();
-				it != it_end;
-				++it )
+					it_xml = _xml_node.begin(),
+					it_xml_end = _xml_node.end();
+				it_xml != it_xml_end;
+				++it_xml )
 				{
-					pugi::xml_node & child = *it;
+					const pugi::xml_node & child = *it_xml;
 
 					const char * child_name = child.name();
 
@@ -819,12 +834,12 @@ namespace Metabuf
 			const XmlMember * member = &it->second;
 
 			for( TMapAttributes::const_iterator
-				it = member->attributes.begin(),
-				it_end = member->attributes.end();
-			it != it_end;
-			++it )
+				it_attributes = member->attributes.begin(),
+				it_attributes_end = member->attributes.end();
+			it_attributes != it_attributes_end;
+			++it_attributes )
 			{
-				const XmlAttribute * attr = &it->second;
+				const XmlAttribute * attr = &it_attributes->second;
 
 				if( attr->required == false )
 				{
@@ -834,12 +849,12 @@ namespace Metabuf
 				bool member_found = false;
 
 				for( pugi::xml_node::iterator
-					it = _xml_node.begin(),
-					it_end = _xml_node.end();
-				it != it_end;
-				++it )
+					it_xml = _xml_node.begin(),
+					it_xml_end = _xml_node.end();
+				it_xml != it_xml_end;
+				++it_xml )
 				{
-					const pugi::xml_node & child = *it;
+					const pugi::xml_node & child = *it_xml;
 
 					const char * child_name = child.name();
 
@@ -908,12 +923,12 @@ namespace Metabuf
             const XmlMember * member = &it->second;
             
             for( TMapAttributes::const_iterator
-                it = member->attributes.begin(),
-                it_end = member->attributes.end();
-            it != it_end;
-            ++it )
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
             {
-                const XmlAttribute * attr = &it->second;
+                const XmlAttribute * attr = &it_attributes->second;
 
 				if( attr->required == true )
 				{
@@ -921,12 +936,12 @@ namespace Metabuf
 				}
 
                 for( pugi::xml_node::iterator
-                    it = _xml_node.begin(),
-                    it_end = _xml_node.end();
-                it != it_end;
-                ++it )
+                    it_xml = _xml_node.begin(),
+                    it_xml_end = _xml_node.end();
+                it_xml != it_xml_end;
+                ++it_xml )
                 {
-                    pugi::xml_node & child = *it;
+                    const pugi::xml_node & child = *it_xml;
 
                     const char * child_name = child.name();
 
@@ -1148,12 +1163,12 @@ namespace Metabuf
             const XmlMember * member = &it->second;
 
             for( TMapAttributes::const_iterator
-                it = member->attributes.begin(),
-                it_end = member->attributes.end();
-            it != it_end;
-            ++it )
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
             {
-                const XmlAttribute * attr = &it->second;
+                const XmlAttribute * attr = &it_attributes->second;
 
 				if( attr->required == true )
 				{
@@ -1161,12 +1176,12 @@ namespace Metabuf
 				}
 
                 for( pugi::xml_node::iterator
-                    it = _xml_node.begin(),
-                    it_end = _xml_node.end();
-                it != it_end;
-                ++it )
+                    it_xml = _xml_node.begin(),
+                    it_xml_end = _xml_node.end();
+                it_xml != it_xml_end;
+                ++it_xml )
                 {
-                    const pugi::xml_node & child = *it;
+                    const pugi::xml_node & child = *it_xml;
 
                     const char * child_name = child.name();
 
@@ -1193,6 +1208,125 @@ namespace Metabuf
 
         return true;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::writeNodeSingles_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+	{
+		uint32_t typeCount = 0;
+
+		for( TMapNodes::const_iterator
+			it = _node->singles.begin(),
+			it_end = _node->singles.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
+
+			uint32_t count;
+			this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
+
+			if( count == 0 )
+			{
+				continue;
+			}
+
+			if( count > 1 )
+			{
+				m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " singles " << node->name << " have more one instance" << std::endl;
+
+				return false;
+			}
+
+			++typeCount;
+		}
+
+		this->writeSize( typeCount );
+
+		for( TMapNodes::const_iterator
+			it = _node->singles.begin(),
+			it_end = _node->singles.end();
+			it != it_end;
+			++it )
+		{
+			const XmlNode * node = it->second;
+
+			uint32_t count;
+			this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
+
+			if( count == 0 )
+			{
+				continue;
+			}
+
+			this->writeSize( node->id );
+
+			for( pugi::xml_node::iterator
+				it_xml = _xml_node.begin(),
+				it_xml_end = _xml_node.end();
+				it_xml != it_xml_end;
+				++it_xml )
+			{
+				const pugi::xml_node & child = *it_xml;
+
+				const char * child_name = child.name();
+
+				if( node->name != child_name )
+				{
+					continue;
+				}
+
+				if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+				{
+					continue;
+				}
+
+				if( this->writeNode_( node, child ) == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " childrens " << node->name << std::endl;
+
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metabuf::getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count )
+	{
+		uint32_t count = 0;
+
+		for( pugi::xml_node::iterator
+			it_xml = _xml_node.begin(),
+			it_xml_end = _xml_node.end();
+			it_xml != it_xml_end;
+			++it_xml )
+		{
+			const pugi::xml_node & child = *it_xml;
+
+			const char * child_name = child.name();
+
+			if( _type != child_name )
+			{
+				continue;
+			}
+
+			if( _node->getSingle( child_name ) == nullptr )
+			{
+				continue;
+			}
+
+			if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+			{
+				continue;
+			}
+
+			++count;
+		}
+
+		_count = count;
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
@@ -1240,12 +1374,12 @@ namespace Metabuf
             this->writeSize( node_include->id );
 
             for( pugi::xml_node::iterator
-                it = _xml_node.begin(),
-                it_end = _xml_node.end();
-            it != it_end;
-            ++it )
+                it_xml = _xml_node.begin(),
+                it_xml_end = _xml_node.end();
+            it_xml != it_xml_end;
+            ++it_xml )
             {
-                const pugi::xml_node & child = *it;
+                const pugi::xml_node & child = *it_xml;
 
                 const char * child_name = child.name();
 
@@ -1276,12 +1410,12 @@ namespace Metabuf
         uint32_t count = 0;
 
         for( pugi::xml_node::iterator
-            it = _xml_node.begin(),
-            it_end = _xml_node.end();
-        it != it_end;
-        ++it )
+            it_xml = _xml_node.begin(),
+            it_xml_end = _xml_node.end();
+        it_xml != it_xml_end;
+        ++it_xml )
         {
-            const pugi::xml_node & child = *it;
+            const pugi::xml_node & child = *it_xml;
 
             const char * child_name = child.name();
 
@@ -1320,8 +1454,6 @@ namespace Metabuf
 		{
 			const XmlChildren & children = it->second;
 
-			const XmlNode * children_node = m_protocol->getNode( children.type );
-
 			uint32_t includeCount;
 			this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, includeCount );
 
@@ -1342,8 +1474,6 @@ namespace Metabuf
 				++it )
 			{
 				const XmlChildren & children = it->second;
-
-				const XmlNode * children_node = m_protocol->getNode( children.type );
 
 				uint32_t includeCount;
 				this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, includeCount );
@@ -1386,12 +1516,12 @@ namespace Metabuf
 			pugi::xml_node group_child = _xml_node.child( group_value );
 
 			for( pugi::xml_node::iterator
-				it = group_child.begin(),
-				it_end = group_child.end();
-				it != it_end;
-				++it )
+				it_xml = group_child.begin(),
+				it_xml_end = group_child.end();
+				it_xml != it_xml_end;
+				++it_xml )
 			{
-				const pugi::xml_node & child = *it;
+				const pugi::xml_node & child = *it_xml;
 
 				const char * child_name = child.name();
 
@@ -1443,12 +1573,12 @@ namespace Metabuf
 				pugi::xml_node group_child = _xml_node.child( group_value );
 
 				for( pugi::xml_node::iterator
-					it = group_child.begin(),
-					it_end = group_child.end();
-					it != it_end;
-					++it )
+					it_xml = group_child.begin(),
+					it_xml_end = group_child.end();
+					it_xml != it_xml_end;
+					++it_xml )
 				{
-					const pugi::xml_node & child = *it;
+					const pugi::xml_node & child = *it_xml;
 
 					const char * child_name = child.name();
 
@@ -1477,6 +1607,8 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count )
 	{
+		(void)_node;
+
 		const char * group_value = _group.c_str();
 
 		pugi::xml_node group_child = _xml_node.child( group_value );
@@ -1484,12 +1616,12 @@ namespace Metabuf
 		uint32_t count = 0;
 
 		for( pugi::xml_node::iterator
-			it = group_child.begin(),
-			it_end = group_child.end();
-			it != it_end;
-			++it )
+			it_xml = group_child.begin(),
+			it_xml_end = group_child.end();
+			it_xml != it_xml_end;
+			++it_xml )
 		{
-			const pugi::xml_node & child = *it;
+			const pugi::xml_node & child = *it_xml;
 
 			const char * child_name = child.name();
 
@@ -1563,12 +1695,12 @@ namespace Metabuf
 			this->writeSize( node_inheritance->id );
 
 			for( pugi::xml_node::iterator
-				it = _xml_node.begin(),
-				it_end = _xml_node.end();
-				it != it_end;
-				++it )
+				it_xml = _xml_node.begin(),
+				it_xml_end = _xml_node.end();
+				it_xml != it_xml_end;
+				++it_xml )
 			{
-				const pugi::xml_node & child = *it;
+				const pugi::xml_node & child = *it_xml;
 
 				const char * child_name = child.name();
 
@@ -1619,12 +1751,12 @@ namespace Metabuf
         uint32_t count = 0;
 
         for( pugi::xml_node::iterator
-            it = _xml_node.begin(),
-            it_end = _xml_node.end();
-        it != it_end;
-        ++it )
+            it_xml = _xml_node.begin(),
+            it_xml_end = _xml_node.end();
+        it_xml != it_xml_end;
+        ++it_xml )
         {
-            const pugi::xml_node & child = *it;
+            const pugi::xml_node & child = *it_xml;
 
             const char * child_name = child.name();
 

@@ -32,6 +32,7 @@ namespace Metabuf
         bool writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node );        
 		bool writeHeaderAttribute_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderSingles_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderSinglesReader_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderIncludes_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
@@ -49,7 +50,8 @@ namespace Metabuf
     protected:
 		bool writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeSourceDataReader_(std::stringstream & _ss, const XmlNode * _node);
-        bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );		
+		bool writeSourceSinglesReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node );

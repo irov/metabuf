@@ -10,7 +10,7 @@
 
 #	include <stdint.h>
 
-#   define METABUF_BIN_VERSION 4
+#   define METABUF_BIN_VERSION 5
 
 namespace Metabuf
 {
@@ -94,6 +94,7 @@ namespace Metabuf
 		const XmlAttribute * getAttribute( const std::string & _name ) const;
 		const XmlMember * getMember( const std::string & _name ) const;
         
+		const XmlNode * getSingle( const std::string & _name ) const;
         const XmlNode * getInclude( const std::string & _name ) const;
         const XmlNode * getInheritances( const std::string & _name ) const;
         const XmlNode * getGenerator( const std::string & _name ) const;

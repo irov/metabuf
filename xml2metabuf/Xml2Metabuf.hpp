@@ -17,6 +17,7 @@ namespace Metabuf
 	class XmlNode;
 	class XmlAttribute;
 
+	typedef int64_t (*MakeHash)( const void * _data, size_t _len );
     typedef bool (*ValueSerialization)( class Xml2Metabuf * _metabuf, const char * _value, void * _user );
 
 	class Xml2Metabuf
@@ -26,6 +27,7 @@ namespace Metabuf
 
     public:
         void initialize();
+		void setHashable( MakeHash _hashable );
         void addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user );
 
 	public:
@@ -43,6 +45,9 @@ namespace Metabuf
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
+
+		bool writeNodeSingles_( const XmlNode * _node, const pugi::xml_node & _xml_node );
+		bool getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
 
         bool writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
@@ -80,6 +85,8 @@ namespace Metabuf
 		XmlProtocol * m_protocol;
 
 		std::stringstream m_error;
+
+		MakeHash m_hashable;
         
         struct SerializationDesc
         {
