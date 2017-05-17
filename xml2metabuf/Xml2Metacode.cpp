@@ -590,7 +590,7 @@ namespace Metabuf
 
 			const XmlNode * node_children = m_protocol->getNode( children.type );
 
-			std::string ss_vector_children_name = "TVector" + node_children->name;
+			std::string ss_vector_children_name = "TVector" + node_children->getName();
 
 			this->write( _ss ) << "    typedef std::vector<" << node_children->getName() << "> " << ss_vector_children_name << ";" << std::endl;
 			this->write( _ss ) << std::endl;
