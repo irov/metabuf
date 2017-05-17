@@ -1535,9 +1535,27 @@ namespace Metabuf
 					continue;
 				}
 
-				if( this->writeNode_( node_children, child ) == false )
+				pugi::xml_attribute attr_generator = child.attribute( node_children->generator.c_str() );
+
+				const char * value_generator = attr_generator.value();
+
+				const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
+
+				if( node_generator == 0 )
 				{
-					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_children->name << std::endl;
+					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
+
+					return false;
+				}
+
+				if( node_generator->getNoWrite() == true )
+				{
+					continue;
+				}
+
+				if( this->writeNode_( node_generator, child ) == false )
+				{
+					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_generator->name << std::endl;
 
 					return false;
 				}
@@ -1592,9 +1610,27 @@ namespace Metabuf
 						continue;
 					}
 
-					if( this->writeNode_( node_children, child ) == false )
+					pugi::xml_attribute attr_generator = child.attribute( node_children->generator.c_str() );
+
+					const char * value_generator = attr_generator.value();
+
+					const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
+
+					if( node_generator == 0 )
 					{
-						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_children->name << std::endl;
+						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
+
+						return false;
+					}
+
+					if( node_generator->getNoWrite() == true )
+					{
+						continue;
+					}
+
+					if( this->writeNode_( node_generator, child ) == false )
+					{
+						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_generator->name << std::endl;
 
 						return false;
 					}
@@ -1825,7 +1861,7 @@ namespace Metabuf
 			it_found = m_stringCache.insert( m_stringCache.end(), _value );
         }
 
-		size_t index = std::distance( m_stringCache.begin(), it_found );
+		TVectorStringCache::difference_type index = std::distance( m_stringCache.begin(), it_found );
 
 		uint32_t write_index = (uint32_t)index;
 
