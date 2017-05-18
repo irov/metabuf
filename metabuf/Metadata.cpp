@@ -102,7 +102,10 @@ namespace Metabuf
 
 			for( uint32_t j = 0; j != childrenCount; ++j )
 			{
-				this->_parseChildren( _buff, _size, _read, id );
+				uint32_t generator_id;
+				this->readSize( _buff, _size, _read, generator_id );
+
+				this->_parseChildren( _buff, _size, _read, generator_id );
 			}
 		}
 
@@ -121,10 +124,10 @@ namespace Metabuf
 
 			for( uint32_t j = 0; j != generatorCount; ++j )
 			{
-				uint32_t id;
-				this->readSize( _buff, _size, _read, id );
+				uint32_t generator_id;
+				this->readSize( _buff, _size, _read, generator_id );
 
-				this->_parseGenerators( _buff, _size, _read, id );
+				this->_parseGenerators( _buff, _size, _read, generator_id );
 			}
 		}
 

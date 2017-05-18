@@ -592,7 +592,7 @@ namespace Metabuf
 
 			std::string ss_vector_children_name = "TVector" + node_children->getName();
 
-			this->write( _ss ) << "    typedef std::vector<" << node_children->getName() << "> " << ss_vector_children_name << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_children->getName() << " *> " << ss_vector_children_name << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const " << ss_vector_children_name << " & " << "get_Children_" << node_children->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
@@ -1387,15 +1387,29 @@ namespace Metabuf
 		{
 			const XmlChildren & children = it_includes->second;
 
-			const XmlNode * node = m_protocol->getNode( children.type );
+			const XmlNode * node_children = m_protocol->getNode( children.type );
 
-			this->write( _ss ) << "    case " << node->id << ":" << std::endl;
-			this->write( _ss ) << "        {" << std::endl;
-			this->write( _ss ) << "            children_" << node->getName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
-			this->write( _ss ) << "            " << node->getScope() << " & metadata = children_" << node->getName() << ".back();" << std::endl;
-			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "            metadata.parse( _buff, _size, _read, m_userData );" << std::endl;
-			this->write( _ss ) << "        }break;" << std::endl;
+			for( TMapNodes::const_iterator
+				it_generators = node_children->node_scope->generators.begin(),
+				it_generators_end = node_children->node_scope->generators.end();
+				it_generators != it_generators_end;
+				++it_generators )
+			{
+				const XmlNode * node_generator = it_generators->second;
+
+				if( node_generator->inheritance != node_children->name )
+				{
+					continue;
+				}
+
+				this->write( _ss ) << "    case " << node_generator->id << ":" << std::endl;
+				this->write( _ss ) << "        {" << std::endl;
+				this->write( _ss ) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
+				this->write( _ss ) << "            metadata->parse( _buff, _size, _read, m_userData );" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "            children_" << node_children->getName() << ".push_back(metadata);" << std::endl;
+				this->write( _ss ) << "        }break;" << std::endl;
+			}
 		}
 
 		this->write( _ss ) << "    }" << std::endl;

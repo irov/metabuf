@@ -424,31 +424,31 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::initialize()
     {
-        this->addSerializator( "string", &Serialize::s_write_string, 0 );
+        this->addSerializator( "string", &Serialize::s_write_string, nullptr );
         
-		this->addSerializator( "bool", &Serialize::s_write_bool, 0 );
-		this->addSerializator( "int8_t", &Serialize::s_write_int8_t, 0 );
-        this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, 0 );
-		this->addSerializator( "int16_t", &Serialize::s_write_int16_t, 0 );
-		this->addSerializator( "uint16_t", &Serialize::s_write_uint16_t, 0 );
-        this->addSerializator( "int32_t", &Serialize::s_write_int32_t, 0 );
-        this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, 0 );
+		this->addSerializator( "bool", &Serialize::s_write_bool, nullptr );
+		this->addSerializator( "int8_t", &Serialize::s_write_int8_t, nullptr );
+        this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, nullptr );
+		this->addSerializator( "int16_t", &Serialize::s_write_int16_t, nullptr );
+		this->addSerializator( "uint16_t", &Serialize::s_write_uint16_t, nullptr );
+        this->addSerializator( "int32_t", &Serialize::s_write_int32_t, nullptr );
+        this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, nullptr );
         
-        this->addSerializator( "float", &Serialize::s_write_float, 0 );
-        this->addSerializator( "float2", &Serialize::s_write_float2, 0 );
-        this->addSerializator( "float3", &Serialize::s_write_float3, 0 );
-        this->addSerializator( "float4", &Serialize::s_write_float4, 0 );
-		this->addSerializator( "float6", &Serialize::s_write_float6, 0 );
-		this->addSerializator( "float8", &Serialize::s_write_float8, 0 );
-		this->addSerializator( "float12", &Serialize::s_write_float12, 0 );
-		this->addSerializator( "float16", &Serialize::s_write_float16, 0 );
-        this->addSerializator( "floats", &Serialize::s_write_floats, 0 );
-		this->addSerializator( "int8s", &Serialize::s_write_int8s, 0 );
-		this->addSerializator( "int16s", &Serialize::s_write_int16s, 0 );
-		this->addSerializator( "int32s", &Serialize::s_write_int32s, 0 );
-		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, 0 );
-		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, 0 );
-		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, 0 );
+        this->addSerializator( "float", &Serialize::s_write_float, nullptr );
+        this->addSerializator( "float2", &Serialize::s_write_float2, nullptr );
+        this->addSerializator( "float3", &Serialize::s_write_float3, nullptr );
+        this->addSerializator( "float4", &Serialize::s_write_float4, nullptr );
+		this->addSerializator( "float6", &Serialize::s_write_float6, nullptr );
+		this->addSerializator( "float8", &Serialize::s_write_float8, nullptr );
+		this->addSerializator( "float12", &Serialize::s_write_float12, nullptr );
+		this->addSerializator( "float16", &Serialize::s_write_float16, nullptr );
+        this->addSerializator( "floats", &Serialize::s_write_floats, nullptr );
+		this->addSerializator( "int8s", &Serialize::s_write_int8s, nullptr );
+		this->addSerializator( "int16s", &Serialize::s_write_int16s, nullptr );
+		this->addSerializator( "int32s", &Serialize::s_write_int32s, nullptr );
+		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, nullptr );
+		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, nullptr );
+		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, nullptr );
 
 		m_hashable = &makeHash;
     }
@@ -1541,7 +1541,7 @@ namespace Metabuf
 
 				const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
 
-				if( node_generator == 0 )
+				if( node_generator == nullptr )
 				{
 					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
 
@@ -1616,7 +1616,7 @@ namespace Metabuf
 
 					const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
 
-					if( node_generator == 0 )
+					if( node_generator == nullptr )
 					{
 						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
 
@@ -1627,6 +1627,8 @@ namespace Metabuf
 					{
 						continue;
 					}
+
+					this->writeSize( node_generator->id );
 
 					if( this->writeNode_( node_generator, child ) == false )
 					{
@@ -1756,7 +1758,7 @@ namespace Metabuf
 
 				const XmlNode * node_generator = _node->getGenerator( value_generator );
 
-				if( node_generator == 0 )
+				if( node_generator == nullptr )
 				{
 					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
 
