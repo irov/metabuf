@@ -166,7 +166,7 @@ namespace Metabuf
 			return nullptr;
 		}
 
-		XmlNode * node = it_found->second;
+		const XmlNode * node = it_found->second;
 
 		return node;
 	}
