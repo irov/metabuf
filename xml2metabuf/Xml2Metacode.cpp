@@ -821,6 +821,7 @@ namespace Metabuf
 	bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node )
 	{
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "//cppcheck-suppress uninitMemberVar" << std::endl;
 		this->write( _ss ) << _node->getScope() << "::" << _node->getName() << "()" << std::endl;
 
 		if( _node->inheritance.empty() == false )
