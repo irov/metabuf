@@ -481,7 +481,7 @@ namespace Metabuf
 		pugi::xml_attribute Name = _xml_node.attribute( "Name" );
 		pugi::xml_attribute Type = _xml_node.attribute( "Type" );
 
-		if( Name == false )
+		if( Name.empty() == true )
 		{
 			m_error << "XmlProtocol::readEnum_: Name not set" << std::endl;
 
@@ -529,7 +529,7 @@ namespace Metabuf
 		pugi::xml_attribute Evict = _xml_node.attribute( "Evict" );
 		pugi::xml_attribute NCR = _xml_node.attribute( "NCR" );
 
-		if( Name == false || Evict == false )
+		if( Name.empty() == true || Evict.empty() == true )
 		{
 			m_error << "XmlProtocol::readType_: Name or Evict not set" << std::endl;
 
