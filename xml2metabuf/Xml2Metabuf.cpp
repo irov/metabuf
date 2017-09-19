@@ -388,6 +388,46 @@ namespace Metabuf
 
 			return successful;
 		}
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_hexadecimal( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+            size_t len = strlen( _value );
+
+            if( len % 2 != 0 )
+            {
+                return false;
+            }
+
+            size_t hexadecimal_len = len / 2;
+
+            _metabuf->writeSize( hexadecimal_len );
+
+            if( hexadecimal_len == 0 )
+            {
+                return true;
+            }           
+
+            typedef std::vector<uint8_t> TVectorHexadecimal;
+            TVectorHexadecimal hexadecimal( hexadecimal_len );
+
+            for( size_t i = 0; i != len; i += 2 )
+            {
+                char a0 = _value[i + 0];
+                char a1 = _value[i + 1];
+                
+                uint8_t h0 = (a0 > 'a') ? (10 + (a0 - 'a')) : (a0 - '0');
+                uint8_t h1 = (a1 > 'a') ? (10 + (a1 - 'a')) : (a1 - '0');
+
+                uint8_t h = h0 + (h1 << 4);
+                
+                hexadecimal.push_back( h );
+            }
+
+            _metabuf->writeCount( &hexadecimal[0], hexadecimal_len );
+
+            return true;
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     static int64_t makeHash( const void * _data, size_t _len )
@@ -449,6 +489,8 @@ namespace Metabuf
 		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, nullptr );
 		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, nullptr );
 		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, nullptr );
+
+        this->addSerializator( "hexadecimal", &Serialize::s_write_hexadecimal, nullptr );
 
 		m_hashable = &makeHash;
     }

@@ -27,23 +27,8 @@ static void * read_file( const char * _file, size_t * _size )
 	return (void *)buf;
 }
 
-auto f = []( auto a )
-{
-    printf( "%d", a );
-};
-
-template<class T>
-void ff( T t, auto b )
-{
-
-}
-
 int main( int argc, char *argv[] )
 {
-    f( 1 );
-
-    ff<int>( 1, 2 );
-
 	if( argc != 4 )
 	{
 		printf( "invalid args count! '%d' need 4"
