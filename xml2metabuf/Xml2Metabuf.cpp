@@ -420,9 +420,9 @@ namespace Metabuf
                 uint8_t h0 = (a0 >= 'a') ? (10 + (a0 - 'a')) : (a0 - '0');
                 uint8_t h1 = (a1 >= 'a') ? (10 + (a1 - 'a')) : (a1 - '0');
 
-                uint8_t h2 = h1 << 4;
+                uint8_t h2 = h0 << 4;
 
-                uint8_t h = h0 + h2;
+                uint8_t h = h1 + h2;
                 
                 hexadecimal.push_back( h );
             }

@@ -258,9 +258,9 @@ namespace Metabuf
 				this->write( _ss ) << "    return " << attr->name << "_successful;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
 				this->write( _ss ) << std::endl;
-                this->write( _ss ) << "void" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
+                this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "( const " << type.write << " & _default ) const" << std::endl;
                 this->write( _ss ) << "{" << std::endl;
-                this->write( _ss ) << "    _value = " << attr->name << "_successful == true ? this->" << attr->name << " : _default;" << std::endl;
+                this->write( _ss ) << "    return " << attr->name << "_successful == true ? this->" << attr->name << " : _default;" << std::endl;
                 this->write( _ss ) << "}" << std::endl;
                 this->write( _ss ) << std::endl;
 				this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
