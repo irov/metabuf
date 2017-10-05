@@ -31,7 +31,7 @@ namespace Metabuf
 	class XmlAttribute
 	{
 	public:
-		size_t id;
+        uint32_t id;
 		std::string name;
 		std::string type;
 		bool required;

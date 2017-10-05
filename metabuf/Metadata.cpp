@@ -13,7 +13,7 @@ namespace Metabuf
 	{
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Metadata::parseRoot( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData )
+	bool Metadata::parseRoot( const unsigned char * _buff, size_t _size, uint32_t & _read, void * _userData )
 	{
 		if( _size == _read )
 		{
@@ -35,7 +35,7 @@ namespace Metabuf
 		return result;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Metadata::parse( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData )
+	bool Metadata::parse( const unsigned char * _buff, size_t _size, uint32_t & _read, void * _userData )
 	{
 		if( _size == _read )
 		{
@@ -158,14 +158,14 @@ namespace Metabuf
 		METABUF_FREE( _ptr, _size );
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseData( const unsigned char * _buff, size_t _size, size_t & _read )
+	void Metadata::_parseData( const unsigned char * _buff, size_t _size, uint32_t & _read )
 	{
 		(void)_buff;
 		(void)_size;
 		(void)_read;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	void Metadata::_parseArguments( const unsigned char * _buff, size_t _size, uint32_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;
@@ -173,7 +173,7 @@ namespace Metabuf
 		(void)_id;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseSingles( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	void Metadata::_parseSingles( const unsigned char * _buff, size_t _size, uint32_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;
@@ -187,7 +187,7 @@ namespace Metabuf
 		(void)_count;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	void Metadata::_parseIncludes( const unsigned char * _buff, size_t _size, uint32_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;
@@ -201,7 +201,7 @@ namespace Metabuf
 		(void)_count;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	void Metadata::_parseChildren( const unsigned char * _buff, size_t _size, uint32_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;
@@ -209,7 +209,7 @@ namespace Metabuf
 		(void)_id;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	void Metadata::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )
+	void Metadata::_parseGenerators( const unsigned char * _buff, size_t _size, uint32_t & _read, uint32_t _id )
 	{
 		(void)_buff;
 		(void)_size;

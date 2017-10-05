@@ -1550,7 +1550,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	std::stringstream & Xml2Metacode::write( std::stringstream & _ss )
 	{
-		for( size_t i = 0; i != m_indent; ++i )
+		for( uint32_t i = 0; i != m_indent; ++i )
 		{
 			_ss << " ";
 		}

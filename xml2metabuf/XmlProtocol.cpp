@@ -612,7 +612,7 @@ namespace Metabuf
 			nodeXml->noWrite = true;
 		}
 
-		if( _node == 0 )
+		if( _node == nullptr )
 		{
 			nodeXml->id = ++m_enumerator;
 		}

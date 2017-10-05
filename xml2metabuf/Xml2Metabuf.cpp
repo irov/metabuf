@@ -409,7 +409,8 @@ namespace Metabuf
             }           
 
             typedef std::vector<uint8_t> TVectorHexadecimal;
-            TVectorHexadecimal hexadecimal( hexadecimal_len );
+            TVectorHexadecimal hexadecimal;
+            hexadecimal.reserve( hexadecimal_len );
 
             for( size_t i = 0; i != len; i += 2 )
             {
@@ -1130,7 +1131,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metabuf::writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
 	{
-		uint32_t id = (uint32_t)_attr->id;
+		uint32_t id = _attr->id;
 		this->writeSize( id );
 
 		if( this->writeNodeDataValue_( _attr, _xml_attr ) == false )
