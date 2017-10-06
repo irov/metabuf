@@ -258,23 +258,75 @@ namespace Metabuf
 				this->write( _ss ) << "    return " << attr->name << "_successful;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
 				this->write( _ss ) << std::endl;
-                this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "( const " << type.write << " & _default ) const" << std::endl;
-                this->write( _ss ) << "{" << std::endl;
-                this->write( _ss ) << "    return " << attr->name << "_successful == true ? this->" << attr->name << " : _default;" << std::endl;
-                this->write( _ss ) << "}" << std::endl;
-                this->write( _ss ) << std::endl;
-				this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
-				this->write( _ss ) << "{" << std::endl;
-				this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
-				this->write( _ss ) << "    {" << std::endl;
-				this->write( _ss ) << "        return false;" << std::endl;
-				this->write( _ss ) << "    }" << std::endl;
-				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "    _value = this->" << attr->name << ";" << std::endl;
-				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "    return true;" << std::endl;
-				this->write( _ss ) << "}" << std::endl;
-				this->write( _ss ) << std::endl;
+
+                if( type.is_ncr == true || type.is_enumerator == true )
+                {
+                    this->write( _ss ) << "" << type.write << " " << "get_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        return _default;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        return false;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    _value = this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    return true;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        _value = _default;" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "        return false;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    _value = this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    return true;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+                }
+                else
+                {
+                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        return false;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    _value = std::move( this->" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    return true;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        _value = std::move( _default );" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "        return false;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    _value = std::move( this->" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    return true;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+                }
 			}
 			else
 			{
