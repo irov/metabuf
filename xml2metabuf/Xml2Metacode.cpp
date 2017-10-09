@@ -422,17 +422,6 @@ namespace Metabuf
 		m_indent += 4;
 
 		for( TMapNodes::const_iterator
-			it_singles = _node->singles.begin(),
-			it_singles_end = _node->singles.end();
-			it_singles != it_singles_end;
-			++it_singles )
-		{
-			XmlNode * node = it_singles->second;
-
-			this->writeHeaderNode_( _ss, node );
-		}
-
-		for( TMapNodes::const_iterator
 			it_includes = _node->includes.begin(),
 			it_includes_end = _node->includes.end();
 			it_includes != it_includes_end;
@@ -453,6 +442,17 @@ namespace Metabuf
 
 			this->writeHeaderNode_( _ss, node );
 		}
+
+        for( TMapNodes::const_iterator
+            it_singles = _node->singles.begin(),
+            it_singles_end = _node->singles.end();
+            it_singles != it_singles_end;
+            ++it_singles )
+        {
+            XmlNode * node = it_singles->second;
+
+            this->writeHeaderNode_( _ss, node );
+        }
 
 		for( TMapNodes::const_iterator
 			it_generators = _node->generators.begin(),
