@@ -2,7 +2,7 @@
 
 #	include "XmlProtocol.hpp"
 
-#	include <pugixml.hpp>
+#	include "pugixml.hpp"
 
 #	include <string>
 #	include <sstream>

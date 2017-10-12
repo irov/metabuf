@@ -1,8 +1,6 @@
 #	pragma once
 
-//#   include "XmlProtocol.hpp"
-
-#	include <pugixml.hpp>
+#	include "pugixml.hpp"
 
 #	include <vector>
 #   include <map>
