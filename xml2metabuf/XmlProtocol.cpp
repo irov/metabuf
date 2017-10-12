@@ -582,28 +582,45 @@ namespace Metabuf
 		}
 		else
 		{
-			if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+            if( NodeGenerator.empty() == false )
 			{
-				if( _node->singles.find( NodeName.value() ) != _node->singles.end() )
-				{
-					m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " have multiply single element " << NodeSingle.value() << std::endl;
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    m_error << "XmlProtocol::readNode_: node " << NodeName.value() << " inheritances no support single" << std::endl;
 
-					return false;
-				}
+                    return false;
+                }
 
-				_node->singles.insert( std::make_pair( NodeName.value(), nodeXml ) );
-			}
-			else if( NodeGenerator.empty() == false )
-			{
 				_node->inheritances.insert( std::make_pair( NodeName.value(), nodeXml ) );
 			}
 			else if( NodeInheritance.empty() == false )
 			{
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    m_error << "XmlProtocol::readNode_: node " << NodeName.value() << " inheritance no support single" << std::endl;
+
+                    return false;
+                }
+                
 				_node->generators.insert( std::make_pair( NodeName.value(), nodeXml ) );
 			}
 			else
 			{
-				_node->includes.insert( std::make_pair( NodeName.value(), nodeXml ) );
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    if( _node->singles.find( NodeName.value() ) != _node->singles.end() )
+                    {
+                        m_error << "XmlProtocol::readNode_: node " << NodeName.value() << " have multiply single element " << NodeSingle.value() << std::endl;
+
+                        return false;
+                    }
+
+                    _node->singles.insert( std::make_pair( NodeName.value(), nodeXml ) );
+                }
+                else
+                {
+                    _node->includes.insert( std::make_pair( NodeName.value(), nodeXml ) );
+                }
 			}
 		}
 
@@ -639,7 +656,7 @@ namespace Metabuf
 
 			if( nodeXml->node_inheritance == NULL )
 			{
-				m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " not found inheritance " << nodeXml->inheritance << std::endl;
+				m_error << "XmlProtocol::readNode_: node " << NodeName.value() << " not found inheritance " << NodeInheritance.value() << std::endl;
 
 				return false;
 			}
@@ -672,7 +689,7 @@ namespace Metabuf
 
 				if( this->hasType( attributeXml.type ) == false )
 				{
-					m_error << "XmlProtocol::readNode_: Attribute " << nodeXml->name << " not found type " << attributeXml.type << std::endl;
+					m_error << "XmlProtocol::readNode_: Attribute " << NodeName.value() << " not found type " << AttributeType.value() << std::endl;
 
 					return false;
 				}
@@ -698,7 +715,7 @@ namespace Metabuf
 
 				if( this->hasType( attributeXml.type ) == false )
 				{
-					m_error << "XmlProtocol::readNode_: Member " << nodeXml->name << " not found type " << attributeXml.type << std::endl;
+					m_error << "XmlProtocol::readNode_: Member " << NodeName.value() << " not found type " << MemberType.value() << std::endl;
 
 					return false;
 				}
@@ -715,7 +732,7 @@ namespace Metabuf
 
 				if( this->hasNode( childrenXml.type ) == false )
 				{
-					m_error << "XmlProtocol::readNode_: Children " << nodeXml->name << " not found type " << childrenXml.type << std::endl;
+					m_error << "XmlProtocol::readNode_: Children " << NodeName.value() << " not found type " << ChildrenType.value() << std::endl;
 
 					return false;
 				}
