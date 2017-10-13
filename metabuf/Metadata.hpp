@@ -1,7 +1,5 @@
 #	pragma once
 
-//#   include <stdex/auto_array.h>
-
 #   include "Reader.hpp"
 
 namespace Metabuf
