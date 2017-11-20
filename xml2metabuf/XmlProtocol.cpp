@@ -8,6 +8,22 @@
 
 namespace Metabuf
 {
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlAttribute::getWriteName() const
+    {
+        std::string write_name;
+        write_name = "m_" + this->name;
+
+        return write_name;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlMember::getWriteName() const
+    {
+        std::string write_name;
+        write_name = "m_" + this->name;
+
+        return write_name;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	const XmlAttribute * XmlMember::getAttribute( const std::string & _name ) const
 	{
@@ -170,12 +186,16 @@ namespace Metabuf
 
 		return node;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    const std::string & XmlNode::getName() const
+    {
+        return this->name;
+    }
 	//////////////////////////////////////////////////////////////////////////
-	std::string XmlNode::getName() const
+	std::string XmlNode::getWriteName() const
 	{
 		std::string write_name;
-		write_name += "Meta_";
-		write_name += this->name;
+		write_name += "Meta_" + this->name;
 
 		return write_name;
 	}
@@ -186,13 +206,13 @@ namespace Metabuf
 
 		if( this->node_scope == nullptr )
 		{
-			write_scope += this->getName();
+			write_scope += this->getWriteName();
 			return write_scope;
 		}
 
 		write_scope += this->node_scope->getScope();
 		write_scope += "::";
-		write_scope += this->getName();
+		write_scope += this->getWriteName();
 
 		return write_scope;
 	}
@@ -349,6 +369,93 @@ namespace Metabuf
 
 		return nullptr;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    XmlMeta::XmlMeta()
+    {
+    }
+    //////////////////////////////////////////////////////////////////////////
+    XmlMeta::~XmlMeta()
+    {
+        for( TMapNodes::const_iterator
+            it = nodes.begin(),
+            it_end = nodes.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlNode * node = it->second;
+
+            delete node;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string XmlMeta::getWriteName() const
+    {
+        std::string write_name;
+        write_name += "Meta_" + this->name;
+
+        return write_name;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlMeta::hasNode( const std::string & _type ) const
+    {
+        TMapNodes::const_iterator it_found = nodes.find( _type );
+
+        if( it_found != nodes.end() )
+        {
+            return true;
+        }
+
+        for( TMapNodes::const_iterator
+            it = nodes.begin(),
+            it_end = nodes.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlNode * node = it->second;
+
+            if( node->hasNode( _type ) == true )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    const XmlNode * XmlMeta::getNode( const std::string & _type ) const
+    {
+        TMapNodes::const_iterator it_found = nodes.find( _type );
+
+        if( it_found != nodes.end() )
+        {
+            const XmlNode * found_node = it_found->second;
+
+            return found_node;
+        }
+
+        for( TMapNodes::const_iterator
+            it = nodes.begin(),
+            it_end = nodes.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlNode * node = it->second;
+
+            const XmlNode * found_node = node->getNode( _type );
+
+            if( found_node != nullptr )
+            {
+                return found_node;
+            }
+        }
+
+        return nullptr;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    const TMapNodes & XmlMeta::getNodes() const
+    {
+        return nodes;
+    }
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::XmlProtocol()
 		: m_enumerator( 0 )
@@ -358,19 +465,24 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	XmlProtocol::~XmlProtocol()
 	{
-		for( TMapNodes::const_iterator
-			it = m_nodes.begin(),
-			it_end = m_nodes.end();
+		for( TMapMetas::const_iterator
+			it = m_metas.begin(),
+			it_end = m_metas.end();
 			it != it_end;
 			++it )
 		{
-			const XmlNode * node = it->second;
+			const XmlMeta * meta = it->second;
 
-			delete node;
+			delete meta;
 		}
 	}
+    //////////////////////////////////////////////////////////////////////////
+    uint32_t XmlProtocol::getVersion() const
+    {
+        return m_version;
+    }
 	//////////////////////////////////////////////////////////////////////////
-	std::string XmlProtocol::getError()
+	std::string XmlProtocol::getError() const
 	{
 		return m_error.str();
 	}
@@ -416,7 +528,7 @@ namespace Metabuf
 
 			const char * element_name = element.name();
 
-			if( element_name == 0 )
+			if( element_name == nullptr )
 			{
 				return false;
 			}
@@ -440,7 +552,7 @@ namespace Metabuf
 
 			const char * element_name = element.name();
 
-			if( element_name == 0 )
+			if( element_name == nullptr )
 			{
 				return false;
 			}
@@ -454,24 +566,29 @@ namespace Metabuf
 			}
 		}
 
-		for( pugi::xml_node::iterator
-			it = root.begin(),
-			it_end = root.end();
-			it != it_end;
-			++it )
-		{
-			const pugi::xml_node & element = *it;
+        for( pugi::xml_node::iterator
+            it = root.begin(),
+            it_end = root.end();
+            it != it_end;
+            ++it )
+        {
+            const pugi::xml_node & element = *it;
 
-			const char * element_name = element.name();
+            const char * element_name = element.name();
 
-			if( strcmp( element_name, "Node" ) == 0 )
-			{
-				if( this->readNode_( 0, element ) == false )
-				{
-					return false;
-				}
-			}
-		}
+            if( element_name == nullptr )
+            {
+                return false;
+            }
+
+            if( strcmp( element_name, "Meta" ) == 0 )
+            {
+                if( this->readMeta_( element ) == false )
+                {
+                    return false;
+                }
+            }
+        }
 
 		return true;
 	}
@@ -565,8 +682,45 @@ namespace Metabuf
 
 		return true;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool XmlProtocol::readMeta_( const pugi::xml_node & _xml_node )
+    {
+        pugi::xml_attribute MetaName = _xml_node.attribute( "Name" );
+
+        XmlMeta * metaXml = new XmlMeta();
+
+        metaXml->name = MetaName.value();
+
+        m_metas.insert( std::make_pair( metaXml->name, metaXml ) );
+
+        for( pugi::xml_node::iterator
+            it = _xml_node.begin(),
+            it_end = _xml_node.end();
+            it != it_end;
+            ++it )
+        {
+            const pugi::xml_node & element = *it;
+
+            const char * element_name = element.name();
+
+            if( element_name == nullptr )
+            {
+                return false;
+            }
+
+            if( strcmp( element_name, "Node" ) == 0 )
+            {
+                if( this->readNode_( metaXml, nullptr, element ) == false )
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
-	bool XmlProtocol::readNode_( XmlNode * _node, const pugi::xml_node & _xml_node )
+	bool XmlProtocol::readNode_( XmlMeta * _meta, XmlNode * _node, const pugi::xml_node & _xml_node )
 	{
 		pugi::xml_attribute NodeName = _xml_node.attribute( "Name" );
 		pugi::xml_attribute NodeGenerator = _xml_node.attribute( "Generator" );
@@ -578,7 +732,7 @@ namespace Metabuf
 
 		if( _node == nullptr )
 		{
-			m_nodes.insert( std::make_pair( NodeName.value(), nodeXml ) );
+            _meta->nodes.insert( std::make_pair( NodeName.value(), nodeXml ) );
 		}
 		else
 		{
@@ -639,7 +793,7 @@ namespace Metabuf
 		}
 
 		nodeXml->enumerator = 0;
-		nodeXml->node_inheritance = NULL;
+		nodeXml->node_inheritance = nullptr;
 		nodeXml->node_scope = _node;
 		nodeXml->name = NodeName.value();
 
@@ -654,7 +808,7 @@ namespace Metabuf
 
 			nodeXml->node_inheritance = _node->getInheritances( nodeXml->inheritance );
 
-			if( nodeXml->node_inheritance == NULL )
+			if( nodeXml->node_inheritance == nullptr )
 			{
 				m_error << "XmlProtocol::readNode_: node " << NodeName.value() << " not found inheritance " << NodeInheritance.value() << std::endl;
 
@@ -725,12 +879,14 @@ namespace Metabuf
 				pugi::xml_attribute ChildrenGroup = element.attribute( "Group" );
 				pugi::xml_attribute ChildrenType = element.attribute( "Type" );
 
-				XmlChildren & childrenXml = nodeXml->children[ChildrenGroup.value()];
+                const char * ChildrenGroupValue = ChildrenGroup.value();
+
+				XmlChildren & childrenXml = nodeXml->children[ChildrenGroupValue];
 
 				childrenXml.group = ChildrenGroup.value();
 				childrenXml.type = ChildrenType.value();
 
-				if( this->hasNode( childrenXml.type ) == false )
+				if( _meta->hasNode( childrenXml.type ) == false )
 				{
 					m_error << "XmlProtocol::readNode_: Children " << NodeName.value() << " not found type " << ChildrenType.value() << std::endl;
 
@@ -739,7 +895,7 @@ namespace Metabuf
 			}
 			else if( strcmp( element_name, "Node" ) == 0 )
 			{
-				if( this->readNode_( nodeXml, element ) == false )
+				if( this->readNode_( _meta, nodeXml, element ) == false )
 				{
 					return false;
 				}
@@ -779,69 +935,34 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool XmlProtocol::hasNode( const std::string & _type ) const
+	bool XmlProtocol::hasMeta( const std::string & _type ) const
 	{
-		TMapNodes::const_iterator it_found = m_nodes.find( _type );
+		TMapMetas::const_iterator it_found = m_metas.find( _type );
 
-		if( it_found != m_nodes.end() )
+		if( it_found == m_metas.end() )
 		{
-			return true;
+			return false;
 		}
 
-		for( TMapNodes::const_iterator
-			it = m_nodes.begin(),
-			it_end = m_nodes.end();
-			it != it_end;
-			++it )
-		{
-			const XmlNode * node = it->second;
-
-			if( node->hasNode( _type ) == true )
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	const XmlNode * XmlProtocol::getNode( const std::string & _type ) const
+	const XmlMeta * XmlProtocol::getMeta( const std::string & _type ) const
 	{
-		TMapNodes::const_iterator it_found = m_nodes.find( _type );
+		TMapMetas::const_iterator it_found = m_metas.find( _type );
 
-		if( it_found != m_nodes.end() )
+        if( it_found == m_metas.end() )
 		{
-			const XmlNode * found_node = it_found->second;
-
-			return found_node;
+            return nullptr;
 		}
 
-		for( TMapNodes::const_iterator
-			it = m_nodes.begin(),
-			it_end = m_nodes.end();
-			it != it_end;
-			++it )
-		{
-			const XmlNode * node = it->second;
+        const XmlMeta * found_node = it_found->second;
 
-			const XmlNode * found_node = node->getNode( _type );
-
-			if( found_node != nullptr )
-			{
-				return found_node;
-			}
-		}
-
-		return nullptr;
+        return found_node;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	const TMapNodes & XmlProtocol::getNodes() const
+	const TMapMetas & XmlProtocol::getMetas() const
 	{
-		return m_nodes;
-	}
-	//////////////////////////////////////////////////////////////////////////
-	uint32_t XmlProtocol::getVersion() const
-	{
-		return m_version;
+		return m_metas;
 	}
 }

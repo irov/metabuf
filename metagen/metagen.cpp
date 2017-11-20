@@ -80,7 +80,7 @@ int main( int argc, char *argv[] )
 
     FILE * file_metacode_cpp = fopen( metacodecpp_protocol, "wb");
 
-	if( file_metacode_cpp == NULL )
+	if( file_metacode_cpp == nullptr )
 	{
 		printf( "error open 'source' file '%s'"
 			, metacodecpp_protocol

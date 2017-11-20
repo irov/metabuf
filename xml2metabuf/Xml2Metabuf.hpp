@@ -12,6 +12,7 @@
 namespace Metabuf
 {
 	class XmlProtocol;
+    class XmlMeta;
 	class XmlNode;
 	class XmlAttribute;
 
@@ -21,7 +22,7 @@ namespace Metabuf
 	class Xml2Metabuf
 	{
 	public:
-		Xml2Metabuf( XmlProtocol * _protocol );
+		Xml2Metabuf( const XmlProtocol * _protocol, const XmlMeta * _meta );
 
     public:
         void initialize();
@@ -80,7 +81,8 @@ namespace Metabuf
         void writeBuffer( const unsigned char * _buff, size_t _size );
 
 	protected:
-		XmlProtocol * m_protocol;
+		const XmlProtocol * m_protocol;
+        const XmlMeta * m_meta;
 
 		std::stringstream m_error;
 

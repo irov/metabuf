@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
+PROJECT(metabuf)
+
 set( METABUF_LIB_NAME metabuf )
 
 OPTION( METABUF_EXTERNAL_BUILD "METABUF_EXTERNAL_BUILD" OFF )

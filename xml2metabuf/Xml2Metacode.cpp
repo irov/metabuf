@@ -4,7 +4,7 @@
 namespace Metabuf
 {
 	//////////////////////////////////////////////////////////////////////////
-	Xml2Metacode::Xml2Metacode( XmlProtocol * _protocol )
+	Xml2Metacode::Xml2Metacode( const XmlProtocol * _protocol )
 		: m_protocol( _protocol )
 		, m_indent( 0 )
 	{
@@ -59,17 +59,17 @@ namespace Metabuf
 
 		m_indent += 4;
 
-		const TMapNodes & nodes = m_protocol->getNodes();
+		const TMapMetas & metas = m_protocol->getMetas();
 
-		for( TMapNodes::const_iterator
-			it_nodes = nodes.begin(),
-			it_nodes_end = nodes.end();
-			it_nodes != it_nodes_end;
-			++it_nodes )
+		for( TMapMetas::const_iterator
+			it_meta = metas.begin(),
+			it_meta_end = metas.end();
+            it_meta != it_meta_end;
+			++it_meta )
 		{
-			const XmlNode * node = it_nodes->second;
+			const XmlMeta * meta = it_meta->second;
 
-			if( this->writeHeaderNode_( _ss, node ) == false )
+			if( this->writeHeaderMeta_( _ss, meta ) == false )
 			{
 				return false;
 			}
@@ -81,16 +81,46 @@ namespace Metabuf
 
 		return true;
 	}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeHeaderMeta_( std::stringstream & _ss, const XmlMeta * _meta )
+    {
+        this->write( _ss ) << "namespace " << _meta->getWriteName() << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+
+        m_indent += 4;
+
+        const TMapNodes & nodes = _meta->getNodes();
+
+        for( TMapNodes::const_iterator
+            it_node = nodes.begin(),
+            it_node_end = nodes.end();
+            it_node != it_node_end;
+            ++it_node )
+        {
+            const XmlNode * node = it_node->second;
+
+            if( this->writeHeaderNode_( _ss, _meta, node ) == false )
+            {
+                return false;
+            }
+        }
+
+        m_indent -= 4;
+
+        this->write( _ss ) << "}" << std::endl;
+
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeHeaderNode_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
-		this->write( _ss ) << "class " << _node->getName() << std::endl;
+		this->write( _ss ) << "class " << _node->getWriteName() << std::endl;
 
 		if( _node->inheritance.empty() == false )
 		{
 			const XmlNode * node_inheritance = _node->node_inheritance;
 
-			this->write( _ss ) << "    : public " << node_inheritance->getName() << std::endl;
+			this->write( _ss ) << "    : public " << node_inheritance->getWriteName() << std::endl;
 		}
 		else
 		{
@@ -126,7 +156,6 @@ namespace Metabuf
 			return false;
 		}
 
-
 		if( this->writeHeaderSinglesReader_( _ss, _node ) == false )
 		{
 			return false;
@@ -159,7 +188,7 @@ namespace Metabuf
 
 		m_indent -= 4;
 
-		if( this->writeHeaderIncludesDefinition_( _ss, _node ) == false )
+		if( this->writeHeaderIncludesDefinition_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
@@ -181,7 +210,7 @@ namespace Metabuf
 			return false;
 		}
 
-		if( this->writeHeaderChildren_( _ss, _node ) == false )
+		if( this->writeHeaderChildren_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
@@ -195,11 +224,11 @@ namespace Metabuf
 	bool Xml2Metacode::writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node )
 	{
 		this->write( _ss ) << "public:" << std::endl;
-		this->write( _ss ) << "    " << _node->getName() << "();" << std::endl;
+		this->write( _ss ) << "    " << _node->getWriteName() << "();" << std::endl;
 
 		if( _node->inheritances.empty() == false )
 		{
-			this->write( _ss ) << "    ~" << _node->getName() << "();" << std::endl;
+			this->write( _ss ) << "    ~" << _node->getWriteName() << "();" << std::endl;
 		}
 
 		this->write( _ss ) << std::endl;
@@ -255,7 +284,7 @@ namespace Metabuf
 			{
 				this->write( _ss ) << "bool" << " " << "has_" << attr->name << "() const" << std::endl;
 				this->write( _ss ) << "{" << std::endl;
-				this->write( _ss ) << "    return " << attr->name << "_successful;" << std::endl;
+				this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
 				this->write( _ss ) << std::endl;
 
@@ -263,36 +292,36 @@ namespace Metabuf
                 {
                     this->write( _ss ) << "" << type.write << " " << "get_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        return _default;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << "    _value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        _value = _default;" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = this->" << attr->name << ";" << std::endl;
+                    this->write( _ss ) << "    _value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
@@ -302,26 +331,26 @@ namespace Metabuf
                 {
                     this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = std::move( this->" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << "    _value = std::move( this->" << attr->getWriteName() << " );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        _value = std::move( _default );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = std::move( this->" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << "    _value = std::move( this->" << attr->getWriteName() << " );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
@@ -334,14 +363,14 @@ namespace Metabuf
 				{
 					this->write( _ss ) << type.write << " get_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
-					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 				}
 				else
 				{
 					this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
-					this->write( _ss ) << "    return this->" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 				}
 
@@ -372,17 +401,17 @@ namespace Metabuf
 				{
 					this->write( _ss ) << "bool" << " " << "has_" << member->name << "_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
-					this->write( _ss ) << "    return " << member->name << "_" << attr->name << "_successful;" << std::endl;
+					this->write( _ss ) << "    return " << member->getWriteName() << "_" << attr->name << "_successful;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 					this->write( _ss ) << std::endl;
 					this->write( _ss ) << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
-					this->write( _ss ) << "    if( " << member->name << "_" << attr->name << "_successful == false )" << std::endl;
+					this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
 					this->write( _ss ) << "    {" << std::endl;
 					this->write( _ss ) << "        return false;" << std::endl;
 					this->write( _ss ) << "    }" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "    _value = this->" << member->name << "_" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "    _value = this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
 					this->write( _ss ) << std::endl;
 					this->write( _ss ) << "    return true;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
@@ -394,14 +423,14 @@ namespace Metabuf
 					{
 						this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
 						this->write( _ss ) << "{" << std::endl;
-						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
+						this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
 						this->write( _ss ) << "}" << std::endl;
 					}
 					else
 					{
 						this->write( _ss ) << "const " << type.write << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
 						this->write( _ss ) << "{" << std::endl;
-						this->write( _ss ) << "    return this->" << member->name << "_" << attr->name << ";" << std::endl;
+						this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
 						this->write( _ss ) << "}" << std::endl;
 					}
 
@@ -415,7 +444,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		this->write( _ss ) << "public:" << std::endl;
 
@@ -429,7 +458,7 @@ namespace Metabuf
 		{
 			XmlNode * node = it_includes->second;
 
-			this->writeHeaderNode_( _ss, node );
+			this->writeHeaderNode_( _ss, _meta, node );
 		}
 
 		for( TMapNodes::const_iterator
@@ -440,7 +469,7 @@ namespace Metabuf
 		{
 			XmlNode * node = it_inheritances->second;
 
-			this->writeHeaderNode_( _ss, node );
+			this->writeHeaderNode_( _ss, _meta, node );
 		}
 
         for( TMapNodes::const_iterator
@@ -451,7 +480,7 @@ namespace Metabuf
         {
             XmlNode * node = it_singles->second;
 
-            this->writeHeaderNode_( _ss, node );
+            this->writeHeaderNode_( _ss, _meta, node );
         }
 
 		for( TMapNodes::const_iterator
@@ -462,7 +491,7 @@ namespace Metabuf
 		{
 			XmlNode * node = it_generators->second;
 
-			this->writeHeaderNode_( _ss, node );
+			this->writeHeaderNode_( _ss, _meta, node );
 		}
 
 		m_indent -= 4;
@@ -486,13 +515,13 @@ namespace Metabuf
 
 			if( attr->required == false )
 			{
-				this->write( _ss ) << "bool" << " " << attr->name << "_successful;" << std::endl;
+				this->write( _ss ) << "bool" << " " << attr->getWriteName() << "_successful;" << std::endl;
 			}
 
 			XmlType type;
 			m_protocol->getType( attr->type, type );
 
-			this->write( _ss ) << type.write << " " << attr->name << ";" << std::endl;
+			this->write( _ss ) << type.write << " " << attr->getWriteName() << ";" << std::endl;
 		}
 
 		for( TMapMembers::const_iterator
@@ -513,13 +542,13 @@ namespace Metabuf
 
 				if( attr->required == false )
 				{
-					this->write( _ss ) << "bool" << " " << member->name << "_" << attr->name << "_successful" << ";" << std::endl;
+					this->write( _ss ) << "bool" << " " << member->getWriteName() << "_" << attr->name << "_successful" << ";" << std::endl;
 				}
 
 				XmlType type;
 				m_protocol->getType( attr->type, type );
 
-				this->write( _ss ) << type.write << " " << member->name << "_" << attr->name << ";" << std::endl;
+				this->write( _ss ) << type.write << " " << member->getWriteName() << "_" << attr->name << ";" << std::endl;
 			}
 		}
 
@@ -539,13 +568,13 @@ namespace Metabuf
 			const XmlNode * node_single = it_singles->second;
 
 			this->write( _ss ) << "public:" << std::endl;
-			this->write( _ss ) << "    const " << node_single->getName() << " & " << "get_Single_" << node_single->name << "() const" << std::endl;
+			this->write( _ss ) << "    const " << node_single->getWriteName() << " & " << "get_Single_" << node_single->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
-			this->write( _ss ) << "        return this->single_" << node_single->getName() << ";" << std::endl;
+			this->write( _ss ) << "        return this->single_" << node_single->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "protected:" << std::endl;
-			this->write( _ss ) << "    " << node_single->getName() << " single_" << node_single->getName() << ";" << std::endl;
+			this->write( _ss ) << "    " << node_single->getWriteName() << " single_" << node_single->getWriteName() << ";" << std::endl;
 		}
 
 		return true;
@@ -575,15 +604,15 @@ namespace Metabuf
 
 			this->write( _ss ) << "public:" << std::endl;
 
-			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << "> TVector" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_include->getWriteName() << "> Vector" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
+			this->write( _ss ) << "    const Vector" << node_include->getWriteName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
-			this->write( _ss ) << "        return this->includes_" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "        return this->includes_" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "protected:" << std::endl;
-			this->write( _ss ) << "    TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    Vector" << node_include->getWriteName() << " includes_" << node_include->getWriteName() << ";" << std::endl;
 		}
 
 		for( TMapNodes::const_iterator
@@ -595,15 +624,15 @@ namespace Metabuf
 			const XmlNode * node_include = it_inheritances->second;
 
 			this->write( _ss ) << "public:" << std::endl;
-			this->write( _ss ) << "    typedef std::vector<" << node_include->getName() << " *> TVector" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_include->getWriteName() << " *> Vector" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
-			this->write( _ss ) << "    const TVector" << node_include->getName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
+			this->write( _ss ) << "    const Vector" << node_include->getWriteName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
-			this->write( _ss ) << "        return this->includes_" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "        return this->includes_" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "protected:" << std::endl;
-			this->write( _ss ) << "    TVector" << node_include->getName() << " includes_" << node_include->getName() << ";" << std::endl;
+			this->write( _ss ) << "    Vector" << node_include->getWriteName() << " includes_" << node_include->getWriteName() << ";" << std::endl;
 		}
 
 		return true;
@@ -633,7 +662,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeHeaderChildren_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeHeaderChildren_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		for( TMapChildren::const_iterator
 			it_children = _node->children.begin(),
@@ -645,19 +674,19 @@ namespace Metabuf
 
 			this->write( _ss ) << "public:" << std::endl;
 
-			const XmlNode * node_children = m_protocol->getNode( children.type );
+			const XmlNode * node_children = _meta->getNode( children.type );
 
-			std::string ss_vector_children_name = "TVector" + node_children->getName();
+			std::string ss_vector_children_name = "Vector" + node_children->getWriteName();
 
-			this->write( _ss ) << "    typedef std::vector<" << node_children->getName() << " *> " << ss_vector_children_name << ";" << std::endl;
+			this->write( _ss ) << "    typedef std::vector<" << node_children->getWriteName() << " *> " << ss_vector_children_name << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const " << ss_vector_children_name << " & " << "get_Children_" << node_children->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
-			this->write( _ss ) << "        return this->children_" << node_children->getName() << ";" << std::endl;
+			this->write( _ss ) << "        return this->children_" << node_children->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << "    }" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "protected:" << std::endl;
-			this->write( _ss ) << "    " << ss_vector_children_name << " children_" << node_children->getName() << ";" << std::endl;
+			this->write( _ss ) << "    " << ss_vector_children_name << " children_" << node_children->getWriteName() << ";" << std::endl;
 		}
 
 		return true;
@@ -797,7 +826,37 @@ namespace Metabuf
 
 		m_indent += 4;
 
-		const TMapNodes & nodes = m_protocol->getNodes();
+        const TMapMetas & metas = m_protocol->getMetas();
+
+        for( TMapMetas::const_iterator
+            it_meta = metas.begin(),
+            it_meta_end = metas.end();
+            it_meta != it_meta_end;
+            ++it_meta )
+        {
+            const XmlMeta * meta = it_meta->second;
+
+            if( this->writeSourceMeta_( _ss, meta ) == false )
+            {
+                return false;
+            }
+        }
+
+		m_indent -= 4;
+
+		this->write( _ss ) << "}" << std::endl;
+
+		return true;
+	}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeSourceMeta_( std::stringstream & _ss, const XmlMeta * _meta )
+    {
+        this->write( _ss ) << "namespace " << _meta->getWriteName() << std::endl;
+        this->write( _ss ) << "{ " << std::endl;
+
+        m_indent += 4;
+
+		const TMapNodes & nodes = _meta->getNodes();
 
 		for( TMapNodes::const_iterator
 			it_nodes = nodes.begin(),
@@ -807,20 +866,20 @@ namespace Metabuf
 		{
 			const XmlNode * node = it_nodes->second;
 
-			if( this->writeSourceNode_( _ss, node ) == false )
+			if( this->writeSourceNode_( _ss, _meta, node ) == false )
 			{
 				return false;
 			}
 		}
 
-		m_indent -= 4;
+        m_indent -= 4;
 
-		this->write( _ss ) << "}" << std::endl;
+        this->write( _ss ) << "} " << std::endl;
 
-		return true;
-	}
+        return true;
+    }
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		if( this->writeSourceConstructor_( _ss, _node ) == false )
 		{
@@ -852,12 +911,12 @@ namespace Metabuf
 			return false;
 		}
 
-		if( writeSourceChildrenPreparation_( _ss, _node ) == false )
+		if( writeSourceChildrenPreparation_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
 
-		if( writeSourceChildrenReader_( _ss, _node ) == false )
+		if( writeSourceChildrenReader_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
@@ -867,7 +926,7 @@ namespace Metabuf
 			return false;
 		}
 
-		if( this->writeSourceIncludesDefinition_( _ss, _node ) == false )
+		if( this->writeSourceIncludesDefinition_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
@@ -879,13 +938,13 @@ namespace Metabuf
 	{
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "//cppcheck-suppress uninitMemberVar" << std::endl;
-		this->write( _ss ) << _node->getScope() << "::" << _node->getName() << "()" << std::endl;
+		this->write( _ss ) << _node->getScope() << "::" << _node->getWriteName() << "()" << std::endl;
 
 		if( _node->inheritance.empty() == false )
 		{
 			const XmlNode * node_inheritance = _node->node_inheritance;
 
-			this->write( _ss ) << "    : " << node_inheritance->getName() << "()" << std::endl;
+			this->write( _ss ) << "    : " << node_inheritance->getWriteName() << "()" << std::endl;
 		}
 		else
 		{
@@ -902,7 +961,7 @@ namespace Metabuf
 
 			if( attr->required == false )
 			{
-				this->write( _ss ) << "    , " << attr->name << "_successful(false)" << std::endl;
+				this->write( _ss ) << "    , " << attr->getWriteName() << "_successful(false)" << std::endl;
 			}
 		}
 
@@ -924,7 +983,7 @@ namespace Metabuf
 
 				if( attr->required == false )
 				{
-					this->write( _ss ) << "    , " << member->name << "_" << attr->name << "_successful(false)" << std::endl;
+					this->write( _ss ) << "    , " << member->getWriteName() << "_" << attr->name << "_successful(false)" << std::endl;
 				}
 			}
 		}
@@ -935,7 +994,7 @@ namespace Metabuf
 		if( _node->inheritances.empty() == false )
 		{
 			this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-			this->write( _ss ) << _node->getScope() << "::~" << _node->getName() << "()" << std::endl;
+			this->write( _ss ) << _node->getScope() << "::~" << _node->getWriteName() << "()" << std::endl;
 			this->write( _ss ) << "{" << std::endl;
 
 			for( TMapNodes::const_iterator
@@ -946,9 +1005,9 @@ namespace Metabuf
 			{
 				const XmlNode * node_include = it_inheritances->second;
 
-				this->write( _ss ) << "    for( TVector" << node_include->getName() << "::const_iterator" << std::endl;
-				this->write( _ss ) << "        it = includes_" << node_include->getName() << ".begin()," << std::endl;
-				this->write( _ss ) << "        it_end = includes_" << node_include->getName() << ".end();" << std::endl;
+				this->write( _ss ) << "    for( Vector" << node_include->getWriteName() << "::const_iterator" << std::endl;
+				this->write( _ss ) << "        it = includes_" << node_include->getWriteName() << ".begin()," << std::endl;
+				this->write( _ss ) << "        it_end = includes_" << node_include->getWriteName() << ".end();" << std::endl;
 				this->write( _ss ) << "    it != it_end;" << std::endl;
 				this->write( _ss ) << "    ++it )" << std::endl;
 				this->write( _ss ) << "    {" << std::endl;
@@ -1094,7 +1153,7 @@ namespace Metabuf
 					continue;
 				}
 
-				this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << attr->name << " );" << std::endl;
+				this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << attr->getWriteName() << " );" << std::endl;
 			}
 
 			for( TMapMembers::const_iterator
@@ -1118,7 +1177,7 @@ namespace Metabuf
 						continue;
 					}
 
-					this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " );" << std::endl;
+					this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
 				}
 			}
 		}
@@ -1167,9 +1226,9 @@ namespace Metabuf
 
 				this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
 				this->write( _ss ) << "        {" << std::endl;
-				this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << attr->name << " );" << std::endl;
+				this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << attr->getWriteName() << " );" << std::endl;
 				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "            this->" << attr->name << "_successful = true;" << std::endl;
+				this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
 				this->write( _ss ) << std::endl;
 				this->write( _ss ) << "        }break;" << std::endl;
 			}
@@ -1197,9 +1256,9 @@ namespace Metabuf
 
 					this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
 					this->write( _ss ) << "        {" << std::endl;
-					this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << member->name << "_" << attr->name << " );" << std::endl;
+					this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "            this->" << member->name << "_" << attr->name << "_successful = true;" << std::endl;
+					this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
 					this->write( _ss ) << std::endl;
 					this->write( _ss ) << "        }break;" << std::endl;
 				}
@@ -1246,7 +1305,7 @@ namespace Metabuf
 
 			this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 			this->write( _ss ) << "        {" << std::endl;
-			this->write( _ss ) << "            single_" << node->getName() << ".parse( _buff, _size, _read, m_userData );" << std::endl;
+			this->write( _ss ) << "            single_" << node->getWriteName() << ".parse( _buff, _size, _read, m_userData );" << std::endl;
 			this->write( _ss ) << "        }break;" << std::endl;
 		}
 
@@ -1295,7 +1354,7 @@ namespace Metabuf
 
 				this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 				this->write( _ss ) << "        {" << std::endl;
-				this->write( _ss ) << "            includes_" << node->getName() << ".reserve( _count );" << std::endl;
+				this->write( _ss ) << "            includes_" << node->getWriteName() << ".reserve( _count );" << std::endl;
 				this->write( _ss ) << "        }break;" << std::endl;
 			}
 
@@ -1309,7 +1368,7 @@ namespace Metabuf
 
 				this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 				this->write( _ss ) << "        {" << std::endl;
-				this->write( _ss ) << "            includes_" << node->getName() << ".reserve( _count );" << std::endl;
+				this->write( _ss ) << "            includes_" << node->getWriteName() << ".reserve( _count );" << std::endl;
 				this->write( _ss ) << "        }break;" << std::endl;
 			}
 
@@ -1354,8 +1413,8 @@ namespace Metabuf
 
 			this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 			this->write( _ss ) << "        {" << std::endl;
-			this->write( _ss ) << "            includes_" << node->getName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
-			this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getName() << ".back();" << std::endl;
+			this->write( _ss ) << "            includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
+			this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "            metadata.parse( _buff, _size, _read, m_userData );" << std::endl;
 			this->write( _ss ) << "        }break;" << std::endl;
@@ -1368,7 +1427,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		if( _node->children.empty() == true )
 		{
@@ -1399,11 +1458,11 @@ namespace Metabuf
 		{
 			const XmlChildren & children = it_children->second;
 
-			const XmlNode * node = m_protocol->getNode( children.type );
+			const XmlNode * node = _meta->getNode( children.type );
 
 			this->write( _ss ) << "    case " << node->id << ":" << std::endl;
 			this->write( _ss ) << "        {" << std::endl;
-			this->write( _ss ) << "            children_" << node->getName() << ".reserve( _count );" << std::endl;
+			this->write( _ss ) << "            children_" << node->getWriteName() << ".reserve( _count );" << std::endl;
 			this->write( _ss ) << "        }break;" << std::endl;
 		}
 
@@ -1414,7 +1473,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeSourceChildrenReader_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeSourceChildrenReader_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		if( _node->children.empty() == true )
 		{
@@ -1445,7 +1504,7 @@ namespace Metabuf
 		{
 			const XmlChildren & children = it_includes->second;
 
-			const XmlNode * node_children = m_protocol->getNode( children.type );
+			const XmlNode * node_children = _meta->getNode( children.type );
 
 			for( TMapNodes::const_iterator
 				it_generators = node_children->node_scope->generators.begin(),
@@ -1465,7 +1524,7 @@ namespace Metabuf
 				this->write( _ss ) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
 				this->write( _ss ) << "            metadata->parse( _buff, _size, _read, m_userData );" << std::endl;
 				this->write( _ss ) << std::endl;
-				this->write( _ss ) << "            children_" << node_children->getName() << ".push_back(metadata);" << std::endl;
+				this->write( _ss ) << "            children_" << node_children->getWriteName() << ".push_back(metadata);" << std::endl;
 				this->write( _ss ) << "        }break;" << std::endl;
 			}
 		}
@@ -1531,7 +1590,7 @@ namespace Metabuf
 					this->write( _ss ) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
 					this->write( _ss ) << "            metadata->parse( _buff, _size, _read, m_userData );" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "            includes_" << node_inheritance->getName() << ".push_back(metadata);" << std::endl;
+					this->write( _ss ) << "            includes_" << node_inheritance->getWriteName() << ".push_back(metadata);" << std::endl;
 					this->write( _ss ) << "        }break;" << std::endl;
 				}
 			}
@@ -1544,7 +1603,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		for( TMapNodes::const_iterator
 			it = _node->singles.begin(),
@@ -1554,7 +1613,7 @@ namespace Metabuf
 		{
 			XmlNode * node_include = it->second;
 
-			if( this->writeSourceNode_( _ss, node_include ) == false )
+			if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
 			{
 				return false;
 			}
@@ -1568,7 +1627,7 @@ namespace Metabuf
 		{
 			XmlNode * node_include = it->second;
 
-			if( this->writeSourceNode_( _ss, node_include ) == false )
+			if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
 			{
 				return false;
 			}
@@ -1582,7 +1641,7 @@ namespace Metabuf
 		{
 			XmlNode * node_include = it->second;
 
-			if( this->writeSourceNode_( _ss, node_include ) == false )
+			if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
 			{
 				return false;
 			}
@@ -1596,7 +1655,7 @@ namespace Metabuf
 		{
 			XmlNode * node_include = it->second;
 
-			if( this->writeSourceNode_( _ss, node_include ) == false )
+			if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
 			{
 				return false;
 			}

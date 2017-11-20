@@ -325,7 +325,7 @@ namespace Metabuf
 
 				pods.push_back( value );
 
-				pch = strtok( NULL, " " );
+				pch = strtok( nullptr, " " );
 			}
 
 			uint32_t count = (uint32_t)pods.size();
@@ -459,9 +459,10 @@ namespace Metabuf
         return x;
     }
 	//////////////////////////////////////////////////////////////////////////
-	Xml2Metabuf::Xml2Metabuf( XmlProtocol * _protocol )
-		: m_protocol(_protocol)
-		, m_hashable( nullptr )
+	Xml2Metabuf::Xml2Metabuf( const XmlProtocol * _protocol, const XmlMeta * _meta )
+        : m_protocol( _protocol )
+        , m_meta( _meta )
+        , m_hashable( nullptr )
 	{
 	}
     //////////////////////////////////////////////////////////////////////////
@@ -562,13 +563,13 @@ namespace Metabuf
 
         m_buff.clear();
 
-		pugi::xml_node root = doc.document_element();
+        pugi::xml_node root = doc.document_element();
 
         const char * root_name = root.name();
 
-        const XmlNode * node_root = m_protocol->getNode( root_name );
+        const XmlNode * node_root = m_meta->getNode( root_name );
 
-        if( node_root == NULL )
+        if( node_root == nullptr )
         {
             m_error << "Xml2Metabuf::convert: invalid root node " << root_name << std::endl;
 
@@ -1542,7 +1543,7 @@ namespace Metabuf
 		{
 			const XmlChildren & children = it->second;
 
-			const XmlNode * node_children = m_protocol->getNode( children.type );
+			const XmlNode * node_children = m_meta->getNode( children.type );
 
 			uint32_t childrenCount;
 			this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, childrenCount );
@@ -1617,7 +1618,7 @@ namespace Metabuf
 			{
 				const XmlChildren & children = it->second;
 
-				const XmlNode * node_children = m_protocol->getNode( children.type );
+				const XmlNode * node_children = m_meta->getNode( children.type );
 
 				uint32_t childrenCount;
 				this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, childrenCount );

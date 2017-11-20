@@ -30,6 +30,9 @@ namespace Metabuf
 
 	class XmlAttribute
 	{
+    public:
+        std::string getWriteName() const;
+
 	public:
         uint32_t id;
 		std::string name;
@@ -41,6 +44,9 @@ namespace Metabuf
 
 	class XmlMember
 	{
+    public:
+        std::string getWriteName() const;
+
 	public:
 		std::string name;
 		TMapAttributes attributes;
@@ -98,8 +104,9 @@ namespace Metabuf
         const XmlNode * getInclude( const std::string & _name ) const;
         const XmlNode * getInheritances( const std::string & _name ) const;
         const XmlNode * getGenerator( const std::string & _name ) const;
-                
-        std::string getName() const;
+        
+        const std::string & getName() const;
+        std::string getWriteName() const;
         std::string getScope() const;
 
         bool getNoWrite() const;
@@ -108,6 +115,28 @@ namespace Metabuf
 		bool hasNode( const std::string & _type ) const;
 		const XmlNode * getNode( const std::string & _type ) const;
 	};
+
+    class XmlMeta
+    {
+    public:
+        XmlMeta();
+        ~XmlMeta();
+
+    public:
+        std::string getWriteName() const;
+
+    public:
+        bool hasNode( const std::string & _type ) const;
+        const XmlNode * getNode( const std::string & _type ) const;
+        const TMapNodes & getNodes() const;
+
+    public:
+        std::string name;
+
+        TMapNodes nodes;
+    };
+
+    typedef std::map<std::string, XmlMeta *> TMapMetas;
     
 	class XmlProtocol
 	{
@@ -115,15 +144,13 @@ namespace Metabuf
 		XmlProtocol();
         ~XmlProtocol();
 
-	public:
-		const TMapNodes & getNodes() const;
-
     public:
         uint32_t getVersion() const;
 
 	public:
-		bool hasNode( const std::string & _type ) const;
-		const XmlNode * getNode( const std::string & _type ) const;
+		bool hasMeta( const std::string & _type ) const;
+		const XmlMeta * getMeta( const std::string & _type ) const;
+        const TMapMetas & getMetas() const;
 
     public:
 		bool hasType( const std::string & _name ) const;
@@ -131,19 +158,20 @@ namespace Metabuf
 
 	public:
 		bool readProtocol( const void * _buff, size_t _size );
-        std::string getError();
+        std::string getError() const;
 
 	protected:
         bool readType_( const pugi::xml_node & _xml_node );
 		bool readEnum_( const pugi::xml_node & _xml_node );
-		bool readNode_( XmlNode * _node, const pugi::xml_node & _xml_node );
+        bool readMeta_( const pugi::xml_node & _xml_node );
+		bool readNode_( XmlMeta * _meta, XmlNode * _node, const pugi::xml_node & _xml_node );
 		
 	protected:
         uint32_t m_version;
 
 		uint32_t m_enumerator;
 
-		TMapNodes m_nodes;
+        TMapMetas m_metas;
 
 		TMapTypes m_types;
 

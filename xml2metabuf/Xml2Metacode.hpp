@@ -12,7 +12,7 @@ namespace Metabuf
 	class Xml2Metacode
 	{
 	public:
-		Xml2Metacode( XmlProtocol * _protocol );
+		Xml2Metacode( const XmlProtocol * _protocol );
 
 	public:
 		bool generate( std::string & _header, std::string & _source );
@@ -22,21 +22,22 @@ namespace Metabuf
         bool generateHeader( std::stringstream & _ss );        
 
 	protected:		
-		bool writeHeaderNode_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeHeaderMeta_( std::stringstream & _ss, const XmlMeta * _meta );
+		bool writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 				
     protected:
         bool writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderDataReader_(std::stringstream & _ss, const XmlNode * _node);
 		bool writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderAttributeSetup_( std::stringstream & _ss, const XmlNode * _node );
-        bool writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node );        
+        bool writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 		bool writeHeaderAttribute_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderSingles_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderSinglesReader_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderIncludes_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
-		bool writeHeaderChildren_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeHeaderChildren_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 		bool writeHeaderChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node );
 		bool writeHeaderChildrenReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node );
@@ -45,7 +46,8 @@ namespace Metabuf
         bool generateSource( std::stringstream & _ss );
 
     protected:
-        bool writeSourceNode_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceMeta_( std::stringstream & _ss, const XmlMeta * _meta );
+        bool writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 
     protected:
 		bool writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node );
@@ -54,10 +56,10 @@ namespace Metabuf
 		bool writeSourceSinglesReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node );
-		bool writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlNode * _node );
-		bool writeSourceChildrenReader_( std::stringstream & _ss, const XmlNode * _node );
+		bool writeSourceChildrenPreparation_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
+		bool writeSourceChildrenReader_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
         bool writeSourceGeneratorsReader_( std::stringstream & _ss, const XmlNode * _node );
-        bool writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 
 	protected:
 		bool hasNodeDataSize_( const XmlNode * _node );
@@ -67,10 +69,10 @@ namespace Metabuf
 		std::stringstream & write( std::stringstream & _ss );
 
 	protected:
-		std::stringstream m_out;
-        uint32_t m_indent;
+        const XmlProtocol * m_protocol;
 
-		XmlProtocol * m_protocol;
+        std::stringstream m_out;
+        uint32_t m_indent;		
 
 		std::stringstream m_error;
 	};
