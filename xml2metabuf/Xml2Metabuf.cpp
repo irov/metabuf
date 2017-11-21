@@ -513,7 +513,7 @@ namespace Metabuf
         m_serialization[_type] = desc;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::header( unsigned char * _binBuff, size_t _binSize, size_t & _writeSize )
+    bool Xml2Metabuf::header( unsigned char * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize )
     {
         m_buff.clear();
 
@@ -527,6 +527,8 @@ namespace Metabuf
 
         uint32_t protocol = m_protocol->getVersion();
         this->write( protocol );
+
+        this->write( _metaVersion );
         
         writeSize += m_buff.size();
 

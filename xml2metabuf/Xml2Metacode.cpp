@@ -52,7 +52,7 @@ namespace Metabuf
 		this->write( _ss ) << "    uint32_t get_metacode_magic();" << std::endl;
 		this->write( _ss ) << "    uint32_t get_metacode_version();" << std::endl;
 		this->write( _ss ) << "    uint32_t get_metacode_protocol();" << std::endl;
-		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol );" << std::endl;
+		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
 		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
 		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -233,7 +233,8 @@ namespace Metabuf
 
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "public:" << std::endl;
-		this->write( _ss ) << "    uint32_t getId() const override;" << std::endl;
+		this->write( _ss ) << "    uint32_t getVersion() const override;" << std::endl;
+        this->write( _ss ) << "    uint32_t getId() const override;" << std::endl;
 		this->write( _ss ) << std::endl;
 
 		return true;
@@ -756,7 +757,7 @@ namespace Metabuf
 		this->write( _ss ) << "        return metacode_protocol;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol )" << std::endl;
+		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -773,11 +774,15 @@ namespace Metabuf
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        uint32_t protocol;" << std::endl;
 		this->write( _ss ) << "        ar.readPOD( protocol );" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        uint32_t meta_version;" << std::endl;
+        this->write( _ss ) << "        ar.readPOD( meta_version );" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        _readVersion = version;" << std::endl;
 		this->write( _ss ) << "        _needVersion = metacode_version;" << std::endl;
 		this->write( _ss ) << "        _readProtocol = protocol;" << std::endl;
 		this->write( _ss ) << "        _needProtocol = metacode_protocol;" << std::endl;
+        this->write( _ss ) << "        _readMetaVersion = meta_version;" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        if( version != metacode_version )" << std::endl;
 		this->write( _ss ) << "        {" << std::endl;
@@ -789,6 +794,11 @@ namespace Metabuf
 		this->write( _ss ) << "            return false;" << std::endl;
 		this->write( _ss ) << "        }" << std::endl;
 		this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        if( meta_version != _metaVersion )" << std::endl;
+        this->write( _ss ) << "        {" << std::endl;
+        this->write( _ss ) << "            return false;" << std::endl;
+        this->write( _ss ) << "        }" << std::endl;
+        this->write( _ss ) << std::endl;
 		this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
@@ -881,7 +891,7 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
-		if( this->writeSourceConstructor_( _ss, _node ) == false )
+		if( this->writeSourceConstructor_( _ss, _meta, _node ) == false )
 		{
 			return false;
 		}
@@ -934,7 +944,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlNode * _node )
+	bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
 	{
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "//cppcheck-suppress uninitMemberVar" << std::endl;
@@ -1019,10 +1029,16 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "uint32_t " << _node->getScope() << "::getId() const" << std::endl;
+		this->write( _ss ) << "uint32_t " << _node->getScope() << "::getVersion() const" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
-		this->write( _ss ) << "    return " << _node->id << ";" << std::endl;
+		this->write( _ss ) << "    return " << _meta->version << ";" << std::endl;
 		this->write( _ss ) << "}" << std::endl;
+
+        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "uint32_t " << _node->getScope() << "::getId() const" << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+        this->write( _ss ) << "    return " << _node->id << ";" << std::endl;
+        this->write( _ss ) << "}" << std::endl;
 
 		return true;
 	}

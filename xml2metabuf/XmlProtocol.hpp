@@ -123,6 +123,9 @@ namespace Metabuf
         ~XmlMeta();
 
     public:
+        uint32_t getVersion() const;
+
+    public:
         std::string getWriteName() const;
 
     public:
@@ -132,6 +135,7 @@ namespace Metabuf
 
     public:
         std::string name;
+        uint32_t version;
 
         TMapNodes nodes;
     };

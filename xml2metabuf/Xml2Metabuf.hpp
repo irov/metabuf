@@ -30,7 +30,7 @@ namespace Metabuf
         void addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user );
 
 	public:
-        bool header( unsigned char * _binBuff, size_t _binSize, size_t & _writeSize );
+        bool header( unsigned char * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
 		bool convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
 		std::string getError();
 

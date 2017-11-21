@@ -388,6 +388,11 @@ namespace Metabuf
         }
     }
     //////////////////////////////////////////////////////////////////////////
+    uint32_t XmlMeta::getVersion() const
+    {
+        return this->version;
+    }
+    //////////////////////////////////////////////////////////////////////////
     std::string XmlMeta::getWriteName() const
     {
         std::string write_name;
@@ -686,10 +691,12 @@ namespace Metabuf
     bool XmlProtocol::readMeta_( const pugi::xml_node & _xml_node )
     {
         pugi::xml_attribute MetaName = _xml_node.attribute( "Name" );
+        pugi::xml_attribute MetaVersion = _xml_node.attribute( "Version" );
 
         XmlMeta * metaXml = new XmlMeta();
 
-        metaXml->name = MetaName.value();
+        metaXml->name = MetaName.as_string();
+        metaXml->version = MetaVersion.as_uint();
 
         m_metas.insert( std::make_pair( metaXml->name, metaXml ) );
 

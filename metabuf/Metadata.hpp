@@ -4,7 +4,7 @@
 
 namespace Metabuf
 {
-    const size_t header_size = 12;
+    const size_t header_size = 16;
 
 	template<class T>
 	void archive_read( Reader & ar, T & _value, void * _userData );
@@ -14,6 +14,9 @@ namespace Metabuf
 	public:
 		Metadata();
 		virtual ~Metadata();
+
+    public:
+        virtual uint32_t getVersion() const = 0;
 
 	public:
 		bool parseRoot( const unsigned char * _buff, size_t _size, size_t & _read, void * _userData );
@@ -51,7 +54,7 @@ namespace Metabuf
 		virtual void _parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
 		virtual void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id );
 
-	protected:
+	protected:        
 		virtual uint32_t getId() const = 0;
 
     protected:
