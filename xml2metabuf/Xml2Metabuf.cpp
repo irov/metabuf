@@ -310,10 +310,17 @@ namespace Metabuf
 			TVectorPods pods;
 
 			size_t len = strlen( _value );
-			char * parse_value = new char[len + 1];
-			strcpy( parse_value, _value );
+            
+            typedef std::vector<char> TVectorParseValue; 
+            TVectorParseValue parse_value;
 
-			char * pch = strtok( parse_value, " " );
+            parse_value.resize( len + 1 );
+
+            char * parse_value_buffer = &parse_value[0];
+
+			strcpy( parse_value_buffer, _value );
+
+			char * pch = strtok( parse_value_buffer, " " );
 
 			while( pch != nullptr )
 			{
