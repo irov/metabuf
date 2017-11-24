@@ -1,12 +1,12 @@
 #	pragma once
 
 #	ifndef METABUF_MALLOC
-#	include <malloc.h>
+#   include <stdlib.h>
 #	define METABUF_MALLOC(S) malloc(S)
 #	endif
 
 #	ifndef METABUF_FREE
-#	include <malloc.h>
+#   include <stdlib.h>
 #	define METABUF_FREE(B, S) free(B)
 #	endif
 
