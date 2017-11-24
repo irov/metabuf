@@ -406,7 +406,7 @@ namespace Metabuf
                 return false;
             }
 
-            size_t hexadecimal_len = len / 2;
+            uint32_t hexadecimal_len = len / 2;
 
             _metabuf->writeSize( hexadecimal_len );
 
@@ -1075,9 +1075,9 @@ namespace Metabuf
 				continue;
 			}
 
-			uint32_t index = std::distance( _type.enumerators.begin(), it );
+            XmlType::TVectorEnumerators::difference_type index = std::distance( _type.enumerators.begin(), it );
 
-			_index = index;
+            _index = (uint32_t)index;
 
 			return true;
 		}
