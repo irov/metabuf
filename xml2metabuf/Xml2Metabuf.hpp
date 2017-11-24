@@ -30,8 +30,8 @@ namespace Metabuf
         void addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user );
 
 	public:
-        bool header( unsigned char * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
-		bool convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
+        bool header( uint8_t * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
+		bool convert( uint8_t * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
 		std::string getError();
 
 	protected:
@@ -64,7 +64,7 @@ namespace Metabuf
         template<class T>
         void write( const T & _value )
         {
-            this->writeBuffer( (const unsigned char * )&_value, sizeof(T) );
+            this->writeBuffer( (const uint8_t * )&_value, sizeof(T) );
         }   
 
         void writeSize( uint32_t _value );
@@ -72,13 +72,13 @@ namespace Metabuf
         template<class T>
         void writeCount( const T * _value, uint32_t _count )
         {
-            this->writeBuffer( (const unsigned char * )_value, sizeof(T) * _count );
+            this->writeBuffer( (const uint8_t * )_value, sizeof(T) * _count );
         }
 
         void writeString( const char * _value );
         
     protected:
-        void writeBuffer( const unsigned char * _buff, size_t _size );
+        void writeBuffer( const uint8_t * _buff, size_t _size );
 
 	protected:
 		const XmlProtocol * m_protocol;
@@ -100,7 +100,7 @@ namespace Metabuf
         typedef std::vector<std::string> TVectorStringCache;
         TVectorStringCache m_stringCache;
 
-        typedef std::vector<unsigned char> TBlobject;
+        typedef std::vector<uint8_t> TBlobject;
         TBlobject m_buff;
 	};
 }

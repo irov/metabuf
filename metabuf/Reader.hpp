@@ -53,7 +53,7 @@ namespace Metabuf
 				throw ReaderException();
 			}
 
-			const unsigned char * read_buff = (const unsigned char *)m_buff + m_read;
+			const uint8_t * read_buff = (const uint8_t *)m_buff + m_read;
 			METABUF_MEMCPY( _begin, read_buff, _size );
 
 			m_read += _size;
@@ -81,7 +81,7 @@ namespace Metabuf
 		template<class T>
 		inline const T * current_buff() const
 		{
-			const unsigned char * current = (const unsigned char *)m_buff + m_read;
+			const uint8_t * current = (const uint8_t *)m_buff + m_read;
 			const T * buff = reinterpret_cast<const T *>(current);
 
 			return buff;

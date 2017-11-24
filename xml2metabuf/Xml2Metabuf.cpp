@@ -447,7 +447,7 @@ namespace Metabuf
             return 0;
         }
 
-        const unsigned char * p = (const unsigned char *)_data;
+        const uint8_t * p = (const uint8_t *)_data;
 
 		int64_t x = *p << 7;
 
@@ -520,7 +520,7 @@ namespace Metabuf
         m_serialization[_type] = desc;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::header( unsigned char * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize )
+    bool Xml2Metabuf::header( uint8_t * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize )
     {
         m_buff.clear();
 
@@ -555,7 +555,7 @@ namespace Metabuf
         return true;
     }
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::convert( unsigned char * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
+	bool Xml2Metabuf::convert( uint8_t * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
 	{	
 		pugi::xml_document doc;
 
@@ -1898,12 +1898,12 @@ namespace Metabuf
     {
         if( _value < 255 )
         {
-            unsigned char size = (unsigned char)_value;
+            uint8_t size = (uint8_t)_value;
             this->write( size );
         }
         else
         {
-            unsigned char size = 255;
+            uint8_t size = 255;
             this->write( size );
             this->write( _value );
         }
@@ -1925,7 +1925,7 @@ namespace Metabuf
 		this->writeSize( write_index );
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeBuffer( const unsigned char * _buff, size_t _size )
+    void Xml2Metabuf::writeBuffer( const uint8_t * _buff, size_t _size )
     {
         m_buff.insert( m_buff.end(), _buff, _buff + _size );
     }

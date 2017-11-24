@@ -12,5 +12,5 @@
 
 #	ifndef METABUF_MEMCPY
 #	include <algorithm>
-#	define METABUF_MEMCPY(Dest, Src, Size) std::copy((const unsigned char *)Src, (const unsigned char *)Src + Size, (unsigned char *)Dest)
+#	define METABUF_MEMCPY(Dest, Src, Size) std::copy((const uint8_t *)Src, (const uint8_t *)Src + Size, (uint8_t *)Dest)
 #	endif

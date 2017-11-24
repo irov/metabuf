@@ -52,9 +52,9 @@ namespace Metabuf
 		this->write( _ss ) << "    uint32_t get_metacode_magic();" << std::endl;
 		this->write( _ss ) << "    uint32_t get_metacode_version();" << std::endl;
 		this->write( _ss ) << "    uint32_t get_metacode_protocol();" << std::endl;
-		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
-		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
-		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
+		this->write( _ss ) << "    bool readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
+		this->write( _ss ) << "    bool readStrings( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
+		this->write( _ss ) << "    const char * readString( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
 		this->write( _ss ) << std::endl;
 
 		m_indent += 4;
@@ -247,7 +247,7 @@ namespace Metabuf
 			return true;
 		}
 
-		this->write( _ss ) << "void _parseData( const unsigned char * _buff, size_t _size, size_t & _read ) override;" << std::endl;
+		this->write( _ss ) << "void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;" << std::endl;
 
 		return true;
 	}
@@ -259,7 +259,7 @@ namespace Metabuf
 			return true;
 		}
 
-		this->write( _ss ) << "void _parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -588,7 +588,7 @@ namespace Metabuf
 			return true;
 		}
 
-		this->write( _ss ) << "void _parseSingles( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		this->write( _ss ) << "void _parseSingles( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -658,7 +658,7 @@ namespace Metabuf
 			return true;
 		}
 
-		this->write( _ss ) << "void _parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -712,7 +712,7 @@ namespace Metabuf
 			return  true;
 		}
 
-		this->write( _ss ) << "void _parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		this->write( _ss ) << "void _parseChildren( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -724,7 +724,7 @@ namespace Metabuf
 			return true;
 		}
 
-		this->write( _ss ) << "void _parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		this->write( _ss ) << "void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
 
 		return true;
 	}
@@ -757,7 +757,7 @@ namespace Metabuf
 		this->write( _ss ) << "        return metacode_protocol;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    bool readHeader( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
+		this->write( _ss ) << "    bool readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -802,7 +802,7 @@ namespace Metabuf
 		this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    bool readStrings( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
+		this->write( _ss ) << "    bool readStrings( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -814,7 +814,7 @@ namespace Metabuf
 		this->write( _ss ) << "        return true;" << std::endl;
 		this->write( _ss ) << "    }" << std::endl;
 		this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "    const char * readString( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
+		this->write( _ss ) << "    const char * readString( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
 		this->write( _ss ) << "    {" << std::endl;
 		this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
 		this->write( _ss ) << std::endl;
@@ -1143,7 +1143,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseData( const unsigned char * _buff, size_t _size, size_t & _read )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseData( const uint8_t * _buff, size_t _size, size_t & _read )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
@@ -1211,7 +1211,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
@@ -1296,7 +1296,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseSingles( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseSingles( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
@@ -1404,7 +1404,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
@@ -1497,7 +1497,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseChildren( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseChildren( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
@@ -1560,7 +1560,7 @@ namespace Metabuf
 		}
 
 		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-		this->write( _ss ) << "void " << _node->getScope() << "::_parseGenerators( const unsigned char * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
 
 		if( _node->inheritance.empty() == false )
