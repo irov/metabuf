@@ -645,7 +645,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	std::string Xml2Metabuf::getError()
+	std::string Xml2Metabuf::getError() const
 	{
 		return m_error.str();
 	}
@@ -823,7 +823,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count )
+	bool Xml2Metabuf::getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
 	{
 		uint32_t count = 0;
 
@@ -1156,7 +1156,7 @@ namespace Metabuf
         return true;
 	}
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count )
+    bool Xml2Metabuf::getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
     {    
         uint32_t count = 0;
 
@@ -1346,7 +1346,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count )
+	bool Xml2Metabuf::getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
 	{
 		uint32_t count = 0;
 
@@ -1460,7 +1460,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count )
+    bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -1698,7 +1698,7 @@ namespace Metabuf
 		return true;
 	}
 	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count )
+	bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count ) const
 	{
 		(void)_node;
 
@@ -1839,7 +1839,7 @@ namespace Metabuf
 		return true;
 	}
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count )
+    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count ) const
     {
         uint32_t count = 0;
 

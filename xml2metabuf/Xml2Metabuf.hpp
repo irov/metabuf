@@ -32,30 +32,30 @@ namespace Metabuf
 	public:
         bool header( uint8_t * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
 		bool convert( uint8_t * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
-		std::string getError();
+		std::string getError() const;
 
 	protected:
 		bool writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node );
 
 		bool writeNodeData_( const XmlNode * _node, const pugi::xml_node & _xml_node );
 		bool writeNodeData2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-		bool getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
+		bool getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const;
 
         bool writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node );
         bool writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count );
+        bool getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const;
 
 		bool writeNodeSingles_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-		bool getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
+		bool getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const;
 
         bool writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count );
+        bool getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const;
 
 		bool writeNodeChildren_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-		bool getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count );
+		bool getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count ) const;
 
 		bool writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node );
-        bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count );
+        bool getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count ) const;
 
 		bool writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
 		bool writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
@@ -84,7 +84,7 @@ namespace Metabuf
 		const XmlProtocol * m_protocol;
         const XmlMeta * m_meta;
 
-		std::stringstream m_error;
+		mutable std::stringstream m_error;
 
 		MakeHash m_hashable;
         
