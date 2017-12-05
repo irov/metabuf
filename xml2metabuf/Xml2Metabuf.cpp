@@ -438,6 +438,24 @@ namespace Metabuf
 
             return true;
         }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_angle360( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            float value;
+            if( sscanf( _value, "%f", &value ) != 1 )
+            {
+                return false;
+            }
+
+            double d2_angle360 = double( value ) * 3.141592653589793238462643383279502884197169399375105820974944 / 180.0;
+            float angle360 = (float)d2_angle360;
+
+            _metabuf->write( angle360 );
+
+            return true;
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     static int64_t makeHash( const void * _data, size_t _len )
@@ -500,8 +518,9 @@ namespace Metabuf
 		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, nullptr );
 		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, nullptr );
 		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, nullptr );
-
+        
         this->addSerializator( "hexadecimal", &Serialize::s_write_hexadecimal, nullptr );
+        this->addSerializator( "angle360", &Serialize::s_write_angle360, nullptr );
 
 		m_hashable = &makeHash;
     }
@@ -1123,7 +1142,7 @@ namespace Metabuf
 
 			if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << " [enum]" << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value '" << attr_value << "' [enum]" << std::endl;
 
 				return false;
 			}
@@ -1132,7 +1151,7 @@ namespace Metabuf
 		{
 			if( (*desc.serialization)(this, attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value " << attr_value << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value '" << attr_value << "'" << std::endl;
 
 				return false;
 			}
