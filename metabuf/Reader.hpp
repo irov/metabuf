@@ -4,13 +4,10 @@
 
 #	include <stdint.h>
 
-#	include <exception>
-#	include <algorithm>
-
 namespace Metabuf
 {
 	class ReaderException
-		: public std::exception
+		: public Exception
 	{
 	};
 

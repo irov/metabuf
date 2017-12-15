@@ -283,7 +283,7 @@ namespace Metabuf
 
 			if( attr->required == false )
 			{
-				this->write( _ss ) << "bool" << " " << "has_" << attr->name << "() const" << std::endl;
+				this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
 				this->write( _ss ) << "{" << std::endl;
 				this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
 				this->write( _ss ) << "}" << std::endl;
@@ -291,7 +291,7 @@ namespace Metabuf
 
                 if( type.is_ncr == true || type.is_enumerator == true )
                 {
-                    this->write( _ss ) << "" << type.write << " " << "get_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
+                    this->write( _ss ) << type.write << " getd_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
@@ -301,28 +301,28 @@ namespace Metabuf
                     this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
+                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = this->" << attr->getWriteName() << ";" << std::endl;
+                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
+                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        _value = _default;" << std::endl;
+                    this->write( _ss ) << "        *_value = _default;" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = this->" << attr->getWriteName() << ";" << std::endl;
+                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
@@ -330,28 +330,28 @@ namespace Metabuf
                 }
                 else
                 {
-                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
+                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = std::move( this->" << attr->getWriteName() << " );" << std::endl;
+                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool" << " " << "get_" << attr->name << "( " << type.write << " & _value, const " << type.write << " & _default ) const" << std::endl;
+                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        _value = std::move( _default );" << std::endl;
+                    this->write( _ss ) << "        *_value = _default;" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "        return false;" << std::endl;
                     this->write( _ss ) << "    }" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    _value = std::move( this->" << attr->getWriteName() << " );" << std::endl;
+                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
@@ -400,19 +400,19 @@ namespace Metabuf
 
 				if( attr->required == false )
 				{
-					this->write( _ss ) << "bool" << " " << "has_" << member->name << "_" << attr->name << "() const" << std::endl;
+					this->write( _ss ) << "bool has_" << member->name << "_" << attr->name << "() const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    return " << member->getWriteName() << "_" << attr->name << "_successful;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "bool" << " " << "get_" << member->name << "_" << attr->name << "( " << type.write << " & _value ) const" << std::endl;
+					this->write( _ss ) << "bool get_" << member->name << "_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
 					this->write( _ss ) << "{" << std::endl;
 					this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
 					this->write( _ss ) << "    {" << std::endl;
 					this->write( _ss ) << "        return false;" << std::endl;
 					this->write( _ss ) << "    }" << std::endl;
 					this->write( _ss ) << std::endl;
-					this->write( _ss ) << "    _value = this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
+					this->write( _ss ) << "    *_value = this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
 					this->write( _ss ) << std::endl;
 					this->write( _ss ) << "    return true;" << std::endl;
 					this->write( _ss ) << "}" << std::endl;
@@ -605,7 +605,7 @@ namespace Metabuf
 
 			this->write( _ss ) << "public:" << std::endl;
 
-			this->write( _ss ) << "    typedef std::vector<" << node_include->getWriteName() << "> Vector" << node_include->getWriteName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef Metabuf::Vector<" << node_include->getWriteName() << "> Vector" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const Vector" << node_include->getWriteName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
@@ -625,7 +625,7 @@ namespace Metabuf
 			const XmlNode * node_include = it_inheritances->second;
 
 			this->write( _ss ) << "public:" << std::endl;
-			this->write( _ss ) << "    typedef std::vector<" << node_include->getWriteName() << " *> Vector" << node_include->getWriteName() << ";" << std::endl;
+			this->write( _ss ) << "    typedef Metabuf::Vector<" << node_include->getWriteName() << " *> Vector" << node_include->getWriteName() << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const Vector" << node_include->getWriteName() << " & " << "get_Includes_" << node_include->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;
@@ -679,7 +679,7 @@ namespace Metabuf
 
 			std::string ss_vector_children_name = "Vector" + node_children->getWriteName();
 
-			this->write( _ss ) << "    typedef std::vector<" << node_children->getWriteName() << " *> " << ss_vector_children_name << ";" << std::endl;
+			this->write( _ss ) << "    typedef Metabuf::Vector<" << node_children->getWriteName() << " *> " << ss_vector_children_name << ";" << std::endl;
 			this->write( _ss ) << std::endl;
 			this->write( _ss ) << "    const " << ss_vector_children_name << " & " << "get_Children_" << node_children->name << "() const" << std::endl;
 			this->write( _ss ) << "    {" << std::endl;

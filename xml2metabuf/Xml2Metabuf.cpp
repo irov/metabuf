@@ -778,14 +778,14 @@ namespace Metabuf
 
 					if( xml_attr.empty() == true )
 					{
-						m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " not found required member " << member->name << " argument " << attr->name << std::endl;
+						m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' not found required member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
 						return false;
 					}
 
 					if( this->writeNodeDataValue_( attr, xml_attr ) == false )
 					{
-						m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
+						m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
 						return false;
 					}
@@ -796,7 +796,7 @@ namespace Metabuf
 
 				if( member_found == false )
 				{
-					m_error << "Xml2Metabuf::writeNodeData_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+					m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
 					return false;
 				}
@@ -826,14 +826,14 @@ namespace Metabuf
 
 			if( xml_attr.empty() == true )
 			{
-				m_error << "Xml2Metabuf::writeNodeData2_:" << _node->name << " not found required argument " << attr->name << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData2_: '" << _node->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
 				return false;
 			}
 
 			if( this->writeNodeDataValue_( attr, xml_attr ) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData2_:" << _node->name << " not write argument " << attr->name << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData2_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
 
 				return false;
 			}
@@ -863,7 +863,7 @@ namespace Metabuf
 
 			if( xml_attr.empty() == true )
 			{
-				m_error << "Xml2Metabuf::getNodeDataSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+				m_error << "Xml2Metabuf::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
 
 				return false;
 			}
@@ -890,7 +890,7 @@ namespace Metabuf
 
 				if( xml_attr.empty() == true )
 				{
-					m_error << "Xml2Metabuf::getNodeDataSize_: node " << _node->name << " not found attribute " << attr->name << std::endl;
+					m_error << "Xml2Metabuf::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
 
 					return false;
 				}
@@ -953,7 +953,7 @@ namespace Metabuf
 
 				if( member_found == false )
 				{
-					m_error << "Xml2Metabuf::getNodeDataSize_:" << _node->name << " member " << member->name << " not found required argument " << attr->name << std::endl;
+					m_error << "Xml2Metabuf::getNodeDataSize_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
 					return false;
 				}
@@ -1033,7 +1033,7 @@ namespace Metabuf
 
                     if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
                     {
-                        m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write member " << member->name << " argument " << attr->name << std::endl;
+                        m_error << "Xml2Metabuf::writeNodeAttribute_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
                         return false;
                     }
@@ -1070,7 +1070,7 @@ namespace Metabuf
 
             if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeAttribute_:" << _node->name << " not write argument " << attr->name << std::endl;
+                m_error << "Xml2Metabuf::writeNodeAttribute_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
 
                 return false;
             }
@@ -1109,7 +1109,7 @@ namespace Metabuf
 		XmlType type;
 		if( m_protocol->getType( _attr->type, type ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute " << _attr->name << " type " << type.write << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
 			return false;
 		}
@@ -1118,7 +1118,7 @@ namespace Metabuf
 
 		if( it_serialize == m_serialization.end() )
 		{
-			m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize " << type.evict << " for attribute " << _attr->name << " type " << type.write << std::endl;
+			m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize '" << type.evict << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
 			return false;
 		}
@@ -1132,7 +1132,7 @@ namespace Metabuf
 			uint32_t index;
 			if( s_getTypeEnumeratorIndex( type, attr_value, index ) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: not found enumerate " << attr_value << " for attribute " << _attr->name << " type " << type.write << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: not found enumerate '" << attr_value << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
 				return false;
 			}
@@ -1142,7 +1142,7 @@ namespace Metabuf
 
 			if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value '" << attr_value << "' [enum]" << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "' [enum]" << std::endl;
 
 				return false;
 			}
@@ -1151,7 +1151,7 @@ namespace Metabuf
 		{
 			if( (*desc.serialization)(this, attr_value, desc.user) == false )
 			{
-				m_error << "Xml2Metabuf::writeNodeData_: serialize " << type.evict << " for attribute " << _attr->name << " error for value '" << attr_value << "'" << std::endl;
+				m_error << "Xml2Metabuf::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "'" << std::endl;
 
 				return false;
 			}
@@ -1167,7 +1167,7 @@ namespace Metabuf
 
 		if( this->writeNodeDataValue_( _attr, _xml_attr ) == false )
 		{
-			m_error << "Xml2Metabuf::writeNodeArguments_: invalid write data " << _attr->name << " type " << _attr->type << std::endl;
+			m_error << "Xml2Metabuf::writeNodeArguments_: invalid write data '" << _attr->name << "' type '" << _attr->type << "'" << std::endl;
 
 			return false;
 		}
@@ -1305,7 +1305,7 @@ namespace Metabuf
 
 			if( count > 1 )
 			{
-				m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " singles " << node->name << " have more one instance" << std::endl;
+				m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' singles '" << node->name << "' have more one instance" << std::endl;
 
 				return false;
 			}
@@ -1355,7 +1355,7 @@ namespace Metabuf
 
 				if( this->writeNode_( node, child ) == false )
 				{
-					m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " childrens " << node->name << std::endl;
+					m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' childrens '" << node->name << "'" << std::endl;
 
 					return false;
 				}
@@ -1469,7 +1469,7 @@ namespace Metabuf
                 
                 if( this->writeNode_( node_include, child ) == false )
                 {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_include->name << std::endl;
+                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
 
                     return false;
                 }
@@ -1617,7 +1617,7 @@ namespace Metabuf
 
 				if( node_generator == nullptr )
 				{
-					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
+					m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
 
 					return false;
 				}
@@ -1629,7 +1629,7 @@ namespace Metabuf
 
 				if( this->writeNode_( node_generator, child ) == false )
 				{
-					m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_generator->name << std::endl;
+					m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
 
 					return false;
 				}
@@ -1692,7 +1692,7 @@ namespace Metabuf
 
 					if( node_generator == nullptr )
 					{
-						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes " << node_children->node_scope->name << " not found generator " << value_generator << std::endl;
+						m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
 
 						return false;
 					}
@@ -1706,7 +1706,7 @@ namespace Metabuf
 
 					if( this->writeNode_( node_generator, child ) == false )
 					{
-						m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " children " << node_generator->name << std::endl;
+						m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
 
 						return false;
 					}
@@ -1834,7 +1834,7 @@ namespace Metabuf
 
 				if( node_generator == nullptr )
 				{
-					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_inheritance->name << " not found generator " << value_generator << std::endl;
+					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
 
 					return false;
 				}
@@ -1848,7 +1848,7 @@ namespace Metabuf
 
 				if( this->writeNode_( node_generator, child ) == false )
 				{
-					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes " << node_generator->name << std::endl;
+					m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_generator->name << "'" << std::endl;
 
 					return false;
 				}
@@ -1895,7 +1895,7 @@ namespace Metabuf
 
             if( node_generator == nullptr )
             {
-                m_error << "Xml2Metabuf::getNodeGeneratorSize_: error node " << _node->name << " includes " << _inheritance->name << " not found generator " << value_generator << std::endl;
+                m_error << "Xml2Metabuf::getNodeGeneratorSize_: error node '" << _node->name << "' includes '" << _inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
 
                 return false;
             }
