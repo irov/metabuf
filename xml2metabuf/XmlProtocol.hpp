@@ -14,9 +14,16 @@
 
 namespace Metabuf
 {
+    struct XmlEnum
+    {
+        std::string name;
+        std::string write;
+        uint32_t index;        
+    };
+
 	struct XmlType
 	{
-		typedef std::vector<std::string> TVectorEnumerators;
+		typedef std::vector<XmlEnum> TVectorEnumerators;
 		TVectorEnumerators enumerators;
 		
 		std::string write;
@@ -24,6 +31,7 @@ namespace Metabuf
 
 		bool is_enumerator;
 		bool is_ncr;
+        bool is_template;
 	};
 
 	typedef std::map<std::string, XmlType> TMapTypes;

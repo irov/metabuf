@@ -8,8 +8,8 @@ namespace Metabuf
 {
     const size_t header_size = 16;
 
-	template<class T>
-	void archive_read( Reader & ar, T & _value, void * _userData );
+	//template<class T>
+	//void archive_read( Reader & ar, T & _value, void * _userData );
 
 	class Metadata
 	{
@@ -29,7 +29,7 @@ namespace Metabuf
 		inline void read( const uint8_t * _buff, size_t _size, size_t & _read, T & _t ) const
 		{
 			Reader ar( _buff, _size, _read );
-			archive_read( ar, _t, m_userData );
+            archive_read( ar, _t, m_userData );
 		}
 
         inline void readSize( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _t ) const

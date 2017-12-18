@@ -133,6 +133,23 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
+        static bool s_write_int32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            int32_t value0;
+            int32_t value1;
+            if( sscanf( _value, "%d %d", &value0, &value1 ) != 2 )
+            {
+                return false;
+            }
+
+            _metabuf->write( value0 );
+            _metabuf->write( value1 );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
@@ -144,6 +161,23 @@ namespace Metabuf
             }
 
             _metabuf->write( value );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_uint32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            uint32_t value0;
+            uint32_t value1;
+            if( sscanf( _value, "%u %u", &value0, &value1 ) != 2 )
+            {
+                return false;
+            }
+
+            _metabuf->write( value0 );
+            _metabuf->write( value1 );
 
             return true;
         }
@@ -500,8 +534,12 @@ namespace Metabuf
         this->addSerializator( "uint8_t", &Serialize::s_write_uint8_t, nullptr );
 		this->addSerializator( "int16_t", &Serialize::s_write_int16_t, nullptr );
 		this->addSerializator( "uint16_t", &Serialize::s_write_uint16_t, nullptr );
+
         this->addSerializator( "int32_t", &Serialize::s_write_int32_t, nullptr );
+        this->addSerializator( "int32_t2", &Serialize::s_write_int32_t2, nullptr );
+
         this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, nullptr );
+        this->addSerializator( "uint32_t2", &Serialize::s_write_uint32_t2, nullptr );
         
         this->addSerializator( "float", &Serialize::s_write_float, nullptr );
         this->addSerializator( "float2", &Serialize::s_write_float2, nullptr );
@@ -1081,22 +1119,24 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	static bool s_getTypeEnumeratorIndex( const XmlType & _type, const char * _value, uint32_t & _index )
 	{
+        uint32_t enum_index = 0U;
+
 		for( XmlType::TVectorEnumerators::const_iterator
 			it = _type.enumerators.begin(),
 			it_end = _type.enumerators.end();
 		it != it_end;
 		++it )
 		{
-			const std::string & enumerat = *it;
+			const XmlEnum & enumerat = *it;
 
-			if( enumerat != _value )
+			if( enumerat.name != _value )
 			{
+                ++enum_index;
+
 				continue;
 			}
 
-            XmlType::TVectorEnumerators::difference_type index = std::distance( _type.enumerators.begin(), it );
-
-            _index = (uint32_t)index;
+            _index = enum_index;
 
 			return true;
 		}

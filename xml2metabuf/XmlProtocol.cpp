@@ -600,8 +600,9 @@ namespace Metabuf
 	//////////////////////////////////////////////////////////////////////////
 	bool XmlProtocol::readEnum_( const pugi::xml_node & _xml_node )
 	{
-		pugi::xml_attribute Name = _xml_node.attribute( "Name" );
+        pugi::xml_attribute Name = _xml_node.attribute( "Name" );
 		pugi::xml_attribute Type = _xml_node.attribute( "Type" );
+        pugi::xml_attribute Template = _xml_node.attribute( "Template" );
 
 		if( Name.empty() == true )
 		{
@@ -619,6 +620,27 @@ namespace Metabuf
 		type.write = (strlen( type_write ) == 0) ? type_name : type_write;
 		type.evict = "uint32_t";
 
+        if( Template.empty() == false )
+        {
+            const char * type_Template = Template.value();
+
+            uint32_t type_Template_value;
+            if( sscanf( type_Template, "%d", &type_Template_value ) != 1 )
+            {
+                m_error << "XmlProtocol::readEnum_: Template invalid" << std::endl;
+
+                return false;
+            }
+
+            type.is_template = (type_Template_value != 0);
+        }
+        else
+        {
+            type.is_template = false;
+        }
+
+        uint32_t enum_index = 0;
+
 		for( pugi::xml_node::iterator
 			it = _xml_node.begin(),
 			it_end = _xml_node.end();
@@ -629,14 +651,43 @@ namespace Metabuf
 
 			const char * element_name = element.name();
 
-			if( element_name == 0 )
-			{
-				m_error << "XmlProtocol::readEnum_: Enum '" << type_name << "' invalid Enum Value" << std::endl;
+            XmlEnum e;
+            e.write = element_name;
 
-				return false;
-			}
+            pugi::xml_attribute EnumName = element.attribute( "Name" );
 
-			type.enumerators.push_back( element_name );
+            if( EnumName.empty() == true )
+            {
+                e.name = element_name;                
+            }
+            else
+            {
+                const char * enum_name_value = EnumName.value();
+
+                e.name = enum_name_value;                
+            }
+
+            pugi::xml_attribute EnumIndex = element.attribute( "Index" );
+
+            if( EnumIndex.empty() == false )
+            {
+                const char * enum_index_value = EnumIndex.value();
+
+                uint32_t value;
+                if( sscanf( enum_index_value, "%u", &value ) != 1 )
+                {
+                    m_error << "XmlProtocol::readEnum_: Enum '" << type_name << "' invalid index '" << enum_index_value << "'" << std::endl;
+
+                    return false;
+                }
+
+                enum_index = value;
+            }
+
+            e.index = enum_index;
+            ++enum_index;
+
+            type.enumerators.push_back( e );            
 		}
 
 		m_types.insert( std::make_pair( type_name, type ) );
@@ -650,6 +701,7 @@ namespace Metabuf
 		pugi::xml_attribute Type = _xml_node.attribute( "Type" );
 		pugi::xml_attribute Evict = _xml_node.attribute( "Evict" );
 		pugi::xml_attribute NCR = _xml_node.attribute( "NCR" );
+        pugi::xml_attribute Template = _xml_node.attribute( "Template" );
 
 		if( Name.empty() == true || Evict.empty() == true )
 		{
@@ -661,27 +713,49 @@ namespace Metabuf
 		const char * type_name = Name.value();
 		const char * type_write = Type.value();
 		const char * type_evict = Evict.value();
-
+        
 		XmlType type;
 		type.is_enumerator = false;
 		type.write = (strlen( type_write ) == 0) ? type_name : type_write;
 		type.evict = type_evict;
 
-		uint32_t type_NCR_value = 0;
-
-		if( NCR != nullptr )
+		if( NCR.empty() == false )
 		{
 			const char * type_NCR = NCR.value();
 
+            uint32_t type_NCR_value;
 			if( sscanf( type_NCR, "%d", &type_NCR_value ) != 1 )
 			{
 				m_error << "XmlProtocol::readType_: NCR invalid" << std::endl;
 
 				return false;
 			}
-		}
 
-		type.is_ncr = (type_NCR_value != 0);
+            type.is_ncr = (type_NCR_value != 0);
+		}
+        else
+        {
+            type.is_ncr = false;
+        }
+
+        if( Template.empty() == false )
+        {
+            const char * type_Template = Template.value();
+
+            uint32_t type_Template_value;
+            if( sscanf( type_Template, "%d", &type_Template_value ) != 1 )
+            {
+                m_error << "XmlProtocol::readType_: Template invalid" << std::endl;
+
+                return false;
+            }
+
+            type.is_template = (type_Template_value != 0);
+        }
+        else
+        {
+            type.is_template = false;
+        }		
 
 		m_types.insert( std::make_pair( type_name, type ) );
 
