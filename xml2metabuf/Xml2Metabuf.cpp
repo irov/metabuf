@@ -490,6 +490,24 @@ namespace Metabuf
 
             return true;
         }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_opacity255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            uint32_t value;
+            if( sscanf( _value, "%u", &value ) != 1 )
+            {
+                return false;
+            }
+
+            double d2_opacity255 = double( value ) / 255.0;
+            float opacity255 = (float)d2_opacity255;
+
+            _metabuf->write( opacity255 );
+
+            return true;
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     static int64_t makeHash( const void * _data, size_t _len )
@@ -559,6 +577,7 @@ namespace Metabuf
         
         this->addSerializator( "hexadecimal", &Serialize::s_write_hexadecimal, nullptr );
         this->addSerializator( "angle360", &Serialize::s_write_angle360, nullptr );
+        this->addSerializator( "opacity255", &Serialize::s_write_opacity255, nullptr );
 
 		m_hashable = &makeHash;
     }
