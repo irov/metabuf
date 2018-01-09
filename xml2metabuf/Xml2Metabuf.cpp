@@ -507,7 +507,7 @@ namespace Metabuf
             _metabuf->write( opacity255 );
 
             return true;
-        }
+        }        
     }
     //////////////////////////////////////////////////////////////////////////
     static int64_t makeHash( const void * _data, size_t _len )
