@@ -36,7 +36,7 @@ namespace Metabuf
 		}
 
 		template<class T>
-		inline void readPODs( T * _t, size_t _size )
+		inline void readPODs( T * _t, uint32_t _size )
 		{
 			void * buff = (void *)(_t);
 			this->readBuffer( buff, sizeof(T) * _size );

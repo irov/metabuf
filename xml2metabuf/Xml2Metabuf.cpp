@@ -249,7 +249,32 @@ namespace Metabuf
             _metabuf->writeCount( value, 4 );
 
             return true;
-        }
+        }        
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_float4inv255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            float value[4];
+            if( sscanf( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+            {
+                if( sscanf( _value, "%f %f %f %f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+                {
+                    return false;
+                }
+            }
+
+            const float inv255 = 1.f / 255.f;
+
+            value[0] *= inv255;
+            value[1] *= inv255;
+            value[2] *= inv255;
+            value[3] *= inv255;
+
+            _metabuf->writeCount( value, 4 );
+
+            return true;
+        }        
 		//////////////////////////////////////////////////////////////////////////
 		static bool s_write_float6( Xml2Metabuf * _metabuf, const char * _value, void * _user )
 		{
@@ -563,6 +588,7 @@ namespace Metabuf
         this->addSerializator( "float2", &Serialize::s_write_float2, nullptr );
         this->addSerializator( "float3", &Serialize::s_write_float3, nullptr );
         this->addSerializator( "float4", &Serialize::s_write_float4, nullptr );
+        this->addSerializator( "float4inv255", &Serialize::s_write_float4inv255, nullptr );
 		this->addSerializator( "float6", &Serialize::s_write_float6, nullptr );
 		this->addSerializator( "float8", &Serialize::s_write_float8, nullptr );
 		this->addSerializator( "float12", &Serialize::s_write_float12, nullptr );
