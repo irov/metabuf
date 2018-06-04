@@ -455,6 +455,30 @@ namespace Metabuf
 			return successful;
 		}
         //////////////////////////////////////////////////////////////////////////
+        static bool s_write_sha1bin( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            uint32_t hashmask[] = { 0, 0, 0, 0, 0 };
+
+            for( uint32_t i = 0; i != 40; ++i ) 
+            {
+                uint32_t j = (i / 8);
+                uint32_t k = i % 8;
+
+                char hash_char = _value[i];
+                char char_code_0 = '0';
+                char char_code_9 = '9';
+                char char_code_a = 'a';
+
+                uint32_t v = (hash_char > char_code_9) ? hash_char - char_code_a + 10 : hash_char - char_code_0;
+
+                hashmask[j] += v << (k * 4);
+            }
+
+            _metabuf->writeCount( hashmask, 5 );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_hexadecimal( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
@@ -600,6 +624,8 @@ namespace Metabuf
 		this->addSerializator( "uint8s", &Serialize::s_write_uint8s, nullptr );
 		this->addSerializator( "uint16s", &Serialize::s_write_uint16s, nullptr );
 		this->addSerializator( "uint32s", &Serialize::s_write_uint32s, nullptr );
+        this->addSerializator( "sha1bin", &Serialize::s_write_sha1bin, nullptr );
+        
         
         this->addSerializator( "hexadecimal", &Serialize::s_write_hexadecimal, nullptr );
         this->addSerializator( "angle360", &Serialize::s_write_angle360, nullptr );
