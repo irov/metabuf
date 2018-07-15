@@ -1,0 +1,14 @@
+@echo off
+
+set "PROJECT=metabuf"
+set "CONFIGURATION=Debug"
+set "SOLUTION_DIR=..\solutions\%PROJECT%_msvc15_%CONFIGURATION%"
+
+@pushd ..
+@mkdir %SOLUTION_DIR%
+@pushd %SOLUTION_DIR%
+CMake -G "Visual Studio 15 2017" "%CD%\..\.." -DCMAKE_CONFIGURATION_TYPES:STRING='Debug' -DCMAKE_BUILD_TYPE:STRING='Debug'
+@popd
+
+@echo on
+@pause

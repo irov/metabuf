@@ -827,7 +827,7 @@ namespace Metabuf
 	{
 		uint32_t protocol = m_protocol->getVersion();
 
-		this->write( _ss ) << "#   include \"Metacode.h\"" << std::endl;
+		this->write( _ss ) << "#include \"Metacode.h\"" << std::endl;
 		this->write( _ss ) << std::endl;
 		this->write( _ss ) << "namespace Metacode" << std::endl;
 		this->write( _ss ) << "{" << std::endl;
