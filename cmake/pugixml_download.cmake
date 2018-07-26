@@ -1,6 +1,6 @@
 include(ExternalProject)
 
-ExternalProject_Add(pugixml_download PREFIX glad
+ExternalProject_Add(pugixml_download PREFIX pugixml
         GIT_REPOSITORY https://github.com/zeux/pugixml.git
 		GIT_TAG "v1.9"
 		GIT_PROGRESS TRUE
