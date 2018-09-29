@@ -1,122 +1,122 @@
-#	include "XmlProtocol.hpp"
-#	include "Xml2Metabuf.hpp"
+#include "XmlProtocol.hpp"
+#include "Xml2Metabuf.hpp"
 
-#	include <stdio.h>
+#include <stdio.h>
 
 static void * read_file( const char * _file, size_t * _size )
 {
-	FILE * file_protocol = fopen( _file, "rb" );
+    FILE * file_protocol = fopen( _file, "rb" );
 
-	if( file_protocol == nullptr )
-	{
-		return nullptr;
-	}
+    if( file_protocol == nullptr )
+    {
+        return nullptr;
+    }
 
-	fseek( file_protocol, 0, SEEK_END );
-	long size = ftell( file_protocol );
-	fseek( file_protocol, 0, SEEK_SET );
+    fseek( file_protocol, 0, SEEK_END );
+    long size = ftell( file_protocol );
+    fseek( file_protocol, 0, SEEK_SET );
 
-	uint8_t * buf = new uint8_t[size];
+    uint8_t * buf = new uint8_t[size];
 
-	fread( buf, 1, size, file_protocol );
+    fread( buf, 1, size, file_protocol );
 
-	fclose( file_protocol );
+    fclose( file_protocol );
 
-	*_size = (size_t)size;
+    *_size = (size_t)size;
 
-	return (void *)buf;
+    return (void *)buf;
 }
 
 int main( int argc, char *argv[] )
 {
-	if( argc != 4 )
-	{
-		printf( "invalid args count! '%d' need 4"
-			, argc
-		);
+    if( argc != 4 )
+    {
+        printf( "invalid args count! '%d' need 4"
+            , argc
+        );
 
-		return 0;
-	}
+        return 0;
+    }
 
-	const char * path_protocol = argv[1];
+    const char * path_protocol = argv[1];
 
-	Metabuf::XmlProtocol xml_protocol;
+    Metabuf::XmlProtocol xml_protocol;
 
-	size_t protocol_size;
-	void * protocol_buf = read_file( path_protocol, &protocol_size );
+    size_t protocol_size;
+    void * protocol_buf = read_file( path_protocol, &protocol_size );
 
-	if( protocol_buf == nullptr )
-	{
-		printf( "invalid open protocol: %s"
-			, path_protocol
-		);
+    if( protocol_buf == nullptr )
+    {
+        printf( "invalid open protocol: %s"
+            , path_protocol
+        );
 
-		return 0;
-	}
+        return 0;
+    }
 
-	if( xml_protocol.readProtocol( protocol_buf, protocol_size ) == false )
-	{
-		std::string error = xml_protocol.getError();
+    if( xml_protocol.readProtocol( protocol_buf, protocol_size ) == false )
+    {
+        std::string error = xml_protocol.getError();
 
-		printf( "error read protocol '%s': %s"
-			, path_protocol
-			, error.c_str()
-		);
+        printf( "error read protocol '%s': %s"
+            , path_protocol
+            , error.c_str()
+        );
 
-		return 0;
-	}
-	
-	Metabuf::Xml2Metabuf xml_metabuf(&xml_protocol);
+        return 0;
+    }
 
-	xml_metabuf.initialize();
+    Metabuf::Xml2Metabuf xml_metabuf( &xml_protocol );
 
-	const char * path_xml = argv[2];
+    xml_metabuf.initialize();
 
-	size_t xml_size;
-	void * xml_buf = read_file( path_xml, &xml_size );
+    const char * path_xml = argv[2];
 
-	if( xml_buf == nullptr )
-	{
-		printf( "invalid open xml: %s"
-			, path_xml
-		);
+    size_t xml_size;
+    void * xml_buf = read_file( path_xml, &xml_size );
 
-		return 0;
-	}
+    if( xml_buf == nullptr )
+    {
+        printf( "invalid open xml: %s"
+            , path_xml
+        );
 
-	size_t try_bin_size = xml_size * 2;
-	uint8_t * bin_buf = new uint8_t[try_bin_size];
-	
-	size_t bin_size;
-	if( xml_metabuf.convert( bin_buf, try_bin_size, xml_buf, xml_size, bin_size ) == false )
-	{
-		std::string error = xml_metabuf.getError();
+        return 0;
+    }
 
-		printf( "error convert metabuf '%s': %s"
-			, path_xml
-			, error.c_str()
-		);
+    size_t try_bin_size = xml_size * 2;
+    uint8_t * bin_buf = new uint8_t[try_bin_size];
 
-		return 0;
-	}
+    size_t bin_size;
+    if( xml_metabuf.convert( bin_buf, try_bin_size, xml_buf, xml_size, bin_size ) == false )
+    {
+        std::string error = xml_metabuf.getError();
 
-	const char * path_bin = argv[3];
+        printf( "error convert metabuf '%s': %s"
+            , path_xml
+            , error.c_str()
+        );
 
-	FILE * file_bin = fopen( path_bin, "wb" );
+        return 0;
+    }
 
-	if( file_bin == nullptr )
-	{
-		printf( "invalid open bin '%s'"
-			, path_bin
-		);
+    const char * path_bin = argv[3];
 
-		return 0;
-	}
+    FILE * file_bin = fopen( path_bin, "wb" );
 
-	fwrite( bin_buf, 1, bin_size, file_bin );
-	fclose( file_bin );
-		
-	printf( "done\n" );
+    if( file_bin == nullptr )
+    {
+        printf( "invalid open bin '%s'"
+            , path_bin
+        );
 
-	return 0;
+        return 0;
+    }
+
+    fwrite( bin_buf, 1, bin_size, file_bin );
+    fclose( file_bin );
+
+    printf( "done\n" );
+
+    return 0;
 }

@@ -1,98 +1,98 @@
-#	include "XmlProtocol.hpp"
-#	include "Xml2Metabuf.hpp"
-#	include "Xml2Metacode.hpp"
+#include "XmlProtocol.hpp"
+#include "Xml2Metabuf.hpp"
+#include "Xml2Metacode.hpp"
 
-#	include <stdio.h>
+#include <stdio.h>
 
 int main( int argc, char *argv[] )
 {
-	if( argc != 4 )
-	{
-		printf( "invalid args count! '%d' need 4"
-			, argc
-		);
+    if( argc != 4 )
+    {
+        printf( "invalid args count! '%d' need 4"
+            , argc
+        );
 
-		return 0;
-	}
+        return 0;
+    }
 
-	const char * path_protocol = argv[1];
+    const char * path_protocol = argv[1];
 
 
-	Metabuf::XmlProtocol xml_protocol;
+    Metabuf::XmlProtocol xml_protocol;
 
-	FILE * file_protocol = fopen( path_protocol, "rb");
+    FILE * file_protocol = fopen( path_protocol, "rb" );
 
-	long size;
+    long size;
 
-	fseek(file_protocol, 0, SEEK_END);
-	size = ftell(file_protocol);
-	fseek(file_protocol, 0, SEEK_SET);
-	
-	char * buf = new char[size];
+    fseek( file_protocol, 0, SEEK_END );
+    size = ftell( file_protocol );
+    fseek( file_protocol, 0, SEEK_SET );
 
-	fread( buf, 1, size, file_protocol );
-	
-	fclose( file_protocol );
+    char * buf = new char[size];
 
-	if( xml_protocol.readProtocol( buf, size ) == false )
-	{
-		std::string error = xml_protocol.getError();
+    fread( buf, 1, size, file_protocol );
 
-		printf( "error read protocol: %s"
-			, error.c_str()
-		);
+    fclose( file_protocol );
 
-		return 0;
-	}
-	
-	Metabuf::Xml2Metacode xml_metacode(&xml_protocol);
+    if( xml_protocol.readProtocol( buf, size ) == false )
+    {
+        std::string error = xml_protocol.getError();
 
-	std::string header;
+        printf( "error read protocol: %s"
+            , error.c_str()
+        );
+
+        return 0;
+    }
+
+    Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
+
+    std::string header;
     std::string source;
-	if( xml_metacode.generate( header, source ) == false )
-	{
-		std::string error = xml_protocol.getError();
+    if( xml_metacode.generate( header, source ) == false )
+    {
+        std::string error = xml_protocol.getError();
 
-		printf( "error generate: %s"
-			, error.c_str()
-		);
+        printf( "error generate: %s"
+            , error.c_str()
+        );
 
-		return 0;
-	}
+        return 0;
+    }
 
-	const char * metacodeh_protocol = argv[2];
-	
-	FILE * file_metacode_hpp = fopen( metacodeh_protocol, "wb");
+    const char * metacodeh_protocol = argv[2];
 
-	if( file_metacode_hpp == nullptr )
-	{
-		printf( "error open 'header' file '%s'"
-			, metacodeh_protocol
-		);
+    FILE * file_metacode_hpp = fopen( metacodeh_protocol, "wb" );
 
-		return 0;
-	}
+    if( file_metacode_hpp == nullptr )
+    {
+        printf( "error open 'header' file '%s'"
+            , metacodeh_protocol
+        );
 
-	fwrite( header.c_str(), header.size(), 1, file_metacode_hpp );
-	fclose( file_metacode_hpp );
+        return 0;
+    }
 
-	const char * metacodecpp_protocol = argv[3];
+    fwrite( header.c_str(), header.size(), 1, file_metacode_hpp );
+    fclose( file_metacode_hpp );
 
-    FILE * file_metacode_cpp = fopen( metacodecpp_protocol, "wb");
+    const char * metacodecpp_protocol = argv[3];
 
-	if( file_metacode_cpp == nullptr )
-	{
-		printf( "error open 'source' file '%s'"
-			, metacodecpp_protocol
-		);
+    FILE * file_metacode_cpp = fopen( metacodecpp_protocol, "wb" );
 
-		return 0;
-	}
+    if( file_metacode_cpp == nullptr )
+    {
+        printf( "error open 'source' file '%s'"
+            , metacodecpp_protocol
+        );
+
+        return 0;
+    }
 
     fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
     fclose( file_metacode_cpp );
-	
-	printf( "done\n" );
 
-	return 0;
+    printf( "done\n" );
+
+    return 0;
 }
