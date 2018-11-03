@@ -1,7 +1,7 @@
 @echo off
 
 set "PROJECT=metabuf"
-set "CONFIGURATION=Debug"
+set "CONFIGURATION=Release"
 set "SOLUTION_DIR=..\solutions\%PROJECT%_msvc15_%CONFIGURATION%"
 
 @pushd ..

@@ -358,7 +358,18 @@ namespace Metabuf
                         this->write( _ss ) << "    return true;" << std::endl;
                         this->write( _ss ) << "}" << std::endl;
                         this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    {" << std::endl;
+                        this->write( _ss ) << "        return;" << std::endl;
+                        this->write( _ss ) << "    }" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
                         this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
@@ -375,6 +386,17 @@ namespace Metabuf
                 }
                 else
                 {
+                    this->write( _ss ) << "template<class C, class M>" << std::endl;
+                    this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        return;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
                     this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
@@ -387,7 +409,7 @@ namespace Metabuf
                     this->write( _ss ) << "    return true;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
+                    this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                     this->write( _ss ) << "    {" << std::endl;
@@ -416,6 +438,12 @@ namespace Metabuf
                     }
                     else
                     {
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
                         this->write( _ss ) << type.write << " get_" << attr->name << "() const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
                         this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
@@ -424,6 +452,12 @@ namespace Metabuf
                 }
                 else
                 {
+                    this->write( _ss ) << "template<class C, class M>" << std::endl;
+                    this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
                     this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "() const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
@@ -460,6 +494,17 @@ namespace Metabuf
                     this->write( _ss ) << "    return " << member->getWriteName() << "_" << attr->name << "_successful;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "template<class C, class M>" << std::endl;
+                    this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                    this->write( _ss ) << "    {" << std::endl;
+                    this->write( _ss ) << "        return;" << std::endl;
+                    this->write( _ss ) << "    }" << std::endl;
+                    this->write( _ss ) << std::endl;
+                    this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
                     this->write( _ss ) << "bool get_" << member->name << "_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
                     this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
@@ -487,6 +532,12 @@ namespace Metabuf
                         }
                         else
                         {
+                            this->write( _ss ) << "template<class C, class M>" << std::endl;
+                            this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
                             this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
                             this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
@@ -495,6 +546,12 @@ namespace Metabuf
                     }
                     else
                     {
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
                         this->write( _ss ) << "const " << type.write << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
                         this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
