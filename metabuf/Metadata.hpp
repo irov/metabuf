@@ -6,8 +6,6 @@
 
 namespace Metabuf
 {
-    const size_t header_size = 16;
-
     //template<class T>
     //void archive_read( Reader & ar, T & _value, void * _userData );
 

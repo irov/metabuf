@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define METABUF_BIN_VERSION 5
+#define METABUF_BIN_VERSION 6
 
 namespace Metabuf
 {
@@ -158,6 +158,7 @@ namespace Metabuf
 
     public:
         uint32_t getVersion() const;
+        uint32_t getCrc32() const;
 
     public:
         bool hasMeta( const std::string & _type ) const;
@@ -180,6 +181,7 @@ namespace Metabuf
 
     protected:
         uint32_t m_version;
+        uint32_t m_crc32;
 
         uint32_t m_enumerator;
 

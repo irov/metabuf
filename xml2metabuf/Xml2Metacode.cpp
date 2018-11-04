@@ -49,12 +49,26 @@ namespace Metabuf
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "namespace Metacode" << std::endl;
         this->write( _ss ) << "{" << std::endl;
+        this->write( _ss ) << "    const size_t header_size = 20;" << std::endl;
+        this->write( _ss ) << std::endl;
         this->write( _ss ) << "    typedef uint32_t enum_t;" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "    uint32_t get_metacode_magic();" << std::endl;
         this->write( _ss ) << "    uint32_t get_metacode_version();" << std::endl;
-        this->write( _ss ) << "    uint32_t get_metacode_protocol();" << std::endl;
-        this->write( _ss ) << "    bool readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
+        this->write( _ss ) << "    uint32_t get_metacode_protocol_version();" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "    enum HeaderError" << std::endl;
+        this->write( _ss ) << "    {" << std::endl;
+        this->write( _ss ) << "        HEADER_OK," << std::endl;
+        this->write( _ss ) << "        HEADER_INVALID_MAGIC," << std::endl;
+        this->write( _ss ) << "        HEADER_INVALID_VERSION," << std::endl;
+        this->write( _ss ) << "        HEADER_INVALID_PROTOCOL_VERSION," << std::endl;
+        this->write( _ss ) << "        HEADER_INVALID_PROTOCOL_CRC32," << std::endl;
+        this->write( _ss ) << "        HEADER_INVALID_METAVERSION," << std::endl;
+        this->write( _ss ) << "    };" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "    HeaderError readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
+        this->write( _ss ) << std::endl;
         this->write( _ss ) << "    bool readStrings( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
         this->write( _ss ) << "    const char * readString( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
         this->write( _ss ) << std::endl;
@@ -882,7 +896,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::generateSource( std::stringstream & _ss )
     {
-        uint32_t protocol = m_protocol->getVersion();
+        uint32_t protocol_version = m_protocol->getVersion();
+        uint32_t protocol_crc32 = m_protocol->getCrc32();
 
         this->write( _ss ) << "#include \"Metacode.h\"" << std::endl;
         this->write( _ss ) << std::endl;
@@ -891,7 +906,8 @@ namespace Metabuf
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    static const uint32_t metacode_magic = 3133062829u;" << std::endl;
         this->write( _ss ) << "    static const uint32_t metacode_version = " << METABUF_BIN_VERSION << ";" << std::endl;
-        this->write( _ss ) << "    static const uint32_t metacode_protocol = " << protocol << ";" << std::endl;
+        this->write( _ss ) << "    static const uint32_t metacode_protocol_version = " << protocol_version << ";" << std::endl;
+        this->write( _ss ) << "    static const uint32_t metacode_protocol_crc32 = " << protocol_crc32 << ";" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    uint32_t get_metacode_magic()" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
@@ -903,12 +919,12 @@ namespace Metabuf
         this->write( _ss ) << "        return metacode_version;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "    uint32_t get_metacode_protocol()" << std::endl;
+        this->write( _ss ) << "    uint32_t get_metacode_protocol_version()" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
-        this->write( _ss ) << "        return metacode_protocol;" << std::endl;
+        this->write( _ss ) << "        return metacode_protocol_version;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "    bool readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
+        this->write( _ss ) << "    HeaderError readHeader( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
         this->write( _ss ) << "        Metabuf::Reader ar(_buff, _size, _read);" << std::endl;
         this->write( _ss ) << std::endl;
@@ -917,40 +933,48 @@ namespace Metabuf
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( head != metacode_magic )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return false;" << std::endl;
+        this->write( _ss ) << "            return HEADER_INVALID_MAGIC;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        uint32_t version;" << std::endl;
         this->write( _ss ) << "        ar.readPOD( version );" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        uint32_t protocol;" << std::endl;
-        this->write( _ss ) << "        ar.readPOD( protocol );" << std::endl;
+        this->write( _ss ) << "        uint32_t protocol_version;" << std::endl;
+        this->write( _ss ) << "        ar.readPOD( protocol_version );" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        uint32_t protocol_crc32;" << std::endl;
+        this->write( _ss ) << "        ar.readPOD( protocol_crc32 );" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        uint32_t meta_version;" << std::endl;
         this->write( _ss ) << "        ar.readPOD( meta_version );" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        _readVersion = version;" << std::endl;
         this->write( _ss ) << "        _needVersion = metacode_version;" << std::endl;
-        this->write( _ss ) << "        _readProtocol = protocol;" << std::endl;
-        this->write( _ss ) << "        _needProtocol = metacode_protocol;" << std::endl;
+        this->write( _ss ) << "        _readProtocol = protocol_version;" << std::endl;
+        this->write( _ss ) << "        _needProtocol = metacode_protocol_version;" << std::endl;
         this->write( _ss ) << "        _readMetaVersion = meta_version;" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( version != metacode_version )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return false;" << std::endl;
+        this->write( _ss ) << "            return HEADER_INVALID_VERSION;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        if( protocol != metacode_protocol )" << std::endl;
+        this->write( _ss ) << "        if( protocol_version != metacode_protocol_version )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return false;" << std::endl;
+        this->write( _ss ) << "            return HEADER_INVALID_PROTOCOL_VERSION;" << std::endl;
+        this->write( _ss ) << "        }" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        if( protocol_crc32 != metacode_protocol_crc32 )" << std::endl;
+        this->write( _ss ) << "        {" << std::endl;
+        this->write( _ss ) << "            return HEADER_INVALID_PROTOCOL_CRC32;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( meta_version != _metaVersion )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return false;" << std::endl;
+        this->write( _ss ) << "            return HEADER_INVALID_METAVERSION;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        return true;" << std::endl;
+        this->write( _ss ) << "        return HEADER_OK;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    bool readStrings( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
@@ -1431,6 +1455,8 @@ namespace Metabuf
                 }
             }
 
+            this->write( _ss ) << "    default:" << std::endl;
+            this->write( _ss ) << "        break;" << std::endl;
             this->write( _ss ) << "    }" << std::endl;
         }
 
@@ -1476,6 +1502,8 @@ namespace Metabuf
             this->write( _ss ) << "        }break;" << std::endl;
         }
 
+        this->write( _ss ) << "    default:" << std::endl;
+        this->write( _ss ) << "        break;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
@@ -1539,6 +1567,8 @@ namespace Metabuf
                 this->write( _ss ) << "        }break;" << std::endl;
             }
 
+            this->write( _ss ) << "    default:" << std::endl;
+            this->write( _ss ) << "        break;" << std::endl;
             this->write( _ss ) << "    }" << std::endl;
         }
 
@@ -1587,6 +1617,8 @@ namespace Metabuf
             this->write( _ss ) << "        }break;" << std::endl;
         }
 
+        this->write( _ss ) << "    default:" << std::endl;
+        this->write( _ss ) << "        break;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
@@ -1633,6 +1665,8 @@ namespace Metabuf
             this->write( _ss ) << "        }break;" << std::endl;
         }
 
+        this->write( _ss ) << "    default:" << std::endl;
+        this->write( _ss ) << "        break;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
@@ -1696,6 +1730,8 @@ namespace Metabuf
             }
         }
 
+        this->write( _ss ) << "    default:" << std::endl;
+        this->write( _ss ) << "        break;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
@@ -1762,6 +1798,8 @@ namespace Metabuf
                 }
             }
 
+            this->write( _ss ) << "    default:" << std::endl;
+            this->write( _ss ) << "        break;" << std::endl;
             this->write( _ss ) << "    }" << std::endl;
         }
 

@@ -457,6 +457,8 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_sha1bin( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
+            (void)_user;
+
             uint32_t hashmask[] = { 0, 0, 0, 0, 0 };
 
             for( uint32_t i = 0; i != 40; ++i )
@@ -482,6 +484,7 @@ namespace Metabuf
         static bool s_write_hexadecimal( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
+
             size_t len = strlen( _value );
 
             if( len % 2 != 0 )
@@ -648,7 +651,7 @@ namespace Metabuf
         m_serialization[_type] = desc;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::header( uint8_t * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize )
+    bool Xml2Metabuf::header( void * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize )
     {
         m_buff.clear();
 
@@ -660,9 +663,12 @@ namespace Metabuf
         uint32_t version = METABUF_BIN_VERSION;
         this->write( version );
 
-        uint32_t protocol = m_protocol->getVersion();
-        this->write( protocol );
+        uint32_t protocol_version = m_protocol->getVersion();
+        this->write( protocol_version );
 
+        uint32_t protocol_crc32 = m_protocol->getCrc32();
+        this->write( protocol_crc32 );
+        
         this->write( _metaVersion );
 
         writeSize += m_buff.size();
@@ -674,7 +680,7 @@ namespace Metabuf
             return false;
         }
 
-        std::copy( m_buff.begin(), m_buff.end(), _binBuff );
+        std::copy( m_buff.begin(), m_buff.end(), reinterpret_cast<uint8_t *>(_binBuff) );
 
         _writeSize = writeSize;
 
@@ -683,7 +689,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::convert( uint8_t * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
+    bool Xml2Metabuf::convert( void * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize )
     {
         pugi::xml_document doc;
 
@@ -723,21 +729,15 @@ namespace Metabuf
             return false;
         }
 
-        TBlobject buffBody;
+        VectorBlobject buffBody;
         buffBody.swap( m_buff );
         m_buff.clear();
 
         uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
         this->write( stringCacheCount );
 
-        for( TVectorStringCache::iterator
-            it = m_stringCache.begin(),
-            it_end = m_stringCache.end();
-            it != it_end;
-            ++it )
+        for( const std::string & str : m_stringCache )
         {
-            const std::string & str = *it;
-
             uint32_t strSize = (uint32_t)str.size();
             this->writeSize( strSize );
 
@@ -749,11 +749,11 @@ namespace Metabuf
             this->writeCount( strBuff, strSize );
         }
 
-        TBlobject buffStrCache;
+        VectorBlobject buffStrCache;
         buffStrCache.swap( m_buff );
         m_buff.clear();
 
-        TBlobject buffFinal;
+        VectorBlobject buffFinal;
 
         buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
         buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
@@ -768,7 +768,7 @@ namespace Metabuf
         }
 
         _writeSize = writeSize;
-        std::copy( buffFinal.begin(), buffFinal.end(), _binBuff );
+        std::copy( buffFinal.begin(), buffFinal.end(), reinterpret_cast<uint8_t *>(_binBuff) );
 
         return true;
     }
@@ -1225,7 +1225,7 @@ namespace Metabuf
             return false;
         }
 
-        TMapSerialization::const_iterator it_serialize = m_serialization.find( type.evict );
+        MapSerialization::const_iterator it_serialize = m_serialization.find( type.evict );
 
         if( it_serialize == m_serialization.end() )
         {
@@ -2041,14 +2041,14 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::writeString( const char * _value )
     {
-        TVectorStringCache::iterator it_found = std::find( m_stringCache.begin(), m_stringCache.end(), _value );
+        VectorStringCache::iterator it_found = std::find( m_stringCache.begin(), m_stringCache.end(), _value );
 
         if( it_found == m_stringCache.end() )
         {
             it_found = m_stringCache.insert( m_stringCache.end(), _value );
         }
 
-        TVectorStringCache::difference_type index = std::distance( m_stringCache.begin(), it_found );
+        VectorStringCache::difference_type index = std::distance( m_stringCache.begin(), it_found );
 
         uint32_t write_index = (uint32_t)index;
 

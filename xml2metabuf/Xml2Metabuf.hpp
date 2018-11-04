@@ -30,8 +30,8 @@ namespace Metabuf
         void addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user );
 
     public:
-        bool header( uint8_t * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
-        bool convert( uint8_t * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
+        bool header( void * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t & _writeSize );
+        bool convert( void * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t & _writeSize );
         std::string getError() const;
 
     protected:
@@ -94,13 +94,13 @@ namespace Metabuf
             void * user;
         };
 
-        typedef std::map<std::string, SerializationDesc> TMapSerialization;
-        TMapSerialization m_serialization;
+        typedef std::map<std::string, SerializationDesc> MapSerialization;
+        MapSerialization m_serialization;
 
-        typedef std::vector<std::string> TVectorStringCache;
-        TVectorStringCache m_stringCache;
+        typedef std::vector<std::string> VectorStringCache;
+        VectorStringCache m_stringCache;
 
-        typedef std::vector<uint8_t> TBlobject;
-        TBlobject m_buff;
+        typedef std::vector<uint8_t> VectorBlobject;
+        VectorBlobject m_buff;
     };
 }
