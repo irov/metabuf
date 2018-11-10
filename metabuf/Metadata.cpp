@@ -1,7 +1,7 @@
-#include "Metadata.hpp"
+#include "metabuf/Metadata.hpp"
 
 #ifndef METABUF_CONFIG
-#define METABUF_CONFIG "Metaconfig.hpp"
+#define METABUF_CONFIG "config/Metaconfig.hpp"
 #endif
 
 #include METABUF_CONFIG
