@@ -21,11 +21,13 @@ namespace Metabuf
         {
         }
 
-    private:
-        Reader & operator = ( const Reader & )
+        ~Reader()
         {
-            return *this;
         }
+
+    private:
+        Reader( const Reader & );
+        Reader & operator = ( const Reader & );
 
     public:
         template<class T>
