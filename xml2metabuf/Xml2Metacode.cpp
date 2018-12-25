@@ -1448,7 +1448,6 @@ namespace Metabuf
                 this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << attr->getWriteName() << " );" << std::endl;
                 this->write( _ss ) << std::endl;
                 this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
-                this->write( _ss ) << std::endl;
                 this->write( _ss ) << "        }break;" << std::endl;
             }
 
@@ -1478,7 +1477,6 @@ namespace Metabuf
                     this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
-                    this->write( _ss ) << std::endl;
                     this->write( _ss ) << "        }break;" << std::endl;
                 }
             }
