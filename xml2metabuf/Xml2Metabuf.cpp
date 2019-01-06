@@ -23,6 +23,35 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
+        static bool s_write_strings( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
+
+            std::stringstream ss( _value );
+
+            std::vector<std::string> strs;
+            std::string str;
+
+            while( ss >> str )
+            {
+                strs.push_back( str );
+
+                if( ss.peek() == ',' )
+                {
+                    ss.ignore();
+                }
+            }
+
+            _metabuf->writeSize( strs.size() );
+
+            for( const std::string & str : strs )
+            {
+                _metabuf->writeString( str.c_str() );
+            }
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             (void)_user;
@@ -598,6 +627,7 @@ namespace Metabuf
     void Xml2Metabuf::initialize()
     {
         this->addSerializator( "string", &Serialize::s_write_string, nullptr );
+        this->addSerializator( "strings", &Serialize::s_write_strings, nullptr );
 
         this->addSerializator( "bool", &Serialize::s_write_bool, nullptr );
         this->addSerializator( "int8_t", &Serialize::s_write_int8_t, nullptr );
