@@ -1,0 +1,36 @@
+<Protocol Version = "1">
+  <Type Name="std::string" Evict="string"/>
+  <Type Name="bool" Evict="bool" NCR="1"/>
+  <Type Name="uint32_t" Evict="uint32_t" NCR="1"/>
+  <Type Name="float" Evict="float" NCR="1"/>
+  <Type Name="Detail::Rect" Evict="uint32_t2"/>
+  
+  <Meta Name="Data" Version="1">
+      <Node Name="DataBlock">    
+        <Attribute Name="Name" Type="std::string" Required="1"/>    
+
+        <Node Name="Include">
+          <Attribute Name="Path" Type="std::string" Required="1"/>
+        </Node>
+
+        <Node Name="Resource" Generator="Type">
+          <Attribute Name="Name" Type="std::string" Required="1"/>
+          <Attribute Name="Type" Type="std::string" Required="1"/>
+          <Attribute Name="Unique" Type="bool"/> 
+          <Attribute Name="Precompile" Type="bool"/> 
+        </Node>
+
+        <Node Name="ResourceImageDefault" Inheritance = "Resource">
+          <Member Node="File" Name="Path" Type="std::string" Required="1"/>
+          <Member Node="File" Name="Codec" Type="std::string"/>
+          <Member Node="File" Name="Converter" Type="std::string"/>
+          <Member Node="File" Name="Alpha" Type="bool"/>
+          <Member Node="File" Name="Premultiply" Type="bool"/>
+          
+          <Member Node="File" Name="MaxSize" Type="Detail::Rect" Required="1"/>
+          <Member Node="File" Name="Size" Type="Detail::Rect"/>
+          <Member Node="File" Name="Offset" Type="Detail::Rect"/>
+        </Node>
+      </Node>
+  </Meta>
+</Protocol>

@@ -20,8 +20,8 @@
 
 namespace Metabuf
 {
-    template<class Type, class Allocator = std::allocator<Type> >
-    using Vector = std::vector<Type, Allocator>;
+	template<class Type, class Allocator = std::allocator<Type> >
+	using Vector = std::vector<Type, Allocator>;
 
-    using Exception = std::exception;
+	using Exception = std::exception;
 }

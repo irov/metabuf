@@ -1,0 +1,5 @@
+<DataBlock Name = "Test">
+    <Resource Name = "Battleground" Type = "ResourceImageDefault">
+        <File Path = "Art/Battleground.png" Codec = "pngImage"  MaxSize = "867;1536"/>
+    </Resource>
+</DataBlock>
