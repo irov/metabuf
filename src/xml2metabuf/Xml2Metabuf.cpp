@@ -44,9 +44,9 @@ namespace Metabuf
 
             _metabuf->writeSize( strs.size() );
 
-            for( const std::string & str : strs )
+            for( const std::string & s : strs )
             {
-                _metabuf->writeString( str.c_str() );
+                _metabuf->writeString( s.c_str() );
             }
 
             return true;

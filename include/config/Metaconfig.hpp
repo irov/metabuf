@@ -1,27 +1,23 @@
 #pragma once
 
-#ifndef METABUF_MALLOC
-#include <stdlib.h>
-#define METABUF_MALLOC(S) malloc(S)
+#ifdef METABUF_EXTERNAL_CONFIG
+	#include METABUF_EXTERNAL_CONFIG
+#else
+	#include <stdlib.h>
+	#include <string.h>
+
+	#define METABUF_MALLOC(S) malloc(S)
+	#define METABUF_FREE(B, S) free(B)
+	#define METABUF_MEMCPY(Dest, Src, Size) memcpy(Dest, Src, Size)
+
+	#include <vector>
+	#include <exception>
+
+	namespace Metabuf
+	{
+		template<class Type, class Allocator = std::allocator<Type> >
+		using Vector = std::vector<Type, Allocator>;
+
+		using Exception = std::exception;
+	}
 #endif
-
-#ifndef METABUF_FREE
-#include <stdlib.h>
-#define METABUF_FREE(B, S) free(B)
-#endif
-
-#ifndef METABUF_MEMCPY
-#include <algorithm>
-#define METABUF_MEMCPY(Dest, Src, Size) std::copy((const uint8_t *)Src, (const uint8_t *)Src + Size, (uint8_t *)Dest)
-#endif
-
-#include <vector>
-#include <exception>
-
-namespace Metabuf
-{
-	template<class Type, class Allocator = std::allocator<Type> >
-	using Vector = std::vector<Type, Allocator>;
-
-	using Exception = std::exception;
-}
