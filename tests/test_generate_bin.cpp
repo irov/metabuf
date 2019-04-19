@@ -1,6 +1,7 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metabuf.hpp"
 
+#include "Metautils.h"
 #include "Metacode.h"
 
 #include <stdlib.h>
@@ -17,9 +18,10 @@ int main( int argc, char *argv[] )
 	(void)(argc);
 	(void)(argv);
 
-	FILE * file_protocol = ::fopen( path_protocol, "rb" );
+	size_t file_protocol_size;
+	void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
 
-	if( file_protocol == nullptr )
+	if( file_protocol_buffer == nullptr )
 	{
 		printf( "invalid open protocol: %s"
 			, path_protocol
@@ -27,16 +29,6 @@ int main( int argc, char *argv[] )
 
 		return EXIT_FAILURE;
 	}
-
-	fseek( file_protocol, 0, SEEK_END );
-	long file_protocol_size = ftell( file_protocol );
-	fseek( file_protocol, 0, SEEK_SET );
-
-	uint8_t * file_protocol_buffer = (uint8_t *)malloc( file_protocol_size );
-
-	fread( file_protocol_buffer, 1, file_protocol_size, file_protocol );
-
-	fclose( file_protocol );
 
 	Metabuf::XmlProtocol xml_protocol;
 
@@ -102,26 +94,17 @@ int main( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}
 
-	FILE * file_example_xml = ::fopen( path_example_xml, "rb" );
+	size_t file_example_xml_size;
+	void * example_xml_buffer = read_file( argv[1], path_example_xml, &file_example_xml_size );
 
-	if( file_example_xml == nullptr )
+	if( example_xml_buffer == nullptr )
 	{
-		printf( "invalid open example: %s"
+		printf( "invalid open protocol: %s"
 			, path_example_xml
 		);
 
 		return EXIT_FAILURE;
 	}
-
-	fseek( file_example_xml, 0, SEEK_END );
-	long file_example_xml_size = ftell( file_example_xml );
-	fseek( file_example_xml, 0, SEEK_SET );
-
-	uint8_t * example_xml_buffer = (uint8_t *)malloc( file_example_xml_size );
-
-	fread( example_xml_buffer, 1, file_example_xml_size, file_example_xml );
-
-	fclose( file_example_xml );
 
 	uint8_t * example_bin_buffer = (uint8_t *)malloc( file_example_xml_size * 2 );
 

@@ -1,6 +1,8 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
 
+#include "Metautils.h"
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -17,9 +19,10 @@ int main( int argc, char *argv[] )
 
 	Metabuf::XmlProtocol xml_protocol;
 
-	FILE * file_protocol = ::fopen( path_protocol, "rb" );
+	size_t file_protocol_size;
+	void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
 
-	if( file_protocol == nullptr )
+	if( file_protocol_buffer == nullptr )
 	{
 		printf( "invalid open protocol: %s"
 			, path_protocol
@@ -28,17 +31,7 @@ int main( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}
 
-	fseek( file_protocol, 0, SEEK_END );
-	long size = ftell( file_protocol );
-	fseek( file_protocol, 0, SEEK_SET );
-
-	uint8_t * buf = (uint8_t *)malloc( size );
-
-	fread( buf, 1, size, file_protocol );
-
-	fclose( file_protocol );
-
-	if( xml_protocol.readProtocol( buf, size ) == false )
+	if( xml_protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
 	{
 		std::string error = xml_protocol.getError();
 
@@ -49,7 +42,7 @@ int main( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}
 
-	free( buf );	
+	free( file_protocol_buffer );
 
     return EXIT_SUCCESS;
 }

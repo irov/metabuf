@@ -16,9 +16,23 @@ OPTION( METABUF_TEST "METABUF_TEST" ON )
 
 
 IF(NOT METABUF_EXTERNAL_BUILD)
+    if(${CMAKE_C_COMPILER_ID} STREQUAL Clang)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL AppleClang)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL GNU)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL Intel)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+    elseif(${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Wall /WX")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4710")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4738")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4820")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4711")
+    endif()
+
     set( CMAKE_CXX_STANDARD 14 )
-    
-    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${CMAKE_GENERATOR}/${CMAKE_BUILD_TYPE} )
     
     if(MSVC)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS)

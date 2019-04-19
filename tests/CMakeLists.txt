@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+ADD_LIBRARY( test_utils STATIC Metautils.h Metautils.cpp )
+
+set_target_properties(test_utils PROPERTIES
+    FOLDER tests
+)
+
 INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_INCLUDE_PATH} )
 
 ADD_LIBRARY( test_common STATIC Metacode.cpp Metacode.h Metatype.h Metatype.cpp )
@@ -41,8 +47,8 @@ macro(ADD_MOVIE_TEST testname)
     ADD_TEST(NAME ${testname} COMMAND ./test_${testname} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()
 
-ADD_MOVIE_TEST(open_protocol)
-ADD_MOVIE_TEST(make_metacode)
-ADD_MOVIE_TEST(generate_bin test_common metabuf)
-ADD_MOVIE_TEST(parse_bin test_common)
-ADD_MOVIE_TEST(memory_leak test_common)
+ADD_MOVIE_TEST(open_protocol test_utils)
+ADD_MOVIE_TEST(make_metacode test_utils)
+ADD_MOVIE_TEST(generate_bin test_common test_utils metabuf)
+ADD_MOVIE_TEST(parse_bin test_common test_utils)
+ADD_MOVIE_TEST(memory_leak test_common test_utils)

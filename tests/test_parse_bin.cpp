@@ -16,12 +16,18 @@ int main( int argc, char *argv[] )
 	(void)(argc);
 	(void)(argv);
 
-	FILE * file_example_bin = ::fopen( path_example_bin, "rb" );
+	char full_path_example_bin[256];
+	sprintf( full_path_example_bin, "%s/%s"
+		, argv[1]
+		, path_example_bin
+	);
+
+	FILE * file_example_bin = ::fopen( full_path_example_bin, "rb" );
 
 	if( file_example_bin == nullptr )
 	{
 		printf( "invalid open example: %s"
-			, path_example_bin
+			, full_path_example_bin
 		);
 
 		return EXIT_FAILURE;
