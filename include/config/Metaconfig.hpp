@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef METABUF_EXTERNAL_CONFIG
-	#include METABUF_EXTERNAL_CONFIG
+	#include "Metaexternalconfig.hpp"
 #else
 	#include <stdlib.h>
 	#include <string.h>

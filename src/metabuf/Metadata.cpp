@@ -1,10 +1,6 @@
 #include "metabuf/Metadata.hpp"
 
-#ifndef METABUF_CONFIG
-#define METABUF_CONFIG "config/Metaconfig.hpp"
-#endif
-
-#include METABUF_CONFIG
+#include "config/Metaconfig.hpp"
 
 namespace Metabuf
 {
