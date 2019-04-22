@@ -9,11 +9,11 @@
 
 namespace Metabuf
 {
-	struct Xml2Settings
-	{
-		std::string metacode_h;
-		std::string metatype_h;
-	};
+    struct Xml2Settings
+    {
+        std::string metacode_h;
+        std::string metatype_h;
+    };
 
     class Xml2Metacode
     {
@@ -33,7 +33,7 @@ namespace Metabuf
 
     protected:
         bool writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node );
-		bool writeHeaderParse_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeHeaderParse_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderDataReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderAttributeSetup_( std::stringstream & _ss, const XmlNode * _node );
@@ -58,7 +58,7 @@ namespace Metabuf
 
     protected:
         bool writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root );
-		bool writeSourceParse_( std::stringstream & _ss, const XmlNode * _node );
+        bool writeSourceParse_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceDataReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceSinglesReader_( std::stringstream & _ss, const XmlNode * _node );
@@ -79,7 +79,7 @@ namespace Metabuf
     protected:
         const XmlProtocol * m_protocol;
 
-		Xml2Settings m_settings;
+        Xml2Settings m_settings;
 
         std::stringstream m_out;
         uint32_t m_indent;

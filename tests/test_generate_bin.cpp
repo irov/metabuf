@@ -15,133 +15,133 @@ const char * path_protocol = "Protocol.xml";
 
 int main( int argc, char *argv[] )
 {
-	(void)(argc);
-	(void)(argv);
+    (void)(argc);
+    (void)(argv);
 
-	size_t file_protocol_size;
-	void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
+    size_t file_protocol_size;
+    void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
 
-	if( file_protocol_buffer == nullptr )
-	{
-		printf( "invalid open protocol: %s"
-			, path_protocol
-		);
+    if( file_protocol_buffer == nullptr )
+    {
+        printf( "invalid open protocol: %s"
+            , path_protocol
+        );
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	Metabuf::XmlProtocol xml_protocol;
+    Metabuf::XmlProtocol xml_protocol;
 
-	if( xml_protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
-	{
-		printf( "error read protocol: %s"
-			, path_protocol
-		);
+    if( xml_protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
+    {
+        printf( "error read protocol: %s"
+            , path_protocol
+        );
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	free( file_protocol_buffer );
+    free( file_protocol_buffer );
 
-	uint32_t protocol_version = Metacode::get_metacode_protocol_version();
+    uint32_t protocol_version = Metacode::get_metacode_protocol_version();
 
-	if( protocol_version != xml_protocol.getVersion() )
-	{
-		printf( "invalid protocol version: %s"
-			, path_protocol
-		);
+    if( protocol_version != xml_protocol.getVersion() )
+    {
+        printf( "invalid protocol version: %s"
+            , path_protocol
+        );
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	uint32_t protocol_crc32 = Metacode::get_metacode_protocol_crc32();
+    uint32_t protocol_crc32 = Metacode::get_metacode_protocol_crc32();
 
-	if( protocol_crc32 != xml_protocol.getCrc32() )
-	{
-		printf( "invalid protocol crc32: %s"
-			, path_protocol
-		);
+    if( protocol_crc32 != xml_protocol.getCrc32() )
+    {
+        printf( "invalid protocol crc32: %s"
+            , path_protocol
+        );
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	const Metabuf::XmlMeta * xml_meta = xml_protocol.getMeta( "Data" );
+    const Metabuf::XmlMeta * xml_meta = xml_protocol.getMeta( "Data" );
 
-	if( xml_meta == nullptr )
-	{
-		printf( "error protocol don't have meta Data: %s"
-			, path_protocol
-		);
+    if( xml_meta == nullptr )
+    {
+        printf( "error protocol don't have meta Data: %s"
+            , path_protocol
+        );
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	uint32_t xml_meta_version = xml_meta->getVersion();
+    uint32_t xml_meta_version = xml_meta->getVersion();
 
-	Metabuf::Xml2Metabuf xml_metabuf( &xml_protocol, xml_meta );
-	
-	xml_metabuf.initialize();
+    Metabuf::Xml2Metabuf xml_metabuf( &xml_protocol, xml_meta );
 
-	uint8_t metabuf_header_buffer[Metacode::header_size];
+    xml_metabuf.initialize();
 
-	size_t header_size;
-	if( xml_metabuf.header( metabuf_header_buffer, Metacode::header_size, xml_meta_version, &header_size ) == false )
-	{
-		printf( "invalid make header: %s"
-			, path_protocol
-		);
+    uint8_t metabuf_header_buffer[Metacode::header_size];
 
-		return EXIT_FAILURE;
-	}
+    size_t header_size;
+    if( xml_metabuf.header( metabuf_header_buffer, Metacode::header_size, xml_meta_version, &header_size ) == false )
+    {
+        printf( "invalid make header: %s"
+            , path_protocol
+        );
 
-	size_t file_example_xml_size;
-	void * example_xml_buffer = read_file( argv[1], path_example_xml, &file_example_xml_size );
+        return EXIT_FAILURE;
+    }
 
-	if( example_xml_buffer == nullptr )
-	{
-		printf( "invalid open protocol: %s"
-			, path_example_xml
-		);
+    size_t file_example_xml_size;
+    void * example_xml_buffer = read_file( argv[1], path_example_xml, &file_example_xml_size );
 
-		return EXIT_FAILURE;
-	}
+    if( example_xml_buffer == nullptr )
+    {
+        printf( "invalid open protocol: %s"
+            , path_example_xml
+        );
 
-	uint8_t * example_bin_buffer = (uint8_t *)malloc( file_example_xml_size * 2 );
+        return EXIT_FAILURE;
+    }
 
-	size_t example_bin_size;
-	if( xml_metabuf.convert( example_bin_buffer, file_example_xml_size * 2, example_xml_buffer, file_example_xml_size, &example_bin_size ) == false )
-	{
-		printf( "invalid convert example: %s\nerror: %s"
-			, path_example_xml
-			, xml_metabuf.getError().c_str()
-		);
+    uint8_t * example_bin_buffer = (uint8_t *)malloc( file_example_xml_size * 2 );
 
-		return EXIT_FAILURE;
-	}
+    size_t example_bin_size;
+    if( xml_metabuf.convert( example_bin_buffer, file_example_xml_size * 2, example_xml_buffer, file_example_xml_size, &example_bin_size ) == false )
+    {
+        printf( "invalid convert example: %s\nerror: %s"
+            , path_example_xml
+            , xml_metabuf.getError().c_str()
+        );
 
-	free( example_xml_buffer );
+        return EXIT_FAILURE;
+    }
 
-	FILE * file_example_bin = write_file( argv[1], path_example_bin );
+    free( example_xml_buffer );
 
-	if( file_example_bin == nullptr )
-	{
-		printf( "error open 'header' file '%s'"
-			, path_example_bin
-		);
+    FILE * file_example_bin = write_file( argv[1], path_example_bin );
 
-		return EXIT_FAILURE;
-	}
+    if( file_example_bin == nullptr )
+    {
+        printf( "error open 'header' file '%s'"
+            , path_example_bin
+        );
 
-	fwrite( metabuf_header_buffer, Metacode::header_size, 1, file_example_bin );
+        return EXIT_FAILURE;
+    }
 
-	uint32_t write_example_bin_size = (uint32_t)example_bin_size;
-	fwrite( &write_example_bin_size, sizeof( write_example_bin_size ), 1, file_example_bin );
+    fwrite( metabuf_header_buffer, Metacode::header_size, 1, file_example_bin );
 
-	fwrite( example_bin_buffer, example_bin_size, 1, file_example_bin );
+    uint32_t write_example_bin_size = (uint32_t)example_bin_size;
+    fwrite( &write_example_bin_size, sizeof( write_example_bin_size ), 1, file_example_bin );
 
-	fclose( file_example_bin );
+    fwrite( example_bin_buffer, example_bin_size, 1, file_example_bin );
 
-	free( example_bin_buffer );
+    fclose( file_example_bin );
+
+    free( example_bin_buffer );
 
     return EXIT_SUCCESS;
 }

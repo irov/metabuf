@@ -867,7 +867,7 @@ namespace Metabuf
 
         m_metas.insert( std::make_pair( metaXml->m_name, metaXml ) );
 
-		for( const pugi::xml_node & element : _xml_node )
+        for( const pugi::xml_node & element : _xml_node )
         {
             const char * element_name = element.name();
 
@@ -1025,55 +1025,55 @@ namespace Metabuf
                 return false;
             }
         }
-		
-		if( _node == nullptr )
-		{
-			_meta->m_nodes.insert( std::make_pair( nodeXml->name, nodeXml ) );
-		}
-		else
-		{
-			if( NodeGenerator.empty() == false )
-			{
-				if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
-				{
-					m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " inheritances no support single" << std::endl;
 
-					return false;
-				}
+        if( _node == nullptr )
+        {
+            _meta->m_nodes.insert( std::make_pair( nodeXml->name, nodeXml ) );
+        }
+        else
+        {
+            if( NodeGenerator.empty() == false )
+            {
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " inheritances no support single" << std::endl;
 
-				_node->inheritances.insert( std::make_pair( nodeXml->name, nodeXml ) );
-			}
-			else if( NodeInheritance.empty() == false )
-			{
-				if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
-				{
-					m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " inheritance no support single" << std::endl;
+                    return false;
+                }
 
-					return false;
-				}
+                _node->inheritances.insert( std::make_pair( nodeXml->name, nodeXml ) );
+            }
+            else if( NodeInheritance.empty() == false )
+            {
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " inheritance no support single" << std::endl;
 
-				_node->generators.insert( std::make_pair( nodeXml->name, nodeXml ) );
-			}
-			else
-			{
-				if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
-				{
-					if( _node->singles.find( nodeXml->name ) != _node->singles.end() )
-					{
-						m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " have multiply single element " << NodeSingle.value() << std::endl;
+                    return false;
+                }
 
-						return false;
-					}
+                _node->generators.insert( std::make_pair( nodeXml->name, nodeXml ) );
+            }
+            else
+            {
+                if( NodeSingle.empty() == false && strcmp( NodeSingle.value(), "1" ) == 0 )
+                {
+                    if( _node->singles.find( nodeXml->name ) != _node->singles.end() )
+                    {
+                        m_error << "XmlProtocol::readNode_: node " << nodeXml->name << " have multiply single element " << NodeSingle.value() << std::endl;
 
-					_node->singles.insert( std::make_pair( nodeXml->name, nodeXml ) );
-				}
-				else
-				{
-					
-					_node->includes.insert( std::make_pair( nodeXml->name, nodeXml ) );
-				}
-			}
-		}
+                        return false;
+                    }
+
+                    _node->singles.insert( std::make_pair( nodeXml->name, nodeXml ) );
+                }
+                else
+                {
+
+                    _node->includes.insert( std::make_pair( nodeXml->name, nodeXml ) );
+                }
+            }
+        }
 
         return true;
     }

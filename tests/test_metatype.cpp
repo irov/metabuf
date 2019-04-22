@@ -43,37 +43,37 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void archive_read( Reader & ar, std::string & _value, void * _userData )
     {
-		Metabuf::Metacache * cache = static_cast<Metabuf::Metacache *>(_userData);
+        Metabuf::Metacache * cache = static_cast<Metabuf::Metacache *>(_userData);
 
-		uint32_t index;
-		ar.readSize( index );
+        uint32_t index;
+        ar.readSize( index );
 
-		_value = cache->strings[index];		
+        _value = cache->strings[index];
     }
-	//////////////////////////////////////////////////////////////////////////
-	void archive_read( Reader & ar, Detail::Vec2f & _value, void * _userData )
-	{
-		(void)_userData;
+    //////////////////////////////////////////////////////////////////////////
+    void archive_read( Reader & ar, Detail::Vec2f & _value, void * _userData )
+    {
+        (void)_userData;
 
-		ar.readPOD( _value.x );
-		ar.readPOD( _value.y );
-	}
-	//////////////////////////////////////////////////////////////////////////
-	void archive_read( Reader & ar, Detail::Vec3f & _value, void * _userData )
-	{
-		(void)_userData;
+        ar.readPOD( _value.x );
+        ar.readPOD( _value.y );
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void archive_read( Reader & ar, Detail::Vec3f & _value, void * _userData )
+    {
+        (void)_userData;
 
-		ar.readPOD( _value.x );
-		ar.readPOD( _value.y );
-		ar.readPOD( _value.z );
-	}
+        ar.readPOD( _value.x );
+        ar.readPOD( _value.y );
+        ar.readPOD( _value.z );
+    }
     //////////////////////////////////////////////////////////////////////////
     void archive_read( Reader & ar, Detail::Rect & _value, void * _userData )
     {
-		(void)_userData;
+        (void)_userData;
 
-		ar.readPOD( _value.width );
-		ar.readPOD( _value.height );
+        ar.readPOD( _value.width );
+        ar.readPOD( _value.height );
     }
     //////////////////////////////////////////////////////////////////////////
 }

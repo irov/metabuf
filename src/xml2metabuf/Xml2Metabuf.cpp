@@ -202,10 +202,10 @@ namespace Metabuf
             uint32_t value1;
             if( sscanf( _value, "%u;%u", &value0, &value1 ) != 2 )
             {
-				if( sscanf( _value, "%u %u", &value0, &value1 ) != 2 )
-				{
-					return false;
-				}
+                if( sscanf( _value, "%u %u", &value0, &value1 ) != 2 )
+                {
+                    return false;
+                }
             }
 
             _metabuf->write( value0 );
@@ -213,52 +213,52 @@ namespace Metabuf
 
             return true;
         }
-		//////////////////////////////////////////////////////////////////////////
-		static bool s_write_uint32_t3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
-		{
-			(void)_user;
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_uint32_t3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
 
-			uint32_t value0;
-			uint32_t value1;
-			uint32_t value2;
-			if( sscanf( _value, "%u;%u;%u", &value0, &value1, &value2 ) != 3 )
-			{
-				if( sscanf( _value, "%u %u %u", &value0, &value1, &value2 ) != 3 )
-				{
-					return false;
-				}
-			}
+            uint32_t value0;
+            uint32_t value1;
+            uint32_t value2;
+            if( sscanf( _value, "%u;%u;%u", &value0, &value1, &value2 ) != 3 )
+            {
+                if( sscanf( _value, "%u %u %u", &value0, &value1, &value2 ) != 3 )
+                {
+                    return false;
+                }
+            }
 
-			_metabuf->write( value0 );
-			_metabuf->write( value1 );
-			_metabuf->write( value2 );
+            _metabuf->write( value0 );
+            _metabuf->write( value1 );
+            _metabuf->write( value2 );
 
-			return true;
-		}
-		//////////////////////////////////////////////////////////////////////////
-		static bool s_write_uint32_t4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
-		{
-			(void)_user;
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_uint32_t4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            (void)_user;
 
-			uint32_t value0;
-			uint32_t value1;
-			uint32_t value2;
-			uint32_t value3;
-			if( sscanf( _value, "%u;%u;%u;%u", &value0, &value1, &value2, &value3 ) != 4 )
-			{
-				if( sscanf( _value, "%u %u %u %u", &value0, &value1, &value2, &value3 ) != 4 )
-				{
-					return false;
-				}
-			}
+            uint32_t value0;
+            uint32_t value1;
+            uint32_t value2;
+            uint32_t value3;
+            if( sscanf( _value, "%u;%u;%u;%u", &value0, &value1, &value2, &value3 ) != 4 )
+            {
+                if( sscanf( _value, "%u %u %u %u", &value0, &value1, &value2, &value3 ) != 4 )
+                {
+                    return false;
+                }
+            }
 
-			_metabuf->write( value0 );
-			_metabuf->write( value1 );
-			_metabuf->write( value2 );
-			_metabuf->write( value3 );
+            _metabuf->write( value0 );
+            _metabuf->write( value1 );
+            _metabuf->write( value2 );
+            _metabuf->write( value3 );
 
-			return true;
-		}
+            return true;
+        }
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
@@ -284,10 +284,10 @@ namespace Metabuf
             {
                 if( sscanf( _value, "%f %f", &value[0], &value[1] ) != 2 )
                 {
-					if( sscanf( _value, "%f,%f", &value[0], &value[1] ) != 2 )
-					{
-						return false;
-					}
+                    if( sscanf( _value, "%f,%f", &value[0], &value[1] ) != 2 )
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -305,10 +305,10 @@ namespace Metabuf
             {
                 if( sscanf( _value, "%f %f %f", &value[0], &value[1], &value[2] ) != 3 )
                 {
-					if( sscanf( _value, "%f,%f,%f", &value[0], &value[1], &value[2] ) != 3 )
-					{
-						return false;
-					}
+                    if( sscanf( _value, "%f,%f,%f", &value[0], &value[1], &value[2] ) != 3 )
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -326,10 +326,10 @@ namespace Metabuf
             {
                 if( sscanf( _value, "%f %f %f %f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
                 {
-					if( sscanf( _value, "%f,%f,%f,%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
-					{
-						return false;
-					}
+                    if( sscanf( _value, "%f,%f,%f,%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -698,8 +698,8 @@ namespace Metabuf
 
         this->addSerializator( "uint32_t", &Serialize::s_write_uint32_t, nullptr );
         this->addSerializator( "uint32_t2", &Serialize::s_write_uint32_t2, nullptr );
-		this->addSerializator( "uint32_t3", &Serialize::s_write_uint32_t3, nullptr );
-		this->addSerializator( "uint32_t4", &Serialize::s_write_uint32_t4, nullptr );
+        this->addSerializator( "uint32_t3", &Serialize::s_write_uint32_t3, nullptr );
+        this->addSerializator( "uint32_t4", &Serialize::s_write_uint32_t4, nullptr );
 
         this->addSerializator( "float", &Serialize::s_write_float, nullptr );
         this->addSerializator( "float2", &Serialize::s_write_float2, nullptr );
@@ -758,7 +758,7 @@ namespace Metabuf
 
         uint32_t protocol_crc32 = m_protocol->getCrc32();
         this->write( protocol_crc32 );
-        
+
         this->write( _metaVersion );
 
         writeSize += m_buff.size();
@@ -772,10 +772,10 @@ namespace Metabuf
 
         std::copy( m_buff.begin(), m_buff.end(), reinterpret_cast<uint8_t *>(_binBuff) );
 
-		if( _writeSize != nullptr )
-		{
-			*_writeSize = writeSize;
-		}
+        if( _writeSize != nullptr )
+        {
+            *_writeSize = writeSize;
+        }
 
         m_buff.clear();
 
@@ -857,12 +857,12 @@ namespace Metabuf
             return false;
         }
 
-		std::copy( buffFinal.begin(), buffFinal.end(), reinterpret_cast<uint8_t *>(_binBuff) );
+        std::copy( buffFinal.begin(), buffFinal.end(), reinterpret_cast<uint8_t *>(_binBuff) );
 
-		if( _writeSize != nullptr )
-		{
-			*_writeSize = writeSize;
-		}
+        if( _writeSize != nullptr )
+        {
+            *_writeSize = writeSize;
+        }
 
         return true;
     }
@@ -1167,80 +1167,89 @@ namespace Metabuf
 
         return true;
     }
-	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::hasMetaAttribute_( const XmlNode * _node ) const
-	{
-		for( TMapAttributes::const_iterator
-			it = _node->attributes.begin(),
-			it_end = _node->attributes.end();
-			it != it_end;
-			++it )
-		{
-			const XmlAttribute & attribute = it->second;
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::hasMetaAttribute_( const XmlNode * _node ) const
+    {
+        for( TMapAttributes::const_iterator
+            it_attributes = _node->attributes.begin(),
+            it_attributes_end = _node->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
+        {
+            const XmlAttribute & attribute = it_attributes->second;
 
-			if( attribute.required == false )
-			{
-				return true;
-			}
-		}
+            if( attribute.required == false )
+            {
+                return true;
+            }
+        }
 
-		if( _node->inheritance.empty() == false )
-		{
-			if( _node->node_inheritance->attributes.empty() == false )
-			{
-				return true;
-			}
-		}
+        if( _node->inheritance.empty() == false )
+        {
+            if( _node->node_inheritance->attributes.empty() == false )
+            {
+                return true;
+            }
+        }
 
-		for( TMapMembers::const_iterator
-			it = _node->members.begin(),
-			it_end = _node->members.end();
-			it != it_end;
-			++it )
-		{
-			const XmlMember * member = &it->second;
+        for( TMapMembers::const_iterator
+            it_members_attributes = _node->members.begin(),
+            it_members_attributes_end = _node->members.end();
+            it_members_attributes != it_members_attributes_end;
+            ++it_members_attributes )
+        {
+            const XmlMember * member = &it_members_attributes->second;
 
-			if( member->attributes.empty() == false )
-			{
-				return true;
-			}
-		}
+            for( TMapAttributes::const_iterator
+                it = member->attributes.begin(),
+                it_end = member->attributes.end();
+                it != it_end;
+                ++it )
+            {
+                const XmlAttribute & attribute = it->second;
 
-		return false;
-	}
+                if( attribute.required == false )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-		if( this->hasMetaAttribute_( _node ) == false )
-		{
-			return true;
-		}
+        if( this->hasMetaAttribute_( _node ) == false )
+        {
+            return true;
+        }
 
-		uint32_t attributeCount;
-		if( this->getNodeAttributeSize_( _node, _xml_node, attributeCount ) == false )
-		{
-			return false;
-		}
+        uint32_t attributeCount;
+        if( this->getNodeAttributeSize_( _node, _xml_node, attributeCount ) == false )
+        {
+            return false;
+        }
 
-		this->writeSize( attributeCount );
+        this->writeSize( attributeCount );
 
-		if( attributeCount == 0 )
-		{
-			return true;
-		}
+        if( attributeCount == 0 )
+        {
+            return true;
+        }
 
-		if( _node->inheritance.empty() == false )
-		{
-			if( this->writeNodeAttribute2_( _node->node_inheritance, _xml_node ) == false )
-			{
-				return false;
-			}
-		}
+        if( _node->inheritance.empty() == false )
+        {
+            if( this->writeNodeAttribute2_( _node->node_inheritance, _xml_node ) == false )
+            {
+                return false;
+            }
+        }
 
-		if( this->writeNodeAttribute2_( _node, _xml_node ) == false )
-		{
-			return false;
-		}
+        if( this->writeNodeAttribute2_( _node, _xml_node ) == false )
+        {
+            return false;
+        }
 
         for( TMapMembers::const_iterator
             it = _node->members.begin(),
@@ -1538,100 +1547,100 @@ namespace Metabuf
 
         return true;
     }
-	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::hasMetaSingles_( const XmlNode * _node ) const
-	{
-		if( _node->singles.empty() == false )
-		{
-			return true;
-		}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::hasMetaSingles_( const XmlNode * _node ) const
+    {
+        if( _node->singles.empty() == false )
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeSingles_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-		if( this->hasMetaSingles_( _node ) == false )
-		{
-			return true;
-		}
+        if( this->hasMetaSingles_( _node ) == false )
+        {
+            return true;
+        }
 
-		uint32_t typeCount = 0;
+        uint32_t typeCount = 0;
 
-		for( TMapNodes::const_iterator
-			it = _node->singles.begin(),
-			it_end = _node->singles.end();
-			it != it_end;
-			++it )
-		{
-			const XmlNode * node = it->second;
+        for( TMapNodes::const_iterator
+            it = _node->singles.begin(),
+            it_end = _node->singles.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlNode * node = it->second;
 
-			uint32_t count;
-			this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
+            uint32_t count;
+            this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
 
-			if( count == 0 )
-			{
-				continue;
-			}
+            if( count == 0 )
+            {
+                continue;
+            }
 
-			if( count > 1 )
-			{
-				m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' singles '" << node->name << "' have more one instance" << std::endl;
+            if( count > 1 )
+            {
+                m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' singles '" << node->name << "' have more one instance" << std::endl;
 
-				return false;
-			}
+                return false;
+            }
 
-			++typeCount;
-		}
+            ++typeCount;
+        }
 
-		this->writeSize( typeCount );
+        this->writeSize( typeCount );
 
-		for( TMapNodes::const_iterator
-			it = _node->singles.begin(),
-			it_end = _node->singles.end();
-			it != it_end;
-			++it )
-		{
-			const XmlNode * node = it->second;
+        for( TMapNodes::const_iterator
+            it = _node->singles.begin(),
+            it_end = _node->singles.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlNode * node = it->second;
 
-			uint32_t count;
-			this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
+            uint32_t count;
+            this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
 
-			if( count == 0 )
-			{
-				continue;
-			}
+            if( count == 0 )
+            {
+                continue;
+            }
 
-			this->writeSize( node->id );
+            this->writeSize( node->id );
 
-			for( pugi::xml_node::iterator
-				it_xml = _xml_node.begin(),
-				it_xml_end = _xml_node.end();
-				it_xml != it_xml_end;
-				++it_xml )
-			{
-				const pugi::xml_node & child = *it_xml;
+            for( pugi::xml_node::iterator
+                it_xml = _xml_node.begin(),
+                it_xml_end = _xml_node.end();
+                it_xml != it_xml_end;
+                ++it_xml )
+            {
+                const pugi::xml_node & child = *it_xml;
 
-				const char * child_name = child.name();
+                const char * child_name = child.name();
 
-				if( node->name != child_name )
-				{
-					continue;
-				}
+                if( node->name != child_name )
+                {
+                    continue;
+                }
 
-				if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
-				{
-					continue;
-				}
+                if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+                {
+                    continue;
+                }
 
-				if( this->writeNode_( node, child ) == false )
-				{
-					m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' childrens '" << node->name << "'" << std::endl;
+                if( this->writeNode_( node, child ) == false )
+                {
+                    m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' childrens '" << node->name << "'" << std::endl;
 
-					return false;
-				}
-			}
-		}
+                    return false;
+                }
+            }
+        }
 
         return true;
     }
@@ -1672,148 +1681,151 @@ namespace Metabuf
 
         return true;
     }
-	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::hasMetaIncludes_( const XmlNode * _node ) const
-	{
-		if( _node->includes.empty() == false )
-		{
-			return true;
-		}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::hasMetaIncludes_( const XmlNode * _node ) const
+    {
+        if( _node->includes.empty() == false )
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-		if( this->hasMetaIncludes_( _node ) == false )
-		{
-			return true;
-		}
+        if( this->hasMetaIncludes_( _node ) == false )
+        {
+            return true;
+        }
 
-		if( _node->includes.size() == 1 )
-		{
-			for( TMapNodes::const_iterator
-				it = _node->includes.begin(),
-				it_end = _node->includes.end();
-				it != it_end;
-				++it )
-			{
-				const XmlNode * node_include = it->second;
+        if( _node->includes.size() == 1 && _node->inheritance.empty() == true )
+        {
+            for( TMapNodes::const_iterator
+                it = _node->includes.begin(),
+                it_end = _node->includes.end();
+                it != it_end;
+                ++it )
+            {
+                const XmlNode * node_include = it->second;
 
-				uint32_t incluidesCount;
-				this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
+                uint32_t incluidesCount;
+                this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
 
-				this->writeSize( incluidesCount );
+                this->writeSize( incluidesCount );
 
-				if( incluidesCount == 0 )
-				{
-					continue;
-				}
+                if( incluidesCount == 0 )
+                {
+                    continue;
+                }
 
-				for( pugi::xml_node::iterator
-					it_xml = _xml_node.begin(),
-					it_xml_end = _xml_node.end();
-					it_xml != it_xml_end;
-					++it_xml )
-				{
-					const pugi::xml_node & child = *it_xml;
+                for( pugi::xml_node::iterator
+                    it_xml = _xml_node.begin(),
+                    it_xml_end = _xml_node.end();
+                    it_xml != it_xml_end;
+                    ++it_xml )
+                {
+                    const pugi::xml_node & child = *it_xml;
 
-					const char * child_name = child.name();
+                    const char * child_name = child.name();
 
-					if( node_include->name != child_name )
-					{
-						continue;
-					}
+                    if( node_include->name != child_name )
+                    {
+                        continue;
+                    }
 
-					if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
-					{
-						continue;
-					}
+                    if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+                    {
+                        continue;
+                    }
 
-					if( this->writeNode_( node_include, child ) == false )
-					{
-						m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
+                    if( this->writeNode_( node_include, child ) == false )
+                    {
+                        m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
 
-						return false;
-					}
-				}
-			}
-		}
-		else
-		{
-			uint32_t includesTypeCount = 0;
+                        return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            uint32_t includesTypeCount = 0;
 
-			for( TMapNodes::const_iterator
-				it = _node->includes.begin(),
-				it_end = _node->includes.end();
-				it != it_end;
-				++it )
-			{
-				const XmlNode * node_include = it->second;
+            for( TMapNodes::const_iterator
+                it = _node->includes.begin(),
+                it_end = _node->includes.end();
+                it != it_end;
+                ++it )
+            {
+                const XmlNode * node_include = it->second;
 
-				uint32_t includeCount;
-				this->getNodeIncludesSize_( _node, _xml_node, node_include->name, includeCount );
+                uint32_t includeCount;
+                this->getNodeIncludesSize_( _node, _xml_node, node_include->name, includeCount );
 
-				if( includeCount == 0 )
-				{
-					continue;
-				}
+                if( includeCount == 0 )
+                {
+                    continue;
+                }
 
-				++includesTypeCount;
-			}
+                ++includesTypeCount;
+            }
 
-			this->writeSize( includesTypeCount );
+            this->writeSize( includesTypeCount );
 
-			for( TMapNodes::const_iterator
-				it = _node->includes.begin(),
-				it_end = _node->includes.end();
-				it != it_end;
-				++it )
-			{
-				const XmlNode * node_include = it->second;
+            if( includesTypeCount != 0 )
+            {
+                for( TMapNodes::const_iterator
+                    it = _node->includes.begin(),
+                    it_end = _node->includes.end();
+                    it != it_end;
+                    ++it )
+                {
+                    const XmlNode * node_include = it->second;
 
-				uint32_t incluidesCount;
-				this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
+                    uint32_t incluidesCount;
+                    this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
 
-				if( incluidesCount == 0 )
-				{
-					continue;
-				}
+                    if( incluidesCount == 0 )
+                    {
+                        continue;
+                    }
 
-				this->writeSize( incluidesCount );
+                    this->writeSize( incluidesCount );
 
-				this->writeSize( node_include->id );
+                    this->writeSize( node_include->id );
 
-				for( pugi::xml_node::iterator
-					it_xml = _xml_node.begin(),
-					it_xml_end = _xml_node.end();
-					it_xml != it_xml_end;
-					++it_xml )
-				{
-					const pugi::xml_node & child = *it_xml;
+                    for( pugi::xml_node::iterator
+                        it_xml = _xml_node.begin(),
+                        it_xml_end = _xml_node.end();
+                        it_xml != it_xml_end;
+                        ++it_xml )
+                    {
+                        const pugi::xml_node & child = *it_xml;
 
-					const char * child_name = child.name();
+                        const char * child_name = child.name();
 
-					if( node_include->name != child_name )
-					{
-						continue;
-					}
+                        if( node_include->name != child_name )
+                        {
+                            continue;
+                        }
 
-					if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
-					{
-						continue;
-					}
+                        if( child.begin() == child.end() && child.attributes_begin() == child.attributes_end() )
+                        {
+                            continue;
+                        }
 
-					if( this->writeNode_( node_include, child ) == false )
-					{
-						m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
+                        if( this->writeNode_( node_include, child ) == false )
+                        {
+                            m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
 
-						return false;
-					}
-				}
-			}
-		}
-		
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1853,31 +1865,31 @@ namespace Metabuf
 
         return true;
     }
-	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::hasMetaChildren_( const XmlNode * _node ) const
-	{
-		if( _node->children.empty() == false )
-		{
-			return true;
-		}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::hasMetaChildren_( const XmlNode * _node ) const
+    {
+        if( _node->children.empty() == false )
+        {
+            return true;
+        }
 
-		if( _node->node_inheritance != nullptr )
-		{
-			if( _node->node_inheritance->children.empty() == false )
-			{
-				return true;
-			}
-		}
+        if( _node->node_inheritance != nullptr )
+        {
+            if( _node->node_inheritance->children.empty() == false )
+            {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeChildren_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-		if( this->hasMetaChildren_( _node ) == false )
-		{
-			return true;
-		}
+        if( this->hasMetaChildren_( _node ) == false )
+        {
+            return true;
+        }
 
         uint32_t childrenTypeCount = 0;
 
@@ -2115,23 +2127,23 @@ namespace Metabuf
 
         return true;
     }
-	//////////////////////////////////////////////////////////////////////////
-	bool Xml2Metabuf::hasMetaGenerators_( const XmlNode * _node ) const
-	{
-		if( _node->inheritances.empty() == false )
-		{
-			return true;
-		}
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::hasMetaGenerators_( const XmlNode * _node ) const
+    {
+        if( _node->inheritances.empty() == false )
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
     {
-		if( this->hasMetaGenerators_( _node ) == false )
-		{
-			return true;
-		}
+        if( this->hasMetaGenerators_( _node ) == false )
+        {
+            return true;
+        }
 
         uint32_t generatorsTypeCount = 0;
 
