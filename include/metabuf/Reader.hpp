@@ -103,4 +103,17 @@ namespace Metabuf
         size_t m_capacity;
         size_t & m_read;
     };
+
+	template<class T>
+	inline void read( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData, T & _t )
+	{
+		Reader ar( _buff, _size, _read );
+		archive_read( ar, _t, _userData );
+	}
+
+	inline void readSize( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _t )
+	{
+		Reader ar( _buff, _size, _read );
+		ar.readSize( _t );
+	}
 }

@@ -20,7 +20,7 @@ int main( int argc, char *argv[] )
 	Metabuf::XmlProtocol xml_protocol;
 
 	size_t file_protocol_size;
-	void * file_protocol_buffer = read_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_protocol, &file_protocol_size );
+	void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
 
 	if( file_protocol_buffer == nullptr )
 	{
@@ -63,7 +63,7 @@ int main( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}	
 
-	FILE * file_metacode_h = write_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_metacode_h );
+	FILE * file_metacode_h = write_file( argv[1], path_metacode_h );
 
 	if( file_metacode_h == nullptr )
 	{
@@ -77,7 +77,7 @@ int main( int argc, char *argv[] )
 	fwrite( header.c_str(), header.size(), 1, file_metacode_h );
 	fclose( file_metacode_h );
 
-	FILE * file_metacode_cpp = write_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_metacode_cpp );
+	FILE * file_metacode_cpp = write_file( argv[1], path_metacode_cpp );
 
 	if( file_metacode_cpp == nullptr )
 	{

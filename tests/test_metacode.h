@@ -27,7 +27,7 @@ namespace Metacode
         uint32_t getVersion();
     
         class Meta_DataBlock
-            : public Metabuf::Metadata
+            : public Metabuf::Metaparse
         { 
         public:
             Meta_DataBlock();
@@ -51,6 +51,7 @@ namespace Metacode
         protected:
             void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
             void _preparationIncludes( uint32_t _id, uint32_t _count );
+            void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
         
         public:
@@ -77,6 +78,8 @@ namespace Metacode
             
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                void _preparationIncludes( uint32_t _id, uint32_t _count );
+                void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:
             protected:
@@ -226,6 +229,8 @@ namespace Metacode
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
                 void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
+                void _preparationIncludes( uint32_t _id, uint32_t _count );
+                void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:
             protected:
@@ -453,6 +458,8 @@ namespace Metacode
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
                 void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
+                void _preparationIncludes( uint32_t _id, uint32_t _count );
+                void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:
             protected:

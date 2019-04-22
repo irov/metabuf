@@ -29,7 +29,7 @@ namespace Metabuf
 
     protected:
         bool writeHeaderMeta_( std::stringstream & _ss, const XmlMeta * _meta );
-        bool writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
+        bool writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root );
 
     protected:
         bool writeHeaderConstructor_( std::stringstream & _ss, const XmlNode * _node );
@@ -54,10 +54,10 @@ namespace Metabuf
 
     protected:
         bool writeSourceMeta_( std::stringstream & _ss, const XmlMeta * _meta );
-        bool writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
+        bool writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root );
 
     protected:
-        bool writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
+        bool writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root );
 		bool writeSourceParse_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceDataReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node );

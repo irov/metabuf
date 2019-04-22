@@ -24,23 +24,9 @@ namespace Metabuf
 
     class Metadata
     {
-    public:
-        Metadata();
-        ~Metadata();
-
-    protected:
-        template<class T>
-        inline void read( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData, T & _t ) const
-        {
-            Reader ar( _buff, _size, _read );
-            archive_read( ar, _t, _userData );
-        }
-
-        inline void readSize( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t & _t ) const
-        {
-            Reader ar( _buff, _size, _read );
-            ar.readSize( _t );
-        }
+	public:
+		Metadata();
+		~Metadata();
 
     public:
         void * operator new (size_t _size);
@@ -49,4 +35,15 @@ namespace Metabuf
         void operator delete (void * _ptr, size_t _size);
         void operator delete[]( void * _ptr, size_t _size );
     };
+
+	class Metaparse
+		: public Metadata
+	{
+	public:
+		Metaparse();
+		~Metaparse();
+
+	public:
+		virtual bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) = 0;
+	};
 }
