@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-ADD_LIBRARY( test_utils STATIC Metautils.h Metautils.cpp )
+ADD_LIBRARY( test_utils STATIC test_utils.h test_utils.cpp )
 
 set_target_properties(test_utils PROPERTIES
     FOLDER tests
@@ -10,7 +10,7 @@ set_target_properties(test_utils PROPERTIES
 
 INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_INCLUDE_PATH} )
 
-ADD_LIBRARY( test_common STATIC Metacode.cpp Metacode.h Metatype.h Metatype.cpp )
+ADD_LIBRARY( test_common STATIC test_metacode.cpp test_metacode.h test_metatype.h test_metatype.cpp )
 
 set_target_properties(test_common PROPERTIES
     FOLDER tests

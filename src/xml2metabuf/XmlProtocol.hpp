@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define METABUF_BIN_VERSION 6
+#define METABUF_BIN_VERSION 7
 
 namespace Metabuf
 {
@@ -142,10 +142,10 @@ namespace Metabuf
         const TMapNodes & getNodes() const;
 
     public:
-        std::string name;
-        uint32_t version;
+        std::string m_name;
+        uint32_t m_version;
 
-        TMapNodes nodes;
+        TMapNodes m_nodes;
     };
 
     typedef std::map<std::string, XmlMeta *> TMapMetas;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Metatype.h"
+#include "test_metatype.h"
 
 #include "metabuf/Metadata.hpp"
 
@@ -15,35 +15,23 @@ namespace Metacode
     uint32_t get_metacode_protocol_version();
     uint32_t get_metacode_protocol_crc32();
 
-    enum HeaderError
-    {
-        HEADER_SUCCESSFUL,
-        HEADER_INVALID_MAGIC,
-        HEADER_INVALID_VERSION,
-        HEADER_INVALID_PROTOCOL_VERSION,
-        HEADER_INVALID_PROTOCOL_CRC32,
-        HEADER_INVALID_METAVERSION,
-    };
+    const char * getHeaderErrorMessage( Metabuf::HeaderError _error );
 
-    const char * getHeaderErrorMessage( HeaderError _error );
-
-    HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );
+    Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );
 
     bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );
     const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );
 
     namespace Meta_Data
     {
+        uint32_t getVersion();
+    
         class Meta_DataBlock
             : public Metabuf::Metadata
         { 
         public:
             Meta_DataBlock();
             ~Meta_DataBlock();
-        
-        public:
-            uint32_t getVersion() const override;
-            uint32_t getId() const override;
         
         public:
             template<class C, class M>
@@ -57,21 +45,20 @@ namespace Metacode
                 return this->m_Name;
             }
             
+        public:
+            bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+        
         protected:
-            void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;
-            void _preparationIncludes( uint32_t _id, uint32_t _count ) override;
-            void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
-            void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+            void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            void _preparationIncludes( uint32_t _id, uint32_t _count );
+            void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
+        
         public:
             class Meta_Include
                 : public Metabuf::Metadata
             { 
             public:
                 Meta_Include();
-            
-            public:
-                uint32_t getVersion() const override;
-                uint32_t getId() const override;
             
             public:
                 template<class C, class M>
@@ -85,8 +72,12 @@ namespace Metacode
                     return this->m_Path;
                 }
                 
+            public:
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            
             protected:
-                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;
+                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            
             public:
             protected:
             protected:
@@ -98,10 +89,7 @@ namespace Metacode
             { 
             public:
                 Meta_Resource();
-            
-            public:
-                uint32_t getVersion() const override;
-                uint32_t getId() const override;
+                virtual ~Meta_Resource();
             
             public:
                 template<class C, class M>
@@ -232,9 +220,13 @@ namespace Metacode
                 
                     return true;
                 }
+            public:
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            
             protected:
-                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;
-                void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
+            
             public:
             protected:
             protected:
@@ -251,10 +243,6 @@ namespace Metacode
             { 
             public:
                 Meta_ResourceImageDefault();
-            
-            public:
-                uint32_t getVersion() const override;
-                uint32_t getId() const override;
             
             public:
                 bool has_File_Alpha() const
@@ -459,9 +447,13 @@ namespace Metacode
                     return true;
                 }
                 
+            public:
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            
             protected:
-                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;
-                void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;
+                void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
+            
             public:
             protected:
             protected:

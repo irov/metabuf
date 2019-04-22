@@ -1,6 +1,10 @@
 #include "Xml2Metacode.hpp"
 #include "XmlProtocol.hpp"
 
+//#ifndef METABUF_METATYPE_HEADER
+//#define METABUF_METATYPE_HEADER Metatype.h
+//#endif
+
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
@@ -16,8 +20,10 @@ namespace Metabuf
         return m_error.str();
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::generate( std::string & _header, std::string & _source )
+    bool Xml2Metacode::generate( std::string & _header, std::string & _source, const Xml2Settings & _settings )
     {
+		m_settings = _settings;
+
         std::stringstream header;
 
         if( this->generateHeader( header ) == false )
@@ -43,7 +49,7 @@ namespace Metabuf
     {
         this->write( _ss ) << "#pragma once" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "#include \"Metatype.h\"" << std::endl;
+        this->write( _ss ) << "#include \"" << m_settings.metatype_h << "\"" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "#include \"metabuf/Metadata.hpp\"" << std::endl;
         this->write( _ss ) << std::endl;
@@ -58,19 +64,9 @@ namespace Metabuf
         this->write( _ss ) << "    uint32_t get_metacode_protocol_version();" << std::endl;
         this->write( _ss ) << "    uint32_t get_metacode_protocol_crc32();" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "    enum HeaderError" << std::endl;
-        this->write( _ss ) << "    {" << std::endl;
-        this->write( _ss ) << "        HEADER_SUCCESSFUL," << std::endl;
-        this->write( _ss ) << "        HEADER_INVALID_MAGIC," << std::endl;
-        this->write( _ss ) << "        HEADER_INVALID_VERSION," << std::endl;
-        this->write( _ss ) << "        HEADER_INVALID_PROTOCOL_VERSION," << std::endl;
-        this->write( _ss ) << "        HEADER_INVALID_PROTOCOL_CRC32," << std::endl;
-        this->write( _ss ) << "        HEADER_INVALID_METAVERSION," << std::endl;
-        this->write( _ss ) << "    };" << std::endl;
+        this->write( _ss ) << "    const char * getHeaderErrorMessage( Metabuf::HeaderError _error );" << std::endl;
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "    const char * getHeaderErrorMessage( HeaderError _error );" << std::endl;
-        this->write( _ss ) << std::endl;
-        this->write( _ss ) << "    HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
+        this->write( _ss ) << "    Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "    bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
         this->write( _ss ) << "    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
@@ -105,6 +101,8 @@ namespace Metabuf
     {
         this->write( _ss ) << "namespace " << _meta->getWriteName() << std::endl;
         this->write( _ss ) << "{" << std::endl;
+		this->write( _ss ) << "    uint32_t getVersion();" << std::endl;
+		this->write( _ss ) << std::endl;
 
         m_indent += 4;
 
@@ -161,6 +159,19 @@ namespace Metabuf
             return false;
         }
 
+		this->write( _ss ) << "public:" << std::endl;
+
+		m_indent += 4;
+
+		if( this->writeHeaderParse_( _ss, _node ) == false )
+		{
+			return false;
+		}
+
+		m_indent -= 4;
+
+		this->write( _ss ) << std::endl;
+
         this->write( _ss ) << "protected:" << std::endl;
 
         m_indent += 4;
@@ -207,6 +218,10 @@ namespace Metabuf
 
         m_indent -= 4;
 
+		this->write( _ss ) << std::endl;
+
+		this->write( _ss ) << "public:" << std::endl;
+
         if( this->writeHeaderIncludesDefinition_( _ss, _meta, _node ) == false )
         {
             return false;
@@ -245,19 +260,26 @@ namespace Metabuf
         this->write( _ss ) << "public:" << std::endl;
         this->write( _ss ) << "    " << _node->getWriteName() << "();" << std::endl;
 
-        if( _node->inheritances.empty() == false )
+		if( _node->generator.empty() == false )
+		{
+			this->write( _ss ) << "    virtual ~" << _node->getWriteName() << "();" << std::endl;
+		}
+		else if( _node->inheritances.empty() == false )
         {
             this->write( _ss ) << "    ~" << _node->getWriteName() << "();" << std::endl;
         }
 
         this->write( _ss ) << std::endl;
-        this->write( _ss ) << "public:" << std::endl;
-        this->write( _ss ) << "    uint32_t getVersion() const override;" << std::endl;
-        this->write( _ss ) << "    uint32_t getId() const override;" << std::endl;
-        this->write( _ss ) << std::endl;
 
         return true;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metacode::writeHeaderParse_( std::stringstream & _ss, const XmlNode * _node )
+	{
+		this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
+
+		return true;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderDataReader_( std::stringstream & _ss, const XmlNode * _node )
     {
@@ -266,7 +288,7 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseData( const uint8_t * _buff, size_t _size, size_t & _read ) override;" << std::endl;
+        this->write( _ss ) << "void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
         return true;
     }
@@ -278,13 +300,18 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+        this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderAttributeSetup_( std::stringstream & _ss, const XmlNode * _node )
     {
+		if( _node->attributes.empty() == true && _node->members.empty() == true )
+		{
+			return true;
+		}
+
         this->write( _ss ) << "public:" << std::endl;
 
         m_indent += 4;
@@ -593,8 +620,6 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
-        this->write( _ss ) << "public:" << std::endl;
-
         m_indent += 4;
 
         for( TMapNodes::const_iterator
@@ -762,7 +787,7 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseSingles( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+        this->write( _ss ) << "void _parseSingles( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id );" << std::endl;
 
         return true;
     }
@@ -820,7 +845,17 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _preparationIncludes( uint32_t _id, uint32_t _count ) override;" << std::endl;
+		if( _node->includes.size() == 1 && _node->inheritances.empty() == true )
+		{
+			return true;
+		}
+
+		if( _node->inheritance.empty() == true && _node->generators.empty() == true )
+		{
+			return true;
+		}
+
+        this->write( _ss ) << "void _preparationIncludes( uint32_t _id, uint32_t _count );" << std::endl;
 
         return true;
     }
@@ -832,7 +867,17 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+		if( _node->includes.size() == 1 && _node->inheritance.empty() == true )
+		{
+			return true;
+		}
+
+		if( _node->inheritance.empty() == true )
+		{
+			return true;
+		}
+
+        this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
         return true;
     }
@@ -874,7 +919,7 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _preparationChildren( uint32_t _id, uint32_t _count ) override;" << std::endl;
+        this->write( _ss ) << "void _preparationChildren( uint32_t _id, uint32_t _count );" << std::endl;
 
         return true;
     }
@@ -886,7 +931,7 @@ namespace Metabuf
             return  true;
         }
 
-        this->write( _ss ) << "void _parseChildren( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+        this->write( _ss ) << "void _parseChildren( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id );" << std::endl;
 
         return true;
     }
@@ -898,7 +943,7 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id ) override;" << std::endl;
+        this->write( _ss ) << "void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
         return true;
     }
@@ -908,7 +953,7 @@ namespace Metabuf
         uint32_t protocol_version = m_protocol->getVersion();
         uint32_t protocol_crc32 = m_protocol->getCrc32();
 
-        this->write( _ss ) << "#include \"Metacode.h\"" << std::endl;
+        this->write( _ss ) << "#include \"" << m_settings.metacode_h << "\"" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "namespace Metacode" << std::endl;
         this->write( _ss ) << "{" << std::endl;
@@ -933,21 +978,21 @@ namespace Metabuf
         this->write( _ss ) << "        return " << protocol_crc32 << "; " << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "    const char * getHeaderErrorMessage( HeaderError _error )" << std::endl;
+        this->write( _ss ) << "    const char * getHeaderErrorMessage( Metabuf::HeaderError _error )" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
         this->write( _ss ) << "        switch( _error )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "        case HEADER_SUCCESSFUL: return \"Successful\";" << std::endl;
-        this->write( _ss ) << "        case HEADER_INVALID_MAGIC: return \"invalid magic header\";" << std::endl;
-        this->write( _ss ) << "        case HEADER_INVALID_VERSION: return \"invalid version\";" << std::endl;
-        this->write( _ss ) << "        case HEADER_INVALID_PROTOCOL_VERSION: return \"invalid protocol version\";" << std::endl;
-        this->write( _ss ) << "        case HEADER_INVALID_PROTOCOL_CRC32: return \"invalid protocol crc32\";" << std::endl;
-        this->write( _ss ) << "        case HEADER_INVALID_METAVERSION: return \"invalid meta version\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_SUCCESSFUL: return \"Successful\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_INVALID_MAGIC: return \"invalid magic header\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_INVALID_VERSION: return \"invalid version\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_INVALID_PROTOCOL_VERSION: return \"invalid protocol version\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_INVALID_PROTOCOL_CRC32: return \"invalid protocol crc32\";" << std::endl;
+        this->write( _ss ) << "        case Metabuf::HEADER_INVALID_METAVERSION: return \"invalid meta version\";" << std::endl;
         this->write( _ss ) << "        default: return \"invalid error\";" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "    HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
+        this->write( _ss ) << "    Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion )" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
         this->write( _ss ) << "        uint32_t metacode_magic = get_metacode_magic();" << std::endl;
         this->write( _ss ) << "        uint32_t metacode_version = get_metacode_version();" << std::endl;
@@ -961,7 +1006,7 @@ namespace Metabuf
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( head != metacode_magic )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return HEADER_INVALID_MAGIC;" << std::endl;
+        this->write( _ss ) << "            return Metabuf::HEADER_INVALID_MAGIC;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        uint32_t read_version;" << std::endl;
@@ -984,25 +1029,25 @@ namespace Metabuf
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( read_version != metacode_version )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return HEADER_INVALID_VERSION;" << std::endl;
+        this->write( _ss ) << "            return Metabuf::HEADER_INVALID_VERSION;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( read_protocol_version != metacode_protocol_version )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return HEADER_INVALID_PROTOCOL_VERSION;" << std::endl;
+        this->write( _ss ) << "            return Metabuf::HEADER_INVALID_PROTOCOL_VERSION;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( read_protocol_crc32 != metacode_protocol_crc32 )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return HEADER_INVALID_PROTOCOL_CRC32;" << std::endl;
+        this->write( _ss ) << "            return Metabuf::HEADER_INVALID_PROTOCOL_CRC32;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        if( read_meta_version != _metaVersion )" << std::endl;
         this->write( _ss ) << "        {" << std::endl;
-        this->write( _ss ) << "            return HEADER_INVALID_METAVERSION;" << std::endl;
+        this->write( _ss ) << "            return Metabuf::HEADER_INVALID_METAVERSION;" << std::endl;
         this->write( _ss ) << "        }" << std::endl;
-        this->write( _ss ) << std::endl;
-        this->write( _ss ) << "        return HEADER_SUCCESSFUL;" << std::endl;
+		this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        return Metabuf::HEADER_SUCCESSFUL;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;
@@ -1066,6 +1111,11 @@ namespace Metabuf
     {
         this->write( _ss ) << "namespace " << _meta->getWriteName() << std::endl;
         this->write( _ss ) << "{ " << std::endl;
+		this->write( _ss ) << "    uint32_t getVersion()" << std::endl;
+		this->write( _ss ) << "    {" << std::endl;
+		this->write( _ss ) << "        return " << _meta->getVersion() << ";" << std::endl;
+		this->write( _ss ) << "    }" << std::endl;
+		this->write( _ss ) << std::endl;
 
         m_indent += 4;
 
@@ -1098,6 +1148,11 @@ namespace Metabuf
         {
             return false;
         }
+
+		if( this->writeSourceParse_( _ss, _node ) == false )
+		{
+			return false;
+		}
 
         if( this->writeSourceDataReader_( _ss, _node ) == false )
         {
@@ -1204,44 +1259,35 @@ namespace Metabuf
         this->write( _ss ) << "{" << std::endl;
         this->write( _ss ) << "}" << std::endl;
 
-        if( _node->inheritances.empty() == false )
+		if( _node->inheritances.empty() == false || _node->generator.empty() == false )
         {
             this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
             this->write( _ss ) << _node->getScope() << "::~" << _node->getWriteName() << "()" << std::endl;
             this->write( _ss ) << "{" << std::endl;
 
-            for( TMapNodes::const_iterator
-                it_inheritances = _node->inheritances.begin(),
-                it_inheritances_end = _node->inheritances.end();
-                it_inheritances != it_inheritances_end;
-                ++it_inheritances )
-            {
-                const XmlNode * node_include = it_inheritances->second;
+			if( _node->inheritances.empty() == false )
+			{
+				for( TMapNodes::const_iterator
+					it_inheritances = _node->inheritances.begin(),
+					it_inheritances_end = _node->inheritances.end();
+					it_inheritances != it_inheritances_end;
+					++it_inheritances )
+				{
+					const XmlNode * node_include = it_inheritances->second;
 
-                this->write( _ss ) << "    for( Vector" << node_include->getWriteName() << "::const_iterator" << std::endl;
-                this->write( _ss ) << "        it = includes_" << node_include->getWriteName() << ".begin()," << std::endl;
-                this->write( _ss ) << "        it_end = includes_" << node_include->getWriteName() << ".end();" << std::endl;
-                this->write( _ss ) << "    it != it_end;" << std::endl;
-                this->write( _ss ) << "    ++it )" << std::endl;
-                this->write( _ss ) << "    {" << std::endl;
-                this->write( _ss ) << "        delete *it;" << std::endl;
-                this->write( _ss ) << "    }" << std::endl;
-            }
+					this->write( _ss ) << "    for( Vector" << node_include->getWriteName() << "::const_iterator" << std::endl;
+					this->write( _ss ) << "        it = includes_" << node_include->getWriteName() << ".begin()," << std::endl;
+					this->write( _ss ) << "        it_end = includes_" << node_include->getWriteName() << ".end();" << std::endl;
+					this->write( _ss ) << "    it != it_end;" << std::endl;
+					this->write( _ss ) << "    ++it )" << std::endl;
+					this->write( _ss ) << "    {" << std::endl;
+					this->write( _ss ) << "        delete *it;" << std::endl;
+					this->write( _ss ) << "    }" << std::endl;
+				}
+			}
 
             this->write( _ss ) << "}" << std::endl;
         }
-
-        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "uint32_t " << _node->getScope() << "::getVersion() const" << std::endl;
-        this->write( _ss ) << "{" << std::endl;
-        this->write( _ss ) << "    return " << _meta->version << ";" << std::endl;
-        this->write( _ss ) << "}" << std::endl;
-
-        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "uint32_t " << _node->getScope() << "::getId() const" << std::endl;
-        this->write( _ss ) << "{" << std::endl;
-        this->write( _ss ) << "    return " << _node->id << ";" << std::endl;
-        this->write( _ss ) << "}" << std::endl;
 
         return true;
     }
@@ -1337,6 +1383,188 @@ namespace Metabuf
 
         return false;
     }
+	//////////////////////////////////////////////////////////////////////////
+	bool Xml2Metacode::writeSourceParse_( std::stringstream & _ss, const XmlNode * _node )
+	{
+		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+		this->write( _ss ) << "bool " << _node->getScope() << "::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
+		this->write( _ss ) << "{" << std::endl;
+
+		if( this->hasNodeDataSize_( _node ) == true )
+		{
+			this->write( _ss ) << "    this->_parseData( _buff, _size, _read, _userData );" << std::endl;
+			this->write( _ss ) << std::endl;
+		}
+
+		if( this->hasNodeAttributeSize_( _node ) == true )
+		{
+			this->write( _ss ) << "    uint32_t attributeCount;" << std::endl;
+			this->write( _ss ) << "    this->readSize( _buff, _size, _read, attributeCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "    for( uint32_t i = 0; i != attributeCount; ++i )" << std::endl;
+			this->write( _ss ) << "    {" << std::endl;
+			this->write( _ss ) << "        uint32_t id;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        this->_parseArguments( _buff, _size, _read, id, _userData );" << std::endl;
+			this->write( _ss ) << "    }" << std::endl;
+			this->write( _ss ) << std::endl;
+		}
+
+		if( _node->singles.empty() == false )
+		{
+			this->write( _ss ) << "    uint32_t singleTypeCount;" << std::endl;
+			this->write( _ss ) << "    this->readSize( _buff, _size, _read, singleTypeCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "    for( uint32_t i = 0; i != singleTypeCount; ++i )" << std::endl;
+			this->write( _ss ) << "    {" << std::endl;
+			this->write( _ss ) << "        uint32_t id;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        this->_parseSingles( _buff, _size, _read, id );" << std::endl;
+			this->write( _ss ) << "    }" << std::endl;
+			this->write( _ss ) << std::endl;
+		}
+
+		if( _node->includes.empty() == false )
+		{
+			if( _node->includes.size() == 1 && _node->inheritance.empty() == true )
+			{				
+				const XmlNode * node = _node->includes.begin()->second;
+
+				this->write( _ss ) << "    uint32_t includeCount;" << std::endl;
+				this->write( _ss ) << "    this->readSize( _buff, _size, _read, includeCount );" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "    if( includeCount != 0 )" << std::endl;
+				this->write( _ss ) << "    {" << std::endl;
+				this->write( _ss ) << "        includes_" << node->getWriteName() << ".reserve( includeCount );" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "        for( uint32_t j = 0; j != includeCount; ++j )" << std::endl;
+				this->write( _ss ) << "        {" << std::endl;
+				this->write( _ss ) << "            includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
+				this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "            metadata.parse( _buff, _size, _read, _userData );" << std::endl;
+				this->write( _ss ) << "        }" << std::endl;
+				this->write( _ss ) << "    }" << std::endl;
+				this->write( _ss ) << std::endl;
+			}
+			else
+			{
+				this->write( _ss ) << "    uint32_t includeTypeCount;" << std::endl;
+				this->write( _ss ) << "    this->readSize( _buff, _size, _read, includeTypeCount );" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "    for( uint32_t i = 0; i != includeTypeCount; ++i )" << std::endl;
+				this->write( _ss ) << "    {" << std::endl;
+				this->write( _ss ) << "        uint32_t includeCount;" << std::endl;
+				this->write( _ss ) << "        this->readSize( _buff, _size, _read, includeCount );" << std::endl;
+				this->write( _ss ) << std::endl;
+				this->write( _ss ) << "        uint32_t id;" << std::endl;
+				this->write( _ss ) << "        this->readSize( _buff, _size, _read, id );" << std::endl;
+				this->write( _ss ) << std::endl;
+				
+				if( _node->inheritance.empty() == false )
+				{
+					this->write( _ss ) << "        this->_preparationIncludes( id, includeCount );" << std::endl;
+					this->write( _ss ) << std::endl;
+					this->write( _ss ) << "        for( uint32_t j = 0; j != includeCount; ++j )" << std::endl;
+					this->write( _ss ) << "        {" << std::endl;
+					this->write( _ss ) << "            this->_parseIncludes( _buff, _size, _read, id, _userData );" << std::endl;
+					this->write( _ss ) << "        }" << std::endl;
+				}
+				else
+				{
+					this->write( _ss ) << "        switch( id )" << std::endl;
+					this->write( _ss ) << "        {" << std::endl;
+
+					for( TMapNodes::const_iterator
+						it_includes = _node->includes.begin(),
+						it_includes_end = _node->includes.end();
+						it_includes != it_includes_end;
+						++it_includes )
+					{
+						const XmlNode * node = it_includes->second;
+
+						this->write( _ss ) << "        case " << node->id << ":" << std::endl;
+						this->write( _ss ) << "            {" << std::endl;
+						this->write( _ss ) << "                includes_" << node->getWriteName() << ".reserve( includeCount );" << std::endl;
+						this->write( _ss ) << std::endl;
+						this->write( _ss ) << "                for( uint32_t j = 0; j != includeCount; ++j )" << std::endl;
+						this->write( _ss ) << "                {" << std::endl;
+						this->write( _ss ) << "                    includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
+						this->write( _ss ) << "                    " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
+						this->write( _ss ) << std::endl;
+						this->write( _ss ) << "                    metadata.parse( _buff, _size, _read, _userData );" << std::endl;
+						this->write( _ss ) << "                }" << std::endl;
+						this->write( _ss ) << "            }break;" << std::endl;
+					}
+
+					this->write( _ss ) << "        }" << std::endl;
+
+				}
+
+				this->write( _ss ) << "    }" << std::endl;
+				this->write( _ss ) << std::endl;
+			}
+		}
+		
+		if( _node->children.empty() == false )
+		{
+			this->write( _ss ) << "    uint32_t childrenTypeCount;" << std::endl;
+			this->write( _ss ) << "    this->readSize( _buff, _size, _read, childrenTypeCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "    for( uint32_t i = 0; i != childrenTypeCount; ++i )" << std::endl;
+			this->write( _ss ) << "    {" << std::endl;
+			this->write( _ss ) << "        uint32_t childrenCount;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, childrenCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        uint32_t id;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        this->_preparationChildren( id, childrenCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        for( uint32_t j = 0; j != childrenCount; ++j )" << std::endl;
+			this->write( _ss ) << "        {" << std::endl;
+			this->write( _ss ) << "            uint32_t generator_id;" << std::endl;
+			this->write( _ss ) << "            this->readSize( _buff, _size, _read, generator_id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "            this->_parseChildren( _buff, _size, _read, generator_id, _userData );" << std::endl;
+			this->write( _ss ) << "        }" << std::endl;
+			this->write( _ss ) << "    }" << std::endl;
+			this->write( _ss ) << std::endl;
+		}
+
+		if( _node->generators.empty() == false && _node->inheritances.empty() == false )
+		{
+			this->write( _ss ) << "    uint32_t generatorTypeCount;" << std::endl;
+			this->write( _ss ) << "    this->readSize( _buff, _size, _read, generatorTypeCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "    for( uint32_t i = 0; i != generatorTypeCount; ++i )" << std::endl;
+			this->write( _ss ) << "    {" << std::endl;
+			this->write( _ss ) << "        uint32_t generatorCount;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, generatorCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        uint32_t id;" << std::endl;
+			this->write( _ss ) << "        this->readSize( _buff, _size, _read, id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        this->_preparationIncludes( id, generatorCount );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "        for( uint32_t j = 0; j != generatorCount; ++j )" << std::endl;
+			this->write( _ss ) << "        {" << std::endl;
+			this->write( _ss ) << "            uint32_t generator_id;" << std::endl;
+			this->write( _ss ) << "            this->readSize( _buff, _size, _read, generator_id );" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "            this->_parseGenerators( _buff, _size, _read, generator_id, _userData );" << std::endl;
+			this->write( _ss ) << "        }" << std::endl;
+			this->write( _ss ) << "    }" << std::endl;
+			this->write( _ss ) << std::endl;
+		}
+
+		this->write( _ss ) << "    return true;" << std::endl;
+		this->write( _ss ) << "}" << std::endl;
+
+		return this;
+	}
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceDataReader_( std::stringstream & _ss, const XmlNode * _node )
     {
@@ -1346,14 +1574,14 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "void " << _node->getScope() << "::_parseData( const uint8_t * _buff, size_t _size, size_t & _read )" << std::endl;
+        this->write( _ss ) << "void " << _node->getScope() << "::_parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseData( _buff, _size, _read );" << std::endl;
+            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseData( _buff, _size, _read, _userData );" << std::endl;
             this->write( _ss ) << std::endl;
         }
 
@@ -1372,7 +1600,7 @@ namespace Metabuf
                     continue;
                 }
 
-                this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << attr->getWriteName() << " );" << std::endl;
+                this->write( _ss ) << "    this->read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
             }
 
             for( TMapMembers::const_iterator
@@ -1396,7 +1624,7 @@ namespace Metabuf
                         continue;
                     }
 
-                    this->write( _ss ) << "    this->read( _buff, _size, _read, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << "    this->read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
                 }
             }
         }
@@ -1414,14 +1642,14 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+        this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id );" << std::endl;
+            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id, _userData );" << std::endl;
             this->write( _ss ) << std::endl;
         }
 
@@ -1445,7 +1673,7 @@ namespace Metabuf
 
                 this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
                 this->write( _ss ) << "        {" << std::endl;
-                this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << attr->getWriteName() << " );" << std::endl;
+                this->write( _ss ) << "            this->read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
                 this->write( _ss ) << std::endl;
                 this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
                 this->write( _ss ) << "        }break;" << std::endl;
@@ -1474,7 +1702,7 @@ namespace Metabuf
 
                     this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
                     this->write( _ss ) << "        {" << std::endl;
-                    this->write( _ss ) << "            this->read( _buff, _size, _read, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                    this->write( _ss ) << "            this->read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
                     this->write( _ss ) << "        }break;" << std::endl;
@@ -1524,7 +1752,7 @@ namespace Metabuf
 
             this->write( _ss ) << "    case " << node->id << ":" << std::endl;
             this->write( _ss ) << "        {" << std::endl;
-            this->write( _ss ) << "            single_" << node->getWriteName() << ".parse( _buff, _size, _read, m_userData );" << std::endl;
+            this->write( _ss ) << "            single_" << node->getWriteName() << ".parse( _buff, _size, _read, _userData );" << std::endl;
             this->write( _ss ) << "        }break;" << std::endl;
         }
 
@@ -1544,21 +1772,31 @@ namespace Metabuf
             return true;
         }
 
+		if( _node->includes.size() == 1 && _node->inheritances.empty() == true )
+		{
+			return true;
+		}
+
+		if( _node->inheritance.empty() == true && _node->generators.empty() == true )
+		{
+			return true;
+		}
+
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_preparationIncludes( uint32_t _id, uint32_t _count )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
-        if( _node->inheritance.empty() == false )
-        {
-            const XmlNode * node_inheritance = _node->node_inheritance;
+		if( _node->inheritance.empty() == false )
+		{
+			const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_preparationIncludes( _id, _count );" << std::endl;
+			this->write( _ss ) << "    " << node_inheritance->getScope() << "::_preparationIncludes( _id, _count );" << std::endl;
 
-            if( _node->includes.empty() == false )
-            {
-                this->write( _ss ) << std::endl;
-            }
-        }
+			if( _node->includes.empty() == false )
+			{
+				this->write( _ss ) << std::endl;
+			}
+		}
 
         if( _node->includes.empty() == false || _node->inheritances.empty() == false )
         {
@@ -1610,42 +1848,49 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
-        this->write( _ss ) << "{" << std::endl;
+		if( _node->includes.size() == 1 && _node->inheritance.empty() == true )
+		{
+			return true;
+		}
 
-        if( _node->inheritance.empty() == false )
-        {
-            const XmlNode * node_inheritance = _node->node_inheritance;
+		if( _node->inheritance.empty() == true )
+		{
+			return true;
+		}
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseIncludes( _buff, _size, _read, _id );" << std::endl;
+		this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+		this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
+		this->write( _ss ) << "{" << std::endl;
 
-            this->write( _ss ) << std::endl;
-        }
+		const XmlNode * node_inheritance = _node->node_inheritance;
 
-        this->write( _ss ) << "    switch( _id )" << std::endl;
-        this->write( _ss ) << "    {" << std::endl;
+		this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseIncludes( _buff, _size, _read, _id, _userData );" << std::endl;
 
-        for( TMapNodes::const_iterator
-            it_includes = _node->includes.begin(),
-            it_includes_end = _node->includes.end();
-            it_includes != it_includes_end;
-            ++it_includes )
-        {
-            const XmlNode * node = it_includes->second;
+		this->write( _ss ) << std::endl;
 
-            this->write( _ss ) << "    case " << node->id << ":" << std::endl;
-            this->write( _ss ) << "        {" << std::endl;
-            this->write( _ss ) << "            includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
-            this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
-            this->write( _ss ) << std::endl;
-            this->write( _ss ) << "            metadata.parse( _buff, _size, _read, m_userData );" << std::endl;
-            this->write( _ss ) << "        }break;" << std::endl;
-        }
+		this->write( _ss ) << "    switch( _id )" << std::endl;
+		this->write( _ss ) << "    {" << std::endl;
 
-        this->write( _ss ) << "    default:" << std::endl;
-        this->write( _ss ) << "        break;" << std::endl;
-        this->write( _ss ) << "    }" << std::endl;
+		for( TMapNodes::const_iterator
+			it_includes = _node->includes.begin(),
+			it_includes_end = _node->includes.end();
+			it_includes != it_includes_end;
+			++it_includes )
+		{
+			const XmlNode * node = it_includes->second;
+
+			this->write( _ss ) << "    case " << node->id << ":" << std::endl;
+			this->write( _ss ) << "        {" << std::endl;
+			this->write( _ss ) << "            includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
+			this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
+			this->write( _ss ) << std::endl;
+			this->write( _ss ) << "            metadata.parse( _buff, _size, _read, _userData );" << std::endl;
+			this->write( _ss ) << "        }break;" << std::endl;
+		}
+
+		this->write( _ss ) << "    default:" << std::endl;
+		this->write( _ss ) << "        break;" << std::endl;
+		this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
 
@@ -1749,7 +1994,7 @@ namespace Metabuf
                 this->write( _ss ) << "    case " << node_generator->id << ":" << std::endl;
                 this->write( _ss ) << "        {" << std::endl;
                 this->write( _ss ) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
-                this->write( _ss ) << "            metadata->parse( _buff, _size, _read, m_userData );" << std::endl;
+                this->write( _ss ) << "            metadata->parse( _buff, _size, _read, _userData );" << std::endl;
                 this->write( _ss ) << std::endl;
                 this->write( _ss ) << "            children_" << node_children->getWriteName() << ".push_back(metadata);" << std::endl;
                 this->write( _ss ) << "        }break;" << std::endl;
@@ -1773,14 +2018,14 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "void " << _node->getScope() << "::_parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id )" << std::endl;
+        this->write( _ss ) << "void " << _node->getScope() << "::_parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseGenerators( _buff, _size, _read, _id );" << std::endl;
+            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseGenerators( _buff, _size, _read, _id, _userData );" << std::endl;
 
             if( _node->includes.empty() == false )
             {
@@ -1817,7 +2062,7 @@ namespace Metabuf
                     this->write( _ss ) << "    case " << node_generator->id << ":" << std::endl;
                     this->write( _ss ) << "        {" << std::endl;
                     this->write( _ss ) << "            " << node_generator->getScope() << " * metadata = new " << node_generator->getScope() << " ();" << std::endl;
-                    this->write( _ss ) << "            metadata->parse( _buff, _size, _read, m_userData );" << std::endl;
+                    this->write( _ss ) << "            metadata->parse( _buff, _size, _read, _userData );" << std::endl;
                     this->write( _ss ) << std::endl;
                     this->write( _ss ) << "            includes_" << node_inheritance->getWriteName() << ".push_back(metadata);" << std::endl;
                     this->write( _ss ) << "        }break;" << std::endl;

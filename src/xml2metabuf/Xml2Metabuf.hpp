@@ -60,6 +60,13 @@ namespace Metabuf
         bool writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
         bool writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr );
 
+	protected:
+		bool hasMetaGenerators_( const XmlNode * _node ) const;
+		bool hasMetaChildren_( const XmlNode * _node ) const;
+		bool hasMetaIncludes_( const XmlNode * _node ) const;
+		bool hasMetaSingles_( const XmlNode * _node ) const;
+		bool hasMetaAttribute_( const XmlNode * _node ) const;
+
     public:
         template<class T>
         void write( const T & _value )

@@ -1,8 +1,8 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metabuf.hpp"
 
-#include "Metautils.h"
-#include "Metacode.h"
+#include "test_utils.h"
+#include "test_metacode.h"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -121,7 +121,7 @@ int main( int argc, char *argv[] )
 
 	free( example_xml_buffer );
 
-	FILE * file_example_bin = fopen( path_example_bin, "wb" );
+	FILE * file_example_bin = write_file( argv[1], path_example_bin );
 
 	if( file_example_bin == nullptr )
 	{

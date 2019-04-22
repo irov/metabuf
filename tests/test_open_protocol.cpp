@@ -1,15 +1,13 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
 
-#include "Metautils.h"
+#include "test_utils.h"
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-const char * path_metacode_h = "Metacode.h";
-const char * path_metacode_cpp = "Metacode.cpp";
 const char * path_protocol = "Protocol.xml";
 
 int main( int argc, char *argv[] )

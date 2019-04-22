@@ -1,4 +1,4 @@
-#include "Metatype.h"
+#include "test_metatype.h"
 
 namespace Metabuf
 {
@@ -50,6 +50,23 @@ namespace Metabuf
 
 		_value = cache->strings[index];		
     }
+	//////////////////////////////////////////////////////////////////////////
+	void archive_read( Reader & ar, Detail::Vec2f & _value, void * _userData )
+	{
+		(void)_userData;
+
+		ar.readPOD( _value.x );
+		ar.readPOD( _value.y );
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void archive_read( Reader & ar, Detail::Vec3f & _value, void * _userData )
+	{
+		(void)_userData;
+
+		ar.readPOD( _value.x );
+		ar.readPOD( _value.y );
+		ar.readPOD( _value.z );
+	}
     //////////////////////////////////////////////////////////////////////////
     void archive_read( Reader & ar, Detail::Rect & _value, void * _userData )
     {

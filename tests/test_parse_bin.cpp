@@ -1,4 +1,4 @@
-#include "Metacode.h"
+#include "test_metacode.h"
 
 #include <string>
 #include <vector>
@@ -37,8 +37,6 @@ int main( int argc, char *argv[] )
 	long file_example_bin_size = ftell( file_example_bin );
 	rewind( file_example_bin );
 
-	Metacode::Meta_Data::Meta_DataBlock meta_DataBlock;
-
 	uint8_t header_buff[Metacode::header_size];
 	fread( header_buff, Metacode::header_size, 1, file_example_bin );
 
@@ -47,12 +45,12 @@ int main( int argc, char *argv[] )
 	uint32_t needVersion;
 	uint32_t readProtocol;
 	uint32_t needProtocol;
-	uint32_t metaMetaVersion = meta_DataBlock.getVersion();
+	uint32_t metaMetaVersion = Metacode::Meta_Data::getVersion();
 	uint32_t needMetaVersion;
 
-	Metacode::HeaderError result = Metacode::readHeader( header_buff, Metacode::header_size, header_read, readVersion, needVersion, readProtocol, needProtocol, metaMetaVersion, needMetaVersion );
+	Metabuf::HeaderError result = Metacode::readHeader( header_buff, Metacode::header_size, header_read, readVersion, needVersion, readProtocol, needProtocol, metaMetaVersion, needMetaVersion );
 
-	if( result != Metacode::HEADER_SUCCESSFUL )
+	if( result != Metabuf::HEADER_SUCCESSFUL )
 	{
 		printf( "invalid header bin file '%s'"
 			, path_example_bin
@@ -95,7 +93,8 @@ int main( int argc, char *argv[] )
 		s.assign( str, stringSize );
 	}
 
-	if( meta_DataBlock.parseRoot( example_bin_buffer, bin_size, read_size, (void *)&metacache ) == false )
+	Metacode::Meta_Data::Meta_DataBlock meta_DataBlock;
+	if( meta_DataBlock.parse( example_bin_buffer, bin_size, read_size, (void *)&metacache ) == false )
 	{
 		printf( "error parse root bin file '%s'"
 			, path_example_bin

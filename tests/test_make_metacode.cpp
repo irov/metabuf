@@ -1,15 +1,15 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
 
-#include "Metautils.h"
+#include "test_utils.h"
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-const char * path_metacode_h = "Metacode.h";
-const char * path_metacode_cpp = "Metacode.cpp";
+const char * path_metacode_h = "test_metacode.h";
+const char * path_metacode_cpp = "test_metacode.cpp";
 const char * path_protocol = "Protocol.xml";
 
 int main( int argc, char *argv[] )
@@ -20,7 +20,7 @@ int main( int argc, char *argv[] )
 	Metabuf::XmlProtocol xml_protocol;
 
 	size_t file_protocol_size;
-	void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
+	void * file_protocol_buffer = read_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_protocol, &file_protocol_size );
 
 	if( file_protocol_buffer == nullptr )
 	{
@@ -46,9 +46,13 @@ int main( int argc, char *argv[] )
 
 	Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
 
+	Metabuf::Xml2Settings xml_settings;
+	xml_settings.metacode_h = "test_metacode.h";
+	xml_settings.metatype_h = "test_metatype.h";
+
 	std::string header;
 	std::string source;
-	if( xml_metacode.generate( header, source ) == false )
+	if( xml_metacode.generate( header, source, xml_settings ) == false )
 	{
 		std::string error = xml_protocol.getError();
 
@@ -59,7 +63,7 @@ int main( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}	
 
-	FILE * file_metacode_h = fopen( path_metacode_h, "wb" );
+	FILE * file_metacode_h = write_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_metacode_h );
 
 	if( file_metacode_h == nullptr )
 	{
@@ -73,7 +77,7 @@ int main( int argc, char *argv[] )
 	fwrite( header.c_str(), header.size(), 1, file_metacode_h );
 	fclose( file_metacode_h );
 
-	FILE * file_metacode_cpp = fopen( path_metacode_cpp, "wb" );
+	FILE * file_metacode_cpp = write_file( "d:/Project/Mengine/dependencies/metabuf/tests", path_metacode_cpp );
 
 	if( file_metacode_cpp == nullptr )
 	{

@@ -47,9 +47,13 @@ int main( int argc, char *argv[] )
 
     Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
 
+	Metabuf::Xml2Settings xml_settings;
+	xml_settings.metacode_h = "Metacode.h";
+	xml_settings.metatype_h = "Metatype.h";
+
     std::string header;
     std::string source;
-    if( xml_metacode.generate( header, source ) == false )
+    if( xml_metacode.generate( header, source, xml_settings ) == false )
     {
         std::string error = xml_protocol.getError();
 
