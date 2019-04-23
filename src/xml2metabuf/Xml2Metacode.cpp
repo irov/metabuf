@@ -290,7 +290,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderDataReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-        if( this->hasNodeDataSize_( _node ) == false )
+        if( this->hasNodeDataSize_( _node, false ) == false )
         {
             return true;
         }
@@ -302,7 +302,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-        if( this->hasNodeAttributeSize_( _node ) == false )
+        if( this->hasNodeAttributeSize_( _node, false ) == false )
         {
             return true;
         }
@@ -1276,7 +1276,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::hasNodeDataSize_( const XmlNode * _node )
+    bool Xml2Metacode::hasNodeDataSize_( const XmlNode * _node, bool _hierarchy )
     {
         for( TMapAttributes::const_iterator
             it_attributes = _node->attributes.begin(),
@@ -1319,10 +1319,15 @@ namespace Metabuf
             }
         }
 
+        if( _hierarchy == true && _node->node_inheritance != nullptr && this->hasNodeDataSize_( _node->node_inheritance, true ) == true )
+        {
+            return true;
+        }
+
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::hasNodeAttributeSize_( const XmlNode * _node )
+    bool Xml2Metacode::hasNodeAttributeSize_( const XmlNode * _node, bool _hierarchy )
     {
         for( TMapAttributes::const_iterator
             it_attributes = _node->attributes.begin(),
@@ -1365,6 +1370,11 @@ namespace Metabuf
             }
         }
 
+        if( _hierarchy == true && _node->node_inheritance != nullptr && this->hasNodeAttributeSize_( _node->node_inheritance, true ) == true )
+        {
+            return true;
+        }
+
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1378,13 +1388,13 @@ namespace Metabuf
         this->write( _ss ) << "    (void)_read;" << std::endl;
         this->write( _ss ) << "    (void)_userData;" << std::endl;
 
-        if( this->hasNodeDataSize_( _node ) == true )
+        if( this->hasNodeDataSize_( _node, true ) == true )
         {
             this->write( _ss ) << "    this->_parseData( _buff, _size, _read, _userData );" << std::endl;
             this->write( _ss ) << std::endl;
         }
 
-        if( this->hasNodeAttributeSize_( _node ) == true )
+        if( this->hasNodeAttributeSize_( _node, true ) == true )
         {
             this->write( _ss ) << "    uint32_t attributeCount;" << std::endl;
             this->write( _ss ) << "    Metabuf::readSize( _buff, _size, _read, attributeCount );" << std::endl;
@@ -1556,7 +1566,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceDataReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-        if( this->hasNodeDataSize_( _node ) == false )
+        if( this->hasNodeDataSize_( _node, false ) == false )
         {
             return true;
         }
@@ -1573,11 +1583,33 @@ namespace Metabuf
             this->write( _ss ) << std::endl;
         }
 
-        if( this->hasNodeDataSize_( _node ) == true )
+        for( TMapAttributes::const_iterator
+            it_attributes = _node->attributes.begin(),
+            it_attributes_end = _node->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
         {
+            const XmlAttribute * attr = &it_attributes->second;
+
+            if( attr->required == false )
+            {
+                continue;
+            }
+
+            this->write( _ss ) << "    Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
+        }
+
+        for( TMapMembers::const_iterator
+            it_members = _node->members.begin(),
+            it_members_end = _node->members.end();
+            it_members != it_members_end;
+            ++it_members )
+        {
+            const XmlMember * member = &it_members->second;
+
             for( TMapAttributes::const_iterator
-                it_attributes = _node->attributes.begin(),
-                it_attributes_end = _node->attributes.end();
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
@@ -1588,32 +1620,7 @@ namespace Metabuf
                     continue;
                 }
 
-                this->write( _ss ) << "    Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
-            }
-
-            for( TMapMembers::const_iterator
-                it_members = _node->members.begin(),
-                it_members_end = _node->members.end();
-                it_members != it_members_end;
-                ++it_members )
-            {
-                const XmlMember * member = &it_members->second;
-
-                for( TMapAttributes::const_iterator
-                    it_attributes = member->attributes.begin(),
-                    it_attributes_end = member->attributes.end();
-                    it_attributes != it_attributes_end;
-                    ++it_attributes )
-                {
-                    const XmlAttribute * attr = &it_attributes->second;
-
-                    if( attr->required == false )
-                    {
-                        continue;
-                    }
-
-                    this->write( _ss ) << "    Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
-                }
+                this->write( _ss ) << "    Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
             }
         }
 
@@ -1624,7 +1631,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceAttributeReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-        if( this->hasNodeAttributeSize_( _node ) == false )
+        if( this->hasNodeAttributeSize_( _node, false ) == false )
         {
             return true;
         }
@@ -1641,14 +1648,41 @@ namespace Metabuf
             this->write( _ss ) << std::endl;
         }
 
-        if( this->hasNodeAttributeSize_( _node ) == true )
+        this->write( _ss ) << "    switch( _id )" << std::endl;
+        this->write( _ss ) << "    {" << std::endl;
+
+        for( TMapAttributes::const_iterator
+            it_attributes = _node->attributes.begin(),
+            it_attributes_end = _node->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
         {
-            this->write( _ss ) << "    switch( _id )" << std::endl;
-            this->write( _ss ) << "    {" << std::endl;
+            const XmlAttribute * attr = &it_attributes->second;
+
+            if( attr->required == true )
+            {
+                continue;
+            }
+
+            this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
+            this->write( _ss ) << "        {" << std::endl;
+            this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
+            this->write( _ss ) << std::endl;
+            this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
+            this->write( _ss ) << "        }break;" << std::endl;
+        }
+
+        for( TMapMembers::const_iterator
+            it_members = _node->members.begin(),
+            it_members_end = _node->members.end();
+            it_members != it_members_end;
+            ++it_members )
+        {
+            const XmlMember * member = &it_members->second;
 
             for( TMapAttributes::const_iterator
-                it_attributes = _node->attributes.begin(),
-                it_attributes_end = _node->attributes.end();
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
@@ -1661,46 +1695,16 @@ namespace Metabuf
 
                 this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
                 this->write( _ss ) << "        {" << std::endl;
-                this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
+                this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
                 this->write( _ss ) << std::endl;
-                this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
+                this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
                 this->write( _ss ) << "        }break;" << std::endl;
             }
-
-            for( TMapMembers::const_iterator
-                it_members = _node->members.begin(),
-                it_members_end = _node->members.end();
-                it_members != it_members_end;
-                ++it_members )
-            {
-                const XmlMember * member = &it_members->second;
-
-                for( TMapAttributes::const_iterator
-                    it_attributes = member->attributes.begin(),
-                    it_attributes_end = member->attributes.end();
-                    it_attributes != it_attributes_end;
-                    ++it_attributes )
-                {
-                    const XmlAttribute * attr = &it_attributes->second;
-
-                    if( attr->required == true )
-                    {
-                        continue;
-                    }
-
-                    this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
-                    this->write( _ss ) << "        {" << std::endl;
-                    this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
-                    this->write( _ss ) << "        }break;" << std::endl;
-                }
-            }
-
-            this->write( _ss ) << "    default:" << std::endl;
-            this->write( _ss ) << "        break;" << std::endl;
-            this->write( _ss ) << "    }" << std::endl;
         }
+
+        this->write( _ss ) << "    default:" << std::endl;
+        this->write( _ss ) << "        break;" << std::endl;
+        this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
 

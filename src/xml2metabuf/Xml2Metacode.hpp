@@ -70,8 +70,8 @@ namespace Metabuf
         bool writeSourceIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
 
     protected:
-        bool hasNodeDataSize_( const XmlNode * _node );
-        bool hasNodeAttributeSize_( const XmlNode * _node );
+        bool hasNodeDataSize_( const XmlNode * _node, bool _hierarchy );
+        bool hasNodeAttributeSize_( const XmlNode * _node, bool _hierarchy );
 
     protected:
         std::stringstream & write( std::stringstream & _ss );
