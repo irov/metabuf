@@ -336,65 +336,185 @@ namespace Metabuf
 
             if( attr->required == false )
             {
-                this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
-                this->write( _ss ) << "{" << std::endl;
-                this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
-                this->write( _ss ) << "}" << std::endl;
-                this->write( _ss ) << std::endl;
-
-                if( type.is_ncr == true || type.is_enumerator == true )
+                if( attr->default_value.empty() == false )
                 {
-                    if( type.is_template == true )
+                    this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+
+                    if( type.is_ncr == true || type.is_enumerator == true )
                     {
-                        this->write( _ss ) << "template<class T>" << std::endl;
-                        this->write( _ss ) << "T getd_" << attr->name << "( T _default ) const" << std::endl;
-                        this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                        this->write( _ss ) << "    {" << std::endl;
-                        this->write( _ss ) << "        return _default;" << std::endl;
-                        this->write( _ss ) << "    }" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    return static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
-                        this->write( _ss ) << "}" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "template<class T>" << std::endl;
-                        this->write( _ss ) << "bool get_" << attr->name << "( T * _value ) const" << std::endl;
-                        this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                        this->write( _ss ) << "    {" << std::endl;
-                        this->write( _ss ) << "        return false;" << std::endl;
-                        this->write( _ss ) << "    }" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    *_value = static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    return true;" << std::endl;
-                        this->write( _ss ) << "}" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "template<class T>" << std::endl;
-                        this->write( _ss ) << "bool get_" << attr->name << "( T * _value, const T & _default ) const" << std::endl;
-                        this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                        this->write( _ss ) << "    {" << std::endl;
-                        this->write( _ss ) << "        *_value = _default;" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "        return false;" << std::endl;
-                        this->write( _ss ) << "    }" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    *_value = static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    return true;" << std::endl;
-                        this->write( _ss ) << "}" << std::endl;
+                        if( type.is_template == true )
+                        {
+                            this->write( _ss ) << "template<class T>" << std::endl;
+                            this->write( _ss ) << "T get_" << attr->name << "() const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                        }
+                        else
+                        {
+                            this->write( _ss ) << "template<class C, class M>" << std::endl;
+                            this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << type.write << " get_" << attr->name << "() const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                        }
                     }
                     else
                     {
-                        this->write( _ss ) << type.write << " getd_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "() const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                    }
+
+                    this->write( _ss ) << std::endl;
+                }
+                else
+                {
+                    this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
+                    this->write( _ss ) << "{" << std::endl;
+                    this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
+                    this->write( _ss ) << "}" << std::endl;
+                    this->write( _ss ) << std::endl;
+
+                    if( type.is_ncr == true || type.is_enumerator == true )
+                    {
+                        if( type.is_template == true )
+                        {
+                            this->write( _ss ) << "template<class T>" << std::endl;
+                            this->write( _ss ) << "T getd_" << attr->name << "( T _default ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return _default;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "template<class T>" << std::endl;
+                            this->write( _ss ) << "bool get_" << attr->name << "( T * _value ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return false;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    *_value = static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return true;" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "template<class T>" << std::endl;
+                            this->write( _ss ) << "bool get_" << attr->name << "( T * _value, const T & _default ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        *_value = _default;" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "        return false;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    *_value = static_cast<T>(this->" << attr->getWriteName() << ");" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return true;" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                        }
+                        else
+                        {
+                            this->write( _ss ) << type.write << " getd_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return _default;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return false;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return true;" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "template<class C, class M>" << std::endl;
+                            this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        return false;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return true;" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    {" << std::endl;
+                            this->write( _ss ) << "        *_value = _default;" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "        return false;" << std::endl;
+                            this->write( _ss ) << "    }" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "    return true;" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                        }
+                    }
+                    else
+                    {
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
                         this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
-                        this->write( _ss ) << "        return _default;" << std::endl;
+                        this->write( _ss ) << "        return false;" << std::endl;
                         this->write( _ss ) << "    }" << std::endl;
                         this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    return this->" << attr->getWriteName() << ";" << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    return true;" << std::endl;
                         this->write( _ss ) << "}" << std::endl;
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
@@ -405,19 +525,6 @@ namespace Metabuf
                         this->write( _ss ) << "    }" << std::endl;
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    return true;" << std::endl;
-                        this->write( _ss ) << "}" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "template<class C, class M>" << std::endl;
-                        this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
-                        this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                        this->write( _ss ) << "    {" << std::endl;
-                        this->write( _ss ) << "        return false;" << std::endl;
-                        this->write( _ss ) << "    }" << std::endl;
-                        this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "    return true;" << std::endl;
                         this->write( _ss ) << "}" << std::endl;
@@ -436,47 +543,6 @@ namespace Metabuf
                         this->write( _ss ) << "    return true;" << std::endl;
                         this->write( _ss ) << "}" << std::endl;
                     }
-                }
-                else
-                {
-                    this->write( _ss ) << "template<class C, class M>" << std::endl;
-                    this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
-                    this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                    this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        return false;" << std::endl;
-                    this->write( _ss ) << "    }" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    (_self->*_method)( this->" << attr->getWriteName() << " );" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return true;" << std::endl;
-                    this->write( _ss ) << "}" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
-                    this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                    this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        return false;" << std::endl;
-                    this->write( _ss ) << "    }" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return true;" << std::endl;
-                    this->write( _ss ) << "}" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
-                    this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
-                    this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        *_value = _default;" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "        return false;" << std::endl;
-                    this->write( _ss ) << "    }" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    *_value = this->" << attr->getWriteName() << ";" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return true;" << std::endl;
-                    this->write( _ss ) << "}" << std::endl;
                 }
             }
             else
@@ -549,31 +615,92 @@ namespace Metabuf
                     this->write( _ss ) << "    return " << member->getWriteName() << "_" << attr->name << "_successful;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "template<class C, class M>" << std::endl;
-                    this->write( _ss ) << "bool getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
-                    this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
-                    this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        return false;" << std::endl;
-                    this->write( _ss ) << "    }" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return true;" << std::endl;
-                    this->write( _ss ) << "}" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "bool get_" << member->name << "_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
-                    this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
-                    this->write( _ss ) << "    {" << std::endl;
-                    this->write( _ss ) << "        return false;" << std::endl;
-                    this->write( _ss ) << "    }" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    *_value = this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
-                    this->write( _ss ) << std::endl;
-                    this->write( _ss ) << "    return true;" << std::endl;
-                    this->write( _ss ) << "}" << std::endl;
-                    this->write( _ss ) << std::endl;
+
+                    if( attr->default_value.empty() == false )
+                    {
+                        if( type.is_ncr == true || type.is_enumerator == true )
+                        {
+                            if( type.is_template == true )
+                            {
+                                this->write( _ss ) << "template<class T>" << std::endl;
+                                this->write( _ss ) << "T get_" << member->name << "_" << attr->name << "() const" << std::endl;
+                                this->write( _ss ) << "{" << std::endl;
+                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    {" << std::endl;
+                                this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                                this->write( _ss ) << "    }" << std::endl;
+                                this->write( _ss ) << std::endl;
+                                this->write( _ss ) << "    return static_cast<T>(this->" << member->getWriteName() << "_" << attr->name << ");" << std::endl;
+                                this->write( _ss ) << "}" << std::endl;
+                            }
+                            else
+                            {
+                                this->write( _ss ) << "template<class C, class M>" << std::endl;
+                                this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                                this->write( _ss ) << "{" << std::endl;
+                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    {" << std::endl;
+                                this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                                this->write( _ss ) << "    }" << std::endl;
+                                this->write( _ss ) << std::endl;
+                                this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                                this->write( _ss ) << "}" << std::endl;
+                                this->write( _ss ) << std::endl;
+                                this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
+                                this->write( _ss ) << "{" << std::endl;
+                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    {" << std::endl;
+                                this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                                this->write( _ss ) << "    }" << std::endl;
+                                this->write( _ss ) << std::endl;
+                                this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
+                                this->write( _ss ) << "}" << std::endl;
+                            }
+                        }
+                        else
+                        {
+                            this->write( _ss ) << "template<class C, class M>" << std::endl;
+                            this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                            this->write( _ss ) << std::endl;
+                            this->write( _ss ) << "const " << type.write << " & get_" << member->name << "_" << attr->name << "() const" << std::endl;
+                            this->write( _ss ) << "{" << std::endl;
+                            this->write( _ss ) << "    return this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
+                            this->write( _ss ) << "}" << std::endl;
+                        }
+
+                        this->write( _ss ) << std::endl;
+                    }
+                    else
+                    {
+                        this->write( _ss ) << "template<class C, class M>" << std::endl;
+                        this->write( _ss ) << "bool getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    {" << std::endl;
+                        this->write( _ss ) << "        return false;" << std::endl;
+                        this->write( _ss ) << "    }" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    return true;" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "bool get_" << member->name << "_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
+                        this->write( _ss ) << "{" << std::endl;
+                        this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    {" << std::endl;
+                        this->write( _ss ) << "        return false;" << std::endl;
+                        this->write( _ss ) << "    }" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    *_value = this->" << member->getWriteName() << "_" << attr->name << ";" << std::endl;
+                        this->write( _ss ) << std::endl;
+                        this->write( _ss ) << "    return true;" << std::endl;
+                        this->write( _ss ) << "}" << std::endl;
+                        this->write( _ss ) << std::endl;
+                    }
                 }
                 else
                 {

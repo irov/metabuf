@@ -953,6 +953,7 @@ namespace Metabuf
                 pugi::xml_attribute AttributeName = element.attribute( "Name" );
                 pugi::xml_attribute AttributeType = element.attribute( "Type" );
                 pugi::xml_attribute AttributeRequired = element.attribute( "Required" );
+                pugi::xml_attribute AttributeDefault = element.attribute( "Default" );
 
                 XmlAttribute & attributeXml = nodeXml->attributes[AttributeName.value()];
 
@@ -960,6 +961,14 @@ namespace Metabuf
                 attributeXml.name = AttributeName.value();
                 attributeXml.type = AttributeType.value();
                 attributeXml.required = AttributeRequired.empty() == false;
+                attributeXml.default_value = AttributeDefault.value();
+
+                if( attributeXml.required == true && attributeXml.default_value.empty() == false )
+                {
+                    m_error << "XmlProtocol::readNode_: Attribute " << NodeName.value() << " incorrect together 'Required' and 'Default' modify" << std::endl;
+
+                    return false;
+                }
 
                 if( this->hasType( attributeXml.type ) == false )
                 {
@@ -975,6 +984,7 @@ namespace Metabuf
                 pugi::xml_attribute MemberType = element.attribute( "Type" );
                 //pugi::xml_attribute Evict = element.attribute("Evict");
                 pugi::xml_attribute MemberRequired = element.attribute( "Required" );
+                pugi::xml_attribute AttributeDefault = element.attribute( "Default" );
 
                 XmlMember & memberXml = nodeXml->members[MemberNode.value()];
 
@@ -986,6 +996,14 @@ namespace Metabuf
                 attributeXml.name = MemberName.value();
                 attributeXml.type = MemberType.value();
                 attributeXml.required = MemberRequired.empty() == false;
+                attributeXml.default_value = AttributeDefault.value();
+
+                if( attributeXml.required == true && attributeXml.default_value.empty() == false )
+                {
+                    m_error << "XmlProtocol::readNode_: Attribute " << NodeName.value() << " incorrect together 'Required' and 'Default' modify" << std::endl;
+
+                    return false;
+                }
 
                 if( this->hasType( attributeXml.type ) == false )
                 {

@@ -46,6 +46,7 @@ namespace Metabuf
         std::string name;
         std::string type;
         bool required;
+        std::string default_value;
     };
 
     typedef std::map<std::string, XmlAttribute> TMapAttributes;
