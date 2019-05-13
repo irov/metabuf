@@ -654,8 +654,7 @@ namespace Metabuf
                                 this->write( _ss ) << "{" << std::endl;
                                 this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
-                                this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
-                                this->write( _ss ) << "    (_self->*_method)( " << attr->default_value << " );" << std::endl;
+                                this->write( _ss ) << "        (_self->*_method)( " << attr->default_value << " );" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
                                 this->write( _ss ) << "    else" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
