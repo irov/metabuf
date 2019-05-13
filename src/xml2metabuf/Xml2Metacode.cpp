@@ -641,7 +641,7 @@ namespace Metabuf
                                 this->write( _ss ) << "{" << std::endl;
                                 this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
-                                this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                                this->write( _ss ) << "        return static_cast<T>(" << attr->default_value << ");" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
                                 this->write( _ss ) << std::endl;
                                 this->write( _ss ) << "    return static_cast<T>(this->" << member->getWriteName() << "_" << attr->name << ");" << std::endl;
@@ -655,9 +655,12 @@ namespace Metabuf
                                 this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
                                 this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
+                                this->write( _ss ) << "    (_self->*_method)( " << attr->default_value << " );" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
-                                this->write( _ss ) << std::endl;
-                                this->write( _ss ) << "    (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                                this->write( _ss ) << "    else" << std::endl;
+                                this->write( _ss ) << "    {" << std::endl;
+                                this->write( _ss ) << "        (_self->*_method)( this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                                this->write( _ss ) << "    }" << std::endl;
                                 this->write( _ss ) << "}" << std::endl;
                                 this->write( _ss ) << std::endl;
                                 this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
