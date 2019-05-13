@@ -283,6 +283,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderParse_( std::stringstream & _ss, const XmlNode * _node )
     {
+		(void)_node;
+
         this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
         return true;
@@ -990,6 +992,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
+		(void)_node;
+
         this->write( _ss ) << "void _preparationIncludes( uint32_t _id, uint32_t _count );" << std::endl;
 
         return true;
@@ -997,6 +1001,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
     {
+		(void)_node;
+
         this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
         return true;
@@ -1324,6 +1330,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root )
     {
+		(void)_meta;
+
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "//cppcheck-suppress uninitMemberVar" << std::endl;
         this->write( _ss ) << _node->getScope() << "::" << _node->getWriteName() << "()" << std::endl;
