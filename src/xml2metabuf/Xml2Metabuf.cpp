@@ -1225,15 +1225,18 @@ namespace Metabuf
             return true;
         }
 
-        uint32_t attributeCount;
-        if( this->getNodeAttributeSize_( _node, _xml_node, attributeCount ) == false )
+        TVectorNoRequiredAttributes noRequiredAttributes;
+        _node->getNoRequiredAttributes2( _xml_node, noRequiredAttributes );
+
+        uint32_t flagNRA = 0;
+        for( const NoRequiredAttribute & nra : noRequiredAttributes )
         {
-            return false;
+            flagNRA |= (1 << nra.id);
         }
 
-        this->writeSize( attributeCount );
+        this->writeSize( flagNRA );
 
-        if( attributeCount == 0 )
+        if( flagNRA == 0 )
         {
             return true;
         }
@@ -1427,9 +1430,6 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
     {
-        uint32_t id = _attr->id;
-        this->writeSize( id );
-
         if( this->writeNodeDataValue_( _attr, _xml_attr ) == false )
         {
             m_error << "Xml2Metabuf::writeNodeArguments_: invalid write data '" << _attr->name << "' type '" << _attr->type << "'" << std::endl;

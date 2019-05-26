@@ -161,6 +161,11 @@ namespace Metabuf
             return false;
         }
 
+        if( this->writeHeaderAttributeNoRequired_( _ss, _node ) == false )
+        {
+            return false;
+        }
+
         if( this->writeHeaderAttributeSetup_( _ss, _node ) == false )
         {
             return false;
@@ -227,14 +232,10 @@ namespace Metabuf
 
         this->write( _ss ) << std::endl;
 
-        this->write( _ss ) << "public:" << std::endl;
-
         if( this->writeHeaderIncludesDefinition_( _ss, _meta, _node ) == false )
         {
             return false;
         }
-
-        this->write( _ss ) << "protected:" << std::endl;
 
         if( this->writeHeaderAttribute_( _ss, _node ) == false )
         {
@@ -309,7 +310,7 @@ namespace Metabuf
             return true;
         }
 
-        this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
+        this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
         return true;
     }
@@ -342,7 +343,7 @@ namespace Metabuf
                 {
                     this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
+                    this->write( _ss ) << "    return (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") != 0;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
 
@@ -353,7 +354,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class T>" << std::endl;
                             this->write( _ss ) << "T get_" << attr->name << "() const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return static_cast<T>(" << attr->default_value << ");" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -366,7 +367,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class C, class M>" << std::endl;
                             this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        (_self->*_method)( this->" << attr->default_value << " );" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -378,7 +379,7 @@ namespace Metabuf
                             this->write( _ss ) << std::endl;
                             this->write( _ss ) << type.write << " get_" << attr->name << "() const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -392,7 +393,7 @@ namespace Metabuf
                         this->write( _ss ) << "template<class C, class M>" << std::endl;
                         this->write( _ss ) << "void getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-						this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+						this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
 						this->write( _ss ) << "    {" << std::endl;
 						this->write( _ss ) << "        (_self->*_method)( this->" << attr->default_value << " );" << std::endl;
 						this->write( _ss ) << "    }" << std::endl;
@@ -404,7 +405,7 @@ namespace Metabuf
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "const " << type.write << " & get_" << attr->name << "() const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-						this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+						this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
 						this->write( _ss ) << "    {" << std::endl;
 						this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
 						this->write( _ss ) << "    }" << std::endl;
@@ -419,7 +420,7 @@ namespace Metabuf
                 {
                     this->write( _ss ) << "bool has_" << attr->name << "() const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    return " << attr->getWriteName() << "_successful;" << std::endl;
+                    this->write( _ss ) << "    return (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") != 0;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
 
@@ -430,7 +431,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class T>" << std::endl;
                             this->write( _ss ) << "T getd_" << attr->name << "( T _default ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return _default;" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -441,7 +442,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class T>" << std::endl;
                             this->write( _ss ) << "bool get_" << attr->name << "( T * _value ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return false;" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -454,7 +455,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class T>" << std::endl;
                             this->write( _ss ) << "bool get_" << attr->name << "( T * _value, const T & _default ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        *_value = _default;" << std::endl;
                             this->write( _ss ) << std::endl;
@@ -470,7 +471,7 @@ namespace Metabuf
                         {
                             this->write( _ss ) << type.write << " getd_" << attr->name << "( " << type.write << " _default ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return _default;" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -480,7 +481,7 @@ namespace Metabuf
                             this->write( _ss ) << std::endl;
                             this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return false;" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -493,7 +494,7 @@ namespace Metabuf
                             this->write( _ss ) << "template<class C, class M>" << std::endl;
                             this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        return false;" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
@@ -505,7 +506,7 @@ namespace Metabuf
                             this->write( _ss ) << std::endl;
                             this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                             this->write( _ss ) << "{" << std::endl;
-                            this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
                             this->write( _ss ) << "        *_value = _default;" << std::endl;
                             this->write( _ss ) << std::endl;
@@ -523,7 +524,7 @@ namespace Metabuf
                         this->write( _ss ) << "template<class C, class M>" << std::endl;
                         this->write( _ss ) << "bool getm_" << attr->name << "( C _self, M _method ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
                         this->write( _ss ) << "        return false;" << std::endl;
                         this->write( _ss ) << "    }" << std::endl;
@@ -535,7 +536,7 @@ namespace Metabuf
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "bool get_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
                         this->write( _ss ) << "        return false;" << std::endl;
                         this->write( _ss ) << "    }" << std::endl;
@@ -547,7 +548,7 @@ namespace Metabuf
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "bool getd_" << attr->name << "( " << type.write << " * _value, const " << type.write << " & _default ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << attr->getWriteName() << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
                         this->write( _ss ) << "        *_value = _default;" << std::endl;
                         this->write( _ss ) << std::endl;
@@ -628,7 +629,7 @@ namespace Metabuf
                 {
                     this->write( _ss ) << "bool has_" << member->name << "_" << attr->name << "() const" << std::endl;
                     this->write( _ss ) << "{" << std::endl;
-                    this->write( _ss ) << "    return " << member->getWriteName() << "_" << attr->name << "_successful;" << std::endl;
+                    this->write( _ss ) << "    return (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") != 0;" << std::endl;
                     this->write( _ss ) << "}" << std::endl;
                     this->write( _ss ) << std::endl;
 
@@ -641,7 +642,7 @@ namespace Metabuf
                                 this->write( _ss ) << "template<class T>" << std::endl;
                                 this->write( _ss ) << "T get_" << member->name << "_" << attr->name << "() const" << std::endl;
                                 this->write( _ss ) << "{" << std::endl;
-                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") == 0 )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
                                 this->write( _ss ) << "        return static_cast<T>(" << attr->default_value << ");" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
@@ -654,7 +655,7 @@ namespace Metabuf
                                 this->write( _ss ) << "template<class C, class M>" << std::endl;
                                 this->write( _ss ) << "void getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
                                 this->write( _ss ) << "{" << std::endl;
-                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") == 0 )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
                                 this->write( _ss ) << "        (_self->*_method)( " << attr->default_value << " );" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
@@ -666,7 +667,7 @@ namespace Metabuf
                                 this->write( _ss ) << std::endl;
                                 this->write( _ss ) << type.write << " get_" << member->name << "_" << attr->name << "() const" << std::endl;
                                 this->write( _ss ) << "{" << std::endl;
-                                this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                                this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") == 0 )" << std::endl;
                                 this->write( _ss ) << "    {" << std::endl;
                                 this->write( _ss ) << "        return " << attr->default_value << ";" << std::endl;
                                 this->write( _ss ) << "    }" << std::endl;
@@ -696,7 +697,7 @@ namespace Metabuf
                         this->write( _ss ) << "template<class C, class M>" << std::endl;
                         this->write( _ss ) << "bool getm_" << member->name << "_" << attr->name << "( C _self, M _method ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") == 0 )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
                         this->write( _ss ) << "        return false;" << std::endl;
                         this->write( _ss ) << "    }" << std::endl;
@@ -708,7 +709,7 @@ namespace Metabuf
                         this->write( _ss ) << std::endl;
                         this->write( _ss ) << "bool get_" << member->name << "_" << attr->name << "( " << type.write << " * _value ) const" << std::endl;
                         this->write( _ss ) << "{" << std::endl;
-                        this->write( _ss ) << "    if( " << member->getWriteName() << "_" << attr->name << "_successful == false )" << std::endl;
+                        this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") == 0 )" << std::endl;
                         this->write( _ss ) << "    {" << std::endl;
                         this->write( _ss ) << "        return false;" << std::endl;
                         this->write( _ss ) << "    }" << std::endl;
@@ -772,6 +773,8 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
+        this->write( _ss ) << "public:" << std::endl;
+
         m_indent += 4;
 
         for( TMapNodes::const_iterator
@@ -823,6 +826,45 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeHeaderAttributeNoRequired_( std::stringstream & _ss, const XmlNode * _node )
+    {
+        TVectorNoRequiredAttributes noRequiredAttributes;
+        _node->getNoRequiredAttributes( noRequiredAttributes );
+
+        if( noRequiredAttributes.empty() == true )
+        {
+            return true;
+        }
+
+        this->write( _ss ) << "protected:" << std::endl;
+
+        m_indent += 4;
+
+        this->write( _ss ) << "enum NoRequiredAttribute" << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+
+        uint32_t index = 0;
+        for( const NoRequiredAttribute & nra : noRequiredAttributes )
+        {
+            this->write( _ss ) << "    EMETA_" << nra.name << " = (1 <<" << nra.id << ")," << std::endl;
+
+            ++index;
+        }
+
+        this->write( _ss ) << "};" << std::endl;
+        this->write( _ss ) << std::endl;
+
+        if( _node->inheritance.empty() == true )
+        {
+            this->write( _ss ) << "uint32_t m_flagNoRequiredAttribute;" << std::endl;
+            this->write( _ss ) << std::endl;
+        }
+
+        m_indent -= 4;
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderAttribute_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write( _ss ) << "protected:" << std::endl;
@@ -836,11 +878,6 @@ namespace Metabuf
             ++it_attributes )
         {
             const XmlAttribute * attr = &it_attributes->second;
-
-            if( attr->required == false )
-            {
-                this->write( _ss ) << "bool" << " " << attr->getWriteName() << "_successful;" << std::endl;
-            }
 
             XmlType type;
             m_protocol->getType( attr->type, type );
@@ -858,6 +895,8 @@ namespace Metabuf
                 else
                 {
                     m_error << "Xml2Metacode::writeHeaderAttribute_: invalid template non enumerator type '" << attr->name << "'" << std::endl;
+
+                    return false;
                 }
             }
         }
@@ -878,11 +917,6 @@ namespace Metabuf
             {
                 const XmlAttribute * attr = &it_attributes->second;
 
-                if( attr->required == false )
-                {
-                    this->write( _ss ) << "bool" << " " << member->getWriteName() << "_" << attr->name << "_successful" << ";" << std::endl;
-                }
-
                 XmlType type;
                 m_protocol->getType( attr->type, type );
 
@@ -899,6 +933,8 @@ namespace Metabuf
                     else
                     {
                         m_error << "Xml2Metacode::writeHeaderAttribute_: invalid member template non enumerator type '" << attr->name << "'" << std::endl;
+
+                        return false;
                     }
                 }
             }
@@ -1352,42 +1388,13 @@ namespace Metabuf
             {
                 this->write( _ss ) << "    : Metabuf::Metadata()" << std::endl;
             }
-        }
 
-        for( TMapAttributes::const_iterator
-            it_attributtes = _node->attributes.begin(),
-            it_attributtes_end = _node->attributes.end();
-            it_attributtes != it_attributtes_end;
-            ++it_attributtes )
-        {
-            const XmlAttribute * attr = &it_attributtes->second;
+            TVectorNoRequiredAttributes noRequiredAttributes;
+            _node->getNoRequiredAttributes( noRequiredAttributes );
 
-            if( attr->required == false )
+            if( noRequiredAttributes.empty() == false )
             {
-                this->write( _ss ) << "    , " << attr->getWriteName() << "_successful(false)" << std::endl;
-            }
-        }
-
-        for( TMapMembers::const_iterator
-            it_members = _node->members.begin(),
-            it_members_end = _node->members.end();
-            it_members != it_members_end;
-            ++it_members )
-        {
-            const XmlMember * member = &it_members->second;
-
-            for( TMapAttributes::const_iterator
-                it_attributtes = member->attributes.begin(),
-                it_attributtes_end = member->attributes.end();
-                it_attributtes != it_attributtes_end;
-                ++it_attributtes )
-            {
-                const XmlAttribute * attr = &it_attributtes->second;
-
-                if( attr->required == false )
-                {
-                    this->write( _ss ) << "    , " << member->getWriteName() << "_" << attr->name << "_successful(false)" << std::endl;
-                }
+                this->write( _ss ) << "    , m_flagNoRequiredAttribute(0)" << std::endl;
             }
         }
 
@@ -1547,15 +1554,11 @@ namespace Metabuf
 
         if( this->hasNodeAttributeSize_( _node, true ) == true )
         {
-            this->write( _ss ) << "    uint32_t attributeCount;" << std::endl;
-            this->write( _ss ) << "    Metabuf::readSize( _buff, _size, _read, attributeCount );" << std::endl;
+            this->write( _ss ) << "    Metabuf::readSize( _buff, _size, _read, m_flagNoRequiredAttribute );" << std::endl;
             this->write( _ss ) << std::endl;
-            this->write( _ss ) << "    for( uint32_t i = 0; i != attributeCount; ++i )" << std::endl;
+            this->write( _ss ) << "    if( m_flagNoRequiredAttribute != 0 )" << std::endl;
             this->write( _ss ) << "    {" << std::endl;
-            this->write( _ss ) << "        uint32_t id;" << std::endl;
-            this->write( _ss ) << "        Metabuf::readSize( _buff, _size, _read, id );" << std::endl;
-            this->write( _ss ) << std::endl;
-            this->write( _ss ) << "        this->_parseArguments( _buff, _size, _read, id, _userData );" << std::endl;
+            this->write( _ss ) << "        this->_parseArguments( _buff, _size, _read, _userData );" << std::endl;
             this->write( _ss ) << "    }" << std::endl;
             this->write( _ss ) << std::endl;
         }
@@ -1586,13 +1589,10 @@ namespace Metabuf
                 this->write( _ss ) << std::endl;
                 this->write( _ss ) << "    if( includeCount != 0 )" << std::endl;
                 this->write( _ss ) << "    {" << std::endl;
-                this->write( _ss ) << "        includes_" << node->getWriteName() << ".reserve( includeCount );" << std::endl;
+                this->write( _ss ) << "        includes_" << node->getWriteName() << ".resize( includeCount );" << std::endl;
                 this->write( _ss ) << std::endl;
-                this->write( _ss ) << "        for( uint32_t j = 0; j != includeCount; ++j )" << std::endl;
+                this->write( _ss ) << "        for( " << node->getScope() << " & metadata : includes_" << node->getWriteName() << " )" << std::endl;
                 this->write( _ss ) << "        {" << std::endl;
-                this->write( _ss ) << "            includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
-                this->write( _ss ) << "            " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
-                this->write( _ss ) << std::endl;
                 this->write( _ss ) << "            metadata.parse( _buff, _size, _read, _userData );" << std::endl;
                 this->write( _ss ) << "        }" << std::endl;
                 this->write( _ss ) << "    }" << std::endl;
@@ -1636,13 +1636,10 @@ namespace Metabuf
 
                         this->write( _ss ) << "        case " << node->id << ":" << std::endl;
                         this->write( _ss ) << "            {" << std::endl;
-                        this->write( _ss ) << "                includes_" << node->getWriteName() << ".reserve( includeCount );" << std::endl;
+                        this->write( _ss ) << "                includes_" << node->getWriteName() << ".resize( includeCount );" << std::endl;
                         this->write( _ss ) << std::endl;
-                        this->write( _ss ) << "                for( uint32_t j = 0; j != includeCount; ++j )" << std::endl;
+                        this->write( _ss ) << "                for( " << node->getScope() << " & metadata : includes_" << node->getWriteName() << " )" << std::endl;
                         this->write( _ss ) << "                {" << std::endl;
-                        this->write( _ss ) << "                    includes_" << node->getWriteName() << ".emplace_back( " << node->getScope() << "() );" << std::endl;
-                        this->write( _ss ) << "                    " << node->getScope() << " & metadata = includes_" << node->getWriteName() << ".back();" << std::endl;
-                        this->write( _ss ) << std::endl;
                         this->write( _ss ) << "                    metadata.parse( _buff, _size, _read, _userData );" << std::endl;
                         this->write( _ss ) << "                }" << std::endl;
                         this->write( _ss ) << "            }break;" << std::endl;
@@ -1788,19 +1785,16 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
-        this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
+        this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
             const XmlNode * node_inheritance = _node->node_inheritance;
 
-            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _id, _userData );" << std::endl;
+            this->write( _ss ) << "    " << node_inheritance->getScope() << "::_parseArguments( _buff, _size, _read, _userData );" << std::endl;
             this->write( _ss ) << std::endl;
         }
-
-        this->write( _ss ) << "    switch( _id )" << std::endl;
-        this->write( _ss ) << "    {" << std::endl;
 
         for( TMapAttributes::const_iterator
             it_attributes = _node->attributes.begin(),
@@ -1814,13 +1808,12 @@ namespace Metabuf
             {
                 continue;
             }
-
-            this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
-            this->write( _ss ) << "        {" << std::endl;
-            this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
+            
+            this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") != 0 )" << std::endl;
+            this->write( _ss ) << "    {" << std::endl;
+            this->write( _ss ) << "        Metabuf::read( _buff, _size, _read, _userData, this->" << attr->getWriteName() << " );" << std::endl;
+            this->write( _ss ) << "    }" << std::endl;
             this->write( _ss ) << std::endl;
-            this->write( _ss ) << "            this->" << attr->getWriteName() << "_successful = true;" << std::endl;
-            this->write( _ss ) << "        }break;" << std::endl;
         }
 
         for( TMapMembers::const_iterator
@@ -1844,18 +1837,13 @@ namespace Metabuf
                     continue;
                 }
 
-                this->write( _ss ) << "    case " << attr->id << ":" << std::endl;
-                this->write( _ss ) << "        {" << std::endl;
-                this->write( _ss ) << "            Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << member->name << "_" << attr->name << ") != 0 )" << std::endl;
+                this->write( _ss ) << "    {" << std::endl;
+                this->write( _ss ) << "        Metabuf::read( _buff, _size, _read, _userData, this->" << member->getWriteName() << "_" << attr->name << " );" << std::endl;
+                this->write( _ss ) << "    }" << std::endl;
                 this->write( _ss ) << std::endl;
-                this->write( _ss ) << "            this->" << member->getWriteName() << "_" << attr->name << "_successful = true;" << std::endl;
-                this->write( _ss ) << "        }break;" << std::endl;
             }
         }
-
-        this->write( _ss ) << "    default:" << std::endl;
-        this->write( _ss ) << "        break;" << std::endl;
-        this->write( _ss ) << "    }" << std::endl;
 
         this->write( _ss ) << "}" << std::endl;
 
@@ -1928,7 +1916,7 @@ namespace Metabuf
             }
         }
 
-        if( _node->includes.empty() == false || _node->inheritances.empty() == false )
+        if( _node->includes.size() > 1 || _node->inheritances.empty() == false )
         {
             this->write( _ss ) << "    switch( _id )" << std::endl;
             this->write( _ss ) << "    {" << std::endl;

@@ -10,7 +10,7 @@ namespace Metacode
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_version()
     {
-        return 7;
+        return 8;
     }
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_protocol_version()
@@ -165,13 +165,10 @@ namespace Metacode
         
             if( includeCount != 0 )
             {
-                includes_Meta_Include.reserve( includeCount );
+                includes_Meta_Include.resize( includeCount );
         
-                for( uint32_t j = 0; j != includeCount; ++j )
+                for( Meta_DataBlock::Meta_Include & metadata : includes_Meta_Include )
                 {
-                    includes_Meta_Include.emplace_back( Meta_DataBlock::Meta_Include() );
-                    Meta_DataBlock::Meta_Include & metadata = includes_Meta_Include.back();
-        
                     metadata.parse( _buff, _size, _read, _userData );
                 }
             }
@@ -302,8 +299,7 @@ namespace Metacode
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_Resource::Meta_Resource()
             : Metabuf::Metadata()
-            , m_Precompile_successful(false)
-            , m_Unique_successful(false)
+            , m_flagNoRequeredAttribute(0)
         {
         }
         //////////////////////////////////////////////////////////////////////////
@@ -319,15 +315,11 @@ namespace Metacode
             (void)_userData;
             this->_parseData( _buff, _size, _read, _userData );
         
-            uint32_t attributeCount;
-            Metabuf::readSize( _buff, _size, _read, attributeCount );
+            Metabuf::readSize( _buff, _size, _read, m_flagNoRequeredAttribute );
         
-            for( uint32_t i = 0; i != attributeCount; ++i )
+            if( m_flagNoRequeredAttribute != 0 )
             {
-                uint32_t id;
-                Metabuf::readSize( _buff, _size, _read, id );
-        
-                this->_parseArguments( _buff, _size, _read, id, _userData );
+                this->_parseArguments( _buff, _size, _read, _userData );
             }
         
             return true;
@@ -339,25 +331,18 @@ namespace Metacode
             Metabuf::read( _buff, _size, _read, _userData, this->m_Type );
         }
         //////////////////////////////////////////////////////////////////////////
-        void Meta_DataBlock::Meta_Resource::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
+        void Meta_DataBlock::Meta_Resource::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            switch( _id )
+            if( (m_flagNoRequeredAttribute & EMETA_Precompile) != 0 )
             {
-            case 4:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_Precompile );
-        
-                    this->m_Precompile_successful = true;
-                }break;
-            case 3:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_Unique );
-        
-                    this->m_Unique_successful = true;
-                }break;
-            default:
-                break;
+                Metabuf::read( _buff, _size, _read, _userData, this->m_Precompile );
             }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_Unique) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_Unique );
+            }
+        
         }
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Resource::_preparationIncludes( uint32_t _id, uint32_t _count )
@@ -378,12 +363,6 @@ namespace Metacode
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_ResourceImageDefault::Meta_ResourceImageDefault()
             : Meta_Resource()
-            , m_File_Alpha_successful(false)
-            , m_File_Codec_successful(false)
-            , m_File_Converter_successful(false)
-            , m_File_Offset_successful(false)
-            , m_File_Premultiply_successful(false)
-            , m_File_Size_successful(false)
         {
         }
         //////////////////////////////////////////////////////////////////////////
@@ -395,15 +374,11 @@ namespace Metacode
             (void)_userData;
             this->_parseData( _buff, _size, _read, _userData );
         
-            uint32_t attributeCount;
-            Metabuf::readSize( _buff, _size, _read, attributeCount );
+            Metabuf::readSize( _buff, _size, _read, m_flagNoRequeredAttribute );
         
-            for( uint32_t i = 0; i != attributeCount; ++i )
+            if( m_flagNoRequeredAttribute != 0 )
             {
-                uint32_t id;
-                Metabuf::readSize( _buff, _size, _read, id );
-        
-                this->_parseArguments( _buff, _size, _read, id, _userData );
+                this->_parseArguments( _buff, _size, _read, _userData );
             }
         
             return true;
@@ -417,51 +392,40 @@ namespace Metacode
             Metabuf::read( _buff, _size, _read, _userData, this->m_File_Path );
         }
         //////////////////////////////////////////////////////////////////////////
-        void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
+        void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _id, _userData );
+            Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _userData );
         
-            switch( _id )
+            if( (m_flagNoRequeredAttribute & EMETA_File_Alpha) != 0 )
             {
-            case 8:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Alpha );
-        
-                    this->m_File_Alpha_successful = true;
-                }break;
-            case 6:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Codec );
-        
-                    this->m_File_Codec_successful = true;
-                }break;
-            case 7:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Converter );
-        
-                    this->m_File_Converter_successful = true;
-                }break;
-            case 12:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Offset );
-        
-                    this->m_File_Offset_successful = true;
-                }break;
-            case 9:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Premultiply );
-        
-                    this->m_File_Premultiply_successful = true;
-                }break;
-            case 11:
-                {
-                    Metabuf::read( _buff, _size, _read, _userData, this->m_File_Size );
-        
-                    this->m_File_Size_successful = true;
-                }break;
-            default:
-                break;
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Alpha );
             }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_File_Codec) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Codec );
+            }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_File_Converter) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Converter );
+            }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_File_Offset) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Offset );
+            }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_File_Premultiply) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Premultiply );
+            }
+        
+            if( (m_flagNoRequeredAttribute & EMETA_File_Size) != 0 )
+            {
+                Metabuf::read( _buff, _size, _read, _userData, this->m_File_Size );
+            }
+        
         }
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_ResourceImageDefault::_preparationIncludes( uint32_t _id, uint32_t _count )

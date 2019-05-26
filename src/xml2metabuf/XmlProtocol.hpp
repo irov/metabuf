@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define METABUF_BIN_VERSION 7
+#define METABUF_BIN_VERSION 8
 
 namespace Metabuf
 {
@@ -77,6 +77,14 @@ namespace Metabuf
 
     typedef std::map<std::string, class XmlNode *> TMapNodes;
 
+    struct NoRequiredAttribute
+    {
+        std::string name;
+        uint32_t id;
+    };
+
+    typedef std::vector<NoRequiredAttribute> TVectorNoRequiredAttributes;
+
     class XmlNode
     {
     public:
@@ -93,6 +101,7 @@ namespace Metabuf
         const XmlNode * node_scope;
 
         mutable uint32_t enumerator;
+        mutable uint32_t enumeratorNRA;
 
         TMapAttributes attributes;
         TMapMembers members;
@@ -113,6 +122,9 @@ namespace Metabuf
         const XmlNode * getInclude( const std::string & _name ) const;
         const XmlNode * getInheritances( const std::string & _name ) const;
         const XmlNode * getGenerator( const std::string & _name ) const;
+
+        void getNoRequiredAttributes( TVectorNoRequiredAttributes & _noRequiredAttributes ) const;
+        void getNoRequiredAttributes2( const pugi::xml_node & _xml_node, TVectorNoRequiredAttributes & _noRequiredAttributes ) const;
 
         const std::string & getName() const;
         std::string getWriteName() const;

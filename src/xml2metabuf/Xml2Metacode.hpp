@@ -38,6 +38,7 @@ namespace Metabuf
         bool writeHeaderAttributeReader_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderAttributeSetup_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderIncludesDefinition_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node );
+        bool writeHeaderAttributeNoRequired_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderAttribute_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderSingles_( std::stringstream & _ss, const XmlNode * _node );
         bool writeHeaderSinglesReader_( std::stringstream & _ss, const XmlNode * _node );

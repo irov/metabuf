@@ -44,6 +44,7 @@ namespace Metabuf
         , node_inheritance( nullptr )
         , node_scope( nullptr )
         , enumerator( 0 )
+        , enumeratorNRA( 0 )
         , noWrite( false )
     {
 
@@ -185,6 +186,174 @@ namespace Metabuf
         const XmlNode * node = it_found->second;
 
         return node;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void XmlNode::getNoRequiredAttributes( TVectorNoRequiredAttributes & _noRequiredAttributes ) const
+    {
+        for( TMapAttributes::const_iterator
+            it_attributes = this->attributes.begin(),
+            it_attributes_end = this->attributes.end();
+            it_attributes != it_attributes_end;
+            ++it_attributes )
+        {
+            const XmlAttribute * attr = &it_attributes->second;
+
+            if( attr->required == true )
+            {
+                continue;
+            }
+
+            NoRequiredAttribute nra;
+            nra.name = attr->name;
+            nra.id = attr->id;
+
+            _noRequiredAttributes.push_back( nra );
+        }
+
+        for( TMapMembers::const_iterator
+            it_members = this->members.begin(),
+            it_members_end = this->members.end();
+            it_members != it_members_end;
+            ++it_members )
+        {
+            const XmlMember * member = &it_members->second;
+
+            for( TMapAttributes::const_iterator
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
+                it_attributes != it_attributes_end;
+                ++it_attributes )
+            {
+                const XmlAttribute * attr = &it_attributes->second;
+
+                if( attr->required == true )
+                {
+                    continue;
+                }
+
+                NoRequiredAttribute nra;
+                nra.name = member->name + "_" + attr->name;;
+                nra.id = attr->id;
+
+                _noRequiredAttributes.push_back( nra );
+            }
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////        
+    void XmlNode::getNoRequiredAttributes2( const pugi::xml_node & _xml_node, TVectorNoRequiredAttributes & _noRequiredAttributes ) const
+    {
+        uint32_t count = 0;
+
+        for( TMapAttributes::const_iterator
+            it = this->attributes.begin(),
+            it_end = this->attributes.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlAttribute * attr = &it->second;
+
+            if( attr->required == true )
+            {
+                continue;
+            }
+
+            pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+            if( xml_attr.empty() == true )
+            {
+                continue;
+            }
+
+            NoRequiredAttribute nra;
+            nra.name = attr->name;
+            nra.id = attr->id;
+
+            _noRequiredAttributes.push_back( nra );
+        }
+
+        if( this->inheritance.empty() == false )
+        {
+            for( TMapAttributes::const_iterator
+                it = this->node_inheritance->attributes.begin(),
+                it_end = this->node_inheritance->attributes.end();
+                it != it_end;
+                ++it )
+            {
+                const XmlAttribute * attr = &it->second;
+
+                if( attr->required == true )
+                {
+                    continue;
+                }
+
+                pugi::xml_attribute xml_attr = _xml_node.attribute( attr->name.c_str() );
+
+                if( xml_attr.empty() == true )
+                {
+                    continue;
+                }
+
+                NoRequiredAttribute nra;
+                nra.name = attr->name;
+                nra.id = attr->id;
+
+                _noRequiredAttributes.push_back( nra );
+            }
+        }
+
+        for( TMapMembers::const_iterator
+            it = this->members.begin(),
+            it_end = this->members.end();
+            it != it_end;
+            ++it )
+        {
+            const XmlMember * member = &it->second;
+
+            for( TMapAttributes::const_iterator
+                it_attributes = member->attributes.begin(),
+                it_attributes_end = member->attributes.end();
+                it_attributes != it_attributes_end;
+                ++it_attributes )
+            {
+                const XmlAttribute * attr = &it_attributes->second;
+
+                if( attr->required == true )
+                {
+                    continue;
+                }
+
+                for( pugi::xml_node::iterator
+                    it_xml = _xml_node.begin(),
+                    it_xml_end = _xml_node.end();
+                    it_xml != it_xml_end;
+                    ++it_xml )
+                {
+                    const pugi::xml_node & child = *it_xml;
+
+                    const char * child_name = child.name();
+
+                    if( member->name != child_name )
+                    {
+                        continue;
+                    }
+
+                    pugi::xml_attribute xml_attr = child.attribute( attr->name.c_str() );
+
+                    if( xml_attr.empty() == true )
+                    {
+                        continue;
+                    }
+
+                    NoRequiredAttribute nra;
+                    nra.name = member->name + "_" + attr->name;;
+                    nra.id = attr->id;
+
+                    _noRequiredAttributes.push_back( nra );
+
+                    break;
+                }
+            }
+        }
     }
     //////////////////////////////////////////////////////////////////////////
     const std::string & XmlNode::getName() const
@@ -913,6 +1082,7 @@ namespace Metabuf
         }
 
         nodeXml->enumerator = 0;
+        nodeXml->enumeratorNRA = 0;
         nodeXml->node_inheritance = nullptr;
         nodeXml->node_scope = _node;
         nodeXml->name = NodeName.value();
@@ -936,6 +1106,7 @@ namespace Metabuf
             }
 
             nodeXml->enumerator = nodeXml->node_inheritance->enumerator;
+            nodeXml->enumeratorNRA = nodeXml->node_inheritance->enumeratorNRA;
         }
 
         for( pugi::xml_node::iterator
@@ -957,11 +1128,26 @@ namespace Metabuf
 
                 XmlAttribute & attributeXml = nodeXml->attributes[AttributeName.value()];
 
-                attributeXml.id = ++nodeXml->enumerator;
                 attributeXml.name = AttributeName.value();
                 attributeXml.type = AttributeType.value();
                 attributeXml.required = AttributeRequired.empty() == false;
                 attributeXml.default_value = AttributeDefault.value();
+
+                if( attributeXml.required == false )
+                {
+                    attributeXml.id = nodeXml->enumeratorNRA++;
+
+                    if( attributeXml.id >= 32 )
+                    {
+                        m_error << "XmlProtocol::readNode_: Attribute " << NodeName.value() << " id more 32" << std::endl;
+
+                        return false;
+                    }
+                }
+                else
+                {
+                    attributeXml.id = 0;
+                }
 
                 if( attributeXml.required == true && attributeXml.default_value.empty() == false )
                 {
@@ -992,11 +1178,26 @@ namespace Metabuf
 
                 XmlAttribute & attributeXml = memberXml.attributes[MemberName.value()];
 
-                attributeXml.id = ++nodeXml->enumerator;
                 attributeXml.name = MemberName.value();
                 attributeXml.type = MemberType.value();
                 attributeXml.required = MemberRequired.empty() == false;
                 attributeXml.default_value = AttributeDefault.value();
+
+                if( attributeXml.required == false )
+                {
+                    attributeXml.id = nodeXml->enumeratorNRA++;
+
+                    if( attributeXml.id >= 32 )
+                    {
+                        m_error << "XmlProtocol::readNode_: Attribute " << NodeName.value() << " id more 32" << std::endl;
+
+                        return false;
+                    }
+                }
+                else
+                {
+                    attributeXml.id = 0;
+                }
 
                 if( attributeXml.required == true && attributeXml.default_value.empty() == false )
                 {
