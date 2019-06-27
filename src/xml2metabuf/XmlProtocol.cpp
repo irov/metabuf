@@ -242,8 +242,6 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////        
     void XmlNode::getNoRequiredAttributes2( const pugi::xml_node & _xml_node, TVectorNoRequiredAttributes & _noRequiredAttributes ) const
     {
-        uint32_t count = 0;
-
         for( TMapAttributes::const_iterator
             it = this->attributes.begin(),
             it_end = this->attributes.end();
