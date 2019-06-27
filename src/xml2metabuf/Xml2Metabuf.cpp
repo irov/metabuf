@@ -42,7 +42,7 @@ namespace Metabuf
                 }
             }
 
-            _metabuf->writeSize( strs.size() );
+            _metabuf->writeSize( (uint32_t)strs.size() );
 
             for( const std::string & s : strs )
             {
@@ -579,7 +579,7 @@ namespace Metabuf
                 return false;
             }
 
-            uint32_t hexadecimal_len = len / 2;
+            uint32_t hexadecimal_len = (uint32_t)len / 2;
 
             _metabuf->writeSize( hexadecimal_len );
 

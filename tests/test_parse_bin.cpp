@@ -33,10 +33,6 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    fseek( file_example_bin, 0, SEEK_END );
-    long file_example_bin_size = ftell( file_example_bin );
-    rewind( file_example_bin );
-
     uint8_t header_buff[Metacode::header_size];
     fread( header_buff, Metacode::header_size, 1, file_example_bin );
 
@@ -107,9 +103,7 @@ int main( int argc, char *argv[] )
 
     free( example_bin_buffer );
 
-    const std::string & DataBlock_Name = meta_DataBlock.get_Name();
-
-    assert( DataBlock_Name == "Test" );
+    assert( meta_DataBlock.get_Name() == "Test" );
 
     const Metacode::Meta_Data::Meta_DataBlock::VectorMeta_Resource & meta_DataBlock_Resource = meta_DataBlock.get_Includes_Resource();
 
@@ -121,6 +115,7 @@ int main( int argc, char *argv[] )
         if( meta_Resource->get_Type() == "ResourceImageDefault" )
         {
             const Metacode::Meta_Data::Meta_DataBlock::Meta_ResourceImageDefault * meta_ResourceImageDefault = static_cast<const Metacode::Meta_Data::Meta_DataBlock::Meta_ResourceImageDefault *>(meta_Resource);
+            (void)meta_ResourceImageDefault;
 
             assert( meta_ResourceImageDefault->get_File_Path() == "Art/Battleground.png" );
             assert( meta_ResourceImageDefault->get_File_MaxSize() == Detail::Rect( { 867, 1536 } ) );
