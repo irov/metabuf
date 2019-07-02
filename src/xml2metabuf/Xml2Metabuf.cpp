@@ -649,36 +649,9 @@ namespace Metabuf
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    static int64_t makeHash( const void * _data, size_t _len )
-    {
-        if( _len == 0 )
-        {
-            return 0;
-        }
-
-        const uint8_t * p = (const uint8_t *)_data;
-
-        int64_t x = *p << 7;
-
-        for( size_t i = 0; i != _len; ++i )
-        {
-            x = (1000003 * x) ^ *p++;
-        }
-
-        x ^= (int64_t)_len;
-
-        if( x == -1 )
-        {
-            x = -2;
-        }
-
-        return x;
-    }
-    //////////////////////////////////////////////////////////////////////////
     Xml2Metabuf::Xml2Metabuf( const XmlProtocol * _protocol, const XmlMeta * _meta )
         : m_protocol( _protocol )
         , m_meta( _meta )
-        , m_hashable( nullptr )
     {
     }
     //////////////////////////////////////////////////////////////////////////
@@ -722,14 +695,7 @@ namespace Metabuf
 
         this->addSerializator( "hexadecimal", &Serialize::s_write_hexadecimal, nullptr );
         this->addSerializator( "angle360", &Serialize::s_write_angle360, nullptr );
-        this->addSerializator( "opacity255", &Serialize::s_write_opacity255, nullptr );
-
-        m_hashable = &makeHash;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::setHashable( MakeHash _hashable )
-    {
-        m_hashable = _hashable;
+        this->addSerializator( "opacity255", &Serialize::s_write_opacity255, nullptr );        
     }
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
@@ -826,6 +792,8 @@ namespace Metabuf
         uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
         this->write( stringCacheCount );
 
+        MakeHash makehash = m_protocol->getHashable();
+
         for( const std::string & str : m_stringCache )
         {
             uint32_t strSize = (uint32_t)str.size();
@@ -833,7 +801,7 @@ namespace Metabuf
 
             const char * strBuff = str.c_str();
 
-            int64_t hash = makeHash( strBuff, strSize );
+            int64_t hash = (*makehash)(strBuff, strSize);
             this->write( hash );
 
             this->writeCount( strBuff, strSize );
@@ -2318,6 +2286,21 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::writeString( const char * _value )
     {
+        const TVectorInternalStrings & internals = m_protocol->getInternals();
+
+        TVectorInternalStrings::const_iterator it_internals_found = std::find( internals.begin(), internals.end(), _value );
+
+        if( it_internals_found != internals.end() )
+        {
+            TVectorInternalStrings::difference_type index = std::distance( internals.begin(), it_internals_found );
+
+            uint32_t write_index = (uint32_t)index;
+
+            this->writeSize( write_index );
+
+            return;
+        }
+
         VectorStringCache::iterator it_found = std::find( m_stringCache.begin(), m_stringCache.end(), _value );
 
         if( it_found == m_stringCache.end() )
@@ -2327,7 +2310,9 @@ namespace Metabuf
 
         VectorStringCache::difference_type index = std::distance( m_stringCache.begin(), it_found );
 
-        uint32_t write_index = (uint32_t)index;
+        TVectorInternalStrings::size_type internals_size = internals.size();
+
+        uint32_t write_index = (uint32_t)internals_size + (uint32_t)index;
 
         this->writeSize( write_index );
     }

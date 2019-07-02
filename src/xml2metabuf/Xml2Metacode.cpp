@@ -68,6 +68,8 @@ namespace Metabuf
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "    Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );" << std::endl;
         this->write( _ss ) << std::endl;
+        this->write( _ss ) << "    uint32_t getInternalStringsCount();" << std::endl;
+        this->write( _ss ) << "    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
         this->write( _ss ) << "    bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );" << std::endl;
         this->write( _ss ) << "    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );" << std::endl;
         this->write( _ss ) << std::endl;
@@ -1115,6 +1117,8 @@ namespace Metabuf
         uint32_t protocol_version = m_protocol->getVersion();
         uint32_t protocol_crc32 = m_protocol->getCrc32();
 
+        const TVectorInternalStrings & internals = m_protocol->getInternals();
+
         this->write( _ss ) << "#include \"" << m_settings.metacode_h << "\"" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "namespace Metacode" << std::endl;
@@ -1210,6 +1214,43 @@ namespace Metabuf
         this->write( _ss ) << "        }" << std::endl;
         this->write( _ss ) << std::endl;
         this->write( _ss ) << "        return Metabuf::HEADER_SUCCESSFUL;" << std::endl;
+        this->write( _ss ) << "    }" << std::endl;
+        this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "    uint32_t getInternalStringsCount()" << std::endl;
+        this->write( _ss ) << "    {" << std::endl;
+        this->write( _ss ) << "        return " << internals.size() << ";" << std::endl;
+        this->write( _ss ) << "    }" << std::endl;
+        this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash )" << std::endl;
+        this->write( _ss ) << "    {" << std::endl;
+        this->write( _ss ) << "        struct internal_t" << std::endl;
+        this->write( _ss ) << "        {" << std::endl;
+        this->write( _ss ) << "            uint32_t size;" << std::endl;
+        this->write( _ss ) << "            const char * str;" << std::endl;
+        this->write( _ss ) << "            uint64_t hash;" << std::endl;
+        this->write( _ss ) << "        };" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        const internal_t internals[] = {" << std::endl;
+
+        MakeHash makehash =  m_protocol->getHashable();
+
+        for( const std::string & v : internals )
+        {
+            std::string::size_type v_size = v.size();
+            const char * v_str = v.c_str();
+
+            uint64_t v_hash = (*makehash)(v_str, v_size);
+
+            this->write( _ss ) << "            {" << v.size() << ", \"" << v << "\", " << v_hash << "UL}," << std::endl;
+        }
+
+        this->write( _ss ) << "        };" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        const internal_t & internal = internals[_index];" << std::endl;
+        this->write( _ss ) << "        _stringSize = internal.size;" << std::endl;
+        this->write( _ss ) << "        _stringHash = internal.hash;" << std::endl;
+        this->write( _ss ) << std::endl;
+        this->write( _ss ) << "        return internal.str;" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )" << std::endl;

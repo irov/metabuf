@@ -10,10 +10,12 @@
 
 #include <stdint.h>
 
-#define METABUF_BIN_VERSION 8
+#define METABUF_BIN_VERSION 9
 
 namespace Metabuf
 {
+    typedef int64_t( *MakeHash )(const void * _data, size_t _len);
+
     struct XmlEnum
     {
         std::string name;
@@ -163,6 +165,8 @@ namespace Metabuf
 
     typedef std::map<std::string, XmlMeta *> TMapMetas;
 
+    typedef std::vector<std::string> TVectorInternalStrings;
+
     class XmlProtocol
     {
     public:
@@ -177,6 +181,13 @@ namespace Metabuf
         bool hasMeta( const std::string & _type ) const;
         const XmlMeta * getMeta( const std::string & _type ) const;
         const TMapMetas & getMetas() const;
+
+    public:
+        void setHashable( MakeHash _hashable );
+        MakeHash getHashable() const;
+
+    public:
+        const TVectorInternalStrings & getInternals() const;
 
     public:
         bool hasType( const std::string & _name ) const;
@@ -198,9 +209,13 @@ namespace Metabuf
 
         uint32_t m_enumerator;
 
+        MakeHash m_hashable;
+
         TMapMetas m_metas;
 
         TMapTypes m_types;
+        
+        TVectorInternalStrings m_internals;
 
         std::stringstream m_error;
     };
