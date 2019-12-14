@@ -2,7 +2,7 @@
 
 set "PROJECT=metabuf"
 set "CONFIGURATION=Debug"
-set "SOLUTION_DIR=..\solutions\%PROJECT%_msvc16_%CONFIGURATION%"
+set "SOLUTION_DIR=..\solutions\%PROJECT%_msvc16\%CONFIGURATION%"
 
 @pushd ..
 @mkdir %SOLUTION_DIR%
