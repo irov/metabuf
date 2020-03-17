@@ -1,4 +1,5 @@
 #include "metabuf/Metadata.hpp"
+#include "metabuf/Memory.hpp"
 
 #include "config/Metaconfig.hpp"
 

@@ -1,5 +1,9 @@
 #include "test_metacode.h"
 
+#include "metabuf/Memory.hpp"
+
+#include <stdlib.h>
+
 namespace Metacode
 {
     //////////////////////////////////////////////////////////////////////////
