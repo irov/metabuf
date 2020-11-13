@@ -1750,7 +1750,7 @@ namespace Metabuf
         this->write( _ss ) << "    return true;" << std::endl;
         this->write( _ss ) << "}" << std::endl;
 
-        return this;
+        return true;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceDataReader_( std::stringstream & _ss, const XmlNode * _node )
