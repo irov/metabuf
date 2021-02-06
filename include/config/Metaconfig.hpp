@@ -3,9 +3,18 @@
 #ifdef METABUF_EXTERNAL_CONFIG
 #include "Metaexternalconfig.hpp"
 #else
+#include <malloc.h>
 #include <string.h>
 
-#define METABUF_MEMCPY(Dest, Src, Size) memcpy(Dest, Src, Size)
+#ifndef METABUF_MALLOC
+#define METABUF_MALLOC(S) (::malloc(S))
+#endif
+
+#ifndef METABUF_FREE
+#define METABUF_FREE(B, S) (::free(B))
+#endif
+
+#define METABUF_MEMCPY(Dest, Src, Size) (::memcpy(Dest, Src, Size))
 
 #include <vector>
 #include <exception>

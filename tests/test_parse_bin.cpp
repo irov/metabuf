@@ -1,7 +1,5 @@
 #include "test_metacode.h"
 
-#include "metabuf/Memory.hpp"
-
 #include <string>
 #include <vector>
 
@@ -14,19 +12,15 @@
 const char * path_example_bin = "Example.bin";
 
 //////////////////////////////////////////////////////////////////////////
-static void * std_malloc( size_t _size, void * _ud )
+void * _metabuf_malloc( size_t _size )
 {
-    (void)_ud;
-
     void * p = ::malloc( _size );
 
     return p;
 }
 //////////////////////////////////////////////////////////////////////////
-static void std_free( void * _ptr, void * _ud )
+void _metabuf_free( void * _ptr )
 {
-    (void)_ud;
-
     ::free( _ptr );
 }
 //////////////////////////////////////////////////////////////////////////
@@ -34,8 +28,6 @@ int main( int argc, char *argv[] )
 {
     (void)(argc);
     (void)(argv);
-
-    Metabuf::set_Metabuf_allocator( &std_malloc, &std_free, nullptr );
 
     char full_path_example_bin[256];
     sprintf( full_path_example_bin, "%s/%s"
