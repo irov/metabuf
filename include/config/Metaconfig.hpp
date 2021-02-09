@@ -3,7 +3,7 @@
 #ifdef METABUF_EXTERNAL_CONFIG
 #include "Metaexternalconfig.hpp"
 #else
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef METABUF_MALLOC
