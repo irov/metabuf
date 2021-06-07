@@ -25,14 +25,14 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         void Metadata::operator delete (void * _ptr, size_t _size)
     {
-        (void)_size;
+        METABUF_UNUSED( _size );
 
         METABUF_FREE( _ptr, _size );
     }
     //////////////////////////////////////////////////////////////////////////
     void Metadata::operator delete []( void * _ptr, size_t _size )
     {
-        (void)_size;
+        METABUF_UNUSED( _size );
 
         METABUF_FREE( _ptr, _size );
     }

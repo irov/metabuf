@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config/Metaconfig.hpp"
+
 #include "pugixml.hpp"
 
 #include <vector>

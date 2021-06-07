@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config/Metaconfig.hpp"
+
 #include "XmlProtocol.hpp"
 
 #include "pugixml.hpp"
@@ -19,10 +21,11 @@ namespace Metabuf
     {
     public:
         Xml2Metacode( const XmlProtocol * _protocol );
+        ~Xml2Metacode();
 
     public:
         bool generate( std::string & _header, std::string & _source, const Xml2Settings & _settings );
-        std::string getError();
+        std::string getError() const;
 
     protected:
         bool generateHeader( std::stringstream & _ss );

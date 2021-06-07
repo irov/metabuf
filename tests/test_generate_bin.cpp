@@ -15,8 +15,8 @@ const char * path_protocol = "Protocol.xml";
 
 int main( int argc, char *argv[] )
 {
-    (void)(argc);
-    (void)(argv);
+    METABUF_UNUSED( argc );
+    METABUF_UNUSED( argv );
 
     size_t file_protocol_size;
     void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );

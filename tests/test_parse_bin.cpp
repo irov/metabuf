@@ -24,10 +24,10 @@ void _metabuf_free( void * _ptr )
     ::free( _ptr );
 }
 //////////////////////////////////////////////////////////////////////////
-int main( int argc, char *argv[] )
+int main( int argc, char * argv[] )
 {
-    (void)(argc);
-    (void)(argv);
+    METABUF_UNUSED( argc );
+    METABUF_UNUSED( argv );
 
     char full_path_example_bin[256];
     sprintf( full_path_example_bin, "%s/%s"
@@ -128,10 +128,10 @@ int main( int argc, char *argv[] )
         if( meta_Resource->get_Type() == "ResourceImageDefault" )
         {
             const Metacode::Meta_Data::Meta_DataBlock::Meta_ResourceImageDefault * meta_ResourceImageDefault = static_cast<const Metacode::Meta_Data::Meta_DataBlock::Meta_ResourceImageDefault *>(meta_Resource);
-            (void)meta_ResourceImageDefault;
+            METABUF_UNUSED( meta_ResourceImageDefault );
 
             assert( meta_ResourceImageDefault->get_File_Path() == "Art/Battleground.png" );
-            assert( meta_ResourceImageDefault->get_File_MaxSize() == Detail::Rect( { 867, 1536 } ) );
+            assert( meta_ResourceImageDefault->get_File_MaxSize() == Detail::Rect( {867, 1536} ) );
         }
         else
         {

@@ -16,7 +16,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             _metabuf->writeString( _value );
 
@@ -25,7 +25,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_strings( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             std::stringstream ss( _value );
 
@@ -54,7 +54,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             if( strcmp( _value, "true" ) == 0 )
             {
@@ -85,7 +85,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_int8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             int32_t value;
             if( sscanf( _value, "%d", &value ) != 1 )
@@ -101,7 +101,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value;
             if( sscanf( _value, "%u", &value ) != 1 )
@@ -117,7 +117,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_int16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             int32_t value;
             if( sscanf( _value, "%d", &value ) != 1 )
@@ -133,7 +133,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value;
             if( sscanf( _value, "%u", &value ) != 1 )
@@ -149,7 +149,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_int32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             int32_t value;
             if( sscanf( _value, "%d", &value ) != 1 )
@@ -164,7 +164,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_int32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             int32_t value0;
             int32_t value1;
@@ -181,7 +181,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value;
             if( sscanf( _value, "%u", &value ) != 1 )
@@ -196,7 +196,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value0;
             uint32_t value1;
@@ -216,7 +216,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint32_t3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value0;
             uint32_t value1;
@@ -238,7 +238,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_uint32_t4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value0;
             uint32_t value1;
@@ -262,7 +262,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value;
             if( sscanf( _value, "%f", &value ) != 1 )
@@ -277,7 +277,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[2];
             if( sscanf( _value, "%f;%f", &value[0], &value[1] ) != 2 )
@@ -298,7 +298,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[3];
             if( sscanf( _value, "%f;%f;%f", &value[0], &value[1], &value[2] ) != 3 )
@@ -319,7 +319,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[4];
             if( sscanf( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
@@ -340,7 +340,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float4inv255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[4];
             if( sscanf( _value, "%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3] ) != 4 )
@@ -365,7 +365,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float6( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[6];
             if( sscanf( _value, "%f;%f;%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5] ) != 6 )
@@ -383,7 +383,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float8( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[8];
             if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f", &value[0], &value[1], &value[2], &value[3], &value[4], &value[5], &value[6], &value[7] ) != 8 )
@@ -401,7 +401,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float12( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[12];
             if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f"
@@ -425,7 +425,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_float16( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value[16];
             if( sscanf( _value, "%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f"
@@ -450,7 +450,7 @@ namespace Metabuf
         template<class T>
         static bool s_write_pods( Xml2Metabuf * _metabuf, const char * _format, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             typedef std::vector<T> TVectorPods;
             TVectorPods pods;
@@ -544,7 +544,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_sha1bin( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t hashmask[] = { 0, 0, 0, 0, 0 };
 
@@ -570,7 +570,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_hexadecimal( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             size_t len = strlen( _value );
 
@@ -614,7 +614,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_angle360( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             float value;
             if( sscanf( _value, "%f", &value ) != 1 )
@@ -632,7 +632,7 @@ namespace Metabuf
         //////////////////////////////////////////////////////////////////////////
         static bool s_write_opacity255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
-            (void)_user;
+            METABUF_UNUSED( _user );
 
             uint32_t value;
             if( sscanf( _value, "%u", &value ) != 1 )
@@ -2060,7 +2060,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count ) const
     {
-        (void)_node;
+        METABUF_UNUSED( _node );
 
         const char * group_value = _group.c_str();
 

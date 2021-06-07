@@ -1,10 +1,6 @@
 #include "Xml2Metacode.hpp"
 #include "XmlProtocol.hpp"
 
-//#ifndef METABUF_METATYPE_HEADER
-//#define METABUF_METATYPE_HEADER Metatype.h
-//#endif
-
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
@@ -12,10 +8,13 @@ namespace Metabuf
         : m_protocol( _protocol )
         , m_indent( 0 )
     {
-
     }
     //////////////////////////////////////////////////////////////////////////
-    std::string Xml2Metacode::getError()
+    Xml2Metacode::~Xml2Metacode()
+    {
+    }
+    //////////////////////////////////////////////////////////////////////////
+    std::string Xml2Metacode::getError() const
     {
         return m_error.str();
     }
@@ -286,7 +285,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderParse_( std::stringstream & _ss, const XmlNode * _node )
     {
-		(void)_node;
+        METABUF_UNUSED( _node );
 
         this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
@@ -1030,7 +1029,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
-		(void)_node;
+        METABUF_UNUSED( _node );
 
         this->write( _ss ) << "void _preparationIncludes( uint32_t _id, uint32_t _count );" << std::endl;
 
@@ -1039,7 +1038,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeHeaderIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
     {
-		(void)_node;
+        METABUF_UNUSED( _node );
 
         this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
@@ -1407,7 +1406,7 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root )
     {
-		(void)_meta;
+        METABUF_UNUSED( _meta );
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "//cppcheck-suppress uninitMemberVar" << std::endl;
@@ -1582,10 +1581,10 @@ namespace Metabuf
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "bool " << _node->getScope() << "::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
-        this->write( _ss ) << "    (void)_buff;" << std::endl;
-        this->write( _ss ) << "    (void)_size;" << std::endl;
-        this->write( _ss ) << "    (void)_read;" << std::endl;
-        this->write( _ss ) << "    (void)_userData;" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _buff );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _size );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _read );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _userData );" << std::endl;
 
         if( this->hasNodeDataSize_( _node, true ) == true )
         {
@@ -1942,8 +1941,8 @@ namespace Metabuf
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_preparationIncludes( uint32_t _id, uint32_t _count )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
-        this->write( _ss ) << "    (void)_id;" << std::endl;
-        this->write( _ss ) << "    (void)_count;" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _id );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _count );" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {
@@ -2005,11 +2004,11 @@ namespace Metabuf
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
-        this->write( _ss ) << "    (void)_buff;" << std::endl;
-        this->write( _ss ) << "    (void)_size;" << std::endl;
-        this->write( _ss ) << "    (void)_read;" << std::endl;
-        this->write( _ss ) << "    (void)_id;" << std::endl;
-        this->write( _ss ) << "    (void)_userData;" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _buff );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _size );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _read );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _id );" << std::endl;
+        this->write( _ss ) << "    METABUF_UNUSED( _userData );" << std::endl;
 
         if( _node->inheritance.empty() == false )
         {

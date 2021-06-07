@@ -14,8 +14,8 @@ const char * path_protocol = "Protocol.xml";
 
 int main( int argc, char *argv[] )
 {
-    (void)(argc);
-    (void)(argv);
+    METABUF_UNUSED( argc );
+    METABUF_UNUSED( argv );
 
     Metabuf::XmlProtocol xml_protocol;
 
