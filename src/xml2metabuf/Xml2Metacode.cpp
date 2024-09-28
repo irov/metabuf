@@ -117,7 +117,7 @@ namespace Metabuf
         {
             const XmlNode * node = it_node->second;
 
-            if( this->writeHeaderNode_( _ss, _meta, node, true ) == false )
+            if( this->writeHeaderNode_( _ss, _meta, node ) == false )
             {
                 return false;
             }
@@ -130,7 +130,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root )
+    bool Xml2Metacode::writeHeaderNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
         this->write( _ss ) << "class " << _node->getWriteName() << std::endl;
 
@@ -142,14 +142,7 @@ namespace Metabuf
         }
         else
         {
-            if( _root == true )
-            {
-                this->write( _ss ) << "    : public Metabuf::Metaparse" << std::endl;
-            }
-            else
-            {
-                this->write( _ss ) << "    : public Metabuf::Metadata" << std::endl;
-            }
+            this->write( _ss ) << "    : public Metabuf::Metaparse" << std::endl;
         }
 
         this->write( _ss ) << "{ " << std::endl;
@@ -287,7 +280,7 @@ namespace Metabuf
     {
         METABUF_UNUSED( _node );
 
-        this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
+        this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;" << std::endl;
 
         return true;
     }
@@ -786,7 +779,7 @@ namespace Metabuf
         {
             XmlNode * node = it_includes->second;
 
-            this->writeHeaderNode_( _ss, _meta, node, false );
+            this->writeHeaderNode_( _ss, _meta, node );
         }
 
         for( TMapNodes::const_iterator
@@ -797,7 +790,7 @@ namespace Metabuf
         {
             XmlNode * node = it_inheritances->second;
 
-            this->writeHeaderNode_( _ss, _meta, node, false );
+            this->writeHeaderNode_( _ss, _meta, node );
         }
 
         for( TMapNodes::const_iterator
@@ -808,7 +801,7 @@ namespace Metabuf
         {
             XmlNode * node = it_singles->second;
 
-            this->writeHeaderNode_( _ss, _meta, node, false );
+            this->writeHeaderNode_( _ss, _meta, node );
         }
 
         for( TMapNodes::const_iterator
@@ -819,7 +812,7 @@ namespace Metabuf
         {
             XmlNode * node = it_generators->second;
 
-            this->writeHeaderNode_( _ss, _meta, node, false );
+            this->writeHeaderNode_( _ss, _meta, node );
         }
 
         m_indent -= 4;
@@ -1331,7 +1324,7 @@ namespace Metabuf
         {
             const XmlNode * node = it_nodes->second;
 
-            if( this->writeSourceNode_( _ss, _meta, node, true ) == false )
+            if( this->writeSourceNode_( _ss, _meta, node ) == false )
             {
                 return false;
             }
@@ -1344,9 +1337,9 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root )
+    bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
-        if( this->writeSourceConstructor_( _ss, _meta, _node, _root ) == false )
+        if( this->writeSourceConstructor_( _ss, _meta, _node ) == false )
         {
             return false;
         }
@@ -1404,7 +1397,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node, bool _root )
+    bool Xml2Metacode::writeSourceConstructor_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
         METABUF_UNUSED( _meta );
 
@@ -1420,21 +1413,12 @@ namespace Metabuf
         }
         else
         {
-            if( _root == true )
-            {
-                this->write( _ss ) << "    : Metabuf::Metaparse()" << std::endl;
-            }
-            else
-            {
-                this->write( _ss ) << "    : Metabuf::Metadata()" << std::endl;
-            }
-
             TVectorNoRequiredAttributes noRequiredAttributes;
             _node->getNoRequiredAttributes( noRequiredAttributes );
 
             if( noRequiredAttributes.empty() == false )
             {
-                this->write( _ss ) << "    , m_flagNoRequiredAttribute(0)" << std::endl;
+                this->write( _ss ) << "    : m_flagNoRequiredAttribute(0)" << std::endl;
             }
         }
 
@@ -2244,7 +2228,7 @@ namespace Metabuf
         {
             XmlNode * node_include = it->second;
 
-            if( this->writeSourceNode_( _ss, _meta, node_include, false ) == false )
+            if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
             {
                 return false;
             }
@@ -2258,7 +2242,7 @@ namespace Metabuf
         {
             XmlNode * node_include = it->second;
 
-            if( this->writeSourceNode_( _ss, _meta, node_include, false ) == false )
+            if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
             {
                 return false;
             }
@@ -2272,7 +2256,7 @@ namespace Metabuf
         {
             XmlNode * node_include = it->second;
 
-            if( this->writeSourceNode_( _ss, _meta, node_include, false ) == false )
+            if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
             {
                 return false;
             }
@@ -2286,7 +2270,7 @@ namespace Metabuf
         {
             XmlNode * node_include = it->second;
 
-            if( this->writeSourceNode_( _ss, _meta, node_include, false ) == false )
+            if( this->writeSourceNode_( _ss, _meta, node_include ) == false )
             {
                 return false;
             }
