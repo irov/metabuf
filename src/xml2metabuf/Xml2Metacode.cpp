@@ -280,6 +280,7 @@ namespace Metabuf
     {
         METABUF_UNUSED( _node );
 
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;" << std::endl;
 
         return true;
@@ -292,6 +293,7 @@ namespace Metabuf
             return true;
         }
 
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
         return true;
@@ -304,6 +306,7 @@ namespace Metabuf
             return true;
         }
 
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );" << std::endl;
 
         return true;
@@ -1024,6 +1027,7 @@ namespace Metabuf
     {
         METABUF_UNUSED( _node );
 
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void _preparationIncludes( uint32_t _id, uint32_t _count );" << std::endl;
 
         return true;
@@ -1033,6 +1037,7 @@ namespace Metabuf
     {
         METABUF_UNUSED( _node );
 
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );" << std::endl;
 
         return true;
@@ -1744,6 +1749,7 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
@@ -1809,6 +1815,7 @@ namespace Metabuf
         }
 
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
 
@@ -1923,6 +1930,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesPreparation_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_preparationIncludes( uint32_t _id, uint32_t _count )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
         this->write( _ss ) << "    METABUF_UNUSED( _id );" << std::endl;
@@ -1986,6 +1994,7 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceIncludesReader_( std::stringstream & _ss, const XmlNode * _node )
     {
         this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "// cppcheck-suppress duplInheritedMember" << std::endl;
         this->write( _ss ) << "void " << _node->getScope() << "::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )" << std::endl;
         this->write( _ss ) << "{" << std::endl;
         this->write( _ss ) << "    METABUF_UNUSED( _buff );" << std::endl;

@@ -1,7 +1,5 @@
 #include "test_metacode.h"
 
-#include <stdlib.h>
-
 namespace Metacode
 {
     //////////////////////////////////////////////////////////////////////////
@@ -12,7 +10,7 @@ namespace Metacode
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_version()
     {
-        return 8;
+        return 9;
     }
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_protocol_version()
@@ -97,6 +95,31 @@ namespace Metacode
         return Metabuf::HEADER_SUCCESSFUL;
     }
     //////////////////////////////////////////////////////////////////////////
+    uint32_t getInternalStringsCount()
+    {
+        return 1;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash )
+    {
+        struct internal_t
+        {
+            uint32_t size;
+            const char * str;
+            uint64_t hash;
+        };
+
+        const internal_t internals[] = {
+            {20, "ResourceImageDefault", 3470757930260756242UL},
+        };
+
+        const internal_t & internal = internals[_index];
+        _stringSize = internal.size;
+        _stringHash = internal.hash;
+
+        return internal.str;
+    }
+    //////////////////////////////////////////////////////////////////////////
     bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount )
     {
         Metabuf::Reader ar(_buff, _size, _read);
@@ -138,7 +161,6 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_DataBlock()
-            : Metabuf::Metaparse()
         {
         }
         //////////////////////////////////////////////////////////////////////////
@@ -156,11 +178,11 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         bool Meta_DataBlock::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_userData;
-            this->_parseData( _buff, _size, _read, _userData );
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _userData );
+            Meta_DataBlock::_parseData(_buff, _size, _read, _userData); 
         
             uint32_t includeCount;
             Metabuf::readSize( _buff, _size, _read, includeCount );
@@ -207,15 +229,15 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::_preparationIncludes( uint32_t _id, uint32_t _count )
         {
-            (void)_id;
-            (void)_count;
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _count );
             switch( _id )
             {
-            case 2:
+            case 1:
                 {
                     includes_Meta_Include.reserve( _count );
                 }break;
-            case 3:
+            case 2:
                 {
                     includes_Meta_Resource.reserve( _count );
                 }break;
@@ -226,14 +248,14 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_id;
-            (void)_userData;
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _userData );
             switch( _id )
             {
-            case 2:
+            case 1:
                 {
                     includes_Meta_Include.emplace_back( Meta_DataBlock::Meta_Include() );
                     Meta_DataBlock::Meta_Include & metadata = includes_Meta_Include.back();
@@ -249,7 +271,7 @@ namespace Metacode
         {
             switch( _id )
             {
-            case 4:
+            case 3:
                 {
                     Meta_DataBlock::Meta_ResourceImageDefault * metadata = new Meta_DataBlock::Meta_ResourceImageDefault ();
                     metadata->parse( _buff, _size, _read, _userData );
@@ -263,17 +285,16 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_Include::Meta_Include()
-            : Metabuf::Metadata()
         {
         }
         //////////////////////////////////////////////////////////////////////////
         bool Meta_DataBlock::Meta_Include::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_userData;
-            this->_parseData( _buff, _size, _read, _userData );
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _userData );
+            Meta_DataBlock::Meta_Include::_parseData(_buff, _size, _read, _userData); 
         
             return true;
         }
@@ -285,23 +306,22 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Include::_preparationIncludes( uint32_t _id, uint32_t _count )
         {
-            (void)_id;
-            (void)_count;
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _count );
         }
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Include::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_id;
-            (void)_userData;
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _userData );
         }
         //////////////////////////////////////////////////////////////////////////
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_Resource::Meta_Resource()
-            : Metabuf::Metadata()
-            , m_flagNoRequeredAttribute(0)
+            : m_flagNoRequiredAttribute(0)
         {
         }
         //////////////////////////////////////////////////////////////////////////
@@ -311,15 +331,15 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         bool Meta_DataBlock::Meta_Resource::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_userData;
-            this->_parseData( _buff, _size, _read, _userData );
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _userData );
+            Meta_DataBlock::Meta_Resource::_parseData(_buff, _size, _read, _userData); 
         
-            Metabuf::readSize( _buff, _size, _read, m_flagNoRequeredAttribute );
+            Metabuf::readSize( _buff, _size, _read, m_flagNoRequiredAttribute );
         
-            if( m_flagNoRequeredAttribute != 0 )
+            if( m_flagNoRequiredAttribute != 0 )
             {
                 this->_parseArguments( _buff, _size, _read, _userData );
             }
@@ -335,12 +355,12 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Resource::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            if( (m_flagNoRequeredAttribute & EMETA_Precompile) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_Precompile) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_Precompile );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_Unique) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_Unique) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_Unique );
             }
@@ -349,17 +369,17 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Resource::_preparationIncludes( uint32_t _id, uint32_t _count )
         {
-            (void)_id;
-            (void)_count;
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _count );
         }
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_Resource::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_id;
-            (void)_userData;
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _userData );
         }
         //////////////////////////////////////////////////////////////////////////
         //cppcheck-suppress uninitMemberVar
@@ -370,15 +390,15 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         bool Meta_DataBlock::Meta_ResourceImageDefault::parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_userData;
-            this->_parseData( _buff, _size, _read, _userData );
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _userData );
+            Meta_DataBlock::Meta_ResourceImageDefault::_parseData(_buff, _size, _read, _userData); 
         
-            Metabuf::readSize( _buff, _size, _read, m_flagNoRequeredAttribute );
+            Metabuf::readSize( _buff, _size, _read, m_flagNoRequiredAttribute );
         
-            if( m_flagNoRequeredAttribute != 0 )
+            if( m_flagNoRequiredAttribute != 0 )
             {
                 this->_parseArguments( _buff, _size, _read, _userData );
             }
@@ -398,32 +418,32 @@ namespace Metacode
         {
             Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _userData );
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Alpha) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Alpha) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Alpha );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Codec) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Codec) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Codec );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Converter) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Converter) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Converter );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Offset) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Offset) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Offset );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Premultiply) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Premultiply) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Premultiply );
             }
         
-            if( (m_flagNoRequeredAttribute & EMETA_File_Size) != 0 )
+            if( (m_flagNoRequiredAttribute & EMETA_File_Size) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Size );
             }
@@ -432,18 +452,18 @@ namespace Metacode
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_ResourceImageDefault::_preparationIncludes( uint32_t _id, uint32_t _count )
         {
-            (void)_id;
-            (void)_count;
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _count );
             Meta_DataBlock::Meta_Resource::_preparationIncludes( _id, _count );
         }
         //////////////////////////////////////////////////////////////////////////
         void Meta_DataBlock::Meta_ResourceImageDefault::_parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData )
         {
-            (void)_buff;
-            (void)_size;
-            (void)_read;
-            (void)_id;
-            (void)_userData;
+            METABUF_UNUSED( _buff );
+            METABUF_UNUSED( _size );
+            METABUF_UNUSED( _read );
+            METABUF_UNUSED( _id );
+            METABUF_UNUSED( _userData );
             Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _id, _userData );
         
         }

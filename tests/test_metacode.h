@@ -19,6 +19,8 @@ namespace Metacode
 
     Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );
 
+    uint32_t getInternalStringsCount();
+    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash );
     bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );
     const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );
 
@@ -46,7 +48,7 @@ namespace Metacode
             }
             
         public:
-            bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
         
         protected:
             void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -56,7 +58,7 @@ namespace Metacode
         
         public:
             class Meta_Include
-                : public Metabuf::Metadata
+                : public Metabuf::Metaparse
             { 
             public:
                 Meta_Include();
@@ -74,7 +76,7 @@ namespace Metacode
                 }
                 
             public:
-                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -87,20 +89,20 @@ namespace Metacode
             };
             
             class Meta_Resource
-                : public Metabuf::Metadata
+                : public Metabuf::Metaparse
             { 
             public:
                 Meta_Resource();
                 virtual ~Meta_Resource();
             
             protected:
-                enum NoRequeredAttribute
+                enum NoRequiredAttribute
                 {
-                    EMETA_Precompile = (1 <<2),
-                    EMETA_Unique = (1 <<1),
+                    EMETA_Precompile = (1 <<1),
+                    EMETA_Unique = (1 <<0),
                 };
                 
-                uint32_t m_flagNoRequeredAttribute;
+                uint32_t m_flagNoRequiredAttribute;
                 
             public:
                 template<class C, class M>
@@ -116,12 +118,12 @@ namespace Metacode
                 
                 bool has_Precompile() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_Precompile) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_Precompile) != 0;
                 }
                 
                 bool getd_Precompile( bool _default ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Precompile) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         return _default;
                     }
@@ -131,7 +133,7 @@ namespace Metacode
                 
                 bool get_Precompile( bool * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Precompile) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         return false;
                     }
@@ -144,7 +146,7 @@ namespace Metacode
                 template<class C, class M>
                 bool getm_Precompile( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Precompile) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         return false;
                     }
@@ -156,7 +158,7 @@ namespace Metacode
                 
                 bool getd_Precompile( bool * _value, const bool & _default ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Precompile) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         *_value = _default;
                 
@@ -180,12 +182,12 @@ namespace Metacode
                 
                 bool has_Unique() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_Unique) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_Unique) != 0;
                 }
                 
                 bool getd_Unique( bool _default ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Unique) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         return _default;
                     }
@@ -195,7 +197,7 @@ namespace Metacode
                 
                 bool get_Unique( bool * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Unique) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         return false;
                     }
@@ -208,7 +210,7 @@ namespace Metacode
                 template<class C, class M>
                 bool getm_Unique( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Unique) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         return false;
                     }
@@ -220,7 +222,7 @@ namespace Metacode
                 
                 bool getd_Unique( bool * _value, const bool & _default ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_Unique) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         *_value = _default;
                 
@@ -232,7 +234,7 @@ namespace Metacode
                     return true;
                 }
             public:
-                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -255,26 +257,26 @@ namespace Metacode
                 Meta_ResourceImageDefault();
             
             protected:
-                enum NoRequeredAttribute
+                enum NoRequiredAttribute
                 {
-                    EMETA_File_Alpha = (1 <<5),
-                    EMETA_File_Codec = (1 <<3),
-                    EMETA_File_Converter = (1 <<4),
-                    EMETA_File_Offset = (1 <<8),
-                    EMETA_File_Premultiply = (1 <<6),
-                    EMETA_File_Size = (1 <<7),
+                    EMETA_File_Alpha = (1 <<4),
+                    EMETA_File_Codec = (1 <<2),
+                    EMETA_File_Converter = (1 <<3),
+                    EMETA_File_Offset = (1 <<7),
+                    EMETA_File_Premultiply = (1 <<5),
+                    EMETA_File_Size = (1 <<6),
                 };
                 
             public:
                 bool has_File_Alpha() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Alpha) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Alpha) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Alpha( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Alpha) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Alpha) == 0 )
                     {
                         return false;
                     }
@@ -286,7 +288,7 @@ namespace Metacode
                 
                 bool get_File_Alpha( bool * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Alpha) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Alpha) == 0 )
                     {
                         return false;
                     }
@@ -298,13 +300,13 @@ namespace Metacode
                 
                 bool has_File_Codec() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Codec) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Codec) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Codec( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Codec) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Codec) == 0 )
                     {
                         return false;
                     }
@@ -316,7 +318,7 @@ namespace Metacode
                 
                 bool get_File_Codec( std::string * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Codec) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Codec) == 0 )
                     {
                         return false;
                     }
@@ -328,13 +330,13 @@ namespace Metacode
                 
                 bool has_File_Converter() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Converter) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Converter) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Converter( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Converter) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Converter) == 0 )
                     {
                         return false;
                     }
@@ -346,7 +348,7 @@ namespace Metacode
                 
                 bool get_File_Converter( std::string * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Converter) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Converter) == 0 )
                     {
                         return false;
                     }
@@ -369,13 +371,13 @@ namespace Metacode
                 
                 bool has_File_Offset() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Offset) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Offset) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Offset( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Offset) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Offset) == 0 )
                     {
                         return false;
                     }
@@ -387,7 +389,7 @@ namespace Metacode
                 
                 bool get_File_Offset( Detail::Rect * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Offset) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Offset) == 0 )
                     {
                         return false;
                     }
@@ -410,13 +412,13 @@ namespace Metacode
                 
                 bool has_File_Premultiply() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Premultiply) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Premultiply) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Premultiply( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Premultiply) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Premultiply) == 0 )
                     {
                         return false;
                     }
@@ -428,7 +430,7 @@ namespace Metacode
                 
                 bool get_File_Premultiply( bool * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Premultiply) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Premultiply) == 0 )
                     {
                         return false;
                     }
@@ -440,13 +442,13 @@ namespace Metacode
                 
                 bool has_File_Size() const
                 {
-                    return (m_flagNoRequeredAttribute & EMETA_File_Size) != 0;
+                    return (m_flagNoRequiredAttribute & EMETA_File_Size) != 0;
                 }
                 
                 template<class C, class M>
                 bool getm_File_Size( C _self, M _method ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Size) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Size) == 0 )
                     {
                         return false;
                     }
@@ -458,7 +460,7 @@ namespace Metacode
                 
                 bool get_File_Size( Detail::Rect * _value ) const
                 {
-                    if( (m_flagNoRequeredAttribute & EMETA_File_Size) == 0 )
+                    if( (m_flagNoRequiredAttribute & EMETA_File_Size) == 0 )
                     {
                         return false;
                     }
@@ -469,7 +471,7 @@ namespace Metacode
                 }
                 
             public:
-                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
