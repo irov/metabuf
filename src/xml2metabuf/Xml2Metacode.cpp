@@ -366,7 +366,7 @@ namespace Metabuf
                             this->write( _ss ) << "{" << std::endl;
                             this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
                             this->write( _ss ) << "    {" << std::endl;
-                            this->write( _ss ) << "        (_self->*_method)( this->" << attr->default_value << " );" << std::endl;
+                            this->write( _ss ) << "        (_self->*_method)( " << attr->default_value << " );" << std::endl;
                             this->write( _ss ) << "    }" << std::endl;
 							this->write( _ss ) << "    else" << std::endl;
 							this->write( _ss ) << "    {" << std::endl;
@@ -392,7 +392,7 @@ namespace Metabuf
                         this->write( _ss ) << "{" << std::endl;
 						this->write( _ss ) << "    if( (m_flagNoRequiredAttribute & EMETA_" << attr->name << ") == 0 )" << std::endl;
 						this->write( _ss ) << "    {" << std::endl;
-						this->write( _ss ) << "        (_self->*_method)( this->" << attr->default_value << " );" << std::endl;
+						this->write( _ss ) << "        (_self->*_method)( " << attr->default_value << " );" << std::endl;
 						this->write( _ss ) << "    }" << std::endl;
 						this->write( _ss ) << "    else" << std::endl;
 						this->write( _ss ) << "    {" << std::endl;
