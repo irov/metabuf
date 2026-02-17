@@ -1,17 +1,24 @@
+cmake_minimum_required(VERSION 3.10)
+
 include(ExternalProject)
 
 ExternalProject_Add(pugixml_download PREFIX pugixml
         GIT_REPOSITORY https://github.com/zeux/pugixml.git
-		GIT_TAG "v1.9"
+		GIT_TAG "v1.15"
 		GIT_PROGRESS TRUE
             
         UPDATE_COMMAND ""
       
         CMAKE_ARGS 
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-            -DBUILD_SHARED_LIBS=OFF
-            -DBUILD_TESTS=OFF
-            -DSTATIC_CRT=ON
+            -DPUGIXML_BUILD_SHARED_AND_STATIC_LIBS=OFF
+            -DPUGIXML_BUILD_TESTS=OFF
+            -DPUGIXML_STATIC_CRT=ON
+            -DPUGIXML_WCHAR_MODE=OFF
+            -DPUGIXML_COMPACT=ON
+            -DPUGIXML_NO_XPATH=ON
+            -DPUGIXML_NO_STL=ON
+            -DPUGIXML_NO_EXCEPTIONS=ON
     )
 
 ExternalProject_Get_Property(pugixml_download INSTALL_DIR)
