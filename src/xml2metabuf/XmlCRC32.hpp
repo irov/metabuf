@@ -2,6 +2,8 @@
 
 #include "pugixml.hpp"
 
+#include <stdint.h>
+
 namespace Metabuf
 {
     class XmlCRC32
