@@ -23,6 +23,51 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
+        static bool s_write_utf8_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            METABUF_UNUSED( _user );
+
+            const uint32_t size = (uint32_t)strlen( _value );
+            _metabuf->writeSize( size );
+            _metabuf->writeCount( _value, size );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static bool s_write_utf8_codepoint( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        {
+            METABUF_UNUSED( _user );
+
+            const uint8_t * utf8 = reinterpret_cast<const uint8_t *>(_value);
+            const size_t size = strlen( _value );
+            uint32_t codepoint;
+
+            if( size >= 1 && utf8[0] < 0x80 )
+            {
+                codepoint = utf8[0];
+            }
+            else if( size >= 2 && (utf8[0] & 0xE0) == 0xC0 && (utf8[1] & 0xC0) == 0x80 )
+            {
+                codepoint = ((utf8[0] & 0x1F) << 6) | (utf8[1] & 0x3F);
+            }
+            else if( size >= 3 && (utf8[0] & 0xF0) == 0xE0 && (utf8[1] & 0xC0) == 0x80 && (utf8[2] & 0xC0) == 0x80 )
+            {
+                codepoint = ((utf8[0] & 0x0F) << 12) | ((utf8[1] & 0x3F) << 6) | (utf8[2] & 0x3F);
+            }
+            else if( size >= 4 && (utf8[0] & 0xF8) == 0xF0 && (utf8[1] & 0xC0) == 0x80 && (utf8[2] & 0xC0) == 0x80 && (utf8[3] & 0xC0) == 0x80 )
+            {
+                codepoint = ((utf8[0] & 0x07) << 18) | ((utf8[1] & 0x3F) << 12) | ((utf8[2] & 0x3F) << 6) | (utf8[3] & 0x3F);
+            }
+            else
+            {
+                return false;
+            }
+
+            _metabuf->write( codepoint );
+
+            return true;
+        }
+        //////////////////////////////////////////////////////////////////////////
         static bool s_write_strings( Xml2Metabuf * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
@@ -659,6 +704,9 @@ namespace Metabuf
     {
         this->addSerializator( "string", &Serialize::s_write_string, nullptr );
         this->addSerializator( "strings", &Serialize::s_write_strings, nullptr );
+        this->addSerializator( "wstring", &Serialize::s_write_utf8_string, nullptr );
+        this->addSerializator( "wchar_t", &Serialize::s_write_utf8_string, nullptr );
+        this->addSerializator( "utf8", &Serialize::s_write_utf8_codepoint, nullptr );
 
         this->addSerializator( "bool", &Serialize::s_write_bool, nullptr );
         this->addSerializator( "int8_t", &Serialize::s_write_int8_t, nullptr );
@@ -750,9 +798,38 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::convert( void * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t * _writeSize )
     {
-        pugi::xml_document doc;
+        std::vector<uint8_t> bin;
+        OutputAdapter output( bin );
 
-        pugi::xml_parse_result result = doc.load_buffer( _xmlBuff, _xmlSize );
+        if( this->convert( output, _xmlBuff, _xmlSize ) == false )
+        {
+            return false;
+        }
+
+        if( bin.size() > _binSize )
+        {
+            m_error << "Xml2Metabuf::convert: write buffer not enouge memory " << _binSize << " need " << bin.size() << std::endl;
+
+            return false;
+        }
+
+        std::copy( bin.begin(), bin.end(), reinterpret_cast<uint8_t *>(_binBuff) );
+
+        if( _writeSize != nullptr )
+        {
+            *_writeSize = bin.size();
+        }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize )
+    {
+        m_error.str( std::string() );
+        m_error.clear();
+
+        pugi::xml_document document;
+        pugi::xml_parse_result result = document.load_buffer( _xmlBuff, _xmlSize );
 
         if( result == false )
         {
@@ -761,83 +838,106 @@ namespace Metabuf
             return false;
         }
 
-        size_t writeSize = 0;
+        const pugi::xml_node root = document.document_element();
+        const XmlNode * node = m_meta->getNode( root.name() );
 
-        m_buff.clear();
-
-        pugi::xml_node root = doc.document_element();
-
-        const char * root_name = root.name();
-
-        const XmlNode * node_root = m_meta->getNode( root_name );
-
-        if( node_root == nullptr )
+        if( node == nullptr )
         {
-            m_error << "Xml2Metabuf::convert: invalid root node " << root_name << std::endl;
+            m_error << "Xml2Metabuf::convert: invalid root node " << root.name() << std::endl;
 
             return false;
         }
 
-        if( this->writeNode_( node_root, root ) == false )
+        if( this->convert( _output, root, node ) == false )
         {
-            m_error << "Xml2Metabuf::convert: invalid write node " << root_name << std::endl;
+            return false;
+        }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize, const XmlNode * _node )
+    {
+        m_error.str( std::string() );
+        m_error.clear();
+
+        pugi::xml_document document;
+        pugi::xml_parse_result result = document.load_buffer( _xmlBuff, _xmlSize );
+
+        if( result == false )
+        {
+            m_error << "Xml2Metabuf::convert xml parser error:" << std::endl << result.description() << std::endl;
 
             return false;
         }
 
-        VectorBlobject buffBody;
-        buffBody.swap( m_buff );
+        const pugi::xml_node root = document.document_element();
+
+        if( this->convert( _output, root, _node ) == false )
+        {
+            return false;
+        }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metabuf::convert( OutputAdapter & _output, const pugi::xml_node & _xmlNode, const XmlNode * _node )
+    {
+        m_error.str( std::string() );
+        m_error.clear();
+        m_stringCache.clear();
         m_buff.clear();
 
-        uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
+        if( _node == nullptr || _node->getName() != _xmlNode.name() )
+        {
+            m_error << "Xml2Metabuf::convert: invalid root node " << _xmlNode.name() << std::endl;
+
+            return false;
+        }
+
+        if( this->writeNode_( _node, _xmlNode ) == false )
+        {
+            m_error << "Xml2Metabuf::convert: invalid write node " << _xmlNode.name() << std::endl;
+
+            return false;
+        }
+
+        VectorBlobject body;
+        body.swap( m_buff );
+
+        const uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
         this->write( stringCacheCount );
 
         MakeHash makehash = m_protocol->getHashable();
 
         for( const std::string & str : m_stringCache )
         {
-            uint32_t strSize = (uint32_t)str.size();
+            const uint32_t strSize = (uint32_t)str.size();
             this->writeSize( strSize );
 
             const char * strBuff = str.c_str();
-
-            int64_t hash = (*makehash)(strBuff, strSize);
+            const int64_t hash = (*makehash)(strBuff, strSize);
             this->write( hash );
 
             this->writeCount( strBuff, strSize );
         }
 
-        VectorBlobject buffStrCache;
-        buffStrCache.swap( m_buff );
-        m_buff.clear();
+        VectorBlobject strings;
+        strings.swap( m_buff );
 
-        VectorBlobject buffFinal;
-
-        buffFinal.insert( buffFinal.end(), buffStrCache.begin(), buffStrCache.end() );
-        buffFinal.insert( buffFinal.end(), buffBody.begin(), buffBody.end() );
-
-        writeSize += buffFinal.size();
-
-        if( writeSize > _binSize )
-        {
-            m_error << "Xml2Metabuf::convert: write buffer not enouge memory " << _binSize << " need " << writeSize << std::endl;
-
-            return false;
-        }
-
-        std::copy( buffFinal.begin(), buffFinal.end(), reinterpret_cast<uint8_t *>(_binBuff) );
-
-        if( _writeSize != nullptr )
-        {
-            *_writeSize = writeSize;
-        }
+        _output.clear();
+        _output.reserve( strings.size() + body.size() );
+        _output.append( strings.data(), strings.size() );
+        _output.append( body.data(), body.size() );
 
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
     std::string Xml2Metabuf::getError() const
     {
-        return m_error.str();
+        const std::string error = m_error.str();
+
+        return error;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metabuf::writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node )
@@ -1374,7 +1474,7 @@ namespace Metabuf
             }
 
             char enumerator_attr_value[16];
-            sprintf( enumerator_attr_value, "%d", index );
+            snprintf( enumerator_attr_value, sizeof( enumerator_attr_value ), "%u", index );
 
             if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
             {

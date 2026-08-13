@@ -48,11 +48,19 @@ namespace Metacode
             }
             
         public:
+            const char * getMetaName() const override;
+            const char * getNodeName() const override;
+            uint32_t getMetaVersion() const override;
+
+            // cppcheck-suppress duplInheritedMember
             bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
         
         protected:
+            // cppcheck-suppress duplInheritedMember
             void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+            // cppcheck-suppress duplInheritedMember
             void _preparationIncludes( uint32_t _id, uint32_t _count );
+            // cppcheck-suppress duplInheritedMember
             void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
         
@@ -76,11 +84,19 @@ namespace Metacode
                 }
                 
             public:
+                const char * getMetaName() const override;
+                const char * getNodeName() const override;
+                uint32_t getMetaVersion() const override;
+
+                // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
+                // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                // cppcheck-suppress duplInheritedMember
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
+                // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:
@@ -234,12 +250,21 @@ namespace Metacode
                     return true;
                 }
             public:
+                const char * getMetaName() const override;
+                const char * getNodeName() const override;
+                uint32_t getMetaVersion() const override;
+
+                // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
+                // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                // cppcheck-suppress duplInheritedMember
                 void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                // cppcheck-suppress duplInheritedMember
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
+                // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:
@@ -471,12 +496,21 @@ namespace Metacode
                 }
                 
             public:
+                const char * getMetaName() const override;
+                const char * getNodeName() const override;
+                uint32_t getMetaVersion() const override;
+
+                // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
             
             protected:
+                // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                // cppcheck-suppress duplInheritedMember
                 void _parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
+                // cppcheck-suppress duplInheritedMember
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
+                // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             
             public:

@@ -1,49 +1,95 @@
 #include "XmlProtocol.hpp"
-#include "Xml2Metabuf.hpp"
 #include "Xml2Metacode.hpp"
+#include "Xml2Metaprotocol.hpp"
 
+#include <stdlib.h>
 #include <stdio.h>
+
+namespace
+{
+    bool writeOutput( const char * _path, const std::string & _content )
+    {
+        FILE * file = fopen( _path, "wb" );
+
+        if( file == nullptr )
+        {
+            printf( "error open output file '%s'", _path );
+
+            return false;
+        }
+
+        const bool successful = fwrite( _content.data(), _content.size(), 1, file ) == 1;
+        fclose( file );
+
+        return successful;
+    }
+}
 
 int main( int argc, char *argv[] )
 {
-    if( argc != 4 )
+    if( argc != 6 )
     {
-        printf( "invalid args count! '%d' need 4"
+        printf( "invalid args count! '%d' need 6"
             , argc
         );
 
-        return 0;
+        return EXIT_FAILURE;
     }
 
     const char * path_protocol = argv[1];
-
-
-    Metabuf::XmlProtocol xml_protocol;
-
     FILE * file_protocol = fopen( path_protocol, "rb" );
 
-    long size;
+    if( file_protocol == nullptr )
+    {
+        printf( "error open protocol file '%s'", path_protocol );
 
-    fseek( file_protocol, 0, SEEK_END );
-    size = ftell( file_protocol );
-    fseek( file_protocol, 0, SEEK_SET );
+        return EXIT_FAILURE;
+    }
+
+    if( fseek( file_protocol, 0, SEEK_END ) != 0 )
+    {
+        fclose( file_protocol );
+
+        return EXIT_FAILURE;
+    }
+
+    const long size = ftell( file_protocol );
+
+    if( size < 0 || fseek( file_protocol, 0, SEEK_SET ) != 0 )
+    {
+        fclose( file_protocol );
+
+        return EXIT_FAILURE;
+    }
 
     char * buf = new char[size];
 
-    fread( buf, 1, size, file_protocol );
+    if( fread( buf, 1, size, file_protocol ) != static_cast<size_t>(size) )
+    {
+        delete [] buf;
+        fclose( file_protocol );
+
+        return EXIT_FAILURE;
+    }
 
     fclose( file_protocol );
 
+    Metabuf::XmlProtocol xml_protocol;
+
     if( xml_protocol.readProtocol( buf, size ) == false )
     {
+        delete [] buf;
+
         std::string error = xml_protocol.getError();
 
         printf( "error read protocol: %s"
             , error.c_str()
         );
 
-        return 0;
+        return EXIT_FAILURE;
     }
+
+    delete [] buf;
 
     Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
 
@@ -55,48 +101,35 @@ int main( int argc, char *argv[] )
     std::string source;
     if( xml_metacode.generate( header, source, xml_settings ) == false )
     {
-        std::string error = xml_protocol.getError();
+        std::string error = xml_metacode.getError();
 
         printf( "error generate: %s"
             , error.c_str()
         );
 
-        return 0;
+        return EXIT_FAILURE;
     }
 
-    const char * metacodeh_protocol = argv[2];
+    Metabuf::Xml2Metaprotocol xml_metaprotocol( &xml_protocol );
 
-    FILE * file_metacode_hpp = fopen( metacodeh_protocol, "wb" );
+    std::string protocol_header;
+    std::string protocol_source;
 
-    if( file_metacode_hpp == nullptr )
+    if( xml_metaprotocol.generate( protocol_header, protocol_source ) == false )
     {
-        printf( "error open 'header' file '%s'"
-            , metacodeh_protocol
-        );
-
-        return 0;
+        return EXIT_FAILURE;
     }
 
-    fwrite( header.c_str(), header.size(), 1, file_metacode_hpp );
-    fclose( file_metacode_hpp );
-
-    const char * metacodecpp_protocol = argv[3];
-
-    FILE * file_metacode_cpp = fopen( metacodecpp_protocol, "wb" );
-
-    if( file_metacode_cpp == nullptr )
+    if( writeOutput( argv[2], header ) == false ||
+        writeOutput( argv[3], source ) == false ||
+        writeOutput( argv[4], protocol_header ) == false ||
+        writeOutput( argv[5], protocol_source ) == false )
     {
-        printf( "error open 'source' file '%s'"
-            , metacodecpp_protocol
-        );
-
-        return 0;
+        return EXIT_FAILURE;
     }
-
-    fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
-    fclose( file_metacode_cpp );
 
     printf( "done\n" );
 
-    return 0;
+    return EXIT_SUCCESS;
 }
+//////////////////////////////////////////////////////////////////////////

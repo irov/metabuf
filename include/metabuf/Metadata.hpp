@@ -44,6 +44,11 @@ namespace Metabuf
         ~Metaparse();
 
     public:
+        virtual const char * getMetaName() const = 0;
+        virtual const char * getNodeName() const = 0;
+        virtual uint32_t getMetaVersion() const = 0;
+
+    public:
         virtual bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) = 0;
     };
 }

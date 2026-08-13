@@ -30,7 +30,7 @@ int main( int argc, char * argv[] )
     METABUF_UNUSED( argv );
 
     char full_path_example_bin[256];
-    sprintf( full_path_example_bin, "%s/%s"
+    snprintf( full_path_example_bin, sizeof( full_path_example_bin ), "%s/%s"
         , argv[1]
         , path_example_bin
     );
@@ -91,15 +91,28 @@ int main( int argc, char * argv[] )
 
     Metabuf::Metacache metacache;
 
-    metacache.strings.resize( stringCount );
+    const uint32_t internalStringsCount = Metacode::getInternalStringsCount();
+    metacache.strings.resize( internalStringsCount + stringCount );
+
+    uint32_t index = 0;
 
     for( std::string & s : metacache.strings )
     {
         uint32_t stringSize;
         int64_t stringHash;
-        const char * str = Metacode::readString( example_bin_buffer, bin_size, read_size, stringSize, stringHash );
+        const char * str;
+
+        if( index < internalStringsCount )
+        {
+            str = Metacode::getInternalString( index, stringSize, stringHash );
+        }
+        else
+        {
+            str = Metacode::readString( example_bin_buffer, bin_size, read_size, stringSize, stringHash );
+        }
 
         s.assign( str, stringSize );
+        ++index;
     }
 
     Metacode::Meta_Data::Meta_DataBlock meta_DataBlock;
@@ -143,3 +156,4 @@ int main( int argc, char * argv[] )
 
     return EXIT_SUCCESS;
 }
+//////////////////////////////////////////////////////////////////////////

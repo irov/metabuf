@@ -16,7 +16,9 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     std::string Xml2Metacode::getError() const
     {
-        return m_error.str();
+        const std::string error = m_error.str();
+
+        return error;
     }
     //////////////////////////////////////////////////////////////////////////
     bool Xml2Metacode::generate( std::string & _header, std::string & _source, const Xml2Settings & _settings )
@@ -169,6 +171,11 @@ namespace Metabuf
 
         m_indent += 4;
 
+        if( this->writeHeaderMetaInfo_( _ss ) == false )
+        {
+            return false;
+        }
+
         if( this->writeHeaderParse_( _ss, _node ) == false )
         {
             return false;
@@ -272,6 +279,16 @@ namespace Metabuf
         }
 
         this->write( _ss ) << std::endl;
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeHeaderMetaInfo_( std::stringstream & _ss )
+    {
+        this->write( _ss ) << "const char * getMetaName() const override;" << std::endl;
+        this->write( _ss ) << "const char * getNodeName() const override;" << std::endl;
+        this->write( _ss ) << "uint32_t getMetaVersion() const override;" << std::endl;
+        _ss << std::endl;
 
         return true;
     }
@@ -1335,6 +1352,8 @@ namespace Metabuf
             }
         }
 
+        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+
         m_indent -= 4;
 
         this->write( _ss ) << "} " << std::endl;
@@ -1345,6 +1364,11 @@ namespace Metabuf
     bool Xml2Metacode::writeSourceNode_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
     {
         if( this->writeSourceConstructor_( _ss, _meta, _node ) == false )
+        {
+            return false;
+        }
+
+        if( this->writeSourceMetaInfo_( _ss, _meta, _node ) == false )
         {
             return false;
         }
@@ -1398,6 +1422,27 @@ namespace Metabuf
         {
             return false;
         }
+
+        return true;
+    }
+    //////////////////////////////////////////////////////////////////////////
+    bool Xml2Metacode::writeSourceMetaInfo_( std::stringstream & _ss, const XmlMeta * _meta, const XmlNode * _node )
+    {
+        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "const char * " << _node->getScope() << "::getMetaName() const" << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+        this->write( _ss ) << "    return \"" << _meta->m_name << "\";" << std::endl;
+        this->write( _ss ) << "}" << std::endl;
+        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "const char * " << _node->getScope() << "::getNodeName() const" << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+        this->write( _ss ) << "    return \"" << _node->name << "\";" << std::endl;
+        this->write( _ss ) << "}" << std::endl;
+        this->write( _ss ) << "//////////////////////////////////////////////////////////////////////////" << std::endl;
+        this->write( _ss ) << "uint32_t " << _node->getScope() << "::getMetaVersion() const" << std::endl;
+        this->write( _ss ) << "{" << std::endl;
+        this->write( _ss ) << "    return " << _meta->getVersion() << "U;" << std::endl;
+        this->write( _ss ) << "}" << std::endl;
 
         return true;
     }
@@ -2297,4 +2342,5 @@ namespace Metabuf
 
         return _ss;
     }
+    //////////////////////////////////////////////////////////////////////////
 }

@@ -1,0 +1,13 @@
+<Protocol Version="1">
+  <Type Name="std::string" Evict="string"/>
+  <Enum Name="Mode">
+    <None/>
+    <Linear/>
+  </Enum>
+  <Meta Name="Data" Version="1">
+    <Node Name="Root">
+      <Attribute Name="Name" Type="std::string" Required="1"/>
+      <Attribute Name="Mode" Type="Mode" Default="None"/>
+    </Node>
+  </Meta>
+</Protocol>

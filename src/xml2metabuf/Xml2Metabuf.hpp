@@ -2,6 +2,8 @@
 
 #include "config/Metaconfig.hpp"
 
+#include "metabufconverter/OutputAdapter.hpp"
+
 #include "pugixml.hpp"
 
 #include <vector>
@@ -32,6 +34,49 @@ namespace Metabuf
     public:
         bool header( void * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t * _writeSize );
         bool convert( void * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t * _writeSize );
+        bool convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize );
+        bool convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize, const XmlNode * _node );
+        bool convert( OutputAdapter & _output, const pugi::xml_node & _xmlNode, const XmlNode * _node );
+
+        template<class T>
+        bool convert( T & _output, const void * _xmlBuff, size_t _xmlSize )
+        {
+            OutputAdapter output( _output );
+
+            if( this->convert( output, _xmlBuff, _xmlSize ) == false )
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        template<class T>
+        bool convert( T & _output, const void * _xmlBuff, size_t _xmlSize, const XmlNode * _node )
+        {
+            OutputAdapter output( _output );
+
+            if( this->convert( output, _xmlBuff, _xmlSize, _node ) == false )
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        template<class T>
+        bool convert( T & _output, const pugi::xml_node & _xmlNode, const XmlNode * _node )
+        {
+            OutputAdapter output( _output );
+
+            if( this->convert( output, _xmlNode, _node ) == false )
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         std::string getError() const;
 
     protected:

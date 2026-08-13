@@ -10,7 +10,13 @@ set_target_properties(test_utils PROPERTIES
 
 INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_INCLUDE_PATH} )
 
-ADD_LIBRARY( test_common STATIC test_metacode.cpp test_metacode.h test_metatype.h test_metatype.cpp )
+ADD_LIBRARY( test_common STATIC test_metacode.cpp test_metacode.h Metaprotocol.cpp Metaprotocol.h test_metatype.h test_metatype.cpp )
+
+TARGET_INCLUDE_DIRECTORIES(test_common PRIVATE
+    ${METABUF_INCLUDE_PATH}
+    ${METABUF_SOURCE_PATH}
+    ${METABUF_PUGIXML_INCLUDE_DIRS}
+)
 
 set_target_properties(test_common PROPERTIES
     FOLDER tests
@@ -24,20 +30,22 @@ macro(ADD_MOVIE_TEST testname)
     SET(TEST_PROJECT_NAME test_${testname})
     
     INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_INCLUDE_PATH} )
-    INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_PUGIXML_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_SOURCE_PATH} )
+    INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_SOURCE_PATH}/xml2metabuf )
+    INCLUDE_DIRECTORIES( ${TEST_PROJECT_NAME} ${METABUF_PUGIXML_INCLUDE_DIRS} )
     
     ADD_EXECUTABLE(${TEST_PROJECT_NAME} test_${testname}.cpp)
     
     TARGET_LINK_LIBRARIES(${TEST_PROJECT_NAME} metabuf)
     TARGET_LINK_LIBRARIES(${TEST_PROJECT_NAME} xml2metabuf)
-    TARGET_LINK_LIBRARIES(${TEST_PROJECT_NAME} pugixml)
+    TARGET_LINK_LIBRARIES(${TEST_PROJECT_NAME} ${METABUF_PUGIXML_LIBRARIES})
     
     FOREACH(library ${test_extra_library})
         TARGET_LINK_LIBRARIES(${TEST_PROJECT_NAME} ${library})
     ENDFOREACH()
     
     if(NOT METABUF_PUGIXML_EXTERNAL)
-        add_dependencies(${PROJECT_NAME} pugixml_download)
+        add_dependencies(${TEST_PROJECT_NAME} pugixml_download)
     endif()
 
     set_target_properties(${TEST_PROJECT_NAME} PROPERTIES
@@ -52,3 +60,7 @@ ADD_MOVIE_TEST(make_metacode test_utils)
 ADD_MOVIE_TEST(generate_bin test_common test_utils metabuf)
 ADD_MOVIE_TEST(parse_bin test_common test_utils metabuf)
 ADD_MOVIE_TEST(memory_leak test_common test_utils metabuf)
+
+if(METABUF_JSON2METABUF)
+    ADD_MOVIE_TEST(converters test_common test_utils metabufconverter json2metabuf ${METABUF_JANSSON_LIBRARIES})
+endif()

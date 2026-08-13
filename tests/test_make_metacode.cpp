@@ -1,5 +1,6 @@
 #include "../../src/xml2metabuf/XmlProtocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
+#include "../../src/xml2metabuf/Xml2Metaprotocol.hpp"
 
 #include "test_utils.h"
 
@@ -10,7 +11,27 @@
 
 const char * path_metacode_h = "test_metacode.h";
 const char * path_metacode_cpp = "test_metacode.cpp";
+const char * path_metaprotocol_h = "Metaprotocol.h";
+const char * path_metaprotocol_cpp = "Metaprotocol.cpp";
 const char * path_protocol = "Protocol.xml";
+
+namespace
+{
+    bool writeOutput( const char * _base, const char * _path, const std::string & _content )
+    {
+        FILE * file = write_file( _base, _path );
+
+        if( file == nullptr )
+        {
+            return false;
+        }
+
+        const bool successful = fwrite( _content.data(), _content.size(), 1, file ) == 1;
+        fclose( file );
+
+        return successful;
+    }
+}
 
 int main( int argc, char *argv[] )
 {
@@ -63,33 +84,24 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    FILE * file_metacode_h = write_file( argv[1], path_metacode_h );
+    Metabuf::Xml2Metaprotocol xml_metaprotocol( &xml_protocol );
 
-    if( file_metacode_h == nullptr )
+    std::string protocol_header;
+    std::string protocol_source;
+
+    if( xml_metaprotocol.generate( protocol_header, protocol_source ) == false )
     {
-        printf( "error open 'header' file '%s'"
-            , path_metacode_h
-        );
-
         return EXIT_FAILURE;
     }
 
-    fwrite( header.c_str(), header.size(), 1, file_metacode_h );
-    fclose( file_metacode_h );
-
-    FILE * file_metacode_cpp = write_file( argv[1], path_metacode_cpp );
-
-    if( file_metacode_cpp == nullptr )
+    if( writeOutput( argv[1], path_metacode_h, header ) == false ||
+        writeOutput( argv[1], path_metacode_cpp, source ) == false ||
+        writeOutput( argv[1], path_metaprotocol_h, protocol_header ) == false ||
+        writeOutput( argv[1], path_metaprotocol_cpp, protocol_source ) == false )
     {
-        printf( "error open 'source' file '%s'"
-            , path_metacode_cpp
-        );
-
         return EXIT_FAILURE;
     }
-
-    fwrite( source.c_str(), source.size(), 1, file_metacode_cpp );
-    fclose( file_metacode_cpp );
 
     return EXIT_SUCCESS;
 }
+//////////////////////////////////////////////////////////////////////////

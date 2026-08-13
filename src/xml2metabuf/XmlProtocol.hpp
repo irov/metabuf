@@ -8,6 +8,7 @@
 
 #include <sstream>
 
+#include <stddef.h>
 #include <stdint.h>
 
 #define METABUF_BIN_VERSION 9
@@ -91,7 +92,12 @@ namespace Metabuf
     {
     public:
         XmlNode();
+        XmlNode( uint32_t _id, const std::string & _name, const std::string & _generator, const std::string & _inheritance, uint32_t _enumerator, uint32_t _enumeratorNRA, bool _noWrite, const XmlNode * _node_scope );
         ~XmlNode();
+
+    public:
+        void * operator new (size_t _size);
+        void operator delete (void * _ptr, size_t _size);
 
     public:
         uint32_t id;
@@ -146,6 +152,10 @@ namespace Metabuf
         ~XmlMeta();
 
     public:
+        void * operator new (size_t _size);
+        void operator delete (void * _ptr, size_t _size);
+
+    public:
         uint32_t getVersion() const;
 
     public:
@@ -174,8 +184,14 @@ namespace Metabuf
         ~XmlProtocol();
 
     public:
+        void finalize();
+
+    public:
         uint32_t getVersion() const;
         uint32_t getCrc32() const;
+
+    public:
+        void initialize( uint32_t _version, uint32_t _crc32, TMapMetas && _metas, TMapTypes && _types, TVectorInternalStrings && _internals );
 
     public:
         bool hasMeta( const std::string & _type ) const;
@@ -192,10 +208,14 @@ namespace Metabuf
     public:
         bool hasType( const std::string & _name ) const;
         bool getType( const std::string & _name, XmlType & _type ) const;
+        const TMapTypes & getTypes() const;
 
     public:
         bool readProtocol( const void * _buff, size_t _size );
         std::string getError() const;
+
+    protected:
+        void clear_();
 
     protected:
         bool readType_( const pugi::xml_node & _xml_node );

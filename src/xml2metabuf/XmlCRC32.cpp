@@ -105,7 +105,9 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     uint32_t XmlCRC32::getCrc32() const
     {
-        return fini_crc32( m_crc32 );
+        const uint32_t crc32 = fini_crc32( m_crc32 );
+
+        return crc32;
     }
     //////////////////////////////////////////////////////////////////////////
     void XmlCRC32::write( const void * data, size_t size )

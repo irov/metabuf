@@ -4,7 +4,7 @@
 void * read_file( const char * _current, const char * _path, size_t * _size )
 {
     char full_path[250];
-    sprintf( full_path, "%s/%s"
+    snprintf( full_path, sizeof( full_path ), "%s/%s"
         , _current
         , _path
     );
@@ -34,7 +34,7 @@ void * read_file( const char * _current, const char * _path, size_t * _size )
 FILE * write_file( const char * _current, const char * _path )
 {
     char full_path[250];
-    sprintf( full_path, "%s/%s"
+    snprintf( full_path, sizeof( full_path ), "%s/%s"
         , _current
         , _path
     );

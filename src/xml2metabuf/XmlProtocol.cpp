@@ -1,11 +1,14 @@
 #include "XmlProtocol.hpp"
 #include "XmlCRC32.hpp"
 
+#include "config/Metaconfig.hpp"
+
 #include <algorithm>
 
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
+#include <utility>
 
 namespace Metabuf
 {
@@ -51,6 +54,20 @@ namespace Metabuf
 
     }
     //////////////////////////////////////////////////////////////////////////
+    XmlNode::XmlNode( uint32_t _id, const std::string & _name, const std::string & _generator, const std::string & _inheritance, uint32_t _enumerator, uint32_t _enumeratorNRA, bool _noWrite, const XmlNode * _node_scope )
+        : id( _id )
+        , name( _name )
+        , generator( _generator )
+        , inheritance( _inheritance )
+        , node_inheritance( nullptr )
+        , node_scope( _node_scope )
+        , enumerator( _enumerator )
+        , enumeratorNRA( _enumeratorNRA )
+        , noWrite( _noWrite )
+    {
+
+    }
+    //////////////////////////////////////////////////////////////////////////
     XmlNode::~XmlNode()
     {
         for( TMapNodes::const_iterator
@@ -85,6 +102,18 @@ namespace Metabuf
 
             delete node;
         }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void * XmlNode::operator new (size_t _size)
+    {
+        return METABUF_MALLOC( _size );
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void XmlNode::operator delete (void * _ptr, size_t _size)
+    {
+        METABUF_UNUSED( _size );
+
+        METABUF_FREE( _ptr, _size );
     }
     //////////////////////////////////////////////////////////////////////////
     const XmlAttribute * XmlNode::getAttribute( const std::string & _name ) const
@@ -556,6 +585,18 @@ namespace Metabuf
         }
     }
     //////////////////////////////////////////////////////////////////////////
+    void * XmlMeta::operator new (size_t _size)
+    {
+        return METABUF_MALLOC( _size );
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void XmlMeta::operator delete (void * _ptr, size_t _size)
+    {
+        METABUF_UNUSED( _size );
+
+        METABUF_FREE( _ptr, _size );
+    }
+    //////////////////////////////////////////////////////////////////////////
     uint32_t XmlMeta::getVersion() const
     {
         return this->m_version;
@@ -665,6 +706,16 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     XmlProtocol::~XmlProtocol()
     {
+        this->clear_();
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void XmlProtocol::finalize()
+    {
+        this->clear_();
+    }
+    //////////////////////////////////////////////////////////////////////////
+    void XmlProtocol::clear_()
+    {
         for( TMapMetas::const_iterator
             it = m_metas.begin(),
             it_end = m_metas.end();
@@ -675,6 +726,8 @@ namespace Metabuf
 
             delete meta;
         }
+
+        m_metas.clear();
     }
     //////////////////////////////////////////////////////////////////////////
     uint32_t XmlProtocol::getVersion() const
@@ -687,9 +740,22 @@ namespace Metabuf
         return m_crc32;
     }
     //////////////////////////////////////////////////////////////////////////
+    void XmlProtocol::initialize( uint32_t _version, uint32_t _crc32, TMapMetas && _metas, TMapTypes && _types, TVectorInternalStrings && _internals )
+    {
+        this->clear_();
+
+        m_version = _version;
+        m_crc32 = _crc32;
+        m_metas = std::move( _metas );
+        m_types = std::move( _types );
+        m_internals = std::move( _internals );
+    }
+    //////////////////////////////////////////////////////////////////////////
     std::string XmlProtocol::getError() const
     {
-        return m_error.str();
+        const std::string error = m_error.str();
+
+        return error;
     }
     //////////////////////////////////////////////////////////////////////////
     bool XmlProtocol::readProtocol( const void * _buff, size_t _size )
@@ -1268,6 +1334,11 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
+    const TMapTypes & XmlProtocol::getTypes() const
+    {
+        return m_types;
+    }
+    //////////////////////////////////////////////////////////////////////////
     bool XmlProtocol::hasMeta( const std::string & _type ) const
     {
         TMapMetas::const_iterator it_found = m_metas.find( _type );
@@ -1313,4 +1384,5 @@ namespace Metabuf
     {
         return m_internals;
     }
+    //////////////////////////////////////////////////////////////////////////
 }
