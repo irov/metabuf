@@ -99,16 +99,15 @@ int main( int argc, char * argv[] )
     for( std::string & s : metacache.strings )
     {
         uint32_t stringSize;
-        int64_t stringHash;
         const char * str;
 
         if( index < internalStringsCount )
         {
-            str = Metacode::getInternalString( index, stringSize, stringHash );
+            str = Metacode::getInternalString( index, stringSize );
         }
         else
         {
-            str = Metacode::readString( example_bin_buffer, bin_size, read_size, stringSize, stringHash );
+            str = Metacode::readString( example_bin_buffer, bin_size, read_size, stringSize );
         }
 
         s.assign( str, stringSize );

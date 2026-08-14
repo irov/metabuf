@@ -11,12 +11,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define METABUF_BIN_VERSION 9
+#define METABUF_BIN_VERSION 10
 
 namespace Metabuf
 {
-    typedef int64_t( *MakeHash )(const void * _data, size_t _len);
-
     struct XmlEnum
     {
         std::string name;
@@ -199,10 +197,6 @@ namespace Metabuf
         const TMapMetas & getMetas() const;
 
     public:
-        void setHashable( MakeHash _hashable );
-        MakeHash getHashable() const;
-
-    public:
         const TVectorInternalStrings & getInternals() const;
 
     public:
@@ -228,8 +222,6 @@ namespace Metabuf
         uint32_t m_crc32;
 
         uint32_t m_enumerator;
-
-        MakeHash m_hashable;
 
         TMapMetas m_metas;
 

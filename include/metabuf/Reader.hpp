@@ -63,12 +63,19 @@ namespace Metabuf
             uint8_t size_1;
             this->readPOD( size_1 );
 
-            if( size_1 == 255 )
+            if( size_1 == 254 )
             {
-                uint32_t size_2;
+                uint16_t size_2;
                 this->readPOD( size_2 );
 
-                _size = size_2;
+                _size = (uint32_t)size_2;
+            }
+            else if( size_1 == 255 )
+            {
+                uint32_t size_4;
+                this->readPOD( size_4 );
+
+                _size = size_4;
             }
             else
             {

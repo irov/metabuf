@@ -906,9 +906,7 @@ namespace Metabuf
         body.swap( m_buff );
 
         const uint32_t stringCacheCount = (uint32_t)m_stringCache.size();
-        this->write( stringCacheCount );
-
-        MakeHash makehash = m_protocol->getHashable();
+        this->writeSize( stringCacheCount );
 
         for( const std::string & str : m_stringCache )
         {
@@ -916,9 +914,6 @@ namespace Metabuf
             this->writeSize( strSize );
 
             const char * strBuff = str.c_str();
-            const int64_t hash = (*makehash)(strBuff, strSize);
-            this->write( hash );
-
             this->writeCount( strBuff, strSize );
         }
 
@@ -2371,16 +2366,26 @@ namespace Metabuf
     //////////////////////////////////////////////////////////////////////////
     void Xml2Metabuf::writeSize( uint32_t _value )
     {
-        if( _value < 255 )
+        if( _value < 254 )
         {
-            uint8_t size = (uint8_t)_value;
-            this->write( size );
+            uint8_t size_1 = (uint8_t)_value;
+            this->write( size_1 );
+        }
+        else if( _value <= 65535 )
+        {
+            uint8_t size_1 = 254;
+            this->write( size_1 );
+
+            uint16_t size_2 = (uint16_t)_value;
+            this->write( size_2 );
         }
         else
         {
-            uint8_t size = 255;
-            this->write( size );
-            this->write( _value );
+            uint8_t size_1 = 255;
+            this->write( size_1 );
+
+            uint32_t size_4 = _value;
+            this->write( size_4 );
         }
     }
     //////////////////////////////////////////////////////////////////////////

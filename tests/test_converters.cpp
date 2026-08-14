@@ -30,16 +30,15 @@ namespace
         for( uint32_t index = 0; index != internalStringsCount + stringCount; ++index )
         {
             uint32_t stringSize;
-            int64_t stringHash;
             const char * value;
 
             if( index < internalStringsCount )
             {
-                value = Metacode::getInternalString( index, stringSize, stringHash );
+                value = Metacode::getInternalString( index, stringSize );
             }
             else
             {
-                value = Metacode::readString( _raw.data(), _raw.size(), read, stringSize, stringHash );
+                value = Metacode::readString( _raw.data(), _raw.size(), read, stringSize );
             }
 
             metacache.strings[index].assign( value, stringSize );

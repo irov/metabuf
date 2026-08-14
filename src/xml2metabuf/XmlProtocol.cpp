@@ -671,37 +671,10 @@ namespace Metabuf
         return m_nodes;
     }
     //////////////////////////////////////////////////////////////////////////
-    static int64_t s_makeHash( const void * _data, size_t _len )
-    {
-        if( _len == 0 )
-        {
-            return 0;
-        }
-
-        const uint8_t * p = (const uint8_t *)_data;
-
-        int64_t x = *p << 7;
-
-        for( size_t i = 0; i != _len; ++i )
-        {
-            x = (1000003 * x) ^ *p++;
-        }
-
-        x ^= (int64_t)_len;
-
-        if( x == -1 )
-        {
-            x = -2;
-        }
-
-        return x;
-    }
-    //////////////////////////////////////////////////////////////////////////
     XmlProtocol::XmlProtocol()
         : m_enumerator( 0 )
         , m_version( 0 )
     {
-        m_hashable = &s_makeHash;
     }
     //////////////////////////////////////////////////////////////////////////
     XmlProtocol::~XmlProtocol()
@@ -1368,16 +1341,6 @@ namespace Metabuf
     const TMapMetas & XmlProtocol::getMetas() const
     {
         return m_metas;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    void XmlProtocol::setHashable( MakeHash _hashable )
-    {
-        m_hashable = _hashable;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    MakeHash XmlProtocol::getHashable() const
-    {
-        return m_hashable;
     }
     //////////////////////////////////////////////////////////////////////////
     const TVectorInternalStrings & XmlProtocol::getInternals() const

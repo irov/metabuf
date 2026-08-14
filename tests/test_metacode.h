@@ -20,9 +20,9 @@ namespace Metacode
     Metabuf::HeaderError readHeader( const void * _buff, size_t _size, size_t & _read, uint32_t & _readVersion, uint32_t & _needVersion, uint32_t & _readProtocol, uint32_t & _needProtocol, uint32_t _metaVersion, uint32_t & _readMetaVersion );
 
     uint32_t getInternalStringsCount();
-    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash );
+    const char * getInternalString( uint32_t _index, uint32_t & _stringSize );
     bool readStrings( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringCount );
-    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash );
+    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize );
 
     namespace Meta_Data
     {

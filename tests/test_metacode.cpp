@@ -10,7 +10,7 @@ namespace Metacode
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_version()
     {
-        return 9;
+        return 10;
     }
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_protocol_version()
@@ -100,22 +100,20 @@ namespace Metacode
         return 1;
     }
     //////////////////////////////////////////////////////////////////////////
-    const char * getInternalString( uint32_t _index, uint32_t & _stringSize, int64_t & _stringHash )
+    const char * getInternalString( uint32_t _index, uint32_t & _stringSize )
     {
         struct internal_t
         {
             uint32_t size;
             const char * str;
-            uint64_t hash;
         };
 
         const internal_t internals[] = {
-            {20, "ResourceImageDefault", 3470757930260756242UL},
+            {20, "ResourceImageDefault"},
         };
 
         const internal_t & internal = internals[_index];
         _stringSize = internal.size;
-        _stringHash = internal.hash;
 
         return internal.str;
     }
@@ -125,28 +123,24 @@ namespace Metacode
         Metabuf::Reader ar(_buff, _size, _read);
 
         uint32_t count;
-        ar.readPOD( count );
+        ar.readSize( count );
 
         _stringCount = count;
 
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize, int64_t & _stringHash )
+    const char * readString( const void * _buff, size_t _size, size_t & _read, uint32_t & _stringSize )
     {
         Metabuf::Reader ar(_buff, _size, _read);
 
         uint32_t size;
         ar.readSize( size );
 
-        int64_t hash;
-        ar.readPOD( hash );
-
         const char * value = ar.current_buff<char>();
         ar.skip( size );
 
         _stringSize = size;
-        _stringHash = hash;
 
         return value;
     }
