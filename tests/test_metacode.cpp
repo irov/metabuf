@@ -20,7 +20,7 @@ namespace Metacode
     //////////////////////////////////////////////////////////////////////////
     uint32_t get_metacode_protocol_crc32()
     {
-        return 4064837494; 
+        return 4064837494;
     }
     //////////////////////////////////////////////////////////////////////////
     const char * getHeaderErrorMessage( Metabuf::HeaderError _error )

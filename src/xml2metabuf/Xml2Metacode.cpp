@@ -1155,7 +1155,7 @@ namespace Metabuf
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    uint32_t get_metacode_protocol_crc32()" << std::endl;
         this->write( _ss ) << "    {" << std::endl;
-        this->write( _ss ) << "        return " << protocol_crc32 << "; " << std::endl;
+        this->write( _ss ) << "        return " << protocol_crc32 << ";" << std::endl;
         this->write( _ss ) << "    }" << std::endl;
         this->write( _ss ) << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         this->write( _ss ) << "    const char * getHeaderErrorMessage( Metabuf::HeaderError _error )" << std::endl;

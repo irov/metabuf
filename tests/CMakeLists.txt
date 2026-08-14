@@ -61,6 +61,6 @@ ADD_MOVIE_TEST(generate_bin test_common test_utils metabuf)
 ADD_MOVIE_TEST(parse_bin test_common test_utils metabuf)
 ADD_MOVIE_TEST(memory_leak test_common test_utils metabuf)
 
-if(METABUF_JSON2METABUF)
+if(METABUF_JSON2METABUF AND METABUF_CONVERTER)
     ADD_MOVIE_TEST(converters test_common test_utils metabufconverter json2metabuf ${METABUF_JANSSON_LIBRARIES})
 endif()
