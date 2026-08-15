@@ -1,6 +1,6 @@
 #include "metabuf/Reader.hpp"
 
-#include "xml2metabuf/Xml2Metabuf.hpp"
+#include "metaconverter/MetabufWriter.hpp"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -8,11 +8,11 @@
 namespace
 {
     class SizeWriter
-        : public Metabuf::Xml2Metabuf
+        : public Metabuf::MetabufWriter
     {
     public:
         SizeWriter()
-            : Metabuf::Xml2Metabuf( nullptr, nullptr )
+            : Metabuf::MetabufWriter( nullptr, nullptr )
         {
         }
 

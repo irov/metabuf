@@ -1,41 +1,49 @@
 #include "xml2metabuf/XmlConverter.hpp"
 
-#include "xml2metabuf/Xml2Metabuf.hpp"
-#include "xml2metabuf/XmlProtocol.hpp"
+#include "metaconverter/Converter.hpp"
+
+#include "pugixml.hpp"
+
+#include <sstream>
 
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
-    bool convertXml( const XmlProtocol * _protocol, const void * _buffer, size_t _size, const char * _meta, const char * _node, OutputAdapter & _output, std::string & _error )
+    bool convertXml( const ProtocolInterface * _protocol, const void * _buffer, size_t _size, const MetaInterface * _meta, const NodeInterface * _node, OutputAdapter & _output, std::string & _error )
     {
         _error.clear();
         _output.clear();
 
-        const XmlMeta * meta = _protocol->getMeta( _meta );
-
-        if( meta == nullptr )
+        if( _meta == nullptr )
         {
-            _error = std::string( "protocol meta not found: " ) + _meta;
+            _error = "protocol meta is null";
 
             return false;
         }
 
-        const XmlNode * node = meta->getNode( _node );
-
-        if( node == nullptr )
+        if( _node == nullptr )
         {
-            _error = std::string( "protocol node not found: " ) + _node;
+            _error = "protocol node is null";
 
             return false;
         }
 
-        Xml2Metabuf xmlMetabuf( _protocol, meta );
-        xmlMetabuf.initialize();
+        pugi::xml_document document;
+        pugi::xml_parse_result result = document.load_buffer( _buffer, _size );
 
-        if( xmlMetabuf.convert( _output, _buffer, _size, node ) == false )
+        if( result == false )
         {
-            _error = xmlMetabuf.getError();
+            std::stringstream ss;
+            ss << "XML parse error at byte " << result.offset << ": " << result.description();
+            _error = ss.str();
 
+            return false;
+        }
+
+        const pugi::xml_node root = document.document_element();
+
+        if( writeMetabuf( _protocol, _meta, _node, root, _output, _error ) == false )
+        {
             return false;
         }
 

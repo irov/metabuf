@@ -1,7 +1,7 @@
-#include "../src/metabufconverter/Converter.hpp"
-#include "../src/xml2metabuf/XmlConverter.hpp"
-#include "../src/xml2metabuf/XmlProtocol.hpp"
-#include "../src/json2metabuf/JsonConverter.hpp"
+#include "metaconverter/Converter.hpp"
+#include "xml2metabuf/XmlConverter.hpp"
+#include "metaconverter/Protocol.hpp"
+#include "json2metabuf/JsonConverter.hpp"
 
 #include "test_metacode.h"
 #include "Metaprotocol.h"
@@ -110,7 +110,7 @@ int main( int argc, char * argv[] )
     size_t protocol_size;
     void * protocol_buffer = read_file( argv[1], "Protocol.xml", &protocol_size );
 
-    Metabuf::XmlProtocol protocol;
+    Metabuf::Protocol protocol;
 
     if( protocol_buffer == nullptr || protocol.readProtocol( protocol_buffer, protocol_size ) == false )
     {
@@ -118,6 +118,20 @@ int main( int argc, char * argv[] )
     }
 
     free( protocol_buffer );
+
+    const Metabuf::Meta * meta = protocol.getMeta( "Data" );
+
+    if( meta == nullptr )
+    {
+        return EXIT_FAILURE;
+    }
+
+    const Metabuf::Node * node = meta->getNode( "DataBlock" );
+
+    if( node == nullptr )
+    {
+        return EXIT_FAILURE;
+    }
 
     size_t xml_size;
     void * xml_buffer = read_file( argv[1], "Example.xml", &xml_size );
@@ -128,12 +142,12 @@ int main( int argc, char * argv[] )
     std::vector<uint8_t> json_raw;
     std::string error;
 
-    if( Metabuf::convertXml( &protocol, xml_buffer, xml_size, "Data", "DataBlock", xml_raw, error ) == false )
+    if( Metabuf::convertXml( &protocol, xml_buffer, xml_size, meta, node, xml_raw, error ) == false )
     {
         return EXIT_FAILURE;
     }
 
-    if( Metabuf::convertJson( &protocol, json_buffer, json_size, "Data", "DataBlock", json_raw, error ) == false )
+    if( Metabuf::convertJson( &protocol, json_buffer, json_size, meta, node, json_raw, error ) == false )
     {
         return EXIT_FAILURE;
     }
@@ -143,38 +157,88 @@ int main( int argc, char * argv[] )
         return EXIT_FAILURE;
     }
 
+    const Metacode::MetaprotocolGenerator generator;
+    Metabuf::MetaconvertInterface * generated_xml_metaconvert = Metabuf::createXmlMetaconvert( &generator );
+    Metabuf::MetaconvertInterface * generated_json_metaconvert = Metabuf::createJsonMetaconvert( &generator );
+
+    if( generated_xml_metaconvert == nullptr || generated_json_metaconvert == nullptr )
+    {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
+        return EXIT_FAILURE;
+    }
+
+    const Metabuf::MetaInterface * generated_xml_meta = generated_xml_metaconvert->getMeta( "Data" );
+    const Metabuf::MetaInterface * generated_json_meta = generated_json_metaconvert->getMeta( "Data" );
+
+    if( generated_xml_meta == nullptr || generated_json_meta == nullptr )
+    {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
+        return EXIT_FAILURE;
+    }
+
+    const Metabuf::NodeInterface * generated_xml_node = generated_xml_meta->getNode( "DataBlock" );
+    const Metabuf::NodeInterface * generated_json_node = generated_json_meta->getNode( "DataBlock" );
+
+    if( generated_xml_node == nullptr || generated_json_node == nullptr )
+    {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
+        return EXIT_FAILURE;
+    }
+
     std::vector<uint8_t> generated_xml_raw;
     std::vector<uint8_t> generated_json_raw;
     std::string generated_error;
-    Metabuf::XmlProtocol generated_protocol;
-    Metacode::initializeMetaprotocol( &generated_protocol );
 
     std::vector<uint8_t> generated_header;
 
-    if( Metabuf::makeHeader( &generated_protocol, "Data", generated_header, generated_error ) == false )
+    if( generated_xml_metaconvert->makeHeader( generated_xml_meta, generated_header, generated_error ) == false )
     {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
         return EXIT_FAILURE;
     }
 
     if( generated_header.size() != sizeof( uint32_t ) * 5 )
     {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
         return EXIT_FAILURE;
     }
 
-    if( Metabuf::convertXml( &generated_protocol, xml_buffer, xml_size, "Data", "DataBlock", generated_xml_raw, generated_error ) == false )
+    if( generated_xml_metaconvert->convert( xml_buffer, xml_size, generated_xml_meta, generated_xml_node, generated_xml_raw, generated_error ) == false )
     {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
         return EXIT_FAILURE;
     }
 
-    if( Metabuf::convertJson( &generated_protocol, json_buffer, json_size, "Data", "DataBlock", generated_json_raw, generated_error ) == false )
+    if( generated_json_metaconvert->convert( json_buffer, json_size, generated_json_meta, generated_json_node, generated_json_raw, generated_error ) == false )
     {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
         return EXIT_FAILURE;
     }
 
     if( generated_xml_raw != xml_raw || generated_json_raw != json_raw )
     {
+        Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+        Metabuf::destroyMetaconvert( generated_json_metaconvert );
+
         return EXIT_FAILURE;
     }
+
+    Metabuf::destroyMetaconvert( generated_xml_metaconvert );
+    Metabuf::destroyMetaconvert( generated_json_metaconvert );
 
     free( xml_buffer );
     free( json_buffer );
@@ -182,7 +246,7 @@ int main( int argc, char * argv[] )
     const char invalid_complex_object[] = "{\"Name\":\"Test\",\"Resource\":{\"Name\":\"Battleground\",\"Type\":\"ResourceImageDefault\",\"File\":{\"Path\":\"Art/Battleground.png\",\"MaxSize\":{\"x\":867,\"y\":1536}}}}";
     std::vector<uint8_t> invalid_raw;
 
-    if( Metabuf::convertJson( &protocol, invalid_complex_object, sizeof( invalid_complex_object ) - 1, "Data", "DataBlock", invalid_raw, error ) == true )
+    if( Metabuf::convertJson( &protocol, invalid_complex_object, sizeof( invalid_complex_object ) - 1, meta, node, invalid_raw, error ) == true )
     {
         return EXIT_FAILURE;
     }
@@ -217,7 +281,7 @@ int main( int argc, char * argv[] )
 
     const char invalid_required[] = "{\"Include\":{}}";
 
-    if( Metabuf::convertJson( &protocol, invalid_required, sizeof( invalid_required ) - 1, "Data", "DataBlock", invalid_raw, error ) == true )
+    if( Metabuf::convertJson( &protocol, invalid_required, sizeof( invalid_required ) - 1, meta, node, invalid_raw, error ) == true )
     {
         return EXIT_FAILURE;
     }
@@ -229,7 +293,7 @@ int main( int argc, char * argv[] )
 
     size_t validation_protocol_size;
     void * validation_protocol_buffer = read_file( argv[1], "ValidationProtocol.xml", &validation_protocol_size );
-    Metabuf::XmlProtocol validation_protocol;
+    Metabuf::Protocol validation_protocol;
 
     if( validation_protocol_buffer == nullptr || validation_protocol.readProtocol( validation_protocol_buffer, validation_protocol_size ) == false )
     {
@@ -238,17 +302,31 @@ int main( int argc, char * argv[] )
 
     free( validation_protocol_buffer );
 
+    const Metabuf::Meta * validation_meta = validation_protocol.getMeta( "Data" );
+
+    if( validation_meta == nullptr )
+    {
+        return EXIT_FAILURE;
+    }
+
+    const Metabuf::Node * validation_node = validation_meta->getNode( "Root" );
+
+    if( validation_node == nullptr )
+    {
+        return EXIT_FAILURE;
+    }
+
     const char default_xml[] = "<Root Name=\"Test\"/>";
     const char default_json[] = "{\"Name\":\"Test\"}";
     std::vector<uint8_t> default_xml_raw;
     std::vector<uint8_t> default_json_raw;
 
-    if( Metabuf::convertXml( &validation_protocol, default_xml, sizeof( default_xml ) - 1, "Data", "Root", default_xml_raw, error ) == false )
+    if( Metabuf::convertXml( &validation_protocol, default_xml, sizeof( default_xml ) - 1, validation_meta, validation_node, default_xml_raw, error ) == false )
     {
         return EXIT_FAILURE;
     }
 
-    if( Metabuf::convertJson( &validation_protocol, default_json, sizeof( default_json ) - 1, "Data", "Root", default_json_raw, error ) == false )
+    if( Metabuf::convertJson( &validation_protocol, default_json, sizeof( default_json ) - 1, validation_meta, validation_node, default_json_raw, error ) == false )
     {
         return EXIT_FAILURE;
     }
@@ -260,7 +338,7 @@ int main( int argc, char * argv[] )
 
     const char invalid_enum[] = "{\"Name\":\"Test\",\"Mode\":\"Unknown\"}";
 
-    if( Metabuf::convertJson( &validation_protocol, invalid_enum, sizeof( invalid_enum ) - 1, "Data", "Root", invalid_raw, error ) == true )
+    if( Metabuf::convertJson( &validation_protocol, invalid_enum, sizeof( invalid_enum ) - 1, validation_meta, validation_node, invalid_raw, error ) == true )
     {
         return EXIT_FAILURE;
     }

@@ -1,4 +1,4 @@
-#include "../../src/xml2metabuf/XmlProtocol.hpp"
+#include "metaconverter/Protocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
 
 #include "test_utils.h"
@@ -15,7 +15,7 @@ int main( int argc, char *argv[] )
     METABUF_UNUSED( argc );
     METABUF_UNUSED( argv );
 
-    Metabuf::XmlProtocol xml_protocol;
+    Metabuf::Protocol protocol;
 
     size_t file_protocol_size;
     void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
@@ -29,9 +29,9 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    if( xml_protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
+    if( protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
     {
-        std::string error = xml_protocol.getError();
+        std::string error = protocol.getError();
 
         printf( "error read protocol: %s"
             , error.c_str()

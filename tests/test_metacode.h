@@ -27,26 +27,26 @@ namespace Metacode
     namespace Meta_Data
     {
         uint32_t getVersion();
-    
+
         class Meta_DataBlock
             : public Metabuf::Metaparse
-        { 
+        {
         public:
             Meta_DataBlock();
             ~Meta_DataBlock();
-        
+
         public:
             template<class C, class M>
             void getm_Name( C _self, M _method ) const
             {
                 (_self->*_method)( this->m_Name );
             }
-            
+
             const std::string & get_Name() const
             {
                 return this->m_Name;
             }
-            
+
         public:
             const char * getMetaName() const override;
             const char * getNodeName() const override;
@@ -54,7 +54,7 @@ namespace Metacode
 
             // cppcheck-suppress duplInheritedMember
             bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
-        
+
         protected:
             // cppcheck-suppress duplInheritedMember
             void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -63,26 +63,26 @@ namespace Metacode
             // cppcheck-suppress duplInheritedMember
             void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
             void _parseGenerators( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
-        
+
         public:
             class Meta_Include
                 : public Metabuf::Metaparse
-            { 
+            {
             public:
                 Meta_Include();
-            
+
             public:
                 template<class C, class M>
                 void getm_Path( C _self, M _method ) const
                 {
                     (_self->*_method)( this->m_Path );
                 }
-                
+
                 const std::string & get_Path() const
                 {
                     return this->m_Path;
                 }
-                
+
             public:
                 const char * getMetaName() const override;
                 const char * getNodeName() const override;
@@ -90,7 +90,7 @@ namespace Metacode
 
                 // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
-            
+
             protected:
                 // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -98,67 +98,67 @@ namespace Metacode
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
                 // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
-            
+
             public:
             protected:
                 std::string m_Path;
             };
-            
+
             class Meta_Resource
                 : public Metabuf::Metaparse
-            { 
+            {
             public:
                 Meta_Resource();
                 virtual ~Meta_Resource();
-            
+
             protected:
                 enum NoRequiredAttribute
                 {
                     EMETA_Precompile = (1 <<1),
                     EMETA_Unique = (1 <<0),
                 };
-                
+
                 uint32_t m_flagNoRequiredAttribute;
-                
+
             public:
                 template<class C, class M>
                 void getm_Name( C _self, M _method ) const
                 {
                     (_self->*_method)( this->m_Name );
                 }
-                
+
                 const std::string & get_Name() const
                 {
                     return this->m_Name;
                 }
-                
+
                 bool has_Precompile() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_Precompile) != 0;
                 }
-                
+
                 bool getd_Precompile( bool _default ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         return _default;
                     }
-                
+
                     return this->m_Precompile;
                 }
-                
+
                 bool get_Precompile( bool * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_Precompile;
-                
+
                     return true;
                 }
-                
+
                 template<class C, class M>
                 bool getm_Precompile( C _self, M _method ) const
                 {
@@ -166,23 +166,23 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_Precompile );
-                
+
                     return true;
                 }
-                
+
                 bool getd_Precompile( bool * _value, const bool & _default ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Precompile) == 0 )
                     {
                         *_value = _default;
-                
+
                         return false;
                     }
-                
+
                     *_value = this->m_Precompile;
-                
+
                     return true;
                 }
                 template<class C, class M>
@@ -190,39 +190,39 @@ namespace Metacode
                 {
                     (_self->*_method)( this->m_Type );
                 }
-                
+
                 const std::string & get_Type() const
                 {
                     return this->m_Type;
                 }
-                
+
                 bool has_Unique() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_Unique) != 0;
                 }
-                
+
                 bool getd_Unique( bool _default ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         return _default;
                     }
-                
+
                     return this->m_Unique;
                 }
-                
+
                 bool get_Unique( bool * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_Unique;
-                
+
                     return true;
                 }
-                
+
                 template<class C, class M>
                 bool getm_Unique( C _self, M _method ) const
                 {
@@ -230,23 +230,23 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_Unique );
-                
+
                     return true;
                 }
-                
+
                 bool getd_Unique( bool * _value, const bool & _default ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_Unique) == 0 )
                     {
                         *_value = _default;
-                
+
                         return false;
                     }
-                
+
                     *_value = this->m_Unique;
-                
+
                     return true;
                 }
             public:
@@ -256,7 +256,7 @@ namespace Metacode
 
                 // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
-            
+
             protected:
                 // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -266,7 +266,7 @@ namespace Metacode
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
                 // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
-            
+
             public:
             protected:
                 std::string m_Name;
@@ -274,13 +274,13 @@ namespace Metacode
                 std::string m_Type;
                 bool m_Unique;
             };
-            
+
             class Meta_ResourceImageDefault
                 : public Meta_Resource
-            { 
+            {
             public:
                 Meta_ResourceImageDefault();
-            
+
             protected:
                 enum NoRequiredAttribute
                 {
@@ -291,13 +291,13 @@ namespace Metacode
                     EMETA_File_Premultiply = (1 <<5),
                     EMETA_File_Size = (1 <<6),
                 };
-                
+
             public:
                 bool has_File_Alpha() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Alpha) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Alpha( C _self, M _method ) const
                 {
@@ -305,29 +305,29 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Alpha );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Alpha( bool * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Alpha) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Alpha;
-                
+
                     return true;
                 }
-                
+
                 bool has_File_Codec() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Codec) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Codec( C _self, M _method ) const
                 {
@@ -335,29 +335,29 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Codec );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Codec( std::string * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Codec) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Codec;
-                
+
                     return true;
                 }
-                
+
                 bool has_File_Converter() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Converter) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Converter( C _self, M _method ) const
                 {
@@ -365,40 +365,40 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Converter );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Converter( std::string * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Converter) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Converter;
-                
+
                     return true;
                 }
-                
+
                 template<class C, class M>
                 void getm_File_MaxSize( C _self, M _method ) const
                 {
                     (_self->*_method)( this->m_File_MaxSize );
                 }
-                
+
                 const Detail::Rect & get_File_MaxSize() const
                 {
                     return this->m_File_MaxSize;
                 }
-                
+
                 bool has_File_Offset() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Offset) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Offset( C _self, M _method ) const
                 {
@@ -406,40 +406,40 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Offset );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Offset( Detail::Rect * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Offset) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Offset;
-                
+
                     return true;
                 }
-                
+
                 template<class C, class M>
                 void getm_File_Path( C _self, M _method ) const
                 {
                     (_self->*_method)( this->m_File_Path );
                 }
-                
+
                 const std::string & get_File_Path() const
                 {
                     return this->m_File_Path;
                 }
-                
+
                 bool has_File_Premultiply() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Premultiply) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Premultiply( C _self, M _method ) const
                 {
@@ -447,29 +447,29 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Premultiply );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Premultiply( bool * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Premultiply) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Premultiply;
-                
+
                     return true;
                 }
-                
+
                 bool has_File_Size() const
                 {
                     return (m_flagNoRequiredAttribute & EMETA_File_Size) != 0;
                 }
-                
+
                 template<class C, class M>
                 bool getm_File_Size( C _self, M _method ) const
                 {
@@ -477,24 +477,24 @@ namespace Metacode
                     {
                         return false;
                     }
-                
+
                     (_self->*_method)( this->m_File_Size );
-                
+
                     return true;
                 }
-                
+
                 bool get_File_Size( Detail::Rect * _value ) const
                 {
                     if( (m_flagNoRequiredAttribute & EMETA_File_Size) == 0 )
                     {
                         return false;
                     }
-                
+
                     *_value = this->m_File_Size;
-                
+
                     return true;
                 }
-                
+
             public:
                 const char * getMetaName() const override;
                 const char * getNodeName() const override;
@@ -502,7 +502,7 @@ namespace Metacode
 
                 // cppcheck-suppress duplInheritedMember
                 bool parse( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData ) override;
-            
+
             protected:
                 // cppcheck-suppress duplInheritedMember
                 void _parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData );
@@ -512,7 +512,7 @@ namespace Metacode
                 void _preparationIncludes( uint32_t _id, uint32_t _count );
                 // cppcheck-suppress duplInheritedMember
                 void _parseIncludes( const uint8_t * _buff, size_t _size, size_t & _read, uint32_t _id, void * _userData );
-            
+
             public:
             protected:
                 bool m_File_Alpha;
@@ -524,30 +524,30 @@ namespace Metacode
                 bool m_File_Premultiply;
                 Detail::Rect m_File_Size;
             };
-            
+
         protected:
             std::string m_Name;
         public:
             typedef Metabuf::Vector<Meta_Include> VectorMeta_Include;
-        
+
             const VectorMeta_Include & get_Includes_Include() const
             {
                 return this->includes_Meta_Include;
             }
-        
+
         protected:
             VectorMeta_Include includes_Meta_Include;
         public:
             typedef Metabuf::Vector<Meta_Resource *> VectorMeta_Resource;
-        
+
             const VectorMeta_Resource & get_Includes_Resource() const
             {
                 return this->includes_Meta_Resource;
             }
-        
+
         protected:
             VectorMeta_Resource includes_Meta_Resource;
         };
-        
+
     }
 }

@@ -1,4 +1,4 @@
-#include "XmlCRC32.hpp"
+#include "metaconverter/XmlCRC32.hpp"
 
 namespace Metabuf
 {

@@ -1,5 +1,5 @@
-#include "Xml2Metabuf.hpp"
-#include "XmlProtocol.hpp"
+#include "metaconverter/MetabufWriter.hpp"
+#include "metaconverter/Protocol.hpp"
 
 #include <algorithm>
 #include <sstream>
@@ -14,7 +14,7 @@ namespace Metabuf
     namespace Serialize
     {
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_string( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -23,7 +23,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_utf8_string( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_utf8_string( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -34,7 +34,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_utf8_codepoint( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_utf8_codepoint( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -68,7 +68,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_strings( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_strings( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -97,7 +97,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_bool( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_bool( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -128,7 +128,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int8_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -144,7 +144,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint8_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint8_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -160,7 +160,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int16_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -176,7 +176,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint16_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint16_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -192,7 +192,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int32_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -207,7 +207,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int32_t2( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -224,7 +224,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint32_t( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint32_t( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -239,7 +239,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint32_t2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint32_t2( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -259,7 +259,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint32_t3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint32_t3( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -281,7 +281,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint32_t4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint32_t4( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -305,7 +305,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -320,7 +320,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float2( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float2( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -341,7 +341,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float3( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float3( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -362,7 +362,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float4( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float4( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -383,7 +383,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float4inv255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float4inv255( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -408,7 +408,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float6( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float6( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -426,7 +426,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float8( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float8( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -444,7 +444,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float12( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float12( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -468,7 +468,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_float16( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_float16( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -493,7 +493,7 @@ namespace Metabuf
         }
         //////////////////////////////////////////////////////////////////////////
         template<class T>
-        static bool s_write_pods( Xml2Metabuf * _metabuf, const char * _format, const char * _value, void * _user )
+        static bool s_write_pods( MetabufWriter * _metabuf, const char * _format, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -538,56 +538,56 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_floats( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_floats( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<float>( _metabuf, "%f", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int8s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int8s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<int8_t>( _metabuf, "%d", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int16s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int16s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<int16_t>( _metabuf, "%d", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_int32s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_int32s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<int32_t>( _metabuf, "%d", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint8s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint8s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<uint8_t>( _metabuf, "%u", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint16s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint16s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<uint16_t>( _metabuf, "%u", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_uint32s( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_uint32s( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             bool successful = s_write_pods<uint32_t>( _metabuf, "%u", _value, _user );
 
             return successful;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_sha1bin( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_sha1bin( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -613,7 +613,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_hexadecimal( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_hexadecimal( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -657,7 +657,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_angle360( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_angle360( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -675,7 +675,7 @@ namespace Metabuf
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
-        static bool s_write_opacity255( Xml2Metabuf * _metabuf, const char * _value, void * _user )
+        static bool s_write_opacity255( MetabufWriter * _metabuf, const char * _value, void * _user )
         {
             METABUF_UNUSED( _user );
 
@@ -694,13 +694,13 @@ namespace Metabuf
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    Xml2Metabuf::Xml2Metabuf( const XmlProtocol * _protocol, const XmlMeta * _meta )
-        : m_protocol( _protocol )
-        , m_meta( _meta )
+    MetabufWriter::MetabufWriter( const ProtocolInterface * _protocol, const MetaInterface * _meta )
+        : m_protocol( static_cast<const Protocol *>(_protocol) )
+        , m_meta( static_cast<const Meta *>(_meta) )
     {
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::initialize()
+    void MetabufWriter::initialize()
     {
         this->addSerializator( "string", &Serialize::s_write_string, nullptr );
         this->addSerializator( "strings", &Serialize::s_write_strings, nullptr );
@@ -746,7 +746,7 @@ namespace Metabuf
         this->addSerializator( "opacity255", &Serialize::s_write_opacity255, nullptr );        
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
+    void MetabufWriter::addSerializator( const std::string & _type, ValueSerialization _serializator, void * _user )
     {
         SerializationDesc desc;
         desc.serialization = _serializator;
@@ -755,149 +755,25 @@ namespace Metabuf
         m_serialization[_type] = desc;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::header( void * _binBuff, size_t _binSize, uint32_t _metaVersion, size_t * _writeSize )
+    bool MetabufWriter::write( OutputAdapter & _output, const pugi::xml_node & _dataNode, const NodeInterface * _protocolNode )
     {
-        m_buff.clear();
+        const Node * protocolNode = static_cast<const Node *>(_protocolNode);
 
-        size_t writeSize = 0;
-
-        uint32_t magic = 3133062829u;
-        this->write( magic );
-
-        uint32_t version = METABUF_BIN_VERSION;
-        this->write( version );
-
-        uint32_t protocol_version = m_protocol->getVersion();
-        this->write( protocol_version );
-
-        uint32_t protocol_crc32 = m_protocol->getCrc32();
-        this->write( protocol_crc32 );
-
-        this->write( _metaVersion );
-
-        writeSize += m_buff.size();
-
-        if( writeSize != _binSize )
-        {
-            m_error << "Xml2Metabuf::header write size " << writeSize << " > binSize " << _binSize << std::endl;
-
-            return false;
-        }
-
-        std::copy( m_buff.begin(), m_buff.end(), reinterpret_cast<uint8_t *>(_binBuff) );
-
-        if( _writeSize != nullptr )
-        {
-            *_writeSize = writeSize;
-        }
-
-        m_buff.clear();
-
-        return true;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::convert( void * _binBuff, size_t _binSize, const void * _xmlBuff, size_t _xmlSize, size_t * _writeSize )
-    {
-        std::vector<uint8_t> bin;
-        OutputAdapter output( bin );
-
-        if( this->convert( output, _xmlBuff, _xmlSize ) == false )
-        {
-            return false;
-        }
-
-        if( bin.size() > _binSize )
-        {
-            m_error << "Xml2Metabuf::convert: write buffer not enouge memory " << _binSize << " need " << bin.size() << std::endl;
-
-            return false;
-        }
-
-        std::copy( bin.begin(), bin.end(), reinterpret_cast<uint8_t *>(_binBuff) );
-
-        if( _writeSize != nullptr )
-        {
-            *_writeSize = bin.size();
-        }
-
-        return true;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize )
-    {
-        m_error.str( std::string() );
-        m_error.clear();
-
-        pugi::xml_document document;
-        pugi::xml_parse_result result = document.load_buffer( _xmlBuff, _xmlSize );
-
-        if( result == false )
-        {
-            m_error << "Xml2Metabuf::convert xml parser error:" << std::endl << result.description() << std::endl;
-
-            return false;
-        }
-
-        const pugi::xml_node root = document.document_element();
-        const XmlNode * node = m_meta->getNode( root.name() );
-
-        if( node == nullptr )
-        {
-            m_error << "Xml2Metabuf::convert: invalid root node " << root.name() << std::endl;
-
-            return false;
-        }
-
-        if( this->convert( _output, root, node ) == false )
-        {
-            return false;
-        }
-
-        return true;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::convert( OutputAdapter & _output, const void * _xmlBuff, size_t _xmlSize, const XmlNode * _node )
-    {
-        m_error.str( std::string() );
-        m_error.clear();
-
-        pugi::xml_document document;
-        pugi::xml_parse_result result = document.load_buffer( _xmlBuff, _xmlSize );
-
-        if( result == false )
-        {
-            m_error << "Xml2Metabuf::convert xml parser error:" << std::endl << result.description() << std::endl;
-
-            return false;
-        }
-
-        const pugi::xml_node root = document.document_element();
-
-        if( this->convert( _output, root, _node ) == false )
-        {
-            return false;
-        }
-
-        return true;
-    }
-    //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::convert( OutputAdapter & _output, const pugi::xml_node & _xmlNode, const XmlNode * _node )
-    {
         m_error.str( std::string() );
         m_error.clear();
         m_stringCache.clear();
         m_buff.clear();
 
-        if( _node == nullptr || _node->getName() != _xmlNode.name() )
+        if( protocolNode == nullptr || protocolNode->getName() != _dataNode.name() )
         {
-            m_error << "Xml2Metabuf::convert: invalid root node " << _xmlNode.name() << std::endl;
+            m_error << "MetabufWriter::write: invalid root node " << _dataNode.name() << std::endl;
 
             return false;
         }
 
-        if( this->writeNode_( _node, _xmlNode ) == false )
+        if( this->writeNode_( protocolNode, _dataNode ) == false )
         {
-            m_error << "Xml2Metabuf::convert: invalid write node " << _xmlNode.name() << std::endl;
+            m_error << "MetabufWriter::write: invalid write node " << _dataNode.name() << std::endl;
 
             return false;
         }
@@ -928,14 +804,14 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    std::string Xml2Metabuf::getError() const
+    std::string MetabufWriter::getError() const
     {
         const std::string error = m_error.str();
 
         return error;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNode_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNode_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( _xml_node.begin() == _xml_node.end() && _xml_node.attributes_begin() == _xml_node.attributes_end() )
         {
@@ -944,42 +820,42 @@ namespace Metabuf
 
         if( this->writeNodeData_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeData_: error write node " << _node->name << " attribute" << std::endl;
+            m_error << "MetabufWriter::writeNodeData_: error write node " << _node->name << " attribute" << std::endl;
 
             return false;
         }
 
         if( this->writeNodeAttribute_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeAttribute_: error write node " << _node->name << " attribute" << std::endl;
+            m_error << "MetabufWriter::writeNodeAttribute_: error write node " << _node->name << " attribute" << std::endl;
 
             return false;
         }
 
         if( this->writeNodeSingles_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeSingles_: error write node " << _node->name << " includes" << std::endl;
+            m_error << "MetabufWriter::writeNodeSingles_: error write node " << _node->name << " includes" << std::endl;
 
             return false;
         }
 
         if( this->writeNodeIncludes_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeIncludes_: error write node " << _node->name << " includes" << std::endl;
+            m_error << "MetabufWriter::writeNodeIncludes_: error write node " << _node->name << " includes" << std::endl;
 
             return false;
         }
 
         if( this->writeNodeChildren_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeChildren_: error write node " << _node->name << " includes" << std::endl;
+            m_error << "MetabufWriter::writeNodeChildren_: error write node " << _node->name << " includes" << std::endl;
 
             return false;
         }
 
         if( this->writeNodeGenerators_( _node, _xml_node ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeGenerators_: error write node " << _node->name << " generators" << std::endl;
+            m_error << "MetabufWriter::writeNodeGenerators_: error write node " << _node->name << " generators" << std::endl;
 
             return false;
         }
@@ -987,7 +863,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeData_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeData_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( _node->inheritance.empty() == false )
         {
@@ -1008,7 +884,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlMember * member = &it->second;
+            const Member * member = &it->second;
 
             for( TMapAttributes::const_iterator
                 it_attributes = member->attributes.begin(),
@@ -1016,7 +892,7 @@ namespace Metabuf
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
-                const XmlAttribute * attr = &it_attributes->second;
+                const Attribute * attr = &it_attributes->second;
 
                 if( attr->required == false )
                 {
@@ -1044,14 +920,14 @@ namespace Metabuf
 
                     if( xml_attr.empty() == true )
                     {
-                        m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' not found required member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeData_: '" << _node->name << "' not found required member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
                         return false;
                     }
 
                     if( this->writeNodeDataValue_( attr, xml_attr ) == false )
                     {
-                        m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeData_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
                         return false;
                     }
@@ -1062,7 +938,7 @@ namespace Metabuf
 
                 if( member_found == false )
                 {
-                    m_error << "Xml2Metabuf::writeNodeData_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeData_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
                     return false;
                 }
@@ -1073,7 +949,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeData2_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeData2_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         for( TMapAttributes::const_iterator
             it = _node->attributes.begin(),
@@ -1081,7 +957,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlAttribute * attr = &it->second;
+            const Attribute * attr = &it->second;
 
             if( attr->required == false )
             {
@@ -1092,14 +968,14 @@ namespace Metabuf
 
             if( xml_attr.empty() == true )
             {
-                m_error << "Xml2Metabuf::writeNodeData2_: '" << _node->name << "' not found required argument '" << attr->name << "'" << std::endl;
+                m_error << "MetabufWriter::writeNodeData2_: '" << _node->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
                 return false;
             }
 
             if( this->writeNodeDataValue_( attr, xml_attr ) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeData2_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
+                m_error << "MetabufWriter::writeNodeData2_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
 
                 return false;
             }
@@ -1108,7 +984,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeDataSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
+    bool MetabufWriter::getNodeDataSize_( const Node * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -1118,7 +994,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlAttribute * attr = &it->second;
+            const Attribute * attr = &it->second;
 
             if( attr->required == false )
             {
@@ -1129,7 +1005,7 @@ namespace Metabuf
 
             if( xml_attr.empty() == true )
             {
-                m_error << "Xml2Metabuf::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
+                m_error << "MetabufWriter::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
 
                 return false;
             }
@@ -1145,7 +1021,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlAttribute * attr = &it->second;
+                const Attribute * attr = &it->second;
 
                 if( attr->required == false )
                 {
@@ -1156,7 +1032,7 @@ namespace Metabuf
 
                 if( xml_attr.empty() == true )
                 {
-                    m_error << "Xml2Metabuf::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
+                    m_error << "MetabufWriter::getNodeDataSize_: node '" << _node->name << "' not found attribute '" << attr->name << "'" << std::endl;
 
                     return false;
                 }
@@ -1171,7 +1047,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlMember * member = &it->second;
+            const Member * member = &it->second;
 
             for( TMapAttributes::const_iterator
                 it_attributes = member->attributes.begin(),
@@ -1179,7 +1055,7 @@ namespace Metabuf
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
-                const XmlAttribute * attr = &it_attributes->second;
+                const Attribute * attr = &it_attributes->second;
 
                 if( attr->required == false )
                 {
@@ -1219,7 +1095,7 @@ namespace Metabuf
 
                 if( member_found == false )
                 {
-                    m_error << "Xml2Metabuf::getNodeDataSize_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
+                    m_error << "MetabufWriter::getNodeDataSize_: '" << _node->name << "' member '" << member->name << "' not found required argument '" << attr->name << "'" << std::endl;
 
                     return false;
                 }
@@ -1231,7 +1107,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::hasMetaAttribute_( const XmlNode * _node ) const
+    bool MetabufWriter::hasMetaAttribute_( const Node * _node ) const
     {
         for( TMapAttributes::const_iterator
             it_attributes = _node->attributes.begin(),
@@ -1239,7 +1115,7 @@ namespace Metabuf
             it_attributes != it_attributes_end;
             ++it_attributes )
         {
-            const XmlAttribute & attribute = it_attributes->second;
+            const Attribute & attribute = it_attributes->second;
 
             if( attribute.required == false )
             {
@@ -1261,7 +1137,7 @@ namespace Metabuf
             it_members_attributes != it_members_attributes_end;
             ++it_members_attributes )
         {
-            const XmlMember * member = &it_members_attributes->second;
+            const Member * member = &it_members_attributes->second;
 
             for( TMapAttributes::const_iterator
                 it = member->attributes.begin(),
@@ -1269,7 +1145,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlAttribute & attribute = it->second;
+                const Attribute & attribute = it->second;
 
                 if( attribute.required == false )
                 {
@@ -1281,7 +1157,7 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeAttribute_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeAttribute_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( this->hasMetaAttribute_( _node ) == false )
         {
@@ -1323,7 +1199,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlMember * member = &it->second;
+            const Member * member = &it->second;
 
             for( TMapAttributes::const_iterator
                 it_attributes = member->attributes.begin(),
@@ -1331,7 +1207,7 @@ namespace Metabuf
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
-                const XmlAttribute * attr = &it_attributes->second;
+                const Attribute * attr = &it_attributes->second;
 
                 if( attr->required == true )
                 {
@@ -1362,7 +1238,7 @@ namespace Metabuf
 
                     if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
                     {
-                        m_error << "Xml2Metabuf::writeNodeAttribute_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeAttribute_: '" << _node->name << "' not write member '" << member->name << "' argument '" << attr->name << "'" << std::endl;
 
                         return false;
                     }
@@ -1375,7 +1251,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeAttribute2_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeAttribute2_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         for( TMapAttributes::const_iterator
             it = _node->attributes.begin(),
@@ -1383,7 +1259,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlAttribute * attr = &it->second;
+            const Attribute * attr = &it->second;
 
             if( attr->required == true )
             {
@@ -1399,7 +1275,7 @@ namespace Metabuf
 
             if( this->writeNodeArgumentValue_( attr, xml_attr ) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeAttribute_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
+                m_error << "MetabufWriter::writeNodeAttribute_: '" << _node->name << "' not write argument '" << attr->name << "'" << std::endl;
 
                 return false;
             }
@@ -1408,17 +1284,17 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    static bool s_getTypeEnumeratorIndex( const XmlType & _type, const char * _value, uint32_t & _index )
+    static bool s_getTypeEnumeratorIndex( const Type & _type, const char * _value, uint32_t & _index )
     {
         uint32_t enum_index = 0U;
 
-        for( XmlType::TVectorEnumerators::const_iterator
+        for( Type::TVectorEnumerators::const_iterator
             it = _type.enumerators.begin(),
             it_end = _type.enumerators.end();
             it != it_end;
             ++it )
         {
-            const XmlEnum & enumerat = *it;
+            const Enum & enumerat = *it;
 
             if( enumerat.name != _value )
             {
@@ -1435,12 +1311,12 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeDataValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
+    bool MetabufWriter::writeNodeDataValue_( const Attribute * _attr, const pugi::xml_attribute & _xml_attr )
     {
-        XmlType type;
+        Type type;
         if( m_protocol->getType( _attr->type, type ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeDataValue_: not found attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
+            m_error << "MetabufWriter::writeNodeDataValue_: not found attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
             return false;
         }
@@ -1449,7 +1325,7 @@ namespace Metabuf
 
         if( it_serialize == m_serialization.end() )
         {
-            m_error << "Xml2Metabuf::writeNodeDataValue_: not found serialize '" << type.evict << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
+            m_error << "MetabufWriter::writeNodeDataValue_: not found serialize '" << type.evict << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
             return false;
         }
@@ -1463,7 +1339,7 @@ namespace Metabuf
             uint32_t index;
             if( s_getTypeEnumeratorIndex( type, attr_value, index ) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeData_: not found enumerate '" << attr_value << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
+                m_error << "MetabufWriter::writeNodeData_: not found enumerate '" << attr_value << "' for attribute '" << _attr->name << "' type '" << type.write << "'" << std::endl;
 
                 return false;
             }
@@ -1473,7 +1349,7 @@ namespace Metabuf
 
             if( (*desc.serialization)(this, enumerator_attr_value, desc.user) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "' [enum]" << std::endl;
+                m_error << "MetabufWriter::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "' [enum]" << std::endl;
 
                 return false;
             }
@@ -1482,7 +1358,7 @@ namespace Metabuf
         {
             if( (*desc.serialization)(this, attr_value, desc.user) == false )
             {
-                m_error << "Xml2Metabuf::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "'" << std::endl;
+                m_error << "MetabufWriter::writeNodeData_: serialize '" << type.evict << "' for attribute '" << _attr->name << "' error for value '" << attr_value << "'" << std::endl;
 
                 return false;
             }
@@ -1491,11 +1367,11 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeArgumentValue_( const XmlAttribute * _attr, const pugi::xml_attribute & _xml_attr )
+    bool MetabufWriter::writeNodeArgumentValue_( const Attribute * _attr, const pugi::xml_attribute & _xml_attr )
     {
         if( this->writeNodeDataValue_( _attr, _xml_attr ) == false )
         {
-            m_error << "Xml2Metabuf::writeNodeArguments_: invalid write data '" << _attr->name << "' type '" << _attr->type << "'" << std::endl;
+            m_error << "MetabufWriter::writeNodeArguments_: invalid write data '" << _attr->name << "' type '" << _attr->type << "'" << std::endl;
 
             return false;
         }
@@ -1503,7 +1379,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeAttributeSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
+    bool MetabufWriter::getNodeAttributeSize_( const Node * _node, const pugi::xml_node & _xml_node, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -1513,7 +1389,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlAttribute * attr = &it->second;
+            const Attribute * attr = &it->second;
 
             if( attr->required == true )
             {
@@ -1538,7 +1414,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlAttribute * attr = &it->second;
+                const Attribute * attr = &it->second;
 
                 if( attr->required == true )
                 {
@@ -1562,7 +1438,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlMember * member = &it->second;
+            const Member * member = &it->second;
 
             for( TMapAttributes::const_iterator
                 it_attributes = member->attributes.begin(),
@@ -1570,7 +1446,7 @@ namespace Metabuf
                 it_attributes != it_attributes_end;
                 ++it_attributes )
             {
-                const XmlAttribute * attr = &it_attributes->second;
+                const Attribute * attr = &it_attributes->second;
 
                 if( attr->required == true )
                 {
@@ -1611,7 +1487,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::hasMetaSingles_( const XmlNode * _node ) const
+    bool MetabufWriter::hasMetaSingles_( const Node * _node ) const
     {
         if( _node->singles.empty() == false )
         {
@@ -1621,7 +1497,7 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeSingles_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeSingles_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( this->hasMetaSingles_( _node ) == false )
         {
@@ -1636,7 +1512,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlNode * node = it->second;
+            const Node * node = it->second;
 
             uint32_t count;
             this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
@@ -1648,7 +1524,7 @@ namespace Metabuf
 
             if( count > 1 )
             {
-                m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' singles '" << node->name << "' have more one instance" << std::endl;
+                m_error << "MetabufWriter::writeNodeSingles_: error write node '" << _node->name << "' singles '" << node->name << "' have more one instance" << std::endl;
 
                 return false;
             }
@@ -1664,7 +1540,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlNode * node = it->second;
+            const Node * node = it->second;
 
             uint32_t count;
             this->getNodeSinglesSize_( _node, _xml_node, node->name, count );
@@ -1698,7 +1574,7 @@ namespace Metabuf
 
                 if( this->writeNode_( node, child ) == false )
                 {
-                    m_error << "Xml2Metabuf::writeNodeSingles_: error write node '" << _node->name << "' childrens '" << node->name << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeSingles_: error write node '" << _node->name << "' childrens '" << node->name << "'" << std::endl;
 
                     return false;
                 }
@@ -1708,7 +1584,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeSinglesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
+    bool MetabufWriter::getNodeSinglesSize_( const Node * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -1745,7 +1621,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::hasMetaIncludes_( const XmlNode * _node ) const
+    bool MetabufWriter::hasMetaIncludes_( const Node * _node ) const
     {
         if( _node->includes.empty() == false )
         {
@@ -1755,7 +1631,7 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeIncludes_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeIncludes_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( this->hasMetaIncludes_( _node ) == false )
         {
@@ -1770,7 +1646,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlNode * node_include = it->second;
+                const Node * node_include = it->second;
 
                 uint32_t incluidesCount;
                 this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
@@ -1804,7 +1680,7 @@ namespace Metabuf
 
                     if( this->writeNode_( node_include, child ) == false )
                     {
-                        m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
 
                         return false;
                     }
@@ -1821,7 +1697,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlNode * node_include = it->second;
+                const Node * node_include = it->second;
 
                 uint32_t includeCount;
                 this->getNodeIncludesSize_( _node, _xml_node, node_include->name, includeCount );
@@ -1844,7 +1720,7 @@ namespace Metabuf
                     it != it_end;
                     ++it )
                 {
-                    const XmlNode * node_include = it->second;
+                    const Node * node_include = it->second;
 
                     uint32_t incluidesCount;
                     this->getNodeIncludesSize_( _node, _xml_node, node_include->name, incluidesCount );
@@ -1880,7 +1756,7 @@ namespace Metabuf
 
                         if( this->writeNode_( node_include, child ) == false )
                         {
-                            m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
+                            m_error << "MetabufWriter::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_include->name << "'" << std::endl;
 
                             return false;
                         }
@@ -1892,7 +1768,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeIncludesSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
+    bool MetabufWriter::getNodeIncludesSize_( const Node * _node, const pugi::xml_node & _xml_node, const std::string & _type, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -1929,7 +1805,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::hasMetaChildren_( const XmlNode * _node ) const
+    bool MetabufWriter::hasMetaChildren_( const Node * _node ) const
     {
         if( _node->children.empty() == false )
         {
@@ -1947,7 +1823,7 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeChildren_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeChildren_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( this->hasMetaChildren_( _node ) == false )
         {
@@ -1962,7 +1838,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlChildren & children = it->second;
+            const Children & children = it->second;
 
             uint32_t includeCount;
             this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, includeCount );
@@ -1983,7 +1859,7 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlChildren & children = it->second;
+                const Children & children = it->second;
 
                 uint32_t includeCount;
                 this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, includeCount );
@@ -2005,9 +1881,9 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlChildren & children = it->second;
+            const Children & children = it->second;
 
-            const XmlNode * node_children = m_meta->getNode( children.type );
+            const Node * node_children = m_meta->getNode( children.type );
 
             uint32_t childrenCount;
             this->getNodeChildrenSize_( _node, _xml_node, children.group, children.type, childrenCount );
@@ -2049,11 +1925,11 @@ namespace Metabuf
 
                 const char * value_generator = attr_generator.value();
 
-                const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
+                const Node * node_generator = node_children->node_scope->getGenerator( value_generator );
 
                 if( node_generator == nullptr )
                 {
-                    m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
 
                     return false;
                 }
@@ -2065,7 +1941,7 @@ namespace Metabuf
 
                 if( this->writeNode_( node_generator, child ) == false )
                 {
-                    m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
 
                     return false;
                 }
@@ -2080,9 +1956,9 @@ namespace Metabuf
                 it != it_end;
                 ++it )
             {
-                const XmlChildren & children = it->second;
+                const Children & children = it->second;
 
-                const XmlNode * node_children = m_meta->getNode( children.type );
+                const Node * node_children = m_meta->getNode( children.type );
 
                 uint32_t childrenCount;
                 this->getNodeChildrenSize_( _node->node_inheritance, _xml_node, children.group, children.type, childrenCount );
@@ -2124,11 +2000,11 @@ namespace Metabuf
 
                     const char * value_generator = attr_generator.value();
 
-                    const XmlNode * node_generator = node_children->node_scope->getGenerator( value_generator );
+                    const Node * node_generator = node_children->node_scope->getGenerator( value_generator );
 
                     if( node_generator == nullptr )
                     {
-                        m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeChildren_: error write node '" << _node->name << "' includes '" << node_children->node_scope->name << "' not found generator '" << value_generator << "'" << std::endl;
 
                         return false;
                     }
@@ -2142,7 +2018,7 @@ namespace Metabuf
 
                     if( this->writeNode_( node_generator, child ) == false )
                     {
-                        m_error << "Xml2Metabuf::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
+                        m_error << "MetabufWriter::writeNodeChildren_: error write node '" << _node->name << "' children '" << node_generator->name << "'" << std::endl;
 
                         return false;
                     }
@@ -2153,7 +2029,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeChildrenSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count ) const
+    bool MetabufWriter::getNodeChildrenSize_( const Node * _node, const pugi::xml_node & _xml_node, const std::string & _group, const std::string & _type, uint32_t & _count ) const
     {
         METABUF_UNUSED( _node );
 
@@ -2191,7 +2067,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::hasMetaGenerators_( const XmlNode * _node ) const
+    bool MetabufWriter::hasMetaGenerators_( const Node * _node ) const
     {
         if( _node->inheritances.empty() == false )
         {
@@ -2201,7 +2077,7 @@ namespace Metabuf
         return false;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::writeNodeGenerators_( const XmlNode * _node, const pugi::xml_node & _xml_node )
+    bool MetabufWriter::writeNodeGenerators_( const Node * _node, const pugi::xml_node & _xml_node )
     {
         if( this->hasMetaGenerators_( _node ) == false )
         {
@@ -2216,7 +2092,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlNode * node_inheritance = it->second;
+            const Node * node_inheritance = it->second;
 
             uint32_t generatorsCount;
             if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
@@ -2240,7 +2116,7 @@ namespace Metabuf
             it != it_end;
             ++it )
         {
-            const XmlNode * node_inheritance = it->second;
+            const Node * node_inheritance = it->second;
 
             uint32_t generatorsCount;
             if( this->getNodeGeneratorSize_( _node, _xml_node, node_inheritance, generatorsCount ) == false )
@@ -2281,11 +2157,11 @@ namespace Metabuf
 
                 const char * value_generator = attr_generator.value();
 
-                const XmlNode * node_generator = _node->getGenerator( value_generator );
+                const Node * node_generator = _node->getGenerator( value_generator );
 
                 if( node_generator == nullptr )
                 {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
 
                     return false;
                 }
@@ -2299,7 +2175,7 @@ namespace Metabuf
 
                 if( this->writeNode_( node_generator, child ) == false )
                 {
-                    m_error << "Xml2Metabuf::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_generator->name << "'" << std::endl;
+                    m_error << "MetabufWriter::writeNodeIncludes_: error write node '" << _node->name << "' includes '" << node_generator->name << "'" << std::endl;
 
                     return false;
                 }
@@ -2309,7 +2185,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    bool Xml2Metabuf::getNodeGeneratorSize_( const XmlNode * _node, const pugi::xml_node & _xml_node, const XmlNode * _inheritance, uint32_t & _count ) const
+    bool MetabufWriter::getNodeGeneratorSize_( const Node * _node, const pugi::xml_node & _xml_node, const Node * _inheritance, uint32_t & _count ) const
     {
         uint32_t count = 0;
 
@@ -2342,11 +2218,11 @@ namespace Metabuf
 
             const char * value_generator = attr_generator.value();
 
-            const XmlNode * node_generator = _node->getGenerator( value_generator );
+            const Node * node_generator = _node->getGenerator( value_generator );
 
             if( node_generator == nullptr )
             {
-                m_error << "Xml2Metabuf::getNodeGeneratorSize_: error node '" << _node->name << "' includes '" << _inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
+                m_error << "MetabufWriter::getNodeGeneratorSize_: error node '" << _node->name << "' includes '" << _inheritance->name << "' not found generator '" << value_generator << "'" << std::endl;
 
                 return false;
             }
@@ -2364,7 +2240,7 @@ namespace Metabuf
         return true;
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeSize( uint32_t _value )
+    void MetabufWriter::writeSize( uint32_t _value )
     {
         if( _value < 254 )
         {
@@ -2389,7 +2265,7 @@ namespace Metabuf
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeString( const char * _value )
+    void MetabufWriter::writeString( const char * _value )
     {
         const TVectorInternalStrings & internals = m_protocol->getInternals();
 
@@ -2422,7 +2298,7 @@ namespace Metabuf
         this->writeSize( write_index );
     }
     //////////////////////////////////////////////////////////////////////////
-    void Xml2Metabuf::writeBuffer( const uint8_t * _buff, size_t _size )
+    void MetabufWriter::writeBuffer( const uint8_t * _buff, size_t _size )
     {
         m_buff.insert( m_buff.end(), _buff, _buff + _size );
     }

@@ -1,8 +1,13 @@
 #pragma once
 
-#include "xml2metabuf/XmlProtocol.hpp"
+#include "metabuf/Metaconvert.hpp"
 
 namespace Metacode
 {
-    void initializeMetaprotocol( Metabuf::XmlProtocol * _protocol );
+    class MetaprotocolGenerator
+        : public Metabuf::ProtocolGenerator
+    {
+    public:
+        void generate( Metabuf::ProtocolInterface * _protocol ) const override;
+    };
 }

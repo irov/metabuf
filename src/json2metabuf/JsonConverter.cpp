@@ -5,7 +5,7 @@
 namespace Metabuf
 {
     //////////////////////////////////////////////////////////////////////////
-    bool convertJson( const XmlProtocol * _protocol, const void * _buffer, size_t _size, const char * _meta, const char * _node, OutputAdapter & _output, std::string & _error )
+    bool convertJson( const ProtocolInterface * _protocol, const void * _buffer, size_t _size, const MetaInterface * _meta, const NodeInterface * _node, OutputAdapter & _output, std::string & _error )
     {
         const Json2Metabuf jsonMetabuf;
 

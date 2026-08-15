@@ -2,15 +2,11 @@
 
 #include "config/Metaconfig.hpp"
 
+#include <assert.h>
 #include <stdint.h>
 
 namespace Metabuf
 {
-    class ReaderException
-        : public Exception
-    {
-    };
-
     class Reader
     {
     public:
@@ -47,10 +43,7 @@ namespace Metabuf
     public:
         inline void readBuffer( void * _begin, size_t _size )
         {
-            if( m_read + _size > m_capacity )
-            {
-                throw ReaderException();
-            }
+            assert( m_read + _size <= m_capacity );
 
             const uint8_t * read_buff = (const uint8_t *)m_buff + m_read;
             METABUF_MEMCPY( _begin, read_buff, _size );

@@ -1,4 +1,4 @@
-#include "XmlProtocol.hpp"
+#include "metaconverter/Protocol.hpp"
 #include "Xml2Metacode.hpp"
 #include "Xml2Metaprotocol.hpp"
 
@@ -74,13 +74,13 @@ int main( int argc, char *argv[] )
 
     fclose( file_protocol );
 
-    Metabuf::XmlProtocol xml_protocol;
+    Metabuf::Protocol protocol;
 
-    if( xml_protocol.readProtocol( buf, size ) == false )
+    if( protocol.readProtocol( buf, size ) == false )
     {
         delete [] buf;
 
-        std::string error = xml_protocol.getError();
+        std::string error = protocol.getError();
 
         printf( "error read protocol: %s"
             , error.c_str()
@@ -91,7 +91,7 @@ int main( int argc, char *argv[] )
 
     delete [] buf;
 
-    Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
+    Metabuf::Xml2Metacode xml_metacode( &protocol );
 
     Metabuf::Xml2Settings xml_settings;
     xml_settings.metacode_h = "Metacode.h";
@@ -110,7 +110,7 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    Metabuf::Xml2Metaprotocol xml_metaprotocol( &xml_protocol );
+    Metabuf::Xml2Metaprotocol xml_metaprotocol( &protocol );
 
     std::string protocol_header;
     std::string protocol_source;

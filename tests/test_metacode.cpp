@@ -146,12 +146,12 @@ namespace Metacode
     }
     //////////////////////////////////////////////////////////////////////////
     namespace Meta_Data
-    { 
+    {
         uint32_t getVersion()
         {
             return 1;
         }
-    
+
         //////////////////////////////////////////////////////////////////////////
         //cppcheck-suppress uninitMemberVar
         Meta_DataBlock::Meta_DataBlock()
@@ -192,42 +192,42 @@ namespace Metacode
             METABUF_UNUSED( _read );
             METABUF_UNUSED( _userData );
             this->_parseData( _buff, _size, _read, _userData );
-        
+
             uint32_t includeCount;
             Metabuf::readSize( _buff, _size, _read, includeCount );
-        
+
             if( includeCount != 0 )
             {
                 includes_Meta_Include.resize( includeCount );
-        
+
                 for( Meta_DataBlock::Meta_Include & metadata : includes_Meta_Include )
                 {
                     metadata.parse( _buff, _size, _read, _userData );
                 }
             }
-        
+
             uint32_t generatorTypeCount;
             Metabuf::readSize( _buff, _size, _read, generatorTypeCount );
-        
+
             for( uint32_t i = 0; i != generatorTypeCount; ++i )
             {
                 uint32_t generatorCount;
                 Metabuf::readSize( _buff, _size, _read, generatorCount );
-        
+
                 uint32_t id;
                 Metabuf::readSize( _buff, _size, _read, id );
-        
+
                 this->_preparationIncludes( id, generatorCount );
-        
+
                 for( uint32_t j = 0; j != generatorCount; ++j )
                 {
                     uint32_t generator_id;
                     Metabuf::readSize( _buff, _size, _read, generator_id );
-        
+
                     this->_parseGenerators( _buff, _size, _read, generator_id, _userData );
                 }
             }
-        
+
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
@@ -271,7 +271,7 @@ namespace Metacode
                 {
                     includes_Meta_Include.emplace_back( Meta_DataBlock::Meta_Include() );
                     Meta_DataBlock::Meta_Include & metadata = includes_Meta_Include.back();
-        
+
                     metadata.parse( _buff, _size, _read, _userData );
                 }break;
             default:
@@ -287,7 +287,7 @@ namespace Metacode
                 {
                     Meta_DataBlock::Meta_ResourceImageDefault * metadata = new Meta_DataBlock::Meta_ResourceImageDefault ();
                     metadata->parse( _buff, _size, _read, _userData );
-        
+
                     includes_Meta_Resource.push_back(metadata);
                 }break;
             default:
@@ -322,7 +322,7 @@ namespace Metacode
             METABUF_UNUSED( _read );
             METABUF_UNUSED( _userData );
             this->_parseData( _buff, _size, _read, _userData );
-        
+
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
@@ -381,14 +381,14 @@ namespace Metacode
             METABUF_UNUSED( _read );
             METABUF_UNUSED( _userData );
             this->_parseData( _buff, _size, _read, _userData );
-        
+
             Metabuf::readSize( _buff, _size, _read, m_flagNoRequiredAttribute );
-        
+
             if( m_flagNoRequiredAttribute != 0 )
             {
                 this->_parseArguments( _buff, _size, _read, _userData );
             }
-        
+
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
@@ -406,12 +406,12 @@ namespace Metacode
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_Precompile );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_Unique) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_Unique );
             }
-        
+
         }
         //////////////////////////////////////////////////////////////////////////
         // cppcheck-suppress duplInheritedMember
@@ -459,14 +459,14 @@ namespace Metacode
             METABUF_UNUSED( _read );
             METABUF_UNUSED( _userData );
             this->_parseData( _buff, _size, _read, _userData );
-        
+
             Metabuf::readSize( _buff, _size, _read, m_flagNoRequiredAttribute );
-        
+
             if( m_flagNoRequiredAttribute != 0 )
             {
                 this->_parseArguments( _buff, _size, _read, _userData );
             }
-        
+
             return true;
         }
         //////////////////////////////////////////////////////////////////////////
@@ -474,7 +474,7 @@ namespace Metacode
         void Meta_DataBlock::Meta_ResourceImageDefault::_parseData( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
             Meta_DataBlock::Meta_Resource::_parseData( _buff, _size, _read, _userData );
-        
+
             Metabuf::read( _buff, _size, _read, _userData, this->m_File_MaxSize );
             Metabuf::read( _buff, _size, _read, _userData, this->m_File_Path );
         }
@@ -483,37 +483,37 @@ namespace Metacode
         void Meta_DataBlock::Meta_ResourceImageDefault::_parseArguments( const uint8_t * _buff, size_t _size, size_t & _read, void * _userData )
         {
             Meta_DataBlock::Meta_Resource::_parseArguments( _buff, _size, _read, _userData );
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Alpha) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Alpha );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Codec) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Codec );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Converter) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Converter );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Offset) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Offset );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Premultiply) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Premultiply );
             }
-        
+
             if( (m_flagNoRequiredAttribute & EMETA_File_Size) != 0 )
             {
                 Metabuf::read( _buff, _size, _read, _userData, this->m_File_Size );
             }
-        
+
         }
         //////////////////////////////////////////////////////////////////////////
         // cppcheck-suppress duplInheritedMember
@@ -533,8 +533,8 @@ namespace Metacode
             METABUF_UNUSED( _id );
             METABUF_UNUSED( _userData );
             Meta_DataBlock::Meta_Resource::_parseIncludes( _buff, _size, _read, _id, _userData );
-        
+
         }
         //////////////////////////////////////////////////////////////////////////
-    } 
+    }
 }

@@ -8,8 +8,8 @@ namespace Metabuf
 {
     namespace Detail
     {
-        typedef std::vector<const XmlNode *> VectorNodes;
-        typedef std::map<const XmlNode *, size_t> MapNodeIndices;
+        typedef std::vector<const Node *> VectorNodes;
+        typedef std::map<const Node *, size_t> MapNodeIndices;
 
         //////////////////////////////////////////////////////////////////////////
         static std::string quote( const std::string & _value )
@@ -41,7 +41,7 @@ namespace Metabuf
             return value;
         }
         //////////////////////////////////////////////////////////////////////////
-        static void collectNode( const XmlNode * _node, VectorNodes & _nodes, MapNodeIndices & _indices )
+        static void collectNode( const Node * _node, VectorNodes & _nodes, MapNodeIndices & _indices )
         {
             _indices.emplace( _node, _nodes.size() );
             _nodes.emplace_back( _node );
@@ -66,21 +66,31 @@ namespace Metabuf
             }
         }
         //////////////////////////////////////////////////////////////////////////
-        static void writeAttribute( std::stringstream & _ss, const char * _owner, const XmlAttribute & _attribute )
+        static void writeNodeAttribute( std::stringstream & _ss, size_t _nodeIndex, const Attribute & _attribute )
         {
-            _ss << "        " << _owner << ".emplace( "
-                << quote( _attribute.name )
-                << ", Metabuf::XmlAttribute{"
+            _ss << "        node_" << _nodeIndex << "->addAttribute( "
                 << _attribute.id << "U, "
                 << quote( _attribute.name ) << ", "
                 << quote( _attribute.type ) << ", "
                 << (_attribute.required == true ? "true" : "false") << ", "
                 << quote( _attribute.default_value )
-                << "} );" << std::endl;
+                << " );" << std::endl;
+        }
+        //////////////////////////////////////////////////////////////////////////
+        static void writeNodeMemberAttribute( std::stringstream & _ss, size_t _nodeIndex, const std::string & _member, const Attribute & _attribute )
+        {
+            _ss << "        node_" << _nodeIndex << "->addMemberAttribute( "
+                << quote( _member ) << ", "
+                << _attribute.id << "U, "
+                << quote( _attribute.name ) << ", "
+                << quote( _attribute.type ) << ", "
+                << (_attribute.required == true ? "true" : "false") << ", "
+                << quote( _attribute.default_value )
+                << " );" << std::endl;
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    Xml2Metaprotocol::Xml2Metaprotocol( const XmlProtocol * _protocol )
+    Xml2Metaprotocol::Xml2Metaprotocol( const Protocol * _protocol )
         : m_protocol( _protocol )
     {
     }
@@ -90,11 +100,16 @@ namespace Metabuf
         std::stringstream header;
         header << "#pragma once" << std::endl;
         header << std::endl;
-        header << "#include \"xml2metabuf/XmlProtocol.hpp\"" << std::endl;
+        header << "#include \"metabuf/Metaconvert.hpp\"" << std::endl;
         header << std::endl;
         header << "namespace Metacode" << std::endl;
         header << "{" << std::endl;
-        header << "    void initializeMetaprotocol( Metabuf::XmlProtocol * _protocol );" << std::endl;
+        header << "    class MetaprotocolGenerator" << std::endl;
+        header << "        : public Metabuf::ProtocolGenerator" << std::endl;
+        header << "    {" << std::endl;
+        header << "    public:" << std::endl;
+        header << "        void generate( Metabuf::ProtocolInterface * _protocol ) const override;" << std::endl;
+        header << "    };" << std::endl;
         header << "}" << std::endl;
 
         _header = header.str();
@@ -124,47 +139,53 @@ namespace Metabuf
         std::stringstream source;
         source << "#include \"Metaprotocol.h\"" << std::endl;
         source << std::endl;
-        source << "#include <utility>" << std::endl;
-        source << std::endl;
         source << "namespace Metacode" << std::endl;
         source << "{" << std::endl;
         source << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
-        source << "    void initializeMetaprotocol( Metabuf::XmlProtocol * _protocol )" << std::endl;
+        source << "    void MetaprotocolGenerator::generate( Metabuf::ProtocolInterface * _protocol ) const" << std::endl;
         source << "    {" << std::endl;
-        source << "        Metabuf::TMapMetas metas;" << std::endl;
-        source << "        Metabuf::TMapTypes types;" << std::endl;
-        source << "        Metabuf::TVectorInternalStrings internals;" << std::endl;
+        source << "        _protocol->setVersion( " << m_protocol->getVersion() << "U, " << m_protocol->getCrc32() << "U );" << std::endl;
         source << std::endl;
 
         const TMapTypes & types = m_protocol->getTypes();
 
+        size_t type_index = 0;
         for( TMapTypes::const_iterator
             it_type = types.begin(),
             it_type_end = types.end();
             it_type != it_type_end;
-            ++it_type )
+            ++it_type, ++type_index )
         {
-            const XmlType & type = it_type->second;
-            source << "        types.emplace( " << Detail::quote( it_type->first ) << ", Metabuf::XmlType{{";
+            const Type & type = it_type->second;
 
-            for( XmlType::TVectorEnumerators::const_iterator
+            if( type.enumerators.empty() == false )
+            {
+                source << "        Metabuf::TypeInterface * type_" << type_index << " = ";
+            }
+            else
+            {
+                source << "        ";
+            }
+
+            source << "_protocol->addType( "
+                << Detail::quote( it_type->first ) << ", "
+                << Detail::quote( type.write ) << ", "
+                << Detail::quote( type.evict ) << ", "
+                << (type.is_enumerator == true ? "true" : "false") << ", "
+                << (type.is_ncr == true ? "true" : "false") << ", "
+                << (type.is_template == true ? "true" : "false") << " );" << std::endl;
+
+            for( Type::TVectorEnumerators::const_iterator
                 it_enum = type.enumerators.begin(),
                 it_enum_end = type.enumerators.end();
                 it_enum != it_enum_end;
                 ++it_enum )
             {
-                if( it_enum != type.enumerators.begin() )
-                {
-                    source << ", ";
-                }
-
-                source << "Metabuf::XmlEnum{" << Detail::quote( it_enum->name ) << ", " << Detail::quote( it_enum->write ) << ", " << it_enum->index << "U}";
+                source << "        type_" << type_index << "->addEnumerator( "
+                    << Detail::quote( it_enum->name ) << ", "
+                    << Detail::quote( it_enum->write ) << ", "
+                    << it_enum->index << "U );" << std::endl;
             }
-
-            source << "}, " << Detail::quote( type.write ) << ", " << Detail::quote( type.evict ) << ", "
-                << (type.is_enumerator == true ? "true" : "false") << ", "
-                << (type.is_ncr == true ? "true" : "false") << ", "
-                << (type.is_template == true ? "true" : "false") << "} );" << std::endl;
         }
 
         source << std::endl;
@@ -176,19 +197,19 @@ namespace Metabuf
             it_meta != it_meta_end;
             ++it_meta, ++meta_index )
         {
-            const XmlMeta * meta = it_meta->second;
-            source << "        Metabuf::XmlMeta * meta_" << meta_index << " = new Metabuf::XmlMeta();" << std::endl;
-            source << "        meta_" << meta_index << "->m_name = " << Detail::quote( meta->m_name ) << ";" << std::endl;
-            source << "        meta_" << meta_index << "->m_version = " << meta->m_version << "U;" << std::endl;
+            const Meta * meta = it_meta->second;
+            source << "        Metabuf::MetaInterface * meta_" << meta_index << " = _protocol->addMeta( "
+                << Detail::quote( meta->m_name ) << ", "
+                << meta->m_version << "U );" << std::endl;
         }
 
         source << std::endl;
 
         for( size_t node_index = 0; node_index != nodes.size(); ++node_index )
         {
-            const XmlNode * node = nodes[node_index];
+            const Node * node = nodes[node_index];
 
-            source << "        Metabuf::XmlNode * node_" << node_index << " = new Metabuf::XmlNode( "
+            source << "        Metabuf::NodeInterface * node_" << node_index << " = _protocol->addNode( "
                 << node->id << "U, "
                 << Detail::quote( node->name ) << ", "
                 << Detail::quote( node->generator ) << ", "
@@ -213,11 +234,11 @@ namespace Metabuf
 
         for( size_t node_index = 0; node_index != nodes.size(); ++node_index )
         {
-            const XmlNode * node = nodes[node_index];
+            const Node * node = nodes[node_index];
 
             if( node->node_inheritance != nullptr )
             {
-                source << "        node_" << node_index << "->node_inheritance = node_" << node_indices[node->node_inheritance] << ";" << std::endl;
+                source << "        node_" << node_index << "->setInheritance( node_" << node_indices[node->node_inheritance] << " );" << std::endl;
             }
 
             for( TMapAttributes::const_iterator
@@ -226,9 +247,7 @@ namespace Metabuf
                 it_attribute != it_attribute_end;
                 ++it_attribute )
             {
-                std::stringstream owner;
-                owner << "node_" << node_index << "->attributes";
-                Detail::writeAttribute( source, owner.str().c_str(), it_attribute->second );
+                Detail::writeNodeAttribute( source, node_index, it_attribute->second );
             }
 
             for( TMapMembers::const_iterator
@@ -237,17 +256,13 @@ namespace Metabuf
                 it_member != it_member_end;
                 ++it_member )
             {
-                source << "        node_" << node_index << "->members[" << Detail::quote( it_member->first ) << "].name = " << Detail::quote( it_member->second.name ) << ";" << std::endl;
-
                 for( TMapAttributes::const_iterator
                     it_attribute = it_member->second.attributes.begin(),
                     it_attribute_end = it_member->second.attributes.end();
                     it_attribute != it_attribute_end;
                     ++it_attribute )
                 {
-                    std::stringstream owner;
-                    owner << "node_" << node_index << "->members[" << Detail::quote( it_member->first ) << "].attributes";
-                    Detail::writeAttribute( source, owner.str().c_str(), it_attribute->second );
+                    Detail::writeNodeMemberAttribute( source, node_index, it_member->first, it_attribute->second );
                 }
             }
 
@@ -257,12 +272,14 @@ namespace Metabuf
                 it_children != it_children_end;
                 ++it_children )
             {
-                source << "        node_" << node_index << "->children[" << Detail::quote( it_children->first ) << "].group = " << Detail::quote( it_children->second.group ) << ";" << std::endl;
-                source << "        node_" << node_index << "->children[" << Detail::quote( it_children->first ) << "].type = " << Detail::quote( it_children->second.type ) << ";" << std::endl;
+                source << "        node_" << node_index << "->addChildren( "
+                    << Detail::quote( it_children->first ) << ", "
+                    << Detail::quote( it_children->second.group ) << ", "
+                    << Detail::quote( it_children->second.type ) << " );" << std::endl;
             }
 
             const TMapNodes * maps[] = {&node->singles, &node->includes, &node->inheritances, &node->generators};
-            const char * names[] = {"singles", "includes", "inheritances", "generators"};
+            const char * functions[] = {"addSingle", "addInclude", "addInheritance", "addGenerator"};
 
             for( size_t map_index = 0; map_index != 4; ++map_index )
             {
@@ -272,7 +289,7 @@ namespace Metabuf
                     it_child != it_child_end;
                     ++it_child )
                 {
-                    source << "        node_" << node_index << "->" << names[map_index] << ".emplace( " << Detail::quote( it_child->first ) << ", node_" << node_indices[it_child->second] << " );" << std::endl;
+                    source << "        node_" << node_index << "->" << functions[map_index] << "( node_" << node_indices[it_child->second] << " );" << std::endl;
                 }
             }
 
@@ -294,10 +311,8 @@ namespace Metabuf
                 it_node != it_node_end;
                 ++it_node )
             {
-                source << "        meta_" << meta_index << "->m_nodes.emplace( " << Detail::quote( it_node->first ) << ", node_" << node_indices[it_node->second] << " );" << std::endl;
+                source << "        meta_" << meta_index << "->addNode( node_" << node_indices[it_node->second] << " );" << std::endl;
             }
-
-            source << "        metas.emplace( " << Detail::quote( it_meta->first ) << ", meta_" << meta_index << " );" << std::endl;
         }
 
         const TVectorInternalStrings & internals = m_protocol->getInternals();
@@ -308,11 +323,9 @@ namespace Metabuf
             it_internal != it_internal_end;
             ++it_internal )
         {
-            source << "        internals.emplace_back( " << Detail::quote( *it_internal ) << " );" << std::endl;
+            source << "        _protocol->addInternal( " << Detail::quote( *it_internal ) << " );" << std::endl;
         }
 
-        source << std::endl;
-        source << "        _protocol->initialize( " << m_protocol->getVersion() << "U, " << m_protocol->getCrc32() << "U, std::move( metas ), std::move( types ), std::move( internals ) );" << std::endl;
         source << "    }" << std::endl;
         source << "    //////////////////////////////////////////////////////////////////////////" << std::endl;
         source << "}" << std::endl;

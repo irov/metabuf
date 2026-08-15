@@ -1,7 +1,12 @@
-#include "XmlProtocol.hpp"
-#include "Xml2Metabuf.hpp"
+#include "metaconverter/Protocol.hpp"
+#include "xml2metabuf/XmlConverter.hpp"
+
+#include "pugixml.hpp"
 
 #include <stdio.h>
+
+#include <string>
+#include <vector>
 
 static void * read_file( const char * _file, size_t * _size )
 {
@@ -40,7 +45,7 @@ int main( int argc, char *argv[] )
 
     const char * path_protocol = argv[1];
 
-    Metabuf::XmlProtocol xml_protocol;
+    Metabuf::Protocol protocol;
 
     size_t protocol_size;
     void * protocol_buf = read_file( path_protocol, &protocol_size );
@@ -54,9 +59,9 @@ int main( int argc, char *argv[] )
         return 0;
     }
 
-    if( xml_protocol.readProtocol( protocol_buf, protocol_size ) == false )
+    if( protocol.readProtocol( protocol_buf, protocol_size ) == false )
     {
-        std::string error = xml_protocol.getError();
+        std::string error = protocol.getError();
 
         printf( "error read protocol '%s': %s"
             , path_protocol
@@ -65,10 +70,6 @@ int main( int argc, char *argv[] )
 
         return 0;
     }
-
-    Metabuf::Xml2Metabuf xml_metabuf( &xml_protocol );
-
-    xml_metabuf.initialize();
 
     const char * path_xml = argv[2];
 
@@ -84,13 +85,50 @@ int main( int argc, char *argv[] )
         return 0;
     }
 
-    size_t try_bin_size = xml_size * 2;
-    uint8_t * bin_buf = new uint8_t[try_bin_size];
+    pugi::xml_document document;
+    pugi::xml_parse_result parse_result = document.load_buffer( xml_buf, xml_size );
 
-    size_t bin_size;
-    if( xml_metabuf.convert( bin_buf, try_bin_size, xml_buf, xml_size, bin_size ) == false )
+    if( parse_result == false )
     {
-        std::string error = xml_metabuf.getError();
+        printf( "error parse xml '%s': %s"
+            , path_xml
+            , parse_result.description()
+        );
+
+        return 0;
+    }
+
+    const pugi::xml_node root = document.document_element();
+    const Metabuf::Meta * meta = nullptr;
+    const Metabuf::Node * node = nullptr;
+
+    for( const Metabuf::TMapMetas::value_type & value : protocol.getMetas() )
+    {
+        const Metabuf::Node * test_node = value.second->getNode( root.name() );
+
+        if( test_node != nullptr )
+        {
+            meta = value.second;
+            node = test_node;
+
+            break;
+        }
+    }
+
+    if( meta == nullptr )
+    {
+        printf( "error find protocol meta for '%s'"
+            , root.name()
+        );
+
+        return 0;
+    }
+
+    std::vector<uint8_t> bin;
+    std::string error;
+
+    if( Metabuf::convertXml( &protocol, xml_buf, xml_size, meta, node, bin, error ) == false )
+    {
 
         printf( "error convert metabuf '%s': %s"
             , path_xml
@@ -113,7 +151,7 @@ int main( int argc, char *argv[] )
         return 0;
     }
 
-    fwrite( bin_buf, 1, bin_size, file_bin );
+    fwrite( bin.data(), 1, bin.size(), file_bin );
     fclose( file_bin );
 
     printf( "done\n" );

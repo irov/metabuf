@@ -1,4 +1,4 @@
-#include "../../src/xml2metabuf/XmlProtocol.hpp"
+#include "metaconverter/Protocol.hpp"
 #include "../../src/xml2metabuf/Xml2Metacode.hpp"
 #include "../../src/xml2metabuf/Xml2Metaprotocol.hpp"
 
@@ -38,7 +38,7 @@ int main( int argc, char *argv[] )
     METABUF_UNUSED( argc );
     METABUF_UNUSED( argv );
 
-    Metabuf::XmlProtocol xml_protocol;
+    Metabuf::Protocol protocol;
 
     size_t file_protocol_size;
     void * file_protocol_buffer = read_file( argv[1], path_protocol, &file_protocol_size );
@@ -52,9 +52,9 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    if( xml_protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
+    if( protocol.readProtocol( file_protocol_buffer, file_protocol_size ) == false )
     {
-        std::string error = xml_protocol.getError();
+        std::string error = protocol.getError();
 
         printf( "error read protocol: %s"
             , error.c_str()
@@ -65,7 +65,7 @@ int main( int argc, char *argv[] )
 
     free( file_protocol_buffer );
 
-    Metabuf::Xml2Metacode xml_metacode( &xml_protocol );
+    Metabuf::Xml2Metacode xml_metacode( &protocol );
 
     Metabuf::Xml2Settings xml_settings;
     xml_settings.metacode_h = "test_metacode.h";
@@ -75,7 +75,7 @@ int main( int argc, char *argv[] )
     std::string source;
     if( xml_metacode.generate( header, source, xml_settings ) == false )
     {
-        std::string error = xml_protocol.getError();
+        std::string error = protocol.getError();
 
         printf( "error generate: %s"
             , error.c_str()
@@ -84,7 +84,7 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
-    Metabuf::Xml2Metaprotocol xml_metaprotocol( &xml_protocol );
+    Metabuf::Xml2Metaprotocol xml_metaprotocol( &protocol );
 
     std::string protocol_header;
     std::string protocol_source;
